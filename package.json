@@ -1,0 +1,29 @@
+{
+  "name": "hmif-app-be",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "check": "pnpm run typecheck && pnpm run codecheck",
+    "codecheck": "eslint --ext .ts \"src/**\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.8.2",
+    "eslint-config-love": "^43.1.0",
+    "hono": "^4.1.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-promise": "^6.0.0",
+    "prettier": "^3.2.5",
+    "tsx": "^3.12.2",
+    "typescript": "^5.4.3"
+  }
+}
