@@ -1,0 +1,32 @@
+name: codecheck
+
+on:
+  pull_request:
+    branches:
+      - develop
+    types: [opened, synchronize]
+
+jobs:
+  code-check:
+    name: Run eslint and typescript check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile]
+
+      - name: Run code check
+        run: pnpm run check

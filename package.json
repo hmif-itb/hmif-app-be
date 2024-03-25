@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "check": "pnpm run typecheck && pnpm run codecheck",
-    "codecheck": "eslint --ext .ts \"src/**\"",
+    "codecheck": "eslint src --ext .ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
