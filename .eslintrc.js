@@ -23,5 +23,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/no-unsafe-argument': 'off',
+    '@typescript-eslint/strict-boolean-expressions': 'off',
   },
 };

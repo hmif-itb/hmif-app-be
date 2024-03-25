@@ -9,6 +9,12 @@
     ],
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ]
+    },
+    "baseUrl": "."
   }
 }

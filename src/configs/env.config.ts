@@ -3,6 +3,7 @@ import 'dotenv/config';
 
 const EnvSchema = z.object({
   PORT: z.coerce.number().default(5000),
+  DATABASE_URL: z.string().url(),
 });
 
 const result = EnvSchema.safeParse(process.env);
