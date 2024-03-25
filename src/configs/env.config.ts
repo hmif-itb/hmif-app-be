@@ -4,6 +4,11 @@ import 'dotenv/config';
 const EnvSchema = z.object({
   PORT: z.coerce.number().default(5000),
   DATABASE_URL: z.string().url(),
+  ALLOWED_ORIGINS: z
+    .string()
+    .default('["http://localhost:5173"]')
+    .transform((value) => JSON.parse(value))
+    .pipe(z.array(z.string().url())),
 });
 
 const result = EnvSchema.safeParse(process.env);

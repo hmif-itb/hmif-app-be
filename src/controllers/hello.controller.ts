@@ -1,9 +1,9 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
-import { getUsersRoute } from '../routes/hello.route';
+import { getUserRoute } from '../routes/hello.route';
 
 export const helloRouter = new OpenAPIHono();
 
-helloRouter.openapi(getUsersRoute, (c) => {
+helloRouter.openapi(getUserRoute, (c) => {
   const { id } = c.req.valid('param');
   return c.json({
     id,

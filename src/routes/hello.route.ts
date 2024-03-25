@@ -1,7 +1,9 @@
 import { createRoute } from '@hono/zod-openapi';
 import { ParamsSchema, UserSchema } from '../types/hello.types';
 
-export const getUsersRoute = createRoute({
+export const getUserRoute = createRoute({
+  operationId: 'getUser',
+  tags: ['hello'],
   method: 'get',
   path: '/users/{id}',
   request: {
@@ -17,5 +19,4 @@ export const getUsersRoute = createRoute({
       description: 'Retrieve the user',
     },
   },
-  tags: ['hello'],
 });
