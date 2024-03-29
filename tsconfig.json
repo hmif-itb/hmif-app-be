@@ -15,6 +15,7 @@
         "./src/*"
       ]
     },
-    "baseUrl": "."
+    "baseUrl": ".",
+    "skipLibCheck": true
   }
 }

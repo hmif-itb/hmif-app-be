@@ -4,7 +4,7 @@ module.exports = {
     es2021: true,
   },
   extends: ['love', 'plugin:prettier/recommended'],
-  ignorePatterns: ['.eslintrc.js', 'node_modules/'],
+  ignorePatterns: ['.eslintrc.js', 'node_modules/', 'drizzle/'],
   overrides: [
     {
       env: {

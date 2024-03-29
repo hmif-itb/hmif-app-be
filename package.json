@@ -3,6 +3,7 @@
   "displayName": "HMIF App API",
   "version": "0.0.1",
   "scripts": {
+    "start": "tsx src/index.ts",
     "dev": "tsx watch src/index.ts",
     "db:migrations": "drizzle-kit generate:pg --config drizzle.config.ts",
     "db:migrate": "tsx src/db/migrate.ts",
