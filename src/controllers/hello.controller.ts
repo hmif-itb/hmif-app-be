@@ -1,7 +1,7 @@
-import { OpenAPIHono } from '@hono/zod-openapi';
 import { getUserRoute } from '../routes/hello.route';
+import { createRouter } from './router-factory';
 
-export const helloRouter = new OpenAPIHono();
+export const helloRouter = createRouter();
 
 helloRouter.openapi(getUserRoute, (c) => {
   const { id } = c.req.valid('param');

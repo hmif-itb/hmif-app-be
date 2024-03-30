@@ -13,7 +13,13 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageJson = JSON.parse(
   fs.readFileSync(path.join(dirname, '../package.json'), 'utf-8'),
 );
-const app = new OpenAPIHono();
+const app = new OpenAPIHono({
+  defaultHook: (result, c) => {
+    if (!result.success) {
+      return c.json({ errors: result.error.flatten() }, 400);
+    }
+  },
+});
 
 app.use(logger());
 app.use(
@@ -30,7 +36,10 @@ app.doc('/doc', {
     version: packageJson.version,
     title: packageJson.displayName,
   },
-  tags: [{ name: 'hello', description: 'Hello API' }],
+  tags: [
+    { name: 'hello', description: 'Hello API' },
+    { name: 'push', description: 'Push event API' },
+  ],
 });
 app.get('/swagger', swaggerUI({ url: '/doc' }));
 

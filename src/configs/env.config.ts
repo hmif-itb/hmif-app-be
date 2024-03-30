@@ -9,6 +9,9 @@ const EnvSchema = z.object({
     .default('["http://localhost:5173"]')
     .transform((value) => JSON.parse(value))
     .pipe(z.array(z.string().url())),
+  VAPID_PUBLIC_KEY: z.string().default('not-specified'),
+  VAPID_PRIVATE_KEY: z.string().default('not-specified'),
+  VAPID_MAILTO: z.string().email().optional(),
 });
 
 const result = EnvSchema.safeParse(process.env);

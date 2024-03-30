@@ -1,4 +1,5 @@
 import { createRoute } from '@hono/zod-openapi';
+import { validationErrorResponse } from '~/types/responses.type';
 import { ParamsSchema, UserSchema } from '../types/hello.types';
 
 export const getUserRoute = createRoute({
@@ -18,5 +19,6 @@ export const getUserRoute = createRoute({
       },
       description: 'Retrieve the user',
     },
+    400: validationErrorResponse,
   },
 });
