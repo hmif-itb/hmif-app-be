@@ -31,8 +31,15 @@ export function createAuthRouter() {
   // TODO: set proper user
   authRouter.use(async (c, next) => {
     c.set('user', {
-      id: 'test',
+      id: 'djsah8dashko2hdksa',
+      nim: '18221000',
       email: 'test@example.com',
+      full_name: 'Test User',
+      jurusan: 'STI',
+      asal_kampus: 'Ganesha',
+      angkatan: 2021,
+      jenis_kelamin: 'Laki-laki',
+      status_keanggotaan: 'aktif',
       createdAt: new Date(),
     });
     await next();
