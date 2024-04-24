@@ -1,14 +1,222 @@
 import { z } from '@hono/zod-openapi';
 
-export const OpenGraphScrapeRequestSchema = z.object({
-  url: z
-    .string()
-    .url()
-    .openapi({
-      param: {
-        name: 'url',
-        in: 'query',
-      },
-      example: 'https://www.npmjs.com/package/open-graph-scraper*',
+export const OpenGraphScrapeRequestSchema = z
+  .object({
+    url: z
+      .string()
+      .url()
+      .openapi({
+        param: {
+          name: 'url',
+          in: 'query',
+        },
+        example: 'https://www.npmjs.com/package/open-graph-scraper',
+      }),
+  })
+  .openapi('OpenGraphScrapeRequest');
+
+const OpenGraphImageSchema = z
+  .object({
+    height: z.string().optional(),
+    type: z.string(),
+    url: z.string(),
+    width: z.string().optional(),
+  })
+  .openapi('OpenGraphImage');
+
+export const OpenGraphSuccessResultSchema = z
+  .object({
+    alAndroidAppName: z.string().optional(),
+    alAndroidClass: z.string().optional(),
+    alAndroidPackage: z.string().optional(),
+    alAndroidUrl: z.string().optional(),
+    alIosAppName: z.string().optional(),
+    alIosAppStoreId: z.string().optional(),
+    alIosUrl: z.string().optional(),
+    alIpadAppName: z.string().optional(),
+    alIpadAppStoreId: z.string().optional(),
+    alIpadUrl: z.string().optional(),
+    alIphoneAppName: z.string().optional(),
+    alIphoneAppStoreId: z.string().optional(),
+    alIphoneUrl: z.string().optional(),
+    alWebShouldFallback: z.string().optional(),
+    alWebUrl: z.string().optional(),
+    alWindowsAppId: z.string().optional(),
+    alWindowsAppName: z.string().optional(),
+    alWindowsPhoneAppId: z.string().optional(),
+    alWindowsPhoneAppName: z.string().optional(),
+    alWindowsPhoneUrl: z.string().optional(),
+    alWindowsUniversalAppId: z.string().optional(),
+    alWindowsUniversalAppName: z.string().optional(),
+    alWindowsUniversalUrl: z.string().optional(),
+    alWindowsUrl: z.string().optional(),
+    articleAuthor: z.string().optional(),
+    articleExpirationTime: z.string().optional(),
+    articleModifiedTime: z.string().optional(),
+    articlePublishedTime: z.string().optional(),
+    articlePublisher: z.string().optional(),
+    articleSection: z.string().optional(),
+    articleTag: z.string().optional(),
+    author: z.string().optional(),
+    bookAuthor: z.string().optional(),
+    bookCanonicalName: z.string().optional(),
+    bookIsbn: z.string().optional(),
+    bookReleaseDate: z.string().optional(),
+    booksBook: z.string().optional(),
+    booksRatingScale: z.string().optional(),
+    booksRatingValue: z.string().optional(),
+    bookTag: z.string().optional(),
+    businessContactDataCountryName: z.string().optional(),
+    businessContactDataLocality: z.string().optional(),
+    businessContactDataPostalCode: z.string().optional(),
+    businessContactDataRegion: z.string().optional(),
+    businessContactDataStreetAddress: z.string().optional(),
+    dcContributor: z.string().optional(),
+    dcCoverage: z.string().optional(),
+    dcCreator: z.string().optional(),
+    dcDate: z.string().optional(),
+    dcDateCreated: z.string().optional(),
+    dcDateIssued: z.string().optional(),
+    dcDescription: z.string().optional(),
+    dcFormatMedia: z.string().optional(),
+    dcFormatSize: z.string().optional(),
+    dcIdentifier: z.string().optional(),
+    dcLanguage: z.string().optional(),
+    dcPublisher: z.string().optional(),
+    dcRelation: z.string().optional(),
+    dcRights: z.string().optional(),
+    dcSource: z.string().optional(),
+    dcSubject: z.string().optional(),
+    dcTitle: z.string().optional(),
+    dcType: z.string().optional(),
+    modifiedTime: z.string().optional(),
+    musicAlbum: z.string().optional(),
+    musicAlbumDisc: z.string().optional(),
+    musicAlbumTrack: z.string().optional(),
+    musicAlbumUrl: z.string().optional(),
+    musicCreator: z.string().optional(),
+    musicDuration: z.string().optional(),
+    musicMusician: z.string().optional(),
+    musicReleaseDate: z.string().optional(),
+    musicSong: z.string().optional(),
+    musicSongDisc: z.string().optional(),
+    musicSongTrack: z.string().optional(),
+    musicSongUrl: z.string().optional(),
+    ogArticleAuthor: z.string().optional(),
+    ogArticleExpirationTime: z.string().optional(),
+    ogArticleModifiedTime: z.string().optional(),
+    ogArticlePublishedTime: z.string().optional(),
+    ogArticlePublisher: z.string().optional(),
+    ogArticleSection: z.string().optional(),
+    ogArticleTag: z.string().optional(),
+    ogAudio: z.string().optional(),
+    ogAudioSecureURL: z.string().optional(),
+    ogAudioType: z.string().optional(),
+    ogAudioURL: z.string().optional(),
+    ogAvailability: z.string().optional(),
+    ogDate: z
+      .string()
+      .optional()
+      .openapi({ example: '2024-04-07T01:48:26.212Z' }),
+    ogDescription: z.string().optional().openapi({
+      example:
+        'Node.js scraper module for Open Graph and Twitter Card info. Latest version: 6.5.1, last published: 17 days ago. Start using open-graph-scraper in your project by running `npm i open-graph-scraper`. There are 63 other projects in the npm registry using open-graph-scraper.',
     }),
-});
+    ogDeterminer: z.string().optional(),
+    ogLocale: z.string().optional().openapi({ example: 'en' }),
+    ogLocaleAlternate: z.string().optional(),
+    ogLogo: z.string().optional(),
+    ogPriceAmount: z.string().optional(),
+    ogPriceCurrency: z.string().optional(),
+    ogProductAvailability: z.string().optional(),
+    ogProductCondition: z.string().optional(),
+    ogProductPriceAmount: z.string().optional(),
+    ogProductPriceCurrency: z.string().optional(),
+    ogProductRetailerItemId: z.string().optional(),
+    ogSiteName: z.string().optional().openapi({ example: 'npm' }),
+    ogTitle: z.string().optional(),
+    ogType: z.string().optional(),
+    ogUrl: z.string().optional().openapi({
+      example: 'https://www.npmjs.com/package/open-graph-scraper',
+    }),
+    ogVideo: z.string().optional(),
+    ogVideoActorId: z.string().optional(),
+    ogVideoHeight: z.string().optional(),
+    ogVideoSecureURL: z.string().optional(),
+    ogVideoType: z.string().optional(),
+    ogVideoWidth: z.string().optional(),
+    placeLocationLatitude: z.string().optional(),
+    placeLocationLongitude: z.string().optional(),
+    profileFirstName: z.string().optional(),
+    profileGender: z.string().optional(),
+    profileLastName: z.string().optional(),
+    profileUsername: z.string().optional(),
+    publishedTime: z.string().optional(),
+    releaseDate: z.string().optional(),
+    restaurantContactInfoCountryName: z.string().optional(),
+    restaurantContactInfoEmail: z.string().optional(),
+    restaurantContactInfoLocality: z.string().optional(),
+    restaurantContactInfoPhoneNumber: z.string().optional(),
+    restaurantContactInfoPostalCode: z.string().optional(),
+    restaurantContactInfoRegion: z.string().optional(),
+    restaurantContactInfoStreetAddress: z.string().optional(),
+    restaurantContactInfoWebsite: z.string().optional(),
+    restaurantMenu: z.string().optional(),
+    restaurantRestaurant: z.string().optional(),
+    restaurantSection: z.string().optional(),
+    restaurantVariationPriceAmount: z.string().optional(),
+    restaurantVariationPriceCurrency: z.string().optional(),
+    twitterAppIdGooglePlay: z.string().optional(),
+    twitterAppIdiPad: z.string().optional(),
+    twitterAppIdiPhone: z.string().optional(),
+    twitterAppNameGooglePlay: z.string().optional(),
+    twitterAppNameiPad: z.string().optional(),
+    twitterAppNameiPhone: z.string().optional(),
+    twitterAppUrlGooglePlay: z.string().optional(),
+    twitterAppUrliPad: z.string().optional(),
+    twitterAppUrliPhone: z.string().optional(),
+    twitterCard: z.string().optional(),
+    twitterCreator: z.string().optional(),
+    twitterCreatorId: z.string().optional(),
+    twitterDescription: z.string().optional(),
+    twitterImage: z.string().optional(),
+    twitterImageAlt: z.string().optional(),
+    twitterImageHeight: z.string().optional(),
+    twitterImageSrc: z.string().optional(),
+    twitterImageWidth: z.string().optional(),
+    twitterPlayer: z.string().optional(),
+    twitterPlayerHeight: z.string().optional(),
+    twitterPlayerStream: z.string().optional(),
+    twitterPlayerStreamContentType: z.string().optional(),
+    twitterPlayerWidth: z.string().optional(),
+    twitterSite: z.string().optional(),
+    twitterSiteId: z.string().optional(),
+    twitterTitle: z.string().optional().openapi({
+      example: 'npm: open-graph-scraper',
+    }),
+    twitterUrl: z.string().optional().openapi({
+      example: 'https://www.npmjs.com/package/open-graph-scraper',
+    }),
+    updatedTime: z.string().optional(),
+    ogImage: z
+      .union([OpenGraphImageSchema, z.array(OpenGraphImageSchema)])
+      .optional()
+      .openapi({
+        example: [
+          {
+            type: 'png',
+            url: 'https://static-production.npmjs.com/338e4905a2684ca96e08c7780fc68412.png',
+          },
+        ],
+      }),
+    success: z.boolean().default(true),
+  })
+  .openapi('OpenGraphSuccessResult');
+
+export const OpenGraphErrorResultSchema = z
+  .object({
+    error: z.string().openapi({ example: '404 Not Found' }),
+    errorDetails: z.any().openapi({ example: '{}' }),
+    success: z.boolean().default(false),
+  })
+  .openapi('OpenGraphErrorResult');
