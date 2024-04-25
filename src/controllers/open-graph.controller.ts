@@ -14,7 +14,8 @@ openGraphScrapeRoute.openapi(getOpenGraph, async (c) => {
   const data = await og({ url })
     .then((data) => data)
     .catch((err: ErrorResult) => err);
-
+// cache for one day
+c.header('Cache-Control', `public, max-age=${60 * 60 * 24}`)
   if (data.error) {
     return c.json(OpenGraphErrorResultSchema.parse(data.result), 400);
   } else {
