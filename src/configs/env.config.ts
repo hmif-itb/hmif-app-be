@@ -12,6 +12,9 @@ const EnvSchema = z.object({
   VAPID_PUBLIC_KEY: z.string().default('not-specified'),
   VAPID_PRIVATE_KEY: z.string().default('not-specified'),
   VAPID_MAILTO: z.string().email().optional(),
+  GOOGLE_CLIENT_ID: z.string(),
+  GOOGLE_CLIENT_SECRET: z.string(),
+  GOOGLE_CALLBACK_URL: z.string().url(),
 });
 
 const result = EnvSchema.safeParse(process.env);
