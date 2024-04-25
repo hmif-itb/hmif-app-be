@@ -1,8 +1,8 @@
 import { createRoute, z } from '@hono/zod-openapi';
 import {
-  OpenGraphErrorResultSchema,
+  OpenGraphErrorSchema,
   OpenGraphScrapeRequestSchema,
-  OpenGraphSuccessResultSchema,
+  OgObjectSchema,
 } from '~/types/open-graph.types';
 import { ValidationErrorSchema } from '~/types/responses.type';
 
@@ -20,7 +20,7 @@ export const getOpenGraph = createRoute({
       description: 'Scrape successful',
       content: {
         'application/json': {
-          schema: OpenGraphSuccessResultSchema,
+          schema: OgObjectSchema,
         },
       },
     },
@@ -28,7 +28,7 @@ export const getOpenGraph = createRoute({
       description: 'Invalid URL',
       content: {
         'application/json': {
-          schema: z.union([OpenGraphErrorResultSchema, ValidationErrorSchema]),
+          schema: z.union([OpenGraphErrorSchema, ValidationErrorSchema]),
         },
       },
     },
