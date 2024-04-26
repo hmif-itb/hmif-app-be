@@ -1,18 +1,10 @@
 import { z } from '@hono/zod-openapi';
 
-export const QueryParamsSchema = z.object({
+export const BodyParamsSchema = z.object({
   fileName: z.string().openapi({
-    param: {
-      name: 'fileName',
-      in: 'query',
-    },
     example: 'cat',
   }),
   fileType: z.string().openapi({
-    param: {
-      name: 'fileType',
-      in: 'query',
-    },
     example: 'png',
   }),
 });

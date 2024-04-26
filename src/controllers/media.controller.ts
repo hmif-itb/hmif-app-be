@@ -6,7 +6,7 @@ import { createId } from '@paralleldrive/cuid2';
 export const mediaRouter = createAuthRouter();
 
 mediaRouter.openapi(createPresignedUrl, async (c) => {
-  const { fileName, fileType } = c.req.valid('query');
+  const { fileName, fileType } = c.req.valid('json');
   const key = `${createId()}-${fileName}.${fileType}`;
 
   const expiresIn = 3600;

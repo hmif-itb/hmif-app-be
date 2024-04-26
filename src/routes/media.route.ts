@@ -1,15 +1,22 @@
 import { createRoute } from '@hono/zod-openapi';
-import { PresignedUrlSchema, QueryParamsSchema } from '~/types/media.types';
+import { PresignedUrlSchema, BodyParamsSchema } from '~/types/media.types';
 import { ValidationErrorSchema } from '~/types/responses.type';
 
 export const createPresignedUrl = createRoute({
   operationId: 'createPresignedUrl',
   tags: ['media'],
-  method: 'get',
+  method: 'post',
   path: '/media/upload',
   description: 'Creates presigned URL for file upload to S3',
   request: {
-    query: QueryParamsSchema,
+    body: {
+      content: {
+        'application/json': {
+          schema: BodyParamsSchema,
+        },
+      },
+      required: true,
+    },
   },
   responses: {
     200: {
