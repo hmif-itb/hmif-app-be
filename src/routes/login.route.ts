@@ -14,27 +14,27 @@ export const loginRoute = createRoute({
           schema: {},
         },
       },
-      description: 'login from google',
+      description: 'login with google',
     },
     400: validationErrorResponse,
   },
 });
 
 export const authCallbackRoute = createRoute({
-    operationId: 'loginRoute',
-    tags: ['login'],
-    method: 'get',
-    path: '/auth/google/callback',
-    request: {},
-    responses: {
-      200: {
-        content: {
-          'application/json': {
-            schema: {},
-          },
+  operationId: 'loginRoute',
+  tags: ['login'],
+  method: 'get',
+  path: '/auth/google/callback',
+  request: {},
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: {},
         },
-        description: 'callback google',
       },
-      400: validationErrorResponse,
+      description: 'callback google',
     },
-  });
+    400: validationErrorResponse,
+  },
+});
