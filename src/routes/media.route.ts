@@ -1,6 +1,6 @@
 import { createRoute } from '@hono/zod-openapi';
-import { PresignedUrlSchema, BodyParamsSchema } from '~/types/media.types';
-import { ValidationErrorSchema } from '~/types/responses.type';
+import { BodyParamsSchema, PresignedUrlSchema } from '~/types/media.types';
+import { validationErrorResponse } from '~/types/responses.type';
 
 export const createPresignedUrl = createRoute({
   operationId: 'createPresignedUrl',
@@ -27,13 +27,6 @@ export const createPresignedUrl = createRoute({
         },
       },
     },
-    400: {
-      description: 'Bad request',
-      content: {
-        'application/json': {
-          schema: ValidationErrorSchema,
-        },
-      },
-    },
+    400: validationErrorResponse,
   },
 });
