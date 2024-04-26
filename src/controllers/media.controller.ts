@@ -2,6 +2,7 @@ import { createPresignedUrl } from '~/routes/media.route';
 import { createAuthRouter } from './router-factory';
 import { createPutObjectPresignedUrl } from '~/lib/r2-bucket';
 import { createId } from '@paralleldrive/cuid2';
+import { env } from '~/configs/env.config';
 
 export const mediaRouter = createAuthRouter();
 
@@ -9,11 +10,11 @@ mediaRouter.openapi(createPresignedUrl, async (c) => {
   const { fileName, fileType } = c.req.valid('json');
   const key = `${createId()}-${fileName}.${fileType}`;
 
-  const expiresIn = 3600;
+  const expiresIn = 60;
   return c.json(
     {
       presignedUrl: await createPutObjectPresignedUrl(key, expiresIn),
-      mediaUrl: `https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/${key}`,
+      mediaUrl: `${env.R2_PUBLIC_URL}/${key}`,
       expiresIn,
     },
     200,
