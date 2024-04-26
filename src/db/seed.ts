@@ -14,7 +14,7 @@ const db = drizzle(client);
 
 export async function runUserSeed() {
   const filePath = 'src/db/database-anggota-hmif.csv';
-  const data: (typeof users.$inferInsert)[] = [];
+  const data: Array<typeof users.$inferInsert> = [];
 
   fs.createReadStream(filePath)
     .pipe(parse({ delimiter: ',', from_line: 2 }))
@@ -30,9 +30,15 @@ export async function runUserSeed() {
         status_keanggotaan: row[5],
       });
     })
-    .on('end', async () => {
-      await db.insert(users).values(data);
-      await client.end();
+    .on('end', () => {
+      db.insert(users)
+        .values(data)
+        .then(async () => {
+          await client.end();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     })
     .on('error', (err) => {
       console.log(err);
