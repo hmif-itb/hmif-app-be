@@ -14,10 +14,12 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.556.0",
+    "@aws-sdk/s3-request-presigner": "^3.563.0",
     "@hono/node-server": "^1.8.2",
     "@hono/swagger-ui": "^0.2.1",
     "@hono/zod-openapi": "^0.9.9",
     "@paralleldrive/cuid2": "^2.2.2",
+    "aws-sdk": "^2.1607.0",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.1",
