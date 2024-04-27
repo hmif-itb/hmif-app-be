@@ -1,5 +1,10 @@
-import { loginRoute, authCallbackRoute } from '../routes/auth.route';
-import { createRouter } from './router-factory';
+import {
+  loginRoute,
+  authCallbackRoute,
+  logoutRoute,
+  selfRoute,
+} from '../routes/auth.route';
+import { createAuthRouter, createRouter } from './router-factory';
 import 'dotenv/config';
 import { env } from '~/configs/env.config';
 import { findUserByEmail } from '~/repositories/auth.repo';
@@ -9,10 +14,11 @@ import {
   GoogleTokenDataSchema,
   GoogleUserSchema,
 } from '~/types/login.types';
-import { setCookie } from 'hono/cookie';
+import { deleteCookie, setCookie } from 'hono/cookie';
 import { sign } from 'hono/jwt';
 
 export const loginRouter = createRouter();
+export const loginProtectedRouter = createAuthRouter();
 
 const generateJWT = async (payload: object) => {
   const now = Date.now();
@@ -123,4 +129,14 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
       500,
     );
   }
+});
+
+loginProtectedRouter.openapi(logoutRoute, async (c) => {
+  deleteCookie(c, 'hmif-app.access-cookie');
+  return c.json({}, 200);
+});
+
+loginProtectedRouter.openapi(selfRoute, async (c) => {
+  const user = c.var.user;
+  return c.json(user, 200);
 });

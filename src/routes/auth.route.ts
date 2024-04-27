@@ -11,7 +11,7 @@ import {
 
 export const loginRoute = createRoute({
   operationId: 'loginRoute',
-  tags: ['login'],
+  tags: ['auth'],
   method: 'get',
   path: '/login',
   request: {},
@@ -32,7 +32,7 @@ export const loginRoute = createRoute({
 
 export const authCallbackRoute = createRoute({
   operationId: 'loginRoute',
-  tags: ['login'],
+  tags: ['auth'],
   method: 'get',
   path: '/auth/google/callback',
   request: {
@@ -45,9 +45,42 @@ export const authCallbackRoute = createRoute({
           schema: JWTPayloadSchema,
         },
       },
-      description: 'callback google',
+      description: 'Login succesful',
     },
     400: validationErrorResponse,
+    401: authorizaitonErrorResponse,
+    500: errorResponse,
+  },
+});
+
+export const logoutRoute = createRoute({
+  operationId: 'logoutRoute',
+  tags: ['auth'],
+  method: 'post',
+  path: '/logout',
+  responses: {
+    200: {
+      description: 'Logout successful',
+    },
+    401: authorizaitonErrorResponse,
+    500: errorResponse,
+  },
+});
+
+export const selfRoute = createRoute({
+  operationId: 'selfRoute',
+  tags: ['auth'],
+  method: 'get',
+  path: '/me',
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: JWTPayloadSchema,
+        },
+      },
+      description: 'Login succesful',
+    },
     401: authorizaitonErrorResponse,
     500: errorResponse,
   },
