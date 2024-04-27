@@ -51,6 +51,7 @@ export async function runUserSeed() {
     .on('end', () => {
       db.insert(users)
         .values(data)
+        .onConflictDoNothing()
         .then(async () => {
           await client.end();
         })

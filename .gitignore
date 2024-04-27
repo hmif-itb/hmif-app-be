@@ -1,2 +1,5 @@
 node_modules
 .env
+
+# Ignore seed csv data
+src/db/seed/database.csv
