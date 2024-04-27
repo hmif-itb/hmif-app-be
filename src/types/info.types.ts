@@ -42,13 +42,16 @@ export const InfoParamSchema = z.object({
     },
     example: 'Pemrograman Web',
   }),
-  forClass: z.string().openapi({
-    param: {
-      name: 'forClass',
-      in: 'query',
-    },
-    example: 'K1',
-  }),
+  forClass: z
+    .number()
+    .int()
+    .openapi({
+      param: {
+        name: 'forClass',
+        in: 'query',
+      },
+      example: 1,
+    }),
 });
 
 export const InfoSchema = z

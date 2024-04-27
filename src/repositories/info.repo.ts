@@ -25,7 +25,7 @@ export async function createInfo(
     .returning()
     .then(firstSure);
 
-  if (mediaIds.length) {
+  if (mediaIds.length > 0) {
     await db
       .insert(infoMedias)
       .values(mediaIds.map((mediaId) => ({ infoId: create.id, mediaId })))

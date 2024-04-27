@@ -7,5 +7,5 @@ export const createInfoRouter = createAuthRouter();
 
 createInfoRouter.openapi(createInfoRoute, async (c) => {
   const { mediaIds, ...data } = c.req.valid('json');
-  return await createInfo(db, data, c.var.user.id, mediaIds);
+  return c.json(await createInfo(db, data, c.var.user.id, mediaIds), 201);
 });

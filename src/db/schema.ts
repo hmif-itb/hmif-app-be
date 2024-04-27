@@ -94,7 +94,7 @@ export const infos = pgTable('infos', {
   category: text('category').notNull(),
   forAngkatan: integer('for_angkatan'),
   forMatakuliah: text('for_matakuliah'),
-  forClass: text('for_class'),
+  forClass: integer('for_class'),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
