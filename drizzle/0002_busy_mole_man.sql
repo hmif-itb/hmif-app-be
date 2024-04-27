@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS "infos" (
 	"id" text PRIMARY KEY NOT NULL,
 	"creator_id" text,
 	"content" text NOT NULL,
+	"category" text,
 	"for_angkatan" integer,
 	"for_matakuliah" text,
 	"for_class" text,
