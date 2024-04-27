@@ -5,9 +5,15 @@ import { loginRouter } from './auth.controller';
 import { mediaRouter } from './media.controller';
 import { openGraphScrapeRoute } from './open-graph.controller';
 
+const unprotectedApiRouter = new OpenAPIHono();
+unprotectedApiRouter.route('/', loginRouter);
+unprotectedApiRouter.route('/', openGraphScrapeRoute);
+
+const protectedApiRouter = new OpenAPIHono();
+protectedApiRouter.route('/', helloRouter);
+protectedApiRouter.route('/', pushRouter);
+protectedApiRouter.route('/', mediaRouter);
+
 export const apiRouter = new OpenAPIHono();
-apiRouter.route('/', helloRouter);
-apiRouter.route('/', pushRouter);
-apiRouter.route('/', loginRouter);
-apiRouter.route('/', mediaRouter);
-apiRouter.route('/', openGraphScrapeRoute);
+apiRouter.route('/', unprotectedApiRouter);
+apiRouter.route('/', protectedApiRouter);
