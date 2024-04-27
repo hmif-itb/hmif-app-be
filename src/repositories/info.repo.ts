@@ -31,5 +31,7 @@ export async function createInfo(
       .values(mediaIds.map((mediaId) => ({ infoId: create.id, mediaId })))
       .execute();
   }
+  console.log
+  
   return create;
 }
