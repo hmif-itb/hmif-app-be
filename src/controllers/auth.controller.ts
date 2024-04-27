@@ -10,10 +10,9 @@ import {
   GoogleTokenDataSchema,
   GoogleUserSchema,
 } from '~/types/login.types';
-import { setCookie } from 'hono/cookie'
+import { setCookie } from 'hono/cookie';
 
 export const loginRouter = createRouter();
-
 
 function generateJWT(payload: object, secret: string, expiresIn: string) {
   return jwt.sign(payload, secret, { expiresIn });
@@ -81,7 +80,6 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
     );
     // console.log(await userInfoResponse.json());
     const userInfo = GoogleUserSchema.parse(await userInfoResponse.json());
-
     // Find user in db, if not found return forbidden
     const { email, picture } = userInfo;
     const user = await findUserByEmail(db, email);
@@ -96,20 +94,21 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
 
     // Create cookie
     const tokenPayload = JWTPayloadSchema.parse({ ...user, picture });
-    const token = generateJWT(tokenPayload, env.JWT_SECRET, env.TOKEN_EXPIRATION);
-    const currentDate = new Date();
-    const futureDate = new Date(currentDate);
-    futureDate.setDate(futureDate.getDate() + 30);
+    const token = generateJWT(
+      tokenPayload,
+      env.JWT_SECRET,
+      env.TOKEN_EXPIRATION,
+    );
+
     setCookie(c, 'hmif-app.access-cookie', token, {
       path: '/',
       secure: true,
-      domain: 'http://localhost:8000',
+      domain: 'localhost',
       httpOnly: true,
-      maxAge: 2592000000, //30 days in milliseconds
-      expires: futureDate,
+      maxAge: parseInt(env.TOKEN_EXPIRATION, 60 * 60 * 24 * 30),
       sameSite: 'Strict',
-    })
-    console.log(token)
+    });
+    console.log(token);
     return c.json(tokenPayload, 200);
   } catch (error) {
     return c.json(
