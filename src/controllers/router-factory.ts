@@ -1,5 +1,8 @@
-import { Hook, OpenAPIHono } from '@hono/zod-openapi';
-import { User } from '~/db/schema';
+import { Hook, OpenAPIHono, z } from '@hono/zod-openapi';
+import { getCookie } from 'hono/cookie';
+import jwt from 'jsonwebtoken';
+import { env } from '~/configs/env.config';
+import { JWTPayloadSchema } from '~/types/login.types';
 
 const defaultHook: Hook<any, any, any, any> = (result, c) => {
   if (!result.success) {
@@ -22,26 +25,24 @@ export function createRouter() {
 export function createAuthRouter() {
   const authRouter = new OpenAPIHono<{
     Variables: {
-      user: User;
+      user: z.infer<typeof JWTPayloadSchema>;
     };
   }>({ defaultHook });
 
-  // TODO: add jwt middleware
-
-  // TODO: set proper user
+  // JWT Middleware
   authRouter.use(async (c, next) => {
-    c.set('user', {
-      id: 'djsah8dashko2hdksa',
-      nim: '18221000',
-      email: 'test@example.com',
-      full_name: 'Test User',
-      jurusan: 'STI',
-      asal_kampus: 'Ganesha',
-      angkatan: 2021,
-      jenis_kelamin: 'Laki-laki',
-      status_keanggotaan: 'aktif',
-      createdAt: new Date(),
-    });
+    const cookies = getCookie(c, 'hmif-app.access-cookie');
+    if (!cookies) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    try {
+      const jwtPayload = jwt.verify(cookies, env.JWT_SECRET);
+      c.set('user', JWTPayloadSchema.parse(jwtPayload));
+    } catch (error) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
     await next();
   });
 
