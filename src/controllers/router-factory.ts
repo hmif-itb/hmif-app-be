@@ -38,7 +38,6 @@ export function createAuthRouter() {
 
   // Set user middleware
   authRouter.use(async (c, next) => {
-    console.log(c.var.jwtPayload);
     const payload = JWTPayloadSchema.parse(c.var.jwtPayload);
     c.set('user', payload);
     await next();

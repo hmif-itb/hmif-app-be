@@ -93,7 +93,6 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
         },
       },
     );
-    // console.log(await userInfoResponse.json());
     const userInfo = GoogleUserSchema.parse(await userInfoResponse.json());
     // Find user in db, if not found return forbidden
     const { email, picture } = userInfo;
@@ -119,7 +118,6 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
       maxAge: parseInt(env.TOKEN_EXPIRATION),
       sameSite: 'Strict',
     });
-    console.log(token);
     return c.json(tokenPayload, 200);
   } catch (error) {
     return c.json(
