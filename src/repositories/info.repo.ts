@@ -9,14 +9,12 @@ import { infoMedias, infos } from '~/db/schema';
 export async function createInfo(
   db: Database,
   data: Omit<InferInsertModel<typeof infos>, 'createdAt'>,
-  userId: string,
   mediaIds: string[],
 ) {
   const create = await db
     .insert(infos)
     .values({
       ...data,
-      creatorId: userId,
     })
     .onConflictDoUpdate({
       set: data,
