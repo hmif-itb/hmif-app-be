@@ -11,6 +11,7 @@ import {
   GoogleUserSchema,
 } from '~/types/login.types';
 import { setCookie } from 'hono/cookie';
+import { decode, sign, verify } from 'hono/jwt';
 
 export const loginRouter = createRouter();
 
@@ -94,10 +95,15 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
 
     // Create cookie
     const tokenPayload = JWTPayloadSchema.parse({ ...user, picture });
-    const token = generateJWT(
-      tokenPayload,
+    const now = Date.now();
+    const token = await sign(
+      {
+        ...tokenPayload,
+        exp: now.valueOf() / 1000 + parseInt(env.TOKEN_EXPIRATION),
+        iat: now.valueOf() / 1000,
+        nbf: now.valueOf() / 1000,
+      },
       env.JWT_SECRET,
-      env.TOKEN_EXPIRATION,
     );
 
     setCookie(c, 'hmif-app.access-cookie', token, {
