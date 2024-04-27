@@ -32,6 +32,9 @@ importers:
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
+      csv-parse:
+        specifier: ^5.5.5
+        version: 5.5.5
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
@@ -41,6 +44,9 @@ importers:
       drizzle-orm:
         specifier: ^0.30.4
         version: 0.30.4(pg@8.11.3)(postgres@3.4.4)
+      drizzle-zod:
+        specifier: ^0.5.1
+        version: 0.5.1(drizzle-orm@0.30.4(pg@8.11.3)(postgres@3.4.4))(zod@3.22.4)
       eslint-config-love:
         specifier: ^43.1.0
         version: 43.1.0(@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.3))(eslint@8.57.0)(typescript@5.4.3))(eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.3))(eslint@8.57.0))(eslint-plugin-n@16.6.2(eslint@8.57.0))(eslint-plugin-promise@6.1.1(eslint@8.57.0))(eslint@8.57.0)(typescript@5.4.3)
@@ -1096,6 +1102,9 @@ packages:
     resolution: {integrity: sha512-HTUrgRJ7r4dsZKU6GjmpfRK1O76h97Z8MfS1G0FozR+oF2kG6Vfe8JE6zwrkbxigziPHinCJ+gCPjA9EaBDtRw==}
     engines: {node: '>= 6'}
 
+  csv-parse@5.5.5:
+    resolution: {integrity: sha512-erCk7tyU3yLWAhk6wvKxnyPtftuy/6Ak622gOO7BCJ05+TYffnPCJF905wmOQm+BpkX54OdAl8pveJwUdpnCXQ==}
+
   d@1.0.2:
     resolution: {integrity: sha512-MOqHvMWF9/9MX6nza0KgvFH4HpMU0EF5uUDXqX/BtxtU8NfB0QzRtJ8Oe/6SuS4kbhyzVJwjd97EA4PKrzJ8bw==}
     engines: {node: '>=0.12'}
@@ -1264,6 +1273,12 @@ packages:
         optional: true
       sqlite3:
         optional: true
+
+  drizzle-zod@0.5.1:
+    resolution: {integrity: sha512-C/8bvzUH/zSnVfwdSibOgFjLhtDtbKYmkbPbUCq46QZyZCH6kODIMSOgZ8R7rVjoI+tCj3k06MRJMDqsIeoS4A==}
+    peerDependencies:
+      drizzle-orm: '>=0.23.13'
+      zod: '*'
 
   ecdsa-sig-formatter@1.0.11:
     resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==}
@@ -3704,6 +3719,8 @@ snapshots:
 
   css-what@6.1.0: {}
 
+  csv-parse@5.5.5: {}
+
   d@1.0.2:
     dependencies:
       es5-ext: 0.10.64
@@ -3824,6 +3841,11 @@ snapshots:
     optionalDependencies:
       pg: 8.11.3
       postgres: 3.4.4
+
+  drizzle-zod@0.5.1(drizzle-orm@0.30.4(pg@8.11.3)(postgres@3.4.4))(zod@3.22.4):
+    dependencies:
+      drizzle-orm: 0.30.4(pg@8.11.3)(postgres@3.4.4)
+      zod: 3.22.4
 
   ecdsa-sig-formatter@1.0.11:
     dependencies:

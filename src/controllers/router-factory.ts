@@ -35,7 +35,7 @@ export function createAuthRouter() {
       nim: '18221000',
       email: 'test@example.com',
       full_name: 'Test User',
-      jurusan: 'STI',
+      jurusan: 'Sistem dan Teknologi Informasi',
       asal_kampus: 'Ganesha',
       angkatan: 2021,
       jenis_kelamin: 'Laki-laki',
