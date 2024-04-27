@@ -4,20 +4,28 @@ import 'dotenv/config';
 import { env } from '~/configs/env.config';
 import { findUserByEmail } from '~/repositories/auth.repo';
 import { db } from '~/db/drizzle';
-import jwt from 'jsonwebtoken';
 import {
   JWTPayloadSchema,
   GoogleTokenDataSchema,
   GoogleUserSchema,
 } from '~/types/login.types';
 import { setCookie } from 'hono/cookie';
-import { decode, sign, verify } from 'hono/jwt';
+import { sign } from 'hono/jwt';
 
 export const loginRouter = createRouter();
 
-function generateJWT(payload: object, secret: string, expiresIn: string) {
-  return jwt.sign(payload, secret, { expiresIn });
-}
+const generateJWT = async (payload: object) => {
+  const now = Date.now();
+  return await sign(
+    {
+      ...payload,
+      exp: now.valueOf() / 1000 + parseInt(env.TOKEN_EXPIRATION),
+      iat: now.valueOf() / 1000,
+      nbf: now.valueOf() / 1000,
+    },
+    env.JWT_SECRET,
+  );
+};
 
 loginRouter.openapi(loginRoute, async (c) => {
   const authorizationUrl = new URL(
@@ -95,23 +103,14 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
 
     // Create cookie
     const tokenPayload = JWTPayloadSchema.parse({ ...user, picture });
-    const now = Date.now();
-    const token = await sign(
-      {
-        ...tokenPayload,
-        exp: now.valueOf() / 1000 + parseInt(env.TOKEN_EXPIRATION),
-        iat: now.valueOf() / 1000,
-        nbf: now.valueOf() / 1000,
-      },
-      env.JWT_SECRET,
-    );
+    const token = await generateJWT(tokenPayload);
 
     setCookie(c, 'hmif-app.access-cookie', token, {
       path: '/',
       secure: true,
       domain: 'localhost',
       httpOnly: true,
-      maxAge: parseInt(env.TOKEN_EXPIRATION, 60 * 60 * 24 * 30),
+      maxAge: parseInt(env.TOKEN_EXPIRATION),
       sameSite: 'Strict',
     });
     console.log(token);
