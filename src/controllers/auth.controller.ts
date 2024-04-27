@@ -1,8 +1,8 @@
-import { loginRoute, authCallbackRoute } from '../routes/login.route';
+import { loginRoute, authCallbackRoute } from '../routes/auth.route';
 import { createRouter } from './router-factory';
 import 'dotenv/config';
 import { env } from '~/configs/env.config';
-import { findUserByEmail } from '~/repositories/login.repo';
+import { findUserByEmail } from '~/repositories/auth.repo';
 import { db } from '~/db/drizzle';
 import jwt from 'jsonwebtoken';
 import {
@@ -10,10 +10,11 @@ import {
   GoogleTokenDataSchema,
   GoogleUserSchema,
 } from '~/types/login.types';
+import { setCookie } from 'hono/cookie'
 
 export const loginRouter = createRouter();
 
-// All of this function will be moved, right now its just to ensure it works (or not)
+
 function generateJWT(payload: object, secret: string, expiresIn: string) {
   return jwt.sign(payload, secret, { expiresIn });
 }
@@ -95,11 +96,21 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
 
     // Create cookie
     const tokenPayload = JWTPayloadSchema.parse({ ...user, picture });
-    const cookie = generateJWT(tokenPayload, env.JWT_SECRET, '30 days');
-    return c.json(tokenPayload, 200, {
-      Location: 'http://localhost:5173', // Todo change url continuation after logging in,
-      'Set-Cookie': `hmif-app.access-cookie=${cookie}; Path=/; HttpOnly`,
-    });
+    const token = generateJWT(tokenPayload, env.JWT_SECRET, env.TOKEN_EXPIRATION);
+    const currentDate = new Date();
+    const futureDate = new Date(currentDate);
+    futureDate.setDate(futureDate.getDate() + 30);
+    setCookie(c, 'hmif-app.access-cookie', token, {
+      path: '/',
+      secure: true,
+      domain: 'http://localhost:8000',
+      httpOnly: true,
+      maxAge: 2592000000, //30 days in milliseconds
+      expires: futureDate,
+      sameSite: 'Strict',
+    })
+    console.log(token)
+    return c.json(tokenPayload, 200);
   } catch (error) {
     return c.json(
       {

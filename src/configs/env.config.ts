@@ -16,6 +16,7 @@ const EnvSchema = z.object({
   GOOGLE_CLIENT_SECRET: z.string(),
   GOOGLE_CALLBACK_URL: z.string().url(),
   JWT_SECRET: z.string(),
+  TOKEN_EXPIRATION: z.string(),
   R2_ENDPOINT: z.string().url().default('not-specified'),
   R2_ACCESS_KEY_ID: z.string().default('not-specified'),
   R2_SECRET_ACCESS_KEY: z.string().default('not-specified'),
