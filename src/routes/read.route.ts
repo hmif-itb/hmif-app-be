@@ -1,21 +1,33 @@
-import { createRoute } from '@hono/zod-openapi';
-import { ReadSchema } from '~/types/read.types';
-import { validationErrorResponse } from '~/types/responses.type';
+import { createRoute, z } from '@hono/zod-openapi';
+import { CreateReadRequestBodySchema } from '~/types/read.types';
+import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
 export const postReadRoute = createRoute({
   operationId: 'postRead',
   tags: ['read'],
   method: 'post',
-  path: '/read/{id}',
-  responses: {
-    200: {
+  path: '/read',
+  request: {
+    body: {
       content: {
         'application/json': {
-          schema: ReadSchema,
+          schema: CreateReadRequestBodySchema,
         },
       },
-      description: 'Read info success',
+      required: true,
     },
-    400: validationErrorResponse,
+  },
+  responses: {
+    201: {
+      description: 'Created user read info',
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ValidationErrorSchema, ErrorSchema]),
+        },
+      },
+    },
   },
 });
