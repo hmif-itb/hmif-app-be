@@ -18,4 +18,3 @@ protectedApiRouter.route('/', loginProtectedRouter);
 export const apiRouter = new OpenAPIHono();
 apiRouter.route('/', unprotectedApiRouter);
 apiRouter.route('/', protectedApiRouter);
-
