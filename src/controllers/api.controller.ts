@@ -3,9 +3,11 @@ import { helloRouter } from './hello.controller';
 import { pushRouter } from './push.controller';
 import { mediaRouter } from './media.controller';
 import { openGraphScrapeRoute } from './open-graph.controller';
+import { readRouter } from './read.controller';
 
 export const apiRouter = new OpenAPIHono();
 apiRouter.route('/', helloRouter);
 apiRouter.route('/', pushRouter);
 apiRouter.route('/', mediaRouter);
 apiRouter.route('/', openGraphScrapeRoute);
+apiRouter.route('/', readRouter);
