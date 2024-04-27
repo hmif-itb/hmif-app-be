@@ -1,5 +1,13 @@
 import { createRoute } from '@hono/zod-openapi';
-import { validationErrorResponse } from '~/types/responses.type';
+import {
+  CallbackQueryParamsSchema,
+  JWTPayloadSchema,
+} from '~/types/login.types';
+import {
+  authorizaitonErrorResponse,
+  errorResponse,
+  validationErrorResponse,
+} from '~/types/responses.type';
 
 export const loginRoute = createRoute({
   operationId: 'loginRoute',
@@ -8,15 +16,17 @@ export const loginRoute = createRoute({
   path: '/login',
   request: {},
   responses: {
-    200: {
-      content: {
-        'application/json': {
-          schema: {},
+    302: {
+      description: 'Redirect to Google login',
+      headers: {
+        location: {
+          description: 'URL to Google login',
+          schema: {
+            type: 'string',
+          },
         },
       },
-      description: 'login with google',
     },
-    400: validationErrorResponse,
   },
 });
 
@@ -25,16 +35,20 @@ export const authCallbackRoute = createRoute({
   tags: ['login'],
   method: 'get',
   path: '/auth/google/callback',
-  request: {},
+  request: {
+    query: CallbackQueryParamsSchema,
+  },
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: {},
+          schema: JWTPayloadSchema,
         },
       },
       description: 'callback google',
     },
     400: validationErrorResponse,
+    401: authorizaitonErrorResponse,
+    500: errorResponse,
   },
 });
