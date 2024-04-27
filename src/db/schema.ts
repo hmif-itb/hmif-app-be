@@ -91,6 +91,7 @@ export const infos = pgTable('infos', {
   id: text('id').primaryKey().$defaultFn(createId),
   creatorId: text('creator_id').references(() => users.id),
   content: text('content').notNull(),
+  category: text('category').notNull(),
   forAngkatan: integer('for_angkatan'),
   forMatakuliah: text('for_matakuliah'),
   forClass: text('for_class'),
