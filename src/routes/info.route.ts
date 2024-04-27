@@ -1,21 +1,14 @@
 import { createRoute, z } from '@hono/zod-openapi';
-import { CreateReadRequestBodySchema } from '~/types/read.types';
+import { CreateReadRequestBodySchema } from '~/types/info.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
-export const postReadRoute = createRoute({
-  operationId: 'postRead',
-  tags: ['read'],
+export const postReadInfoRoute = createRoute({
+  operationId: 'postInfoRead',
+  tags: ['info'],
   method: 'post',
-  path: '/read',
+  path: '/info/{infoId}/read',
   request: {
-    body: {
-      content: {
-        'application/json': {
-          schema: CreateReadRequestBodySchema,
-        },
-      },
-      required: true,
-    },
+    params: CreateReadRequestBodySchema,
   },
   responses: {
     201: {

@@ -1,14 +1,14 @@
-import { db } from '~/db/drizzle';
-import { postReadRoute } from '~/routes/read.route';
-import { createAuthRouter } from './router-factory';
-import { createReadInfo } from '~/repositories/read.repo';
 import { PostgresError } from 'postgres';
+import { db } from '~/db/drizzle';
+import { createReadInfo } from '~/repositories/info.repo';
+import { postReadInfoRoute } from '~/routes/info.route';
+import { createAuthRouter } from './router-factory';
 
-export const readRouter = createAuthRouter();
+export const infoRouter = createAuthRouter();
 
-readRouter.openapi(postReadRoute, async (c) => {
+infoRouter.openapi(postReadInfoRoute, async (c) => {
   const { id } = c.var.user;
-  const { infoId } = c.req.valid('json');
+  const { infoId } = c.req.valid('param');
 
   try {
     const data = {

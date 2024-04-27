@@ -1,7 +1,7 @@
 import { InferInsertModel } from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
-import { userReadInfos } from '~/db/schema';
 import { firstSure } from '~/db/helper';
+import { userReadInfos } from '~/db/schema';
 
 export async function createReadInfo(
   db: Database,

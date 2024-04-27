@@ -1,19 +1,17 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
-import { helloRouter } from './hello.controller';
-import { pushRouter } from './push.controller';
 import { loginProtectedRouter, loginRouter } from './auth.controller';
+import { infoRouter } from './info.controller';
 import { mediaRouter } from './media.controller';
 import { openGraphScrapeRoute } from './open-graph.controller';
-import { readRouter } from './read.controller';
+import { pushRouter } from './push.controller';
 
 const unprotectedApiRouter = new OpenAPIHono();
 unprotectedApiRouter.route('/', loginRouter);
 unprotectedApiRouter.route('/', openGraphScrapeRoute);
 
 const protectedApiRouter = new OpenAPIHono();
-protectedApiRouter.route('/', helloRouter);
 protectedApiRouter.route('/', pushRouter);
-protectedApiRouter.route('/', readRouter);
+protectedApiRouter.route('/', infoRouter);
 protectedApiRouter.route('/', mediaRouter);
 protectedApiRouter.route('/', loginProtectedRouter);
 

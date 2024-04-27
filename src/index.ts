@@ -39,6 +39,10 @@ app.doc('/doc', {
   tags: [
     { name: 'hello', description: 'Hello API' },
     { name: 'push', description: 'Push event API' },
+    { name: 'auth', description: 'Auth API' },
+    { name: 'media' },
+    { name: 'info' },
+    { name: 'open-graph' },
   ],
 });
 app.get('/swagger', swaggerUI({ url: '/doc' }));
