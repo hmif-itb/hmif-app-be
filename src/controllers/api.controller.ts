@@ -12,4 +12,4 @@ apiRouter.route('/', pushRouter);
 apiRouter.route('/', loginRouter);
 apiRouter.route('/', mediaRouter);
 apiRouter.route('/', openGraphScrapeRoute);
-apiRouter.route('/', infoRouter)
+apiRouter.route('/', infoRouter);

@@ -10,10 +10,9 @@ import {
   GoogleTokenDataSchema,
   GoogleUserSchema,
 } from '~/types/login.types';
-import { setCookie } from 'hono/cookie'
+import { setCookie } from 'hono/cookie';
 
 export const loginRouter = createRouter();
-
 
 function generateJWT(payload: object, secret: string, expiresIn: string) {
   return jwt.sign(payload, secret, { expiresIn });
@@ -96,7 +95,11 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
 
     // Create cookie
     const tokenPayload = JWTPayloadSchema.parse({ ...user, picture });
-    const token = generateJWT(tokenPayload, env.JWT_SECRET, env.TOKEN_EXPIRATION);
+    const token = generateJWT(
+      tokenPayload,
+      env.JWT_SECRET,
+      env.TOKEN_EXPIRATION,
+    );
     const currentDate = new Date();
     const futureDate = new Date(currentDate);
     futureDate.setDate(futureDate.getDate() + 30);
@@ -108,8 +111,8 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
       maxAge: 2592000000, //30 days in milliseconds
       expires: futureDate,
       sameSite: 'Strict',
-    })
-    console.log(token)
+    });
+    console.log(token);
     return c.json(tokenPayload, 200);
   } catch (error) {
     return c.json(
