@@ -1,71 +1,34 @@
 import { z } from '@hono/zod-openapi';
+import { createSelectSchema } from 'drizzle-zod';
+import { infos } from '~/db/schema';
 
 export const InfoParamSchema = z.object({
   content: z.string().openapi({
-    param: {
-      name: 'content',
-      in: 'query',
-      required: true,
-    },
-    example: 'Hello World',
+    example: 'Tutor Sebaya dengan Dr. Asep Spakbor',
   }),
   category: z.string().openapi({
-    param: {
-      name: 'category',
-      in: 'query',
-      required: true,
-    },
-    example: 'Pengumuman',
+    example: 'Akademik',
   }),
-  forAngkatan: z
-    .number()
-    .int()
-    .openapi({
-      param: {
-        name: 'forAngkatan',
-        in: 'query',
-        required: true,
-      },
-      example: 21,
-    }),
-  mediaIds: z.array(z.string()).openapi({
-    param: {
-      name: 'media_ids',
-      in: 'query',
-    },
-    example: ['1', '2'],
+  forAngkatan: z.number().int().openapi({
+    example: 2021,
+  }),
+  mediaUrls: z.array(z.string().url()).openapi({
+    example: [
+      'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/r176r3qcuqs3hg8o3dm93n35-asrielblunt.jpg',
+      'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/ba245cbm4238trmq4zv5kkif-semester-cat.png',
+    ],
   }),
   forMatakuliah: z.string().openapi({
-    param: {
-      name: 'forMatakuliah',
-      in: 'query',
-    },
-    example: 'Pemrograman Web',
+    example: 'II2111 Algoritma dan Struktur Data STI',
   }),
-  forClass: z
-    .number()
-    .int()
-    .openapi({
-      param: {
-        name: 'forClass',
-        in: 'query',
-      },
-      example: 1,
-    }),
+  forClass: z.number().int().openapi({
+    example: 1,
+  }),
 });
 
-export const InfoSchema = z
-  .object({
-    id: z.string(),
-    creatorId: z.string().nullable(),
-    content: z.string(),
-    category: z.string(),
-    forAngkatan: z.number().int().nullable(),
-    forMatakuliah: z.string().nullable(),
-    forClass: z.number().int().nullable(),
-    createdAt: z.string(),
-  })
-  .openapi('Info');
+export const InfoSchema = createSelectSchema(infos, {
+  createdAt: z.string(),
+}).openapi('Info');
 
 export const CreateReadRequestBodySchema = z.object({
   infoId: z.string(),

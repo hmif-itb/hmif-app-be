@@ -4,7 +4,11 @@ import {
   InfoParamSchema,
   InfoSchema,
 } from '~/types/info.types';
-import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
+import {
+  ErrorSchema,
+  validationErrorResponse,
+  ValidationErrorSchema,
+} from '~/types/responses.type';
 
 export const postReadInfoRoute = createRoute({
   operationId: 'postInfoRead',
@@ -31,7 +35,7 @@ export const postReadInfoRoute = createRoute({
 
 export const createInfoRoute = createRoute({
   operationId: 'createInfo',
-  tags: ['create-info'],
+  tags: ['info'],
   method: 'post',
   path: '/info',
   description: 'Create an info',

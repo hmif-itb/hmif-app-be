@@ -3,7 +3,6 @@ import { loginProtectedRouter, loginRouter } from './auth.controller';
 import { infoRouter } from './info.controller';
 import { mediaRouter } from './media.controller';
 import { openGraphScrapeRoute } from './open-graph.controller';
-import { createInfoRouter } from './info.controller';
 import { pushRouter } from './push.controller';
 
 const unprotectedApiRouter = new OpenAPIHono();
@@ -15,7 +14,6 @@ protectedApiRouter.route('/', pushRouter);
 protectedApiRouter.route('/', infoRouter);
 protectedApiRouter.route('/', mediaRouter);
 protectedApiRouter.route('/', loginProtectedRouter);
-protectedApiRouter.route('/', createInfoRouter);
 
 export const apiRouter = new OpenAPIHono();
 apiRouter.route('/', unprotectedApiRouter);
