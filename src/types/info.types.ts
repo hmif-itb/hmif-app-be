@@ -30,7 +30,7 @@ export const InfoParamSchema = z.object({
 });
 
 export const InfoSchema = createSelectSchema(infos, {
-  createdAt: z.string(),
+  createdAt: z.union([z.string(), z.date()]),
 }).openapi('Info');
 
 export const CreateReadRequestBodySchema = z.object({
