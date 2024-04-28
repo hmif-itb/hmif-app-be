@@ -1,5 +1,5 @@
 {
-  "id": "47f28954-2c44-45e5-baf0-4a1ae0a8f535",
+  "id": "70991f31-b86b-475a-a304-e9914da1d3f3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -143,6 +143,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "for_angkatan": {
           "name": "for_angkatan",

@@ -91,10 +91,10 @@ export const infos = pgTable('infos', {
   id: text('id').primaryKey().$defaultFn(createId),
   creatorId: text('creator_id').references(() => users.id),
   content: text('content').notNull(),
-  category: text('category').notNull(),
+  category: text('category'),
   forAngkatan: integer('for_angkatan'),
   forMatakuliah: text('for_matakuliah'),
-  forClass: integer('for_class'),
+  forClass: text('for_class'),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
