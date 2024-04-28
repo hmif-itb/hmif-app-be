@@ -3,13 +3,14 @@ import { PgTransaction } from 'drizzle-orm/pg-core';
 import { PostgresJsQueryResultHKT } from 'drizzle-orm/postgres-js';
 import { firstSure } from '~/db/helper';
 import { infoMedias, medias } from '~/db/schema';
+import * as schema from '~/db/schema';
 
 // EXAMPLE URL -> https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/r176r3qcuqs3hg8o3dm93n35-asrielblunt.jpg
 export const createMediaFromUrlTransaction = async (
   tx: PgTransaction<
     PostgresJsQueryResultHKT,
-    typeof import('~/db/schema'),
-    ExtractTablesWithRelations<typeof import('~/db/schema')>
+    typeof schema,
+    ExtractTablesWithRelations<typeof schema>
   >,
   url: string,
   creatorId: string | null,
@@ -35,10 +36,8 @@ export const createMediaFromUrlTransaction = async (
 export const createInfoMediaTransaction = async (
   tx: PgTransaction<
     PostgresJsQueryResultHKT,
-    typeof import('d:/code/hmif-app-be/src/db/schema'),
-    ExtractTablesWithRelations<
-      typeof import('d:/code/hmif-app-be/src/db/schema')
-    >
+    typeof schema,
+    ExtractTablesWithRelations<typeof schema>
   >,
   data: Omit<InferInsertModel<typeof infoMedias>, 'createdAt'>,
 ) => {
