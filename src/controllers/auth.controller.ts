@@ -112,7 +112,6 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
       expires: futureDate,
       sameSite: 'Strict',
     });
-    console.log(token);
     return c.json(tokenPayload, 200);
   } catch (error) {
     return c.json(

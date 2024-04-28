@@ -14,11 +14,11 @@ import { db } from '~/db/drizzle';
 export const infoRouter = createRouter();
 
 infoRouter.openapi(listInfoRoute, async (c) => {
-  const { search, category, isRead, userId, offset } = c.req.query();
-  if (!isRead || !userId || !offset) {
+  const { search, category, unread, userId, offset } = c.req.query();
+  if (!unread || !userId || !offset) {
     return c.json(
       {
-        error: "request should have isRead, userId, and offset filled in query param",
+        error: "request should have unread, userId, and offset filled in query param",
       },
       400,
     );
@@ -26,7 +26,7 @@ infoRouter.openapi(listInfoRoute, async (c) => {
   const offsetNumber = parseInt(offset, 10);
   if (search && search != '') {
     if (category && category != '') {
-      if (isRead && isRead == 'false') {
+      if (unread && unread == 'true') {
         const infos = await GetListInfosSearchCategoryUnread(
           db,
           userId,
@@ -62,7 +62,7 @@ infoRouter.openapi(listInfoRoute, async (c) => {
   }
 
   if (category && category != '') {
-    if (isRead && isRead == 'false') {
+    if (unread && unread == 'true') {
       const infos = await GetListInfosCategoryUnread(db, userId, category, offsetNumber);
       return c.json(
         {
@@ -82,8 +82,7 @@ infoRouter.openapi(listInfoRoute, async (c) => {
     // Return infos based on category only
   }
 
-  if (isRead && isRead == 'false') {
-    console.log(userId);
+  if (unread && unread == 'true') {
     const infos = await GetListInfosUnread(db, userId, offsetNumber);
     return c.json(
       {
