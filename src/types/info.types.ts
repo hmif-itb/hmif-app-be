@@ -79,3 +79,7 @@ export const InfoSchema = z
     }),
   })
   .openapi('Info');
+
+export const CreateReadRequestBodySchema = z.object({
+  infoId: z.string(),
+});

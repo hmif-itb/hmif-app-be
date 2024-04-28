@@ -1,7 +1,7 @@
 import { InferInsertModel } from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
 import { firstSure } from '~/db/helper';
-import { infoMedias, infos } from '~/db/schema';
+import { infoMedias, infos, userReadInfos } from '~/db/schema';
 
 /**
  * Create an info.
@@ -32,4 +32,15 @@ export async function createInfo(
       .execute();
   }
   return create;
+}
+
+export async function createReadInfo(
+  db: Database,
+  data: Omit<InferInsertModel<typeof userReadInfos>, 'createdAt'>,
+) {
+  return await db
+    .insert(userReadInfos)
+    .values(data)
+    .returning()
+    .then(firstSure);
 }
