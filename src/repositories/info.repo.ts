@@ -1,7 +1,11 @@
 import { InferInsertModel } from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
 import { firstSure } from '~/db/helper';
-import { infoMedias, infos, userReadInfos } from '~/db/schema';
+import { infos, userReadInfos } from '~/db/schema';
+import {
+  createInfoMediaTransaction,
+  createMediaFromUrlTransaction,
+} from './media.repo';
 
 /**
  * Create an info.
@@ -9,27 +13,46 @@ import { infoMedias, infos, userReadInfos } from '~/db/schema';
 export async function createInfo(
   db: Database,
   data: Omit<InferInsertModel<typeof infos>, 'createdAt'>,
-  mediaIds: string[],
+  mediaUrls: string[] | undefined,
 ) {
-  const create = await db
-    .insert(infos)
-    .values({
-      ...data,
-    })
-    .onConflictDoUpdate({
-      set: data,
-      target: [infos.id],
-    })
-    .returning()
-    .then(firstSure);
+  return await db.transaction(async (tx) => {
+    try {
+      const newInfo = await tx
+        .insert(infos)
+        .values(data)
+        .returning()
+        .then(firstSure);
 
-  if (mediaIds.length > 0) {
-    await db
-      .insert(infoMedias)
-      .values(mediaIds.map((mediaId) => ({ infoId: create.id, mediaId })))
-      .execute();
-  }
-  return create;
+      if (mediaUrls) {
+        const newMedias = await Promise.all(
+          mediaUrls.map(async (mediaUrl) => {
+            return await createMediaFromUrlTransaction(
+              tx,
+              mediaUrl,
+              newInfo.creatorId,
+            );
+          }),
+        );
+
+        await Promise.all(
+          newMedias.map(async (media) => {
+            return await createInfoMediaTransaction(tx, {
+              infoId: newInfo.id,
+              mediaId: media.id,
+            });
+          }),
+        );
+      }
+      return newInfo;
+    } catch (err) {
+      try {
+        // Ini hack biar kalo rollback gagal, errornya tetep di throw
+        tx.rollback();
+      } catch (err2) {
+        throw err;
+      }
+    }
+  });
 }
 
 export async function createReadInfo(

@@ -12,17 +12,20 @@ export const InfoParamSchema = z.object({
   forAngkatan: z.number().int().openapi({
     example: 2021,
   }),
-  mediaUrls: z.array(z.string().url()).openapi({
-    example: [
-      'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/r176r3qcuqs3hg8o3dm93n35-asrielblunt.jpg',
-      'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/ba245cbm4238trmq4zv5kkif-semester-cat.png',
-    ],
-  }),
+  mediaUrls: z
+    .array(z.string().url())
+    .optional()
+    .openapi({
+      example: [
+        'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/r176r3qcuqs3hg8o3dm93n35-asrielblunt.jpg',
+        'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/ba245cbm4238trmq4zv5kkif-semester-cat.png',
+      ],
+    }),
   forMatakuliah: z.string().openapi({
     example: 'II2111 Algoritma dan Struktur Data STI',
   }),
-  forClass: z.number().int().openapi({
-    example: 1,
+  forClass: z.string().openapi({
+    example: 'K01',
   }),
 });
 

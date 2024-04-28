@@ -4,11 +4,7 @@ import {
   InfoParamSchema,
   InfoSchema,
 } from '~/types/info.types';
-import {
-  ErrorSchema,
-  validationErrorResponse,
-  ValidationErrorSchema,
-} from '~/types/responses.type';
+import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
 export const postReadInfoRoute = createRoute({
   operationId: 'postInfoRead',
@@ -51,13 +47,20 @@ export const createInfoRoute = createRoute({
   },
   responses: {
     201: {
+      description: 'Info created',
       content: {
         'application/json': {
           schema: InfoSchema,
         },
       },
-      description: 'Info created',
     },
-    400: validationErrorResponse,
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ValidationErrorSchema, ErrorSchema]),
+        },
+      },
+    },
   },
 });
