@@ -56,27 +56,14 @@ export const InfoParamSchema = z.object({
 
 export const InfoSchema = z
   .object({
-    id: z.string().openapi({
-      example: '123',
-    }),
-    creatorId: z.string().openapi({
-      example: '123',
-    }),
-    content: z.string().openapi({
-      example: 'Hello World',
-    }),
-    forAngkatan: z.number().int().openapi({
-      example: 21,
-    }),
-    forMatakuliah: z.string().openapi({
-      example: 'Pemrograman Web',
-    }),
-    forClass: z.number().int().openapi({
-      example: 1,
-    }),
-    createdAt: z.string().openapi({
-      example: '2021-01-01T00:00:00Z',
-    }),
+    id: z.string(),
+    creatorId: z.string().nullable(),
+    content: z.string(),
+    category: z.string(),
+    forAngkatan: z.number().int().nullable(),
+    forMatakuliah: z.string().nullable(),
+    forClass: z.number().int().nullable(),
+    createdAt: z.string(),
   })
   .openapi('Info');
 

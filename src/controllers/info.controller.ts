@@ -27,5 +27,9 @@ infoRouter.openapi(postReadInfoRoute, async (c) => {
 
 infoRouter.openapi(createInfoRoute, async (c) => {
   const { mediaIds, ...data } = c.req.valid('json');
-  return c.json(await createInfo(db, data, c.var.user.id, mediaIds), 201);
+  console.log({ ...data, creatorId: c.var.user.id });
+  return c.json(
+    await createInfo(db, { ...data, creatorId: c.var.user.id }, mediaIds),
+    201,
+  );
 });
