@@ -18,7 +18,8 @@ infoRouter.openapi(listInfoRoute, async (c) => {
   if (!unread || !userId || !offset) {
     return c.json(
       {
-        error: "request should have unread, userId, and offset filled in query param",
+        error:
+          'request should have unread, userId, and offset filled in query param',
       },
       400,
     );
@@ -32,7 +33,7 @@ infoRouter.openapi(listInfoRoute, async (c) => {
           userId,
           search,
           category,
-          offsetNumber
+          offsetNumber,
         );
         return c.json(
           {
@@ -42,7 +43,12 @@ infoRouter.openapi(listInfoRoute, async (c) => {
         );
         // Return infos based on search, category and unread
       }
-      const infos = await GetListInfosSearchCategory(db, search, category, offsetNumber);
+      const infos = await GetListInfosSearchCategory(
+        db,
+        search,
+        category,
+        offsetNumber,
+      );
       return c.json(
         {
           infos: infos,
@@ -63,7 +69,12 @@ infoRouter.openapi(listInfoRoute, async (c) => {
 
   if (category && category != '') {
     if (unread && unread == 'true') {
-      const infos = await GetListInfosCategoryUnread(db, userId, category, offsetNumber);
+      const infos = await GetListInfosCategoryUnread(
+        db,
+        userId,
+        category,
+        offsetNumber,
+      );
       return c.json(
         {
           infos: infos,

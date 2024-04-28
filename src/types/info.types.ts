@@ -71,5 +71,5 @@ export const InfoSchema = z
   .openapi('ListInfo');
 
 export const ListInfoSchema = z.object({
-  infos : z.array(InfoSchema)
-})
+  infos: z.array(InfoSchema),
+});

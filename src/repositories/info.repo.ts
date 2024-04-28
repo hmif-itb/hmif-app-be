@@ -7,7 +7,7 @@ export async function GetListInfosSearchCategoryUnread(
   userId: string,
   search: string,
   category: string,
-  offset: number
+  offset: number,
 ) {
   const getReadInfosByUser = db
     .select({ infoId: userReadInfos.infoId })
@@ -22,12 +22,12 @@ export async function GetListInfosSearchCategoryUnread(
     limit: 10,
     offset: offset,
     with: {
-        infoMedias: {
-          with : {
-              media: true
-          }
+      infoMedias: {
+        with: {
+          media: true,
         },
       },
+    },
   });
 }
 
@@ -35,7 +35,7 @@ export async function GetListInfosSearchCategory(
   db: Database,
   search: string,
   category: string,
-  offset: number
+  offset: number,
 ) {
   return await db.query.infos.findMany({
     where: and(
@@ -46,15 +46,19 @@ export async function GetListInfosSearchCategory(
     offset: offset,
     with: {
       infoMedias: {
-        with : {
-            media: true
-        }
+        with: {
+          media: true,
+        },
       },
     },
   });
 }
 
-export async function GetListInfosSearch(db: Database, search: string, offset: number) {
+export async function GetListInfosSearch(
+  db: Database,
+  search: string,
+  offset: number,
+) {
   return await db.query.infos.findMany({
     where: and(
       like(infos.content, `%${search}%`), // Search by content
@@ -71,7 +75,7 @@ export async function GetListInfosCategoryUnread(
   db: Database,
   userId: string,
   category: string,
-  offset: number
+  offset: number,
 ) {
   const getReadInfosByUser = db
     .select({ infoId: userReadInfos.infoId })
@@ -85,31 +89,39 @@ export async function GetListInfosCategoryUnread(
     limit: 10,
     offset: offset,
     with: {
-        infoMedias: {
-          with : {
-              media: true
-          }
+      infoMedias: {
+        with: {
+          media: true,
         },
       },
+    },
   });
 }
 
-export async function GetListInfosCategory(db: Database, category: string, offset: number) {
+export async function GetListInfosCategory(
+  db: Database,
+  category: string,
+  offset: number,
+) {
   return await db.query.infos.findMany({
     where: eq(infos.category, category),
     limit: 10,
     offset: offset,
     with: {
-        infoMedias: {
-          with : {
-              media: true
-          }
+      infoMedias: {
+        with: {
+          media: true,
         },
       },
+    },
   });
 }
 
-export async function GetListInfosUnread(db: Database, userId: string, offset: number) {
+export async function GetListInfosUnread(
+  db: Database,
+  userId: string,
+  offset: number,
+) {
   const getReadInfosByUser = db
     .select({ infoId: userReadInfos.infoId })
     .from(userReadInfos)
@@ -119,12 +131,12 @@ export async function GetListInfosUnread(db: Database, userId: string, offset: n
     limit: 10,
     offset: offset,
     with: {
-        infoMedias: {
-          with : {
-              media: true
-          }
+      infoMedias: {
+        with: {
+          media: true,
         },
       },
+    },
   });
 }
 
@@ -133,11 +145,11 @@ export async function GetAllListInfos(db: Database, offset: number) {
     limit: 10,
     offset: offset,
     with: {
-        infoMedias: {
-          with : {
-              media: true
-          }
+      infoMedias: {
+        with: {
+          media: true,
         },
       },
+    },
   });
 }
