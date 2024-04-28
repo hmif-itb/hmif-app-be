@@ -5,7 +5,7 @@ export const listInfoRoute = createRoute({
   operationId: 'loginRoute',
   tags: ['login'],
   method: 'get',
-  path: '/get-infos/{search}/{category}',
+  path: '/get-infos',
   request: {
     params: ListInfoParamsSchema
   } ,

@@ -3,7 +3,7 @@ import { z } from '@hono/zod-openapi';
 export const ListInfoParamsSchema = z.object({
     search: z
       .string()
-      .min(0)
+      .optional()
       .openapi({
         param: {
           name: 'search',
@@ -13,7 +13,7 @@ export const ListInfoParamsSchema = z.object({
       }),
     category: z
       .string()
-      .min(3)
+      .optional()
       .openapi({
         param: {
           name: 'category',
@@ -23,13 +23,23 @@ export const ListInfoParamsSchema = z.object({
       }),
       isRead: z
       .string()
-      .min(4)
+      .optional()
       .openapi({
         param: {
           name: 'isRead',
           in: 'path',
         },
         example: 'true',
+      }),
+      userId: z
+      .string()
+      .optional()
+      .openapi({
+        param: {
+          name: 'isRead',
+          in: 'path',
+        },
+        example: 'uuid',
       }),
   });
 
