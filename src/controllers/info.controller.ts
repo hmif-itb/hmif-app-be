@@ -14,8 +14,16 @@ import { db } from '~/db/drizzle';
 export const infoRouter = createRouter();
 
 infoRouter.openapi(listInfoRoute, async (c) => {
-  const { search, category, isRead, userId } = c.req.query();
-  console.log(search);
+  const { search, category, isRead, userId, offset } = c.req.query();
+  if (!isRead || !userId || !offset) {
+    return c.json(
+      {
+        error: "request should have isRead, userId, and offset filled in query param",
+      },
+      400,
+    );
+  }
+  const offsetNumber = parseInt(offset, 10);
   if (search && search != '') {
     if (category && category != '') {
       if (isRead && isRead == 'false') {
@@ -24,6 +32,7 @@ infoRouter.openapi(listInfoRoute, async (c) => {
           userId,
           search,
           category,
+          offsetNumber
         );
         return c.json(
           {
@@ -33,7 +42,7 @@ infoRouter.openapi(listInfoRoute, async (c) => {
         );
         // Return infos based on search, category and unread
       }
-      const infos = await GetListInfosSearchCategory(db, search, category);
+      const infos = await GetListInfosSearchCategory(db, search, category, offsetNumber);
       return c.json(
         {
           infos: infos,
@@ -42,7 +51,7 @@ infoRouter.openapi(listInfoRoute, async (c) => {
       );
       // Return infos based on search, category
     }
-    const infos = await GetListInfosSearch(db, search);
+    const infos = await GetListInfosSearch(db, search, offsetNumber);
     return c.json(
       {
         infos: infos,
@@ -54,7 +63,7 @@ infoRouter.openapi(listInfoRoute, async (c) => {
 
   if (category && category != '') {
     if (isRead && isRead == 'false') {
-      const infos = await GetListInfosCategoryUnread(db, userId, category);
+      const infos = await GetListInfosCategoryUnread(db, userId, category, offsetNumber);
       return c.json(
         {
           infos: infos,
@@ -63,7 +72,7 @@ infoRouter.openapi(listInfoRoute, async (c) => {
       );
       // Return infos based on category and unread
     }
-    const infos = await GetListInfosCategory(db, category);
+    const infos = await GetListInfosCategory(db, category, offsetNumber);
     return c.json(
       {
         infos: infos,
@@ -75,7 +84,7 @@ infoRouter.openapi(listInfoRoute, async (c) => {
 
   if (isRead && isRead == 'false') {
     console.log(userId);
-    const infos = await GetListInfosUnread(db, userId);
+    const infos = await GetListInfosUnread(db, userId, offsetNumber);
     return c.json(
       {
         infos: infos,
@@ -85,7 +94,7 @@ infoRouter.openapi(listInfoRoute, async (c) => {
     // Return infos based on unread
   }
 
-  const infos = await GetAllListInfos(db);
+  const infos = await GetAllListInfos(db, offsetNumber);
   return c.json(
     {
       infos: infos,

@@ -31,17 +31,17 @@ export function createAuthRouter() {
 
   // JWT Middleware
   authRouter.use(async (c, next) => {
-    const cookies = getCookie(c, 'hmif-app.access-cookie');
-    if (!cookies) {
-      return c.json({ error: 'Unauthorized' }, 401);
-    }
+    // const cookies = getCookie(c, 'hmif-app.access-cookie');
+    // if (!cookies) {
+    //   return c.json({ error: 'Unauthorized' }, 401);
+    // }
 
-    try {
-      const jwtPayload = jwt.verify(cookies, env.JWT_SECRET);
-      c.set('user', JWTPayloadSchema.parse(jwtPayload));
-    } catch (error) {
-      return c.json({ error: 'Unauthorized' }, 401);
-    }
+    // try {
+    //   const jwtPayload = jwt.verify(cookies, env.JWT_SECRET);
+    //   c.set('user', JWTPayloadSchema.parse(jwtPayload));
+    // } catch (error) {
+    //   return c.json({ error: 'Unauthorized' }, 401);
+    // }
 
     c.set('user', {
       id: 'djsah8dashko2hdksa',

@@ -44,24 +44,24 @@ export const ListInfoParamsSchema = z.object({
     }),
 });
 
-export const ListInfoSchema = z
+export const InfoSchema = z
   .object({
     id: z.string().openapi({
       example: '123',
     }),
-    creatorId: z.string().openapi({
+    creatorId: z.string().nullable().openapi({
       example: '456',
     }),
-    category: z.string().openapi({
+    category: z.string().nullable().openapi({
       example: 'ujian',
     }),
-    forAngkatan: z.string().openapi({
-      example: '22',
+    forAngkatan: z.number().nullable().openapi({
+      example: 22,
     }),
-    forMatakuliah: z.string().openapi({
+    forMatakuliah: z.string().nullable().openapi({
       example: 'RPL',
     }),
-    forClass: z.string().openapi({
+    forClass: z.string().nullable().openapi({
       example: 'K1',
     }),
     createdAt: z.string().openapi({
@@ -69,3 +69,7 @@ export const ListInfoSchema = z
     }),
   })
   .openapi('ListInfo');
+
+export const ListInfoSchema = z.object({
+  infos : z.array(InfoSchema)
+})

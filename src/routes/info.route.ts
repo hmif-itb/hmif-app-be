@@ -1,5 +1,6 @@
 import { createRoute } from '@hono/zod-openapi';
 import { ListInfoParamsSchema, ListInfoSchema } from '~/types/info.types';
+import { errorResponse, validationErrorResponse } from '~/types/responses.type';
 
 export const listInfoRoute = createRoute({
   operationId: 'loginRoute',
@@ -18,5 +19,6 @@ export const listInfoRoute = createRoute({
       },
       description: 'Get list of infos based on filter',
     },
+    400: errorResponse,
   },
 });
