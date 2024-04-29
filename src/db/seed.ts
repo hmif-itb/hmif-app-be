@@ -46,14 +46,13 @@ export async function runUserSeed() {
         region: row[7],
         angkatan: +row[0],
         gender: row[4],
-        memberShipStatus: row[5],
+        membershipStatus: row[5],
       });
       data.push(user);
     })
     .on('end', () => {
       db.insert(users)
         .values(data)
-        .onConflictDoNothing()
         .then(async () => {
           await client.end();
         })

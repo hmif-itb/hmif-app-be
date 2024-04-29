@@ -8,12 +8,11 @@ import {
 import { createInfoRoute, postReadInfoRoute } from '~/routes/info.route';
 import { InfoSchema } from '~/types/info.types';
 import { listInfoRoute } from '../routes/info.route';
-import { createAuthRouter, createRouter } from './router-factory';
+import { createAuthRouter } from './router-factory';
 
-export const infoRouter = createRouter();
-export const infoProtectedRouter = createAuthRouter();
+export const infoRouter = createAuthRouter();
 
-infoProtectedRouter.openapi(postReadInfoRoute, async (c) => {
+infoRouter.openapi(postReadInfoRoute, async (c) => {
   const { id } = c.var.user;
   const { infoId } = c.req.valid('param');
 
@@ -32,7 +31,7 @@ infoProtectedRouter.openapi(postReadInfoRoute, async (c) => {
   }
 });
 
-infoProtectedRouter.openapi(createInfoRoute, async (c) => {
+infoRouter.openapi(createInfoRoute, async (c) => {
   const { mediaUrls, ...data } = c.req.valid('json');
   const { id } = c.var.user;
 
