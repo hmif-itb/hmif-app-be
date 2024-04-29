@@ -28,8 +28,10 @@ export const AuthorizationErrorSchema = z
 
 export const authorizaitonErrorResponse = {
   content: {
-    'application/json': {
-      schema: AuthorizationErrorSchema,
+    'text/plain': {
+      schema: {
+        example: 'Unauthorized',
+      },
     },
   },
   description: 'Bad request: authorization (not logged in) error',

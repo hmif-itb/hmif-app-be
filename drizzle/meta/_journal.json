@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1711373289815,
-      "tag": "0000_lush_hellcat",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1711767972849,
-      "tag": "0001_outstanding_trauma",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1713885524985,
-      "tag": "0002_busy_mole_man",
+      "when": 1714276945495,
+      "tag": "0000_plain_sharon_carter",
       "breakpoints": true
     }
   ]

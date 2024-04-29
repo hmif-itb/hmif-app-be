@@ -1,22 +1,37 @@
-import { loginRoute, authCallbackRoute } from '../routes/auth.route';
-import { createRouter } from './router-factory';
+import {
+  loginRoute,
+  authCallbackRoute,
+  logoutRoute,
+  selfRoute,
+} from '../routes/auth.route';
+import { createAuthRouter, createRouter } from './router-factory';
 import 'dotenv/config';
 import { env } from '~/configs/env.config';
 import { findUserByEmail } from '~/repositories/auth.repo';
 import { db } from '~/db/drizzle';
-import jwt from 'jsonwebtoken';
 import {
   JWTPayloadSchema,
   GoogleTokenDataSchema,
   GoogleUserSchema,
 } from '~/types/login.types';
-import { setCookie } from 'hono/cookie';
+import { deleteCookie, setCookie } from 'hono/cookie';
+import { sign } from 'hono/jwt';
 
 export const loginRouter = createRouter();
+export const loginProtectedRouter = createAuthRouter();
 
-function generateJWT(payload: object, secret: string, expiresIn: string) {
-  return jwt.sign(payload, secret, { expiresIn });
-}
+const generateJWT = async (payload: object) => {
+  const now = Date.now();
+  return await sign(
+    {
+      ...payload,
+      exp: now.valueOf() / 1000 + parseInt(env.TOKEN_EXPIRATION),
+      iat: now.valueOf() / 1000,
+      nbf: now.valueOf() / 1000,
+    },
+    env.JWT_SECRET,
+  );
+};
 
 loginRouter.openapi(loginRoute, async (c) => {
   const authorizationUrl = new URL(
@@ -78,9 +93,7 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
         },
       },
     );
-    // console.log(await userInfoResponse.json());
     const userInfo = GoogleUserSchema.parse(await userInfoResponse.json());
-
     // Find user in db, if not found return forbidden
     const { email, picture } = userInfo;
     const user = await findUserByEmail(db, email);
@@ -95,21 +108,14 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
 
     // Create cookie
     const tokenPayload = JWTPayloadSchema.parse({ ...user, picture });
-    const token = generateJWT(
-      tokenPayload,
-      env.JWT_SECRET,
-      env.TOKEN_EXPIRATION,
-    );
-    const currentDate = new Date();
-    const futureDate = new Date(currentDate);
-    futureDate.setDate(futureDate.getDate() + 30);
+    const token = await generateJWT(tokenPayload);
+
     setCookie(c, 'hmif-app.access-cookie', token, {
       path: '/',
       secure: true,
-      domain: 'http://localhost:8000',
+      domain: 'localhost',
       httpOnly: true,
-      maxAge: 2592000000, //30 days in milliseconds
-      expires: futureDate,
+      maxAge: parseInt(env.TOKEN_EXPIRATION),
       sameSite: 'Strict',
     });
     return c.json(tokenPayload, 200);
@@ -121,4 +127,14 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
       500,
     );
   }
+});
+
+loginProtectedRouter.openapi(logoutRoute, async (c) => {
+  deleteCookie(c, 'hmif-app.access-cookie');
+  return c.json({}, 200);
+});
+
+loginProtectedRouter.openapi(selfRoute, async (c) => {
+  const user = c.var.user;
+  return c.json(user, 200);
 });

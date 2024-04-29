@@ -1,6 +1,12 @@
-import { createRouter } from './router-factory';
+import { PostgresError } from 'postgres';
+import { db } from '~/db/drizzle';
 import { listInfoRoute } from '../routes/info.route';
+import { postReadInfoRoute, createInfoRoute } from '~/routes/info.route';
+import { createAuthRouter, createRouter } from './router-factory';
+import { InfoSchema } from '~/types/info.types';
 import {
+  createReadInfo,
+  createInfo,
   GetAllListInfos,
   GetListInfosCategory,
   GetListInfosCategoryUnread,
@@ -8,10 +14,47 @@ import {
   GetListInfosSearchCategory,
   GetListInfosSearchCategoryUnread,
   GetListInfosUnread,
+  GetListInfosSearchUnread,
 } from '~/repositories/info.repo';
-import { db } from '~/db/drizzle';
 
 export const infoRouter = createRouter();
+export const infoProtectedRouter = createAuthRouter();
+
+infoProtectedRouter.openapi(postReadInfoRoute, async (c) => {
+  const { id } = c.var.user;
+  const { infoId } = c.req.valid('param');
+
+  try {
+    const data = {
+      userId: id,
+      infoId,
+    };
+
+    await createReadInfo(db, data);
+    return c.json({}, 201);
+  } catch (err) {
+    if (err instanceof PostgresError)
+      return c.json({ error: 'User have already read this info' }, 400);
+    return c.json(err, 400);
+  }
+});
+
+infoProtectedRouter.openapi(createInfoRoute, async (c) => {
+  const { mediaUrls, ...data } = c.req.valid('json');
+  const { id } = c.var.user;
+
+  try {
+    const info = InfoSchema.parse(
+      await createInfo(db, { ...data, creatorId: id }, mediaUrls),
+    );
+    return c.json(info, 201);
+  } catch (err) {
+    if (err instanceof PostgresError)
+      return c.json({ error: err.message }, 400);
+    console.log(err);
+    return c.json({ error: 'Something went wrong' }, 400);
+  }
+});
 
 infoRouter.openapi(listInfoRoute, async (c) => {
   const { search, category, unread, userId, offset } = c.req.query();
@@ -25,9 +68,9 @@ infoRouter.openapi(listInfoRoute, async (c) => {
     );
   }
   const offsetNumber = parseInt(offset, 10);
-  if (search && search != '') {
-    if (category && category != '') {
-      if (unread && unread == 'true') {
+  if (search && search !== '') {
+    if (category && category !== '') {
+      if (unread && unread === 'true') {
         const infos = await GetListInfosSearchCategoryUnread(
           db,
           userId,
@@ -37,7 +80,7 @@ infoRouter.openapi(listInfoRoute, async (c) => {
         );
         return c.json(
           {
-            infos: infos,
+            infos,
           },
           200,
         );
@@ -51,24 +94,39 @@ infoRouter.openapi(listInfoRoute, async (c) => {
       );
       return c.json(
         {
-          infos: infos,
+          infos,
         },
         200,
       );
       // Return infos based on search, category
     }
+  if (unread && unread === 'true') {
+      const infos = await GetListInfosSearchUnread(
+        db,
+        search,
+        userId,
+        offsetNumber,
+      );
+      return c.json(
+        {
+          infos,
+        },
+        200,
+      );
+      // Return infos based on search and unread
+    }
     const infos = await GetListInfosSearch(db, search, offsetNumber);
     return c.json(
       {
-        infos: infos,
+        infos,
       },
       200,
     );
     // Return infos based on search only
   }
 
-  if (category && category != '') {
-    if (unread && unread == 'true') {
+  if (category && category !== '') {
+    if (unread && unread === 'true') {
       const infos = await GetListInfosCategoryUnread(
         db,
         userId,
@@ -77,7 +135,7 @@ infoRouter.openapi(listInfoRoute, async (c) => {
       );
       return c.json(
         {
-          infos: infos,
+          infos,
         },
         200,
       );
@@ -86,18 +144,18 @@ infoRouter.openapi(listInfoRoute, async (c) => {
     const infos = await GetListInfosCategory(db, category, offsetNumber);
     return c.json(
       {
-        infos: infos,
+        infos,
       },
       200,
     );
     // Return infos based on category only
   }
 
-  if (unread && unread == 'true') {
+  if (unread && unread === 'true') {
     const infos = await GetListInfosUnread(db, userId, offsetNumber);
     return c.json(
       {
-        infos: infos,
+        infos,
       },
       200,
     );
@@ -107,9 +165,8 @@ infoRouter.openapi(listInfoRoute, async (c) => {
   const infos = await GetAllListInfos(db, offsetNumber);
   return c.json(
     {
-      infos: infos,
+      infos,
     },
     200,
   );
-  //Return all infos
 });
