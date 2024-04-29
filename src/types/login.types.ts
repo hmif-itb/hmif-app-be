@@ -33,6 +33,12 @@ export const GoogleUserSchema = z.object({
 
 export const JWTPayloadSchema = UserSchema.omit({
   createdAt: true,
-}).extend({
-  picture: z.string().url(),
+})
+  .extend({
+    picture: z.string().url(),
+  })
+  .openapi('User');
+
+export const LoginAccessTokenSchema = z.object({
+  accessToken: z.string(),
 });

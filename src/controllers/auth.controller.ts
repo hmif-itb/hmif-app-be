@@ -1,21 +1,22 @@
+import 'dotenv/config';
+import { deleteCookie, setCookie } from 'hono/cookie';
+import { sign } from 'hono/jwt';
+import { env } from '~/configs/env.config';
+import { db } from '~/db/drizzle';
+import { findUserByEmail } from '~/repositories/auth.repo';
 import {
-  loginRoute,
+  GoogleTokenDataSchema,
+  GoogleUserSchema,
+  JWTPayloadSchema,
+} from '~/types/login.types';
+import {
   authCallbackRoute,
+  loginAccessTokenRoute,
+  loginRoute,
   logoutRoute,
   selfRoute,
 } from '../routes/auth.route';
 import { createAuthRouter, createRouter } from './router-factory';
-import 'dotenv/config';
-import { env } from '~/configs/env.config';
-import { findUserByEmail } from '~/repositories/auth.repo';
-import { db } from '~/db/drizzle';
-import {
-  JWTPayloadSchema,
-  GoogleTokenDataSchema,
-  GoogleUserSchema,
-} from '~/types/login.types';
-import { deleteCookie, setCookie } from 'hono/cookie';
-import { sign } from 'hono/jwt';
 
 export const loginRouter = createRouter();
 export const loginProtectedRouter = createAuthRouter();
@@ -50,6 +51,53 @@ loginRouter.openapi(loginRoute, async (c) => {
   authorizationUrl.searchParams.set('access_type', 'offline');
 
   return c.redirect(authorizationUrl.toString(), 302); // Redirect the user to Google Login
+});
+
+loginRouter.openapi(loginAccessTokenRoute, async (c) => {
+  try {
+    const { accessToken } = c.req.valid('json');
+    const userInfoResponse = await fetch(
+      'https://www.googleapis.com/oauth2/v2/userinfo',
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    const userInfo = GoogleUserSchema.parse(await userInfoResponse.json());
+    // Find user in db, if not found return forbidden
+    const { email, picture } = userInfo;
+    const user = await findUserByEmail(db, email);
+    if (!user) {
+      return c.json(
+        {
+          error: 'User not found in database',
+        },
+        401,
+      );
+    }
+
+    // Create cookie
+    const tokenPayload = JWTPayloadSchema.parse({ ...user, picture });
+    const token = await generateJWT(tokenPayload);
+
+    setCookie(c, 'hmif-app.access-cookie', token, {
+      path: '/',
+      secure: true,
+      domain: 'localhost',
+      httpOnly: true,
+      maxAge: parseInt(env.TOKEN_EXPIRATION),
+      sameSite: 'Strict',
+    });
+    return c.json(tokenPayload, 200);
+  } catch (err) {
+    return c.json(
+      {
+        error: err,
+      },
+      500,
+    );
+  }
 });
 
 loginRouter.openapi(authCallbackRoute, async (c) => {
