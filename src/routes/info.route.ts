@@ -8,7 +8,7 @@ export const listInfoRoute = createRoute({
   method: 'get',
   path: '/get-infos',
   request: {
-    params: ListInfoParamsSchema,
+    query: ListInfoParamsSchema,
   },
   responses: {
     200: {

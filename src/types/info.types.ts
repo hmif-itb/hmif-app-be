@@ -8,9 +8,9 @@ export const ListInfoParamsSchema = z.object({
     .openapi({
       param: {
         name: 'search',
-        in: 'path',
+        in: 'query',
       },
-      example: '',
+      example: 'content',
     }),
   category: z
     .string()
@@ -18,7 +18,7 @@ export const ListInfoParamsSchema = z.object({
     .openapi({
       param: {
         name: 'category',
-        in: 'path',
+        in: 'query',
       },
       example: 'cat',
     }),
@@ -28,7 +28,7 @@ export const ListInfoParamsSchema = z.object({
     .openapi({
       param: {
         name: 'isRead',
-        in: 'path',
+        in: 'query',
       },
       example: 'true',
     }),
@@ -38,7 +38,7 @@ export const ListInfoParamsSchema = z.object({
     .openapi({
       param: {
         name: 'isRead',
-        in: 'path',
+        in: 'query',
       },
       example: 'uuid',
     }),
