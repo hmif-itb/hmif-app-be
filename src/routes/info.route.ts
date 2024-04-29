@@ -68,10 +68,10 @@ export const createInfoRoute = createRoute({
 });
 
 export const listInfoRoute = createRoute({
-  operationId: 'loginRoute',
-  tags: ['login'],
+  operationId: 'listInfo',
+  tags: ['info'],
   method: 'get',
-  path: '/get-infos',
+  path: '/info',
   request: {
     params: ListInfoParamsSchema,
   },

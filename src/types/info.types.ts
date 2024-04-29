@@ -73,7 +73,7 @@ export const ListInfoParamsSchema = z.object({
     .optional()
     .openapi({
       param: {
-        name: 'isRead',
+        name: 'userId',
         in: 'path',
       },
       example: 'uuid',
