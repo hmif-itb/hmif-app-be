@@ -11,10 +11,9 @@ import { createAuthRouter } from './router-factory';
 export const pushRouter = createAuthRouter();
 
 pushRouter.openapi(registerPushRoute, async (c) => {
-  // TODO: if user is set properly, use c.var.user
   await createOrUpdatePushSubscription(db, {
     ...c.req.valid('json'),
-    // userId: c.user.id,
+    userId: c.var.user.id,
   });
 
   return c.json({}, 201);
