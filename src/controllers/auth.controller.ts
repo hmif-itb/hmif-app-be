@@ -84,10 +84,9 @@ loginRouter.openapi(loginAccessTokenRoute, async (c) => {
     setCookie(c, 'hmif-app.access-cookie', token, {
       path: '/',
       secure: true,
-      domain: 'localhost',
       httpOnly: true,
       maxAge: parseInt(env.TOKEN_EXPIRATION),
-      sameSite: 'Strict',
+      sameSite: 'None',
     });
     return c.json(tokenPayload, 200);
   } catch (err) {
@@ -161,10 +160,9 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
     setCookie(c, 'hmif-app.access-cookie', token, {
       path: '/',
       secure: true,
-      domain: 'localhost',
       httpOnly: true,
       maxAge: parseInt(env.TOKEN_EXPIRATION),
-      sameSite: 'Strict',
+      sameSite: 'None',
     });
     return c.json(tokenPayload, 200);
   } catch (error) {
