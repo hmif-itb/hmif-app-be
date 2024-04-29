@@ -74,7 +74,7 @@ export const ListInfoParamsSchema = z.object({
     .openapi({
       param: {
         name: 'userId',
-        in: 'path',
+        in: 'query',
       },
       example: 'uuid',
     }),
