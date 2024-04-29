@@ -124,11 +124,11 @@ export async function GetListInfosSearchUnread(
   userId: string,
   offset: number,
 ) {
-    const getReadInfosByUser =  db
+  const getReadInfosByUser = db
     .select({ infoId: userReadInfos.infoId })
     .from(userReadInfos)
     .where(and(eq(userReadInfos.userId, userId)));
-  
+
   return await db.query.infos.findMany({
     where: and(
       like(infos.content, `%${search}%`), // Search by content

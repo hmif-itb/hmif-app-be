@@ -100,7 +100,7 @@ infoRouter.openapi(listInfoRoute, async (c) => {
       );
       // Return infos based on search, category
     }
-  if (unread && unread === 'true') {
+    if (unread && unread === 'true') {
       const infos = await GetListInfosSearchUnread(
         db,
         search,
