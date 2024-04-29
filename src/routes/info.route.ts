@@ -9,7 +9,7 @@ import {
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
 export const postReadInfoRoute = createRoute({
-  operationId: 'postInfoRead',
+  operationId: 'readInfo',
   tags: ['info'],
   method: 'post',
   path: '/info/{infoId}/read',
@@ -68,7 +68,7 @@ export const createInfoRoute = createRoute({
 });
 
 export const listInfoRoute = createRoute({
-  operationId: 'listInfo',
+  operationId: 'getListInfos',
   tags: ['info'],
   method: 'get',
   path: '/info',

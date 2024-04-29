@@ -10,7 +10,7 @@ import {
 } from '~/types/responses.type';
 
 export const loginRoute = createRoute({
-  operationId: 'loginRoute',
+  operationId: 'loginWeb',
   tags: ['auth'],
   method: 'get',
   path: '/login',
@@ -31,7 +31,7 @@ export const loginRoute = createRoute({
 });
 
 export const authCallbackRoute = createRoute({
-  operationId: 'loginRoute',
+  operationId: 'loginCallback',
   tags: ['auth'],
   method: 'get',
   path: '/auth/google/callback',
@@ -66,7 +66,7 @@ export const authCallbackRoute = createRoute({
 });
 
 export const logoutRoute = createRoute({
-  operationId: 'logoutRoute',
+  operationId: 'logout',
   tags: ['auth'],
   method: 'post',
   path: '/logout',
@@ -80,7 +80,7 @@ export const logoutRoute = createRoute({
 });
 
 export const selfRoute = createRoute({
-  operationId: 'selfRoute',
+  operationId: 'getMe',
   tags: ['auth'],
   method: 'get',
   path: '/me',
