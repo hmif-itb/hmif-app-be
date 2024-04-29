@@ -29,17 +29,17 @@ export function createAuthRouter() {
   }>({ defaultHook });
 
   // JWT Hono Middleware
-  // authRouter.use(
-  //   jwt({
-  //     secret: env.JWT_SECRET,
-  //     cookie: 'hmif-app.access-cookie',
-  //   }),
-  // );
+  authRouter.use(
+    jwt({
+      secret: env.JWT_SECRET,
+      cookie: 'hmif-app.access-cookie',
+    }),
+  );
 
   // Set user middleware
   authRouter.use(async (c, next) => {
-    // const payload = JWTPayloadSchema.parse(c.var.jwtPayload);
-    // c.set('user', payload);
+    const payload = JWTPayloadSchema.parse(c.var.jwtPayload);
+    c.set('user', payload);
     await next();
   });
 
