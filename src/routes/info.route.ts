@@ -3,6 +3,8 @@ import {
   CreateReadRequestBodySchema,
   InfoParamSchema,
   InfoSchema,
+  ListInfoParamsSchema,
+  ListInfoSchema,
 } from '~/types/info.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
@@ -59,6 +61,34 @@ export const createInfoRoute = createRoute({
       content: {
         'application/json': {
           schema: z.union([ValidationErrorSchema, ErrorSchema]),
+        },
+      },
+    },
+  },
+});
+
+export const listInfoRoute = createRoute({
+  operationId: 'listInfo',
+  tags: ['info'],
+  method: 'get',
+  path: '/info',
+  request: {
+    query: ListInfoParamsSchema,
+  },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: ListInfoSchema,
+        },
+      },
+      description: 'Get list of infos based on filter',
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
         },
       },
     },

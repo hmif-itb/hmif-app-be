@@ -1,13 +1,19 @@
 import { PostgresError } from 'postgres';
 import { db } from '~/db/drizzle';
-import { createReadInfo, createInfo } from '~/repositories/info.repo';
-import { postReadInfoRoute, createInfoRoute } from '~/routes/info.route';
-import { createAuthRouter } from './router-factory';
+import {
+  createInfo,
+  createReadInfo,
+  getListInfos,
+} from '~/repositories/info.repo';
+import { createInfoRoute, postReadInfoRoute } from '~/routes/info.route';
 import { InfoSchema } from '~/types/info.types';
+import { listInfoRoute } from '../routes/info.route';
+import { createAuthRouter, createRouter } from './router-factory';
 
-export const infoRouter = createAuthRouter();
+export const infoRouter = createRouter();
+export const infoProtectedRouter = createAuthRouter();
 
-infoRouter.openapi(postReadInfoRoute, async (c) => {
+infoProtectedRouter.openapi(postReadInfoRoute, async (c) => {
   const { id } = c.var.user;
   const { infoId } = c.req.valid('param');
 
@@ -26,7 +32,7 @@ infoRouter.openapi(postReadInfoRoute, async (c) => {
   }
 });
 
-infoRouter.openapi(createInfoRoute, async (c) => {
+infoProtectedRouter.openapi(createInfoRoute, async (c) => {
   const { mediaUrls, ...data } = c.req.valid('json');
   const { id } = c.var.user;
 
@@ -41,4 +47,14 @@ infoRouter.openapi(createInfoRoute, async (c) => {
     console.log(err);
     return c.json({ error: 'Something went wrong' }, 400);
   }
+});
+
+infoRouter.openapi(listInfoRoute, async (c) => {
+  const infos = await getListInfos(db, c.req.valid('query'), c.var.user.id);
+  return c.json(
+    {
+      infos,
+    },
+    200,
+  );
 });

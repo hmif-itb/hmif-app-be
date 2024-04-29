@@ -36,3 +36,25 @@ export const InfoSchema = createSelectSchema(infos, {
 export const CreateReadRequestBodySchema = z.object({
   infoId: z.string(),
 });
+
+export const ListInfoParamsSchema = z.object({
+  search: z.string().optional().openapi({
+    example: 'content',
+  }),
+  category: z.string().optional().openapi({
+    example: 'cat',
+  }),
+  unread: z.enum(['true', 'false']).default('false').openapi({
+    example: 'true',
+  }),
+  userId: z.string().optional().openapi({
+    example: 'uuid',
+  }),
+  offset: z.coerce.number().int().nonnegative().optional().openapi({
+    example: 10,
+  }),
+});
+
+export const ListInfoSchema = z.object({
+  infos: z.array(InfoSchema),
+});
