@@ -1,5 +1,4 @@
 import { z } from '@hono/zod-openapi';
-import { infoMedias } from '~/db/schema';
 
 export const ListInfoParamsSchema = z.object({
   search: z

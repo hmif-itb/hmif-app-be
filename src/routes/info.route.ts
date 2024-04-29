@@ -1,6 +1,6 @@
-import { createRoute } from '@hono/zod-openapi';
+import { createRoute, z } from '@hono/zod-openapi';
 import { ListInfoParamsSchema, ListInfoSchema } from '~/types/info.types';
-import { errorResponse, validationErrorResponse } from '~/types/responses.type';
+import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
 export const listInfoRoute = createRoute({
   operationId: 'loginRoute',
@@ -19,6 +19,13 @@ export const listInfoRoute = createRoute({
       },
       description: 'Get list of infos based on filter',
     },
-    400: errorResponse,
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
+        },
+      },
+    },
   },
 });
