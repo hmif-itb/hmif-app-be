@@ -1,21 +1,14 @@
 import { PostgresError } from 'postgres';
 import { db } from '~/db/drizzle';
-import { listInfoRoute } from '../routes/info.route';
-import { postReadInfoRoute, createInfoRoute } from '~/routes/info.route';
-import { createAuthRouter, createRouter } from './router-factory';
-import { InfoSchema } from '~/types/info.types';
 import {
-  createReadInfo,
   createInfo,
-  GetAllListInfos,
-  GetListInfosCategory,
-  GetListInfosCategoryUnread,
-  GetListInfosSearch,
-  GetListInfosSearchCategory,
-  GetListInfosSearchCategoryUnread,
-  GetListInfosUnread,
-  GetListInfosSearchUnread,
+  createReadInfo,
+  getListInfos,
 } from '~/repositories/info.repo';
+import { createInfoRoute, postReadInfoRoute } from '~/routes/info.route';
+import { InfoSchema } from '~/types/info.types';
+import { listInfoRoute } from '../routes/info.route';
+import { createAuthRouter, createRouter } from './router-factory';
 
 export const infoRouter = createRouter();
 export const infoProtectedRouter = createAuthRouter();
@@ -57,112 +50,7 @@ infoProtectedRouter.openapi(createInfoRoute, async (c) => {
 });
 
 infoRouter.openapi(listInfoRoute, async (c) => {
-  const { search, category, unread, userId, offset } = c.req.query();
-  if (!unread || !userId || !offset) {
-    return c.json(
-      {
-        error:
-          'request should have unread, userId, and offset filled in query param',
-      },
-      400,
-    );
-  }
-  const offsetNumber = parseInt(offset, 10);
-  if (search && search !== '') {
-    if (category && category !== '') {
-      if (unread && unread === 'true') {
-        const infos = await GetListInfosSearchCategoryUnread(
-          db,
-          userId,
-          search,
-          category,
-          offsetNumber,
-        );
-        return c.json(
-          {
-            infos,
-          },
-          200,
-        );
-        // Return infos based on search, category and unread
-      }
-      const infos = await GetListInfosSearchCategory(
-        db,
-        search,
-        category,
-        offsetNumber,
-      );
-      return c.json(
-        {
-          infos,
-        },
-        200,
-      );
-      // Return infos based on search, category
-    }
-    if (unread && unread === 'true') {
-      const infos = await GetListInfosSearchUnread(
-        db,
-        search,
-        userId,
-        offsetNumber,
-      );
-      return c.json(
-        {
-          infos,
-        },
-        200,
-      );
-      // Return infos based on search and unread
-    }
-    const infos = await GetListInfosSearch(db, search, offsetNumber);
-    return c.json(
-      {
-        infos,
-      },
-      200,
-    );
-    // Return infos based on search only
-  }
-
-  if (category && category !== '') {
-    if (unread && unread === 'true') {
-      const infos = await GetListInfosCategoryUnread(
-        db,
-        userId,
-        category,
-        offsetNumber,
-      );
-      return c.json(
-        {
-          infos,
-        },
-        200,
-      );
-      // Return infos based on category and unread
-    }
-    const infos = await GetListInfosCategory(db, category, offsetNumber);
-    return c.json(
-      {
-        infos,
-      },
-      200,
-    );
-    // Return infos based on category only
-  }
-
-  if (unread && unread === 'true') {
-    const infos = await GetListInfosUnread(db, userId, offsetNumber);
-    return c.json(
-      {
-        infos,
-      },
-      200,
-    );
-    // Return infos based on unread
-  }
-
-  const infos = await GetAllListInfos(db, offsetNumber);
+  const infos = await getListInfos(db, c.req.valid('query'), c.var.user.id);
   return c.json(
     {
       infos,

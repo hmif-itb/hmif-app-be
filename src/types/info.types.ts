@@ -38,46 +38,21 @@ export const CreateReadRequestBodySchema = z.object({
 });
 
 export const ListInfoParamsSchema = z.object({
-  search: z
-    .string()
-    .optional()
-    .openapi({
-      param: {
-        name: 'search',
-        in: 'query',
-      },
-      example: 'content',
-    }),
-  category: z
-    .string()
-    .optional()
-    .openapi({
-      param: {
-        name: 'category',
-        in: 'query',
-      },
-      example: 'cat',
-    }),
-  unread: z
-    .string()
-    .optional()
-    .openapi({
-      param: {
-        name: 'unread',
-        in: 'query',
-      },
-      example: 'true',
-    }),
-  userId: z
-    .string()
-    .optional()
-    .openapi({
-      param: {
-        name: 'userId',
-        in: 'query',
-      },
-      example: 'uuid',
-    }),
+  search: z.string().optional().openapi({
+    example: 'content',
+  }),
+  category: z.string().optional().openapi({
+    example: 'cat',
+  }),
+  unread: z.enum(['true', 'false']).default('false').openapi({
+    example: 'true',
+  }),
+  userId: z.string().optional().openapi({
+    example: 'uuid',
+  }),
+  offset: z.coerce.number().int().nonnegative().optional().openapi({
+    example: 10,
+  }),
 });
 
 export const ListInfoSchema = z.object({

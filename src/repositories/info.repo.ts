@@ -1,11 +1,15 @@
-import { eq, and, like, notInArray, InferInsertModel } from 'drizzle-orm';
+import { InferInsertModel, SQL, and, eq, ilike, notInArray } from 'drizzle-orm';
+import { z } from 'zod';
 import { Database } from '~/db/drizzle';
-import { infos, userReadInfos } from '~/db/schema';
 import { firstSure } from '~/db/helper';
+import { infos, userReadInfos } from '~/db/schema';
+import { ListInfoParamsSchema } from '~/types/info.types';
 import {
   createInfoMediaTransaction,
   createMediaFromUrlTransaction,
 } from './media.repo';
+
+const INFOS_PER_PAGE = 10;
 
 /**
  * Create an info.
@@ -66,176 +70,29 @@ export async function createReadInfo(
     .then(firstSure);
 }
 
-export async function GetListInfosSearchCategoryUnread(
+export async function getListInfos(
   db: Database,
+  q: z.infer<typeof ListInfoParamsSchema>,
   userId: string,
-  search: string,
-  category: string,
-  offset: number,
 ) {
-  const getReadInfosByUser = db
-    .select({ infoId: userReadInfos.infoId })
-    .from(userReadInfos)
-    .where(and(eq(userReadInfos.userId, userId)));
-  return await db.query.infos.findMany({
-    where: and(
-      like(infos.content, `%${search}%`), // Search by content
-      eq(infos.category, category),
-      notInArray(infos.id, getReadInfosByUser),
-    ),
-    limit: 20,
-    offset,
-    with: {
-      infoMedias: {
-        with: {
-          media: true,
-        },
-      },
-    },
-  });
-}
+  const searchQ = q.search ? ilike(infos.content, `%${q.search}%`) : undefined;
+  const categoryQ = q.category ? eq(infos.category, q.category) : undefined;
+  let unreadQ: SQL<unknown> | undefined;
 
-export async function GetListInfosSearchCategory(
-  db: Database,
-  search: string,
-  category: string,
-  offset: number,
-) {
-  return await db.query.infos.findMany({
-    where: and(
-      like(infos.content, `%${search}%`), // Search by content
-      eq(infos.category, category), // Filter by category
-    ),
-    limit: 20,
-    offset,
-    with: {
-      infoMedias: {
-        with: {
-          media: true,
-        },
-      },
-    },
-  });
-}
+  if (q.unread === 'true') {
+    const getReadInfosByUser = db
+      .select({ infoId: userReadInfos.infoId })
+      .from(userReadInfos)
+      .where(eq(userReadInfos.userId, userId));
+    unreadQ = notInArray(infos.id, getReadInfosByUser);
+  }
 
-export async function GetListInfosSearchUnread(
-  db: Database,
-  search: string,
-  userId: string,
-  offset: number,
-) {
-  const getReadInfosByUser = db
-    .select({ infoId: userReadInfos.infoId })
-    .from(userReadInfos)
-    .where(and(eq(userReadInfos.userId, userId)));
+  const where = and(searchQ, categoryQ, unreadQ);
 
   return await db.query.infos.findMany({
-    where: and(
-      like(infos.content, `%${search}%`), // Search by content
-      notInArray(infos.id, getReadInfosByUser),
-    ),
-    limit: 20,
-    offset,
-    with: {
-      infoMedias: {
-        with: {
-          media: true,
-        },
-      },
-    },
-  });
-}
-
-export async function GetListInfosSearch(
-  db: Database,
-  search: string,
-  offset: number,
-) {
-  return await db.query.infos.findMany({
-    where: and(
-      like(infos.content, `%${search}%`), // Search by content
-    ),
-    limit: 20,
-    offset,
-    with: {
-      infoMedias: true,
-    },
-  });
-}
-
-export async function GetListInfosCategoryUnread(
-  db: Database,
-  userId: string,
-  category: string,
-  offset: number,
-) {
-  const getReadInfosByUser = db
-    .select({ infoId: userReadInfos.infoId })
-    .from(userReadInfos)
-    .where(and(eq(userReadInfos.userId, userId)));
-  return await db.query.infos.findMany({
-    where: and(
-      eq(infos.category, category),
-      notInArray(infos.id, getReadInfosByUser),
-    ),
-    limit: 20,
-    offset,
-    with: {
-      infoMedias: {
-        with: {
-          media: true,
-        },
-      },
-    },
-  });
-}
-
-export async function GetListInfosCategory(
-  db: Database,
-  category: string,
-  offset: number,
-) {
-  return await db.query.infos.findMany({
-    where: eq(infos.category, category),
-    limit: 20,
-    offset,
-    with: {
-      infoMedias: {
-        with: {
-          media: true,
-        },
-      },
-    },
-  });
-}
-
-export async function GetListInfosUnread(
-  db: Database,
-  userId: string,
-  offset: number,
-) {
-  const getReadInfosByUser = db
-    .select({ infoId: userReadInfos.infoId })
-    .from(userReadInfos)
-    .where(and(eq(userReadInfos.userId, userId)));
-  return await db.query.infos.findMany({
-    where: notInArray(infos.id, getReadInfosByUser),
-    limit: 20,
-    offset,
-    with: {
-      infoMedias: {
-        with: {
-          media: true,
-        },
-      },
-    },
-  });
-}
-
-export async function GetAllListInfos(db: Database, offset: number) {
-  return await db.query.infos.findMany({
-    limit: 20,
-    offset,
+    where,
+    limit: INFOS_PER_PAGE,
+    offset: q.offset,
     with: {
       infoMedias: {
         with: {
