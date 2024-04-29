@@ -1,11 +1,11 @@
-import 'dotenv/config';
-import postgres from 'postgres';
-import { users } from './schema';
-import { drizzle } from 'drizzle-orm/postgres-js';
-import fs from 'fs';
 import { parse } from 'csv-parse';
-import { z } from 'zod';
+import 'dotenv/config';
+import { drizzle } from 'drizzle-orm/postgres-js';
 import { createInsertSchema } from 'drizzle-zod';
+import fs from 'fs';
+import postgres from 'postgres';
+import { z } from 'zod';
+import { users } from './schema';
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is required');
@@ -23,14 +23,16 @@ export async function runUserSeed() {
       .string()
       .email()
       .refine((value) => value.endsWith('@std.stei.itb.ac.id')),
-    jurusan: z.enum(['Teknik Informatika', 'Sistem dan Teknologi Informasi']),
-    asal_kampus: z.enum(['Ganesha', 'Jatinangor']),
-    jenis_kelamin: z.enum(['Laki-laki', 'Perempuan']),
-    status_keanggotaan: z.enum([
+    fullName: z.string(),
+    major: z.enum(['IF', 'STI']),
+    region: z.enum(['Ganesha', 'Jatinangor']),
+    gender: z.enum(['F', 'M']),
+    membershipStatus: z.enum([
       'Anggota Biasa',
       'Anggota Kehormatan',
       'Anggota Muda',
     ]),
+    angkatan: z.number().int(),
   });
 
   fs.createReadStream(filePath)
@@ -39,12 +41,12 @@ export async function runUserSeed() {
       const user = dataSchema.parse({
         nim: row[1],
         email: row[6],
-        full_name: row[2],
-        jurusan: row[3],
-        asal_kampus: row[7],
+        fullName: row[2],
+        major: row[3],
+        region: row[7],
         angkatan: +row[0],
-        jenis_kelamin: row[4],
-        status_keanggotaan: row[5],
+        gender: row[4],
+        memberShipStatus: row[5],
       });
       data.push(user);
     })

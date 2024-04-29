@@ -15,12 +15,14 @@ export const users = pgTable('users', {
   id: text('id').primaryKey().$defaultFn(createId),
   nim: text('nim').unique().notNull(),
   email: text('email').unique().notNull(),
-  full_name: text('full_name'),
-  jurusan: text('jurusan'),
-  asal_kampus: text('asal_kampus'),
+  fullName: text('full_name'),
+  major: text('jurusan', { enum: ['IF', 'STI'] }).notNull(),
+  region: text('asal_kampus', {
+    enum: ['Ganesha', 'Jatinangor'],
+  }).notNull(),
   angkatan: integer('angkatan'),
-  jenis_kelamin: text('jenis_kelamin'),
-  status_keanggotaan: text('status_keanggotaan'),
+  gender: text('jenis_kelamin', { enum: ['F', 'M'] }),
+  membershipStatus: text('status_keanggotaan'),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
