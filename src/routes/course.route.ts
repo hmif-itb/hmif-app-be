@@ -3,6 +3,7 @@ import {
   ListCourseParamsSchema,
   ListCourseSchema,
   CourseIdRequestBodySchema,
+  CourseSchema,
 } from '~/types/course.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
@@ -56,6 +57,104 @@ export const listCourseRouteByID = createRoute({
       content: {
         'application/json': {
           schema: z.union([ErrorSchema, ValidationErrorSchema]),
+        },
+      },
+    },
+  },
+});
+
+export const createCourseRoute = createRoute({
+  operationId: 'createCourse',
+  tags: ['course'],
+  method: 'post',
+  path: '/course',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: CourseSchema.omit({ id: true }),
+        },
+      },
+      required: true,
+    },
+  },
+  responses: {
+    201: {
+      description: 'Created course',
+      content: {
+        'application/json': {
+          schema: CourseSchema,
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ValidationErrorSchema, ErrorSchema]),
+        },
+      },
+    },
+  },
+});
+
+export const updateCourseRoute = createRoute({
+  operationId: 'updateCourse',
+  tags: ['course'],
+  method: 'put',
+  path: '/course/{courseId}',
+  request: {
+    params: CourseIdRequestBodySchema,
+    body: {
+      content: {
+        'application/json': {
+          schema: CourseSchema.omit({ id: true }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'Updated course',
+      content: {
+        'application/json': {
+          schema: CourseSchema,
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ValidationErrorSchema, ErrorSchema]),
+        },
+      },
+    },
+  },
+});
+
+export const deleteCourseRoute = createRoute({
+  operationId: 'deleteCourse',
+  tags: ['course'],
+  method: 'delete',
+  path: '/course/{courseId}',
+  request: {
+    params: CourseIdRequestBodySchema,
+  },
+  responses: {
+    200: {
+      description: 'Deleted course',
+      content: {
+        'application/json': {
+          schema: CourseSchema,
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ValidationErrorSchema, ErrorSchema]),
         },
       },
     },
