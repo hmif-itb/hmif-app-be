@@ -42,6 +42,7 @@ app.doc('/doc', {
     { name: 'auth', description: 'Auth API' },
     { name: 'media' },
     { name: 'info' },
+    { name: 'course' },
     { name: 'open-graph' },
   ],
 });
