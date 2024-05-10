@@ -2,7 +2,7 @@ import {
   createCourseRoute,
   deleteCourseRoute,
   listCourseRoute,
-  listCourseRouteByID,
+  getCourseByIdRoute,
   updateCourseRoute,
 } from '~/routes/course.route';
 import { createAuthRouter } from './router-factory';
@@ -10,7 +10,7 @@ import {
   createCourse,
   deleteCourse,
   getListCourses,
-  getListCoursesById,
+  getCourseById,
   updateCourse,
 } from '~/repositories/course.repo';
 import { db } from '~/db/drizzle';
@@ -38,23 +38,33 @@ courseRouter.openapi(listCourseRoute, async (c) => {
   }
 });
 
-courseRouter.openapi(listCourseRouteByID, async (c) => {
+courseRouter.openapi(getCourseByIdRoute, async (c) => {
   try {
     const { courseId } = c.req.valid('param');
-    const courses = await getListCoursesById(db, courseId);
+    const course = await getCourseById(db, courseId);
     return c.json(
       {
-        courses,
+        course
       },
       200,
     );
-  } catch (err) {
-    return c.json(
-      {
-        error: 'Something went wrong',
-      },
-      400,
-    );
+  } catch (err: any) {
+    if (err instanceof Error) {
+      return c.json(
+        {
+          error: err.message
+        },
+        400,
+      );
+    }
+    else {
+      return c.json(
+        {
+          error: 'Something went wrong'
+        },
+        400,
+      );
+    }
   }
 });
 
@@ -76,8 +86,23 @@ courseRouter.openapi(updateCourseRoute, async (c) => {
     const { courseId } = c.req.valid('param');
     const course = CourseSchema.parse(await updateCourse(db, data, courseId));
     return c.json(course, 200);
-  } catch (err) {
-    return c.json(err, 400);
+  } catch (err: any) {
+    if (err instanceof Error) {
+      return c.json(
+        {
+          error: err.message
+        },
+        400,
+      );
+    }
+    else {
+      return c.json(
+        {
+          error: 'Something went wrong'
+        },
+        400,
+      );
+    }
   }
 });
 
@@ -86,7 +111,22 @@ courseRouter.openapi(deleteCourseRoute, async (c) => {
     const { courseId } = c.req.valid('param');
     const course = CourseSchema.parse(await deleteCourse(db, courseId));
     return c.json(course, 200);
-  } catch (err) {
-    return c.json(err, 400);
+  } catch (err: any) {
+    if (err instanceof Error) {
+      return c.json(
+        {
+          error: err.message
+        },
+        400,
+      );
+    }
+    else {
+      return c.json(
+        {
+          error: 'Something went wrong'
+        },
+        400,
+      );
+    }
   }
 });

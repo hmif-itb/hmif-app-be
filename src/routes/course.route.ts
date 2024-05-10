@@ -4,6 +4,7 @@ import {
   ListCourseSchema,
   CourseIdRequestBodySchema,
   CourseSchema,
+  SingleCourseSchema,
 } from '~/types/course.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
@@ -35,8 +36,8 @@ export const listCourseRoute = createRoute({
   },
 });
 
-export const listCourseRouteByID = createRoute({
-  operationId: 'getlistCoursesById',
+export const getCourseByIdRoute = createRoute({
+  operationId: 'getCourseById',
   tags: ['course'],
   method: 'get',
   path: '/course/{courseId}',
@@ -47,7 +48,7 @@ export const listCourseRouteByID = createRoute({
     200: {
       content: {
         'application/json': {
-          schema: ListCourseSchema,
+          schema: SingleCourseSchema,
         },
       },
       description: 'Get list of courses',
@@ -56,7 +57,7 @@ export const listCourseRouteByID = createRoute({
       description: 'Bad request',
       content: {
         'application/json': {
-          schema: z.union([ErrorSchema, ValidationErrorSchema]),
+          schema: ErrorSchema,
         },
       },
     },
