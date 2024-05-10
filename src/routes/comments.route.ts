@@ -1,6 +1,6 @@
 import { createRoute, z } from '@hono/zod-openapi';
-import { postCommentBody } from '~/types/comments.types';
-import { validationErrorResponse} from '~/types/responses.type';
+import { deleteCommentParam, postCommentBody } from '~/types/comments.types';
+import { validationErrorResponse, ValidationErrorSchema, ErrorSchema} from '~/types/responses.type';
 
 export const postCommentRoute = createRoute({
   operationId: 'postComment',
@@ -23,5 +23,44 @@ export const postCommentRoute = createRoute({
       description: 'comment posted succesfuly',
     },
     400: validationErrorResponse,
+    500: {
+        description: 'Internal server error',
+        content: {
+          'application/json': {
+            schema: ErrorSchema,
+          },
+        },
+      },
   },
 });
+
+export const deleteCommentRoute = createRoute({
+    operationId: 'readInfo',
+    tags: ['comments'],
+    method: 'delete',
+    path: '/comment/{commentId}',
+    request: {
+      params: deleteCommentParam,
+    },
+    responses: {
+      200: {
+        description: 'successfully deleted comment',
+      },
+      400: {
+        description: 'Bad request',
+        content: {
+          'application/json': {
+            schema: z.union([ValidationErrorSchema, ErrorSchema]),
+          },
+        },
+      },
+      500: {
+        description: 'Internal server error',
+        content: {
+          'application/json': {
+            schema: ErrorSchema,
+          },
+        },
+      },
+    },
+  });

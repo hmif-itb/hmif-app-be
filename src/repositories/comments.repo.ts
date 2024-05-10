@@ -1,4 +1,4 @@
-import { InferInsertModel } from 'drizzle-orm';
+import { InferInsertModel, eq } from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
 import { firstSure } from '~/db/helper';
 import { comments } from '~/db/schema';
@@ -13,4 +13,13 @@ export async function createComment(
     .values(data)
     .returning()
     .then(firstSure);
+}
+
+export async function deleteComment(
+    db: Database,
+    commentId: string,
+) {
+    return await db
+        .delete(comments)
+        .where(eq(comments.id, commentId))
 }

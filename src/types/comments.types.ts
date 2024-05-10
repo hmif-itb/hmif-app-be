@@ -8,3 +8,9 @@ export const postCommentBody = z.object({
     example: 'my comment!',
   }),
 });
+
+export const deleteCommentParam = z.object({
+    commentId: z.string().openapi({
+        example: "uuid"
+    })
+})
