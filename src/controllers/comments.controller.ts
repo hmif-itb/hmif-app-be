@@ -29,7 +29,6 @@ commentsRouter.openapi(postCommentRoute, async (c) => {
 
 commentsRouter.openapi(deleteCommentRoute, async (c) => {
     const { commentId } = c.req.valid('param')
-    console.log(commentId)
     if(commentId === "" || !commentId){
         return c.json("request should have content id", 400);
     }
