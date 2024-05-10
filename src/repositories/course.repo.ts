@@ -22,14 +22,16 @@ export async function getListCourses(
   });
 }
 
-export async function getListCoursesById(db: Database, courseId: string) {
-  const courseIdQ = courseId ? eq(courses.id, courseId) : undefined;
-
-  const where = and(courseIdQ);
-
-  return await db.query.courses.findMany({
-    where,
+export async function getCourseById(db: Database, courseId: string) {
+  const course = await db.query.courses.findFirst({
+    where: courseId ? eq(courses.id, courseId) : undefined,
   });
+
+  if (!course) {
+    throw new Error('Course not found');
+  }
+
+  return course;
 }
 
 export async function createCourse(
@@ -51,24 +53,30 @@ export async function updateCourse(
   data: InferInsertModel<typeof courses>,
   courseId: string,
 ) {
-  return await db.transaction(async (tx) => {
-    const newCourse = await tx
-      .update(courses)
-      .set(data)
-      .where(eq(courses.id, courseId))
-      .returning()
-      .then(firstSure);
-    return newCourse;
-  });
+  const course = await db
+    .update(courses)
+    .set(data)
+    .where(eq(courses.id, courseId))
+    .returning()
+    .then(firstSure);
+
+  if (!course) {
+    throw new Error('Course not found');
+  }
+
+  return course;
 }
 
 export async function deleteCourse(db: Database, courseId: string) {
-  return await db.transaction(async (tx) => {
-    const newCourse = await tx
-      .delete(courses)
-      .where(eq(courses.id, courseId))
-      .returning()
-      .then(firstSure);
-    return newCourse;
-  });
+  const course = await db
+    .delete(courses)
+    .where(eq(courses.id, courseId))
+    .returning()
+    .then(firstSure);
+
+  if (!course) {
+    throw new Error('Course not found');
+  }
+
+  return course;
 }

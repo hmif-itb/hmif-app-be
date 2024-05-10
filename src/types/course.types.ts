@@ -3,6 +3,9 @@ import { z } from 'zod';
 import { courses } from '~/db/schema';
 
 export const CourseSchema = createSelectSchema(courses).openapi('Course');
+export const SingleCourseSchema = z.object({
+  course: CourseSchema,
+});
 export const ListCourseSchema = z.object({
   courses: z.array(CourseSchema),
 });
