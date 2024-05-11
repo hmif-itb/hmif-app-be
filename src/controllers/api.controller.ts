@@ -5,6 +5,7 @@ import { mediaRouter } from './media.controller';
 import { openGraphScrapeRoute } from './open-graph.controller';
 import { pushRouter } from './push.controller';
 import { courseRouter } from './course.controller';
+import { reactionRouter } from './reaction.controller';
 
 const unprotectedApiRouter = new OpenAPIHono();
 unprotectedApiRouter.route('/', loginRouter);
@@ -16,6 +17,7 @@ protectedApiRouter.route('/', pushRouter);
 protectedApiRouter.route('/', mediaRouter);
 protectedApiRouter.route('/', loginProtectedRouter);
 protectedApiRouter.route('/', courseRouter);
+protectedApiRouter.route('/', reactionRouter);
 
 export const apiRouter = new OpenAPIHono();
 apiRouter.route('/', unprotectedApiRouter);
