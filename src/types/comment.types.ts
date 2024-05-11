@@ -40,3 +40,9 @@ export const CommentIdQuerySchema = z.object({
     },
   }),
 });
+
+export const CommentContentSchema = z.object({
+  content: z.string().openapi({
+    example: 'Keren nih info',
+  }),
+});

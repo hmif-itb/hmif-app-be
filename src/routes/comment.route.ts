@@ -1,11 +1,16 @@
-import { createRoute } from '@hono/zod-openapi';
+import { createRoute, z } from '@hono/zod-openapi';
 import {
   CommentListQuerySchema,
   CommentListSchema,
   CommentIdQuerySchema,
   CommentSchema,
+  CommentContentSchema,
 } from '~/types/comment.types';
-import { ErrorSchema, validationErrorResponse } from '~/types/responses.type';
+import {
+  ErrorSchema,
+  validationErrorResponse,
+  ValidationErrorSchema,
+} from '~/types/responses.type';
 
 export const getCommentsListRoute = createRoute({
   operationId: 'getCommentsList',
@@ -46,6 +51,50 @@ export const getCommentsbyIdRoute = createRoute({
       },
     },
     400: validationErrorResponse,
+    404: {
+      description: 'Comment not found',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
+        },
+      },
+    },
+  },
+});
+
+export const updateCommentContentRoute = createRoute({
+  operationId: 'updateCommentContent',
+  tags: ['comment'],
+  method: 'put',
+  path: '/comment/{commentId}',
+  request: {
+    params: CommentIdQuerySchema,
+    body: {
+      content: {
+        'application/json': {
+          schema: CommentContentSchema,
+        },
+      },
+      required: true,
+    },
+  },
+  responses: {
+    200: {
+      description: 'Updated comment content',
+      content: {
+        'application/json': {
+          schema: CommentSchema,
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ValidationErrorSchema, ErrorSchema]),
+        },
+      },
+    },
     404: {
       description: 'Comment not found',
       content: {
