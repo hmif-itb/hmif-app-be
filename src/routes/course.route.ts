@@ -4,7 +4,8 @@ import {
   ListCourseSchema,
   CourseIdRequestBodySchema,
   CourseSchema,
-  SingleCourseSchema,
+  CreateCourseSchema,
+  UpdateCourseSchema,
 } from '~/types/course.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
@@ -48,13 +49,21 @@ export const getCourseByIdRoute = createRoute({
     200: {
       content: {
         'application/json': {
-          schema: SingleCourseSchema,
+          schema: CourseSchema,
         },
       },
       description: 'Get list of courses',
     },
     400: {
       description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
+        },
+      },
+    },
+    404: {
+      description: 'Course not found',
       content: {
         'application/json': {
           schema: ErrorSchema,
@@ -73,7 +82,7 @@ export const createCourseRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: CourseSchema.omit({ id: true }),
+          schema: CreateCourseSchema,
         },
       },
       required: true,
@@ -109,7 +118,7 @@ export const updateCourseRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: CourseSchema.omit({ id: true }),
+          schema: UpdateCourseSchema,
         },
       },
     },
@@ -128,6 +137,14 @@ export const updateCourseRoute = createRoute({
       content: {
         'application/json': {
           schema: z.union([ValidationErrorSchema, ErrorSchema]),
+        },
+      },
+    },
+    404: {
+      description: 'Course not found',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
         },
       },
     },
@@ -156,6 +173,14 @@ export const deleteCourseRoute = createRoute({
       content: {
         'application/json': {
           schema: z.union([ValidationErrorSchema, ErrorSchema]),
+        },
+      },
+    },
+    404: {
+      description: 'Course not found',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
         },
       },
     },

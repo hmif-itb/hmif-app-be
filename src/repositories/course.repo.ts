@@ -1,9 +1,12 @@
 import { InferInsertModel, and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
-import { firstSure } from '~/db/helper';
+import { first, firstSure } from '~/db/helper';
 import { courses } from '~/db/schema';
-import { ListCourseParamsSchema } from '~/types/course.types';
+import {
+  ListCourseParamsSchema,
+  UpdateCourseSchema,
+} from '~/types/course.types';
 
 export async function getListCourses(
   db: Database,
@@ -24,13 +27,8 @@ export async function getListCourses(
 
 export async function getCourseById(db: Database, courseId: string) {
   const course = await db.query.courses.findFirst({
-    where: courseId ? eq(courses.id, courseId) : undefined,
+    where: eq(courses.id, courseId),
   });
-
-  if (!course) {
-    throw new Error('Course not found');
-  }
-
   return course;
 }
 
@@ -50,7 +48,7 @@ export async function createCourse(
 
 export async function updateCourse(
   db: Database,
-  data: InferInsertModel<typeof courses>,
+  data: z.infer<typeof UpdateCourseSchema>,
   courseId: string,
 ) {
   const course = await db
@@ -58,12 +56,7 @@ export async function updateCourse(
     .set(data)
     .where(eq(courses.id, courseId))
     .returning()
-    .then(firstSure);
-
-  if (!course) {
-    throw new Error('Course not found');
-  }
-
+    .then(first);
   return course;
 }
 
@@ -72,11 +65,6 @@ export async function deleteCourse(db: Database, courseId: string) {
     .delete(courses)
     .where(eq(courses.id, courseId))
     .returning()
-    .then(firstSure);
-
-  if (!course) {
-    throw new Error('Course not found');
-  }
-
+    .then(first);
   return course;
 }

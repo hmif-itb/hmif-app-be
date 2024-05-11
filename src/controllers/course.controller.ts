@@ -42,13 +42,10 @@ courseRouter.openapi(getCourseByIdRoute, async (c) => {
   try {
     const { courseId } = c.req.valid('param');
     const course = await getCourseById(db, courseId);
-    return c.json(
-      {
-        course,
-      },
-      200,
-    );
-  } catch (err: any) {
+
+    if (!course) return c.json({ error: 'Course not found' }, 404);
+    return c.json(course, 200);
+  } catch (err) {
     if (err instanceof Error) {
       return c.json(
         {
@@ -83,9 +80,11 @@ courseRouter.openapi(updateCourseRoute, async (c) => {
   try {
     const data = c.req.valid('json');
     const { courseId } = c.req.valid('param');
-    const course = CourseSchema.parse(await updateCourse(db, data, courseId));
+    const course = await updateCourse(db, data, courseId);
+
+    if (!course) return c.json({ error: 'Course not found' }, 404);
     return c.json(course, 200);
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof Error) {
       return c.json(
         {
@@ -107,9 +106,11 @@ courseRouter.openapi(updateCourseRoute, async (c) => {
 courseRouter.openapi(deleteCourseRoute, async (c) => {
   try {
     const { courseId } = c.req.valid('param');
-    const course = CourseSchema.parse(await deleteCourse(db, courseId));
+    const course = await deleteCourse(db, courseId);
+
+    if (!course) return c.json({ error: 'Course not found' }, 404);
     return c.json(course, 200);
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof Error) {
       return c.json(
         {

@@ -1,8 +1,15 @@
-import { createSelectSchema } from 'drizzle-zod';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { courses } from '~/db/schema';
 
 export const CourseSchema = createSelectSchema(courses).openapi('Course');
+
+export const CreateCourseSchema = createInsertSchema(courses).omit({
+  id: true,
+});
+
+export const UpdateCourseSchema = CreateCourseSchema.partial();
+
 export const SingleCourseSchema = z.object({
   course: CourseSchema,
 });
