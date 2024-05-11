@@ -6,6 +6,7 @@ import {
   reactionQuerySchema,
   reactionResponseSchema,
   reactionCountSchema,
+  reactionIdSchema,
 } from '~/types/reaction.types';
 
 export async function getReactions(
@@ -47,4 +48,13 @@ export async function getReactions(
   };
 
   return result;
+}
+
+export async function deleteReaction(db: Database, id: string) {
+  // TODO : Query to delete a reaction by id
+  // return await db
+  //   .delete(reactions)
+  //   .where(eq(reactions.id, id))
+  //   .returning();
+  return null;
 }

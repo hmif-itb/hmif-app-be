@@ -20,3 +20,7 @@ export const reactionResponseSchema = z.object({
   totalReactions: z.number(),
   reactionsCount: reactionCountSchema,
 });
+
+export const reactionIdSchema = z.object({
+  reactionId: z.string(),
+});
