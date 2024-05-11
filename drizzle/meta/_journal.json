@@ -15,6 +15,13 @@
       "when": 1715004414120,
       "tag": "0001_cuddly_roughhouse",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1715446566074,
+      "tag": "0002_sticky_guardsmen",
+      "breakpoints": true
     }
   ]
 }
