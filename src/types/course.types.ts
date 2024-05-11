@@ -6,6 +6,7 @@ export const CourseSchema = createSelectSchema(courses).openapi('Course');
 
 export const CreateCourseSchema = createInsertSchema(courses).omit({
   id: true,
+  semesterCode: true,
 });
 
 export const UpdateCourseSchema = CreateCourseSchema.partial();

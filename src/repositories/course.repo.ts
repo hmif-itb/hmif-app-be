@@ -1,9 +1,10 @@
-import { InferInsertModel, and, eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
 import { courses } from '~/db/schema';
 import {
+  CreateCourseSchema,
   ListCourseParamsSchema,
   UpdateCourseSchema,
 } from '~/types/course.types';
@@ -19,7 +20,6 @@ export async function getListCourses(
   const semesterQ = q.semester ? eq(courses.semester, q.semester) : undefined;
 
   const where = and(curriculumYearQ, majorQ, semesterQ);
-
   return await db.query.courses.findMany({
     where,
   });
@@ -34,12 +34,15 @@ export async function getCourseById(db: Database, courseId: string) {
 
 export async function createCourse(
   db: Database,
-  data: InferInsertModel<typeof courses>,
+  data: z.infer<typeof CreateCourseSchema>,
 ) {
   return await db.transaction(async (tx) => {
     const newCourse = await tx
       .insert(courses)
-      .values(data)
+      .values({
+        ...data,
+        semesterCode: data.semester % 2 === 0 ? 'Genap' : 'Ganjil',
+      })
       .returning()
       .then(firstSure);
     return newCourse;
@@ -53,7 +56,14 @@ export async function updateCourse(
 ) {
   const course = await db
     .update(courses)
-    .set(data)
+    .set({
+      ...data,
+      semesterCode: data.semester
+        ? data.semester % 2 === 0
+          ? 'Genap'
+          : 'Ganjil'
+        : undefined,
+    })
     .where(eq(courses.id, courseId))
     .returning()
     .then(first);
