@@ -30,3 +30,13 @@ export const CommentListQuerySchema = z.object({
       },
     }),
 });
+
+export const CommentIdQuerySchema = z.object({
+  commentId: z.string().openapi({
+    param: {
+      in: 'path',
+      description: 'Id of fetched comment',
+      example: '1',
+    },
+  }),
+});
