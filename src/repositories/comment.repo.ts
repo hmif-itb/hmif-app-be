@@ -1,7 +1,7 @@
 import { and, asc, count, desc, eq, getTableColumns } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
-import { firstSure } from '~/db/helper';
+import { first } from '~/db/helper';
 import { comments, reactions } from '~/db/schema';
 import {
   CommentContentSchema,
@@ -46,12 +46,10 @@ export async function updateCommentContent(
   q: z.infer<typeof CommentIdQuerySchema>,
   data: z.infer<typeof CommentContentSchema>,
 ) {
-  const comment = await getCommentById(db, q);
-  if (!comment) return null;
   return await db
     .update(comments)
     .set(data)
     .where(eq(comments.id, q.commentId))
     .returning()
-    .then(firstSure);
+    .then(first);
 }
