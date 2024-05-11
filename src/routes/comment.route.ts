@@ -5,7 +5,7 @@ import {
   CommentIdQuerySchema,
   CommentSchema,
 } from '~/types/comment.types';
-import { validationErrorResponse } from '~/types/responses.type';
+import { ErrorSchema, validationErrorResponse } from '~/types/responses.type';
 
 export const getCommentsListRoute = createRoute({
   operationId: 'getCommentsList',
@@ -46,5 +46,13 @@ export const getCommentsbyIdRoute = createRoute({
       },
     },
     400: validationErrorResponse,
+    404: {
+      description: 'Comment not found',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
+        },
+      },
+    },
   },
 });

@@ -17,5 +17,8 @@ commentRouter.openapi(getCommentsListRoute, async (c) => {
 commentRouter.openapi(getCommentsbyIdRoute, async (c) => {
   const param = c.req.valid('param');
   const comment = await getCommentById(db, param);
-  return c.json({ comment }, 200);
+  if (!comment) {
+    return c.json({ error: 'Comment not found' }, 404);
+  }
+  return c.json(comment, 200);
 });
