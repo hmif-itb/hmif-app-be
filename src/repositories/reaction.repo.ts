@@ -1,5 +1,5 @@
 import { count, eq } from 'drizzle-orm';
-import { z, ZodRecord } from 'zod';
+import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { reactions } from '~/db/schema';
 import {
@@ -12,23 +12,29 @@ export async function getReactions(
   db: Database,
   q: z.infer<typeof reactionQuerySchema>,
 ) {
-  let where = eq(reactions.commentId, q.commentId);
+  let where;
   if (q.infoId) {
     where = eq(reactions.infoId, q.infoId);
+  } else if (q.commentId) {
+    where = eq(reactions.commentId, q.commentId);
+  } else {
+    return null;
   }
 
   const reactionCount = await db
     .select({
-      count: count(),
       reaction: reactions.reaction,
       reactionsCount: count(reactions.reaction),
     })
     .from(reactions)
     .where(where)
     .groupBy(reactions.reaction);
+  if (!reactionCount) return null; // No reactions found
 
+  let total = 0;
   const reactionsMap: z.infer<typeof reactionCountSchema> = [];
   for (const r of reactionCount) {
+    total += r.reactionsCount;
     reactionsMap.push({
       reaction: r.reaction,
       count: r.reactionsCount,
@@ -36,7 +42,7 @@ export async function getReactions(
   }
 
   const result: z.infer<typeof reactionResponseSchema> = {
-    totalReactions: reactionCount[0].count,
+    totalReactions: total,
     reactionsCount: reactionsMap,
   };
 

@@ -5,8 +5,8 @@ import { reactions } from '~/db/schema';
 export const reactionSchema = createSelectSchema(reactions).openapi('Reaction');
 
 export const reactionQuerySchema = z.object({
-  infoId: z.string(),
-  commentId: z.string(),
+  infoId: z.string().nullable(),
+  commentId: z.string().nullable(),
 });
 
 export const reactionCountSchema = z
