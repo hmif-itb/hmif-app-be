@@ -1,5 +1,5 @@
 {
-  "id": "8fdb0792-dcc6-4e25-9cd8-2a6f682687cf",
+  "id": "58faccaf-b12a-4d99-9f36-611e16cb0578",
   "prevId": "10f9dff7-fbfc-4136-a53e-971e965ecc15",
   "version": "6",
   "dialect": "postgresql",
@@ -495,6 +495,12 @@
       "name": "reactions",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
         "creator_id": {
           "name": "creator_id",
           "type": "text",

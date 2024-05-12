@@ -236,6 +236,7 @@ export const commentsRelation = relations(comments, ({ one, many }) => ({
 export const reactions = pgTable(
   'reactions',
   {
+    id: text('id').primaryKey().$defaultFn(createId),
     creatorId: text('creator_id')
       .references(() => users.id)
       .notNull(),
