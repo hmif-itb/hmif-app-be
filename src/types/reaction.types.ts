@@ -2,8 +2,7 @@ import { createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { reactions } from '~/db/schema';
 
-export const reactionSchema = createSelectSchema({
-  ...reactions,
+export const reactionSchema = createSelectSchema(reactions, {
   createdAt: z.union([z.string(), z.date()]),
 }).openapi('Reaction');
 
