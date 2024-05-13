@@ -5,7 +5,7 @@ import {
   ReactionIdSchema,
   ReactionQuerySchema,
   ReactionResponseSchema,
-  CreateOrUpdateReactionSchema,
+  CreateOrUpdateReactionParamsSchema,
 } from '~/types/reaction.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
@@ -54,7 +54,7 @@ export const CreateOrUpdateReactionRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: CreateOrUpdateReactionSchema,
+          schema: CreateOrUpdateReactionParamsSchema,
         },
       },
     },

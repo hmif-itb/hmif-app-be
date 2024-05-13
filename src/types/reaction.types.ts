@@ -12,6 +12,18 @@ export const CreateOrUpdateReactionSchema = createInsertSchema(reactions).omit({
   creatorId: true,
 });
 
+export const CreateOrUpdateReactionParamsSchema = z.object({
+  infoId: z.string().optional().openapi({
+    example: '1',
+  }),
+  commentId: z.string().optional().openapi({
+    example: '1',
+  }),
+  reaction: z.string().openapi({
+    example: 'haha',
+  }),
+});
+
 export const ReactionQuerySchema = z.object({
   infoId: z.string().optional(),
   commentId: z.string().optional(),
