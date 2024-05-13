@@ -1,4 +1,4 @@
-import { createSelectSchema } from 'drizzle-zod';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { reactions } from '~/db/schema';
 
 export const ReactionSchema = createSelectSchema(reactions)
@@ -8,4 +8,4 @@ export const ReactionSchema = createSelectSchema(reactions)
     createdAt: true,
   });
 
-export const UpdateReactionSchema = ReactionSchema.partial();
+export const UpdateReactionSchema = createInsertSchema(reactions);
