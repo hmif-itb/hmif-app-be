@@ -57,14 +57,11 @@ export async function createOrUpdateReaction(
     .insert(reactions)
     .values({
       ...data,
-      creatorId: creatorId,
+      creatorId,
     })
     .onConflictDoUpdate({
       target: [reactions.infoId, reactions.commentId, reactions.creatorId],
-      set: {
-        ...data,
-        creatorId: creatorId,
-      },
+      set: data,
     })
     .returning()
     .then(first);

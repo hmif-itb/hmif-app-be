@@ -1,4 +1,3 @@
-import { CreateOrUpdateReactionRoute } from '~/routes/reaction.route';
 import { createAuthRouter } from './router-factory';
 import {
   createOrUpdateReaction,
@@ -6,6 +5,7 @@ import {
   getReactions,
 } from '~/repositories/reaction.repo';
 import {
+  CreateOrUpdateReactionRoute,
   deleteReactionRoute,
   getReactionsRoute,
 } from '~/routes/reaction.route';

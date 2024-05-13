@@ -1,4 +1,6 @@
 {
+  "id": "e9f7ea7a-1e13-4248-bab6-60e3833a8a87",
+  "prevId": "70991f31-b86b-475a-a304-e9914da1d3f3",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -16,13 +18,13 @@
           "name": "replied_info_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "creator_id": {
           "name": "creator_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "content": {
           "name": "content",
@@ -38,33 +40,48 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "comments_replied_info_id_index": {
+          "name": "comments_replied_info_id_index",
+          "columns": [
+            "replied_info_id"
+          ],
+          "isUnique": false
+        },
+        "comments_creator_id_index": {
+          "name": "comments_creator_id_index",
+          "columns": [
+            "creator_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "comments_replied_info_id_infos_id_fk": {
           "name": "comments_replied_info_id_infos_id_fk",
           "tableFrom": "comments",
+          "tableTo": "infos",
           "columnsFrom": [
             "replied_info_id"
           ],
-          "tableTo": "infos",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "comments_creator_id_users_id_fk": {
           "name": "comments_creator_id_users_id_fk",
           "tableFrom": "comments",
+          "tableTo": "users",
           "columnsFrom": [
             "creator_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -123,16 +140,24 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "courses_code_index": {
+          "name": "courses_code_index",
+          "columns": [
+            "code"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "courses_code_unique": {
           "name": "courses_code_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "code"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -183,15 +208,15 @@
         "google_subscriptions_user_id_users_id_fk": {
           "name": "google_subscriptions_user_id_users_id_fk",
           "tableFrom": "google_subscriptions",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -219,28 +244,28 @@
         "info_medias_info_id_infos_id_fk": {
           "name": "info_medias_info_id_infos_id_fk",
           "tableFrom": "info_medias",
+          "tableTo": "infos",
           "columnsFrom": [
             "info_id"
           ],
-          "tableTo": "infos",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "info_medias_media_id_medias_id_fk": {
           "name": "info_medias_media_id_medias_id_fk",
           "tableFrom": "info_medias",
+          "tableTo": "medias",
           "columnsFrom": [
             "media_id"
           ],
-          "tableTo": "medias",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -268,7 +293,7 @@
           "name": "creator_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "content": {
           "name": "content",
@@ -313,28 +338,28 @@
         "infos_creator_id_users_id_fk": {
           "name": "infos_creator_id_users_id_fk",
           "tableFrom": "infos",
+          "tableTo": "users",
           "columnsFrom": [
             "creator_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "infos_for_matakuliah_courses_code_fk": {
           "name": "infos_for_matakuliah_courses_code_fk",
           "tableFrom": "infos",
+          "tableTo": "courses",
           "columnsFrom": [
             "for_matakuliah"
           ],
-          "tableTo": "courses",
           "columnsTo": [
             "code"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -354,7 +379,7 @@
           "name": "creator_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "name": {
           "name": "name",
@@ -387,25 +412,25 @@
         "medias_creator_id_users_id_fk": {
           "name": "medias_creator_id_users_id_fk",
           "tableFrom": "medias",
+          "tableTo": "users",
           "columnsFrom": [
             "creator_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "medias_name_unique": {
           "name": "medias_name_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "name"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -452,15 +477,15 @@
         "push_subscriptions_user_id_users_id_fk": {
           "name": "push_subscriptions_user_id_users_id_fk",
           "tableFrom": "push_subscriptions",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -470,11 +495,17 @@
       "name": "reactions",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
         "creator_id": {
           "name": "creator_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "info_id": {
           "name": "info_id",
@@ -502,50 +533,75 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "reactions_info_id_index": {
+          "name": "reactions_info_id_index",
+          "columns": [
+            "info_id"
+          ],
+          "isUnique": false
+        },
+        "reactions_comment_id_index": {
+          "name": "reactions_comment_id_index",
+          "columns": [
+            "comment_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "reactions_creator_id_users_id_fk": {
           "name": "reactions_creator_id_users_id_fk",
           "tableFrom": "reactions",
+          "tableTo": "users",
           "columnsFrom": [
             "creator_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "reactions_info_id_infos_id_fk": {
           "name": "reactions_info_id_infos_id_fk",
           "tableFrom": "reactions",
+          "tableTo": "infos",
           "columnsFrom": [
             "info_id"
           ],
-          "tableTo": "infos",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "reactions_comment_id_comments_id_fk": {
           "name": "reactions_comment_id_comments_id_fk",
           "tableFrom": "reactions",
+          "tableTo": "comments",
           "columnsFrom": [
             "comment_id"
           ],
-          "tableTo": "comments",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "reactions_creator_id_info_id_comment_id_unique": {
+          "name": "reactions_creator_id_info_id_comment_id_unique",
+          "nullsNotDistinct": true,
+          "columns": [
+            "creator_id",
+            "info_id",
+            "comment_id"
+          ]
+        }
+      }
     },
     "public.user_read_infos": {
       "name": "user_read_infos",
@@ -576,28 +632,28 @@
         "user_read_infos_user_id_users_id_fk": {
           "name": "user_read_infos_user_id_users_id_fk",
           "tableFrom": "user_read_infos",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "user_read_infos_info_id_infos_id_fk": {
           "name": "user_read_infos_info_id_infos_id_fk",
           "tableFrom": "user_read_infos",
+          "tableTo": "infos",
           "columnsFrom": [
             "info_id"
           ],
-          "tableTo": "infos",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -698,17 +754,17 @@
       "uniqueConstraints": {
         "users_nim_unique": {
           "name": "users_nim_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "nim"
-          ],
-          "nullsNotDistinct": false
+          ]
         },
         "users_email_unique": {
           "name": "users_email_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "email"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     }
@@ -716,10 +772,8 @@
   "enums": {},
   "schemas": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "10f9dff7-fbfc-4136-a53e-971e965ecc15",
-  "prevId": "70991f31-b86b-475a-a304-e9914da1d3f3"
+    "tables": {}
+  }
 }

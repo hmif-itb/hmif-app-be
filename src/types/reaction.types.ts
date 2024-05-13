@@ -4,16 +4,12 @@ import { reactions } from '~/db/schema';
 
 export const ReactionSchema = createSelectSchema(reactions, {
   createdAt: z.union([z.string(), z.date()]),
-})
-  .openapi('Reaction')
-  .omit({
-    id: true,
-    createdAt: true,
-  });
+}).openapi('Reaction');
 
 export const CreateOrUpdateReactionSchema = createInsertSchema(reactions).omit({
   id: true,
   createdAt: true,
+  creatorId: true,
 });
 
 export const ReactionQuerySchema = z.object({

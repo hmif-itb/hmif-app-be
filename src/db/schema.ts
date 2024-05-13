@@ -8,6 +8,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  unique,
 } from 'drizzle-orm/pg-core';
 import webpush from 'web-push';
 
@@ -250,6 +251,9 @@ export const reactions = pgTable(
   (t) => ({
     infoIdIdx: index().on(t.infoId),
     commentIdIdx: index().on(t.commentId),
+    uniqueIdentifier: unique()
+      .on(t.creatorId, t.infoId, t.commentId)
+      .nullsNotDistinct(),
   }),
 );
 
