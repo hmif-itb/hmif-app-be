@@ -2,9 +2,10 @@ import { createRoute, z } from '@hono/zod-openapi';
 import {
   CommentListQuerySchema,
   CommentListSchema,
-  CommentIdQuerySchema,
+  CommentIdParamSchema,
   CommentSchema,
-  CommentContentSchema,
+  CommentPostBodySchema,
+  CommentUpdateBodySchema,
 } from '~/types/comment.types';
 import {
   ErrorSchema,
@@ -33,13 +34,13 @@ export const getCommentsListRoute = createRoute({
   },
 });
 
-export const getCommentsbyIdRoute = createRoute({
+export const getCommentsByIdRoute = createRoute({
   operationId: 'getCommentsById',
   tags: ['comment'],
   method: 'get',
   path: '/comment/{commentId}',
   request: {
-    params: CommentIdQuerySchema,
+    params: CommentIdParamSchema,
   },
   responses: {
     200: {
@@ -68,11 +69,11 @@ export const updateCommentContentRoute = createRoute({
   method: 'put',
   path: '/comment/{commentId}',
   request: {
-    params: CommentIdQuerySchema,
+    params: CommentIdParamSchema,
     body: {
       content: {
         'application/json': {
-          schema: CommentContentSchema,
+          schema: CommentUpdateBodySchema,
         },
       },
       required: true,
@@ -97,6 +98,79 @@ export const updateCommentContentRoute = createRoute({
     },
     404: {
       description: 'Comment not found',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
+        },
+      },
+    },
+  },
+});
+
+export const postCommentRoute = createRoute({
+  operationId: 'postComment',
+  tags: ['comment'],
+  method: 'post',
+  path: '/comment',
+  description: 'post a comment',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: CommentPostBodySchema,
+        },
+      },
+      required: true,
+    },
+  },
+  responses: {
+    201: {
+      description: 'Comment posted succesfuly',
+      content: {
+        'application/json': {
+          schema: CommentSchema,
+        },
+      },
+    },
+    400: validationErrorResponse,
+    500: {
+      description: 'Internal server error',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
+        },
+      },
+    },
+  },
+});
+
+export const deleteCommentRoute = createRoute({
+  operationId: 'deleteComment',
+  tags: ['comment'],
+  method: 'delete',
+  path: '/comment/{commentId}',
+  request: {
+    params: CommentIdParamSchema,
+  },
+  responses: {
+    200: {
+      description: 'Successfully deleted comment',
+      content: {
+        'application/json': {
+          schema: CommentSchema,
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
+        },
+      },
+    },
+    500: {
+      description: 'Internal server error',
       content: {
         'application/json': {
           schema: ErrorSchema,

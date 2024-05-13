@@ -1,5 +1,5 @@
 import { z } from '@hono/zod-openapi';
-import { createSelectSchema } from 'drizzle-zod';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { comments } from '~/db/schema';
 
 export const CommentSchema = createSelectSchema(comments, {
@@ -31,7 +31,7 @@ export const CommentListQuerySchema = z.object({
     }),
 });
 
-export const CommentIdQuerySchema = z.object({
+export const CommentIdParamSchema = z.object({
   commentId: z.string().openapi({
     param: {
       in: 'path',
@@ -41,8 +41,36 @@ export const CommentIdQuerySchema = z.object({
   }),
 });
 
-export const CommentContentSchema = z.object({
-  content: z.string().openapi({
-    example: 'Keren nih info',
-  }),
-});
+export const CommentUpdateBodySchema = createInsertSchema(comments)
+  .pick({
+    content: true,
+  })
+  .default({
+    content: 'Keren nih info',
+  });
+
+export const CommentPostBodySchema = createInsertSchema(comments)
+  .omit({
+    id: true,
+    createdAt: true,
+    creatorId: true,
+  })
+  .default({
+    content: 'Halo! Saya ingin komen, kerja bagus!',
+    repliedInfoId: 'b5kg9vo1xzyutser1zhbi8le',
+  });
+
+// export const CommentUpdateBodySchema = z.object({
+//   content: z.string().openapi({
+//     example: 'Keren nih info',
+//   }),
+// });
+
+// export const CommentPostBodySchema = z.object({
+//   infoId: z.string().openapi({
+//     example: 'uuid',
+//   }),
+//   content: z.string().openapi({
+//     example: 'my comment!',
+//   }),
+// });
