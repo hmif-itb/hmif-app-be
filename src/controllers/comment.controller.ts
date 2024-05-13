@@ -1,6 +1,6 @@
 import {
   getCommentsListRoute,
-  getCommentsbyIdRoute,
+  getCommentsByIdRoute,
   postCommentRoute,
   deleteCommentRoute,
   updateCommentContentRoute,
@@ -14,6 +14,7 @@ import {
   updateCommentContent,
 } from '~/repositories/comment.repo';
 import { db } from '~/db/drizzle';
+import { PostgresError } from 'postgres';
 
 export const commentRouter = createAuthRouter();
 
@@ -23,7 +24,7 @@ commentRouter.openapi(getCommentsListRoute, async (c) => {
   return c.json({ comment }, 200);
 });
 
-commentRouter.openapi(getCommentsbyIdRoute, async (c) => {
+commentRouter.openapi(getCommentsByIdRoute, async (c) => {
   const param = c.req.valid('param');
   const comment = await getCommentById(db, param);
   if (!comment) {
@@ -33,35 +34,26 @@ commentRouter.openapi(getCommentsbyIdRoute, async (c) => {
 });
 
 commentRouter.openapi(postCommentRoute, async (c) => {
-  const { id } = c.var.user;
-  const { infoId, content } = c.req.valid('json');
-  if (infoId === '' || !infoId || content === '' || !content) {
-    return c.json('request should have info id and content id', 400);
-  }
-
   try {
-    const data = {
-      creatorId: id,
-      repliedInfoId: infoId,
-      content,
-    };
-
-    await createComment(db, data);
-    return c.json('comment posted succesfully', 201);
+    const data = c.req.valid('json');
+    const userId = c.var.user.id;
+    const comment = await createComment(db, data, userId);
+    return c.json(comment, 201);
   } catch (err) {
+    if (err instanceof PostgresError)
+      return c.json({ error: err.message }, 400);
     return c.json(err, 400);
   }
 });
 
 commentRouter.openapi(deleteCommentRoute, async (c) => {
-  const { commentId } = c.req.valid('param');
-  if (commentId === '' || !commentId) {
-    return c.json('request should have content id', 400);
-  }
-
   try {
-    await deleteComment(db, commentId);
-    return c.json('comment deleted successfully', 200);
+    const { commentId } = c.req.valid('param');
+    const comment = await deleteComment(db, commentId);
+    if (!comment) {
+      return c.json({ error: 'Comment not found' }, 404);
+    }
+    return c.json(comment, 200);
   } catch (err) {
     return c.json(err, 500);
   }

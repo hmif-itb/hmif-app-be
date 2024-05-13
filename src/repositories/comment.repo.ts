@@ -1,22 +1,14 @@
-import {
-  and,
-  asc,
-  count,
-  desc,
-  eq,
-  getTableColumns,
-  InferInsertModel,
-} from 'drizzle-orm';
+import { and, asc, count, desc, eq, getTableColumns } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
-import { first } from '~/db/helper';
+import { first, firstSure } from '~/db/helper';
 import { comments, reactions } from '~/db/schema';
 import {
-  CommentContentSchema,
-  CommentIdQuerySchema,
+  CommentUpdateBodySchema,
+  CommentIdParamSchema,
   CommentListQuerySchema,
+  CommentPostBodySchema,
 } from '~/types/comment.types';
-import { firstSure } from '~/db/helper';
 
 export async function getCommentList(
   db: Database,
@@ -43,7 +35,7 @@ export async function getCommentList(
 
 export async function getCommentById(
   db: Database,
-  q: z.infer<typeof CommentIdQuerySchema>,
+  q: z.infer<typeof CommentIdParamSchema>,
 ) {
   return await db.query.comments.findFirst({
     where: eq(comments.id, q.commentId),
@@ -52,8 +44,8 @@ export async function getCommentById(
 
 export async function updateCommentContent(
   db: Database,
-  q: z.infer<typeof CommentIdQuerySchema>,
-  data: z.infer<typeof CommentContentSchema>,
+  q: z.infer<typeof CommentIdParamSchema>,
+  data: z.infer<typeof CommentUpdateBodySchema>,
 ) {
   return await db
     .update(comments)
@@ -65,11 +57,20 @@ export async function updateCommentContent(
 
 export async function createComment(
   db: Database,
-  data: Omit<InferInsertModel<typeof comments>, 'createdAt'>,
+  data: z.infer<typeof CommentPostBodySchema>,
+  creatorId: string,
 ) {
-  return await db.insert(comments).values(data).returning().then(firstSure);
+  return await db
+    .insert(comments)
+    .values({ ...data, creatorId })
+    .returning()
+    .then(firstSure);
 }
 
 export async function deleteComment(db: Database, commentId: string) {
-  return await db.delete(comments).where(eq(comments.id, commentId));
+  return await db
+    .delete(comments)
+    .where(eq(comments.id, commentId))
+    .returning()
+    .then(first);
 }

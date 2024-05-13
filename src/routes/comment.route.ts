@@ -2,11 +2,10 @@ import { createRoute, z } from '@hono/zod-openapi';
 import {
   CommentListQuerySchema,
   CommentListSchema,
-  CommentIdQuerySchema,
+  CommentIdParamSchema,
   CommentSchema,
-  postCommentBody,
-  deleteCommentParam,
-  CommentContentSchema,
+  CommentPostBodySchema,
+  CommentUpdateBodySchema,
 } from '~/types/comment.types';
 import {
   ErrorSchema,
@@ -35,13 +34,13 @@ export const getCommentsListRoute = createRoute({
   },
 });
 
-export const getCommentsbyIdRoute = createRoute({
+export const getCommentsByIdRoute = createRoute({
   operationId: 'getCommentsById',
   tags: ['comment'],
   method: 'get',
   path: '/comment/{commentId}',
   request: {
-    params: CommentIdQuerySchema,
+    params: CommentIdParamSchema,
   },
   responses: {
     200: {
@@ -70,11 +69,11 @@ export const updateCommentContentRoute = createRoute({
   method: 'put',
   path: '/comment/{commentId}',
   request: {
-    params: CommentIdQuerySchema,
+    params: CommentIdParamSchema,
     body: {
       content: {
         'application/json': {
-          schema: CommentContentSchema,
+          schema: CommentUpdateBodySchema,
         },
       },
       required: true,
@@ -110,7 +109,7 @@ export const updateCommentContentRoute = createRoute({
 
 export const postCommentRoute = createRoute({
   operationId: 'postComment',
-  tags: ['comments'],
+  tags: ['comment'],
   method: 'post',
   path: '/comment',
   description: 'post a comment',
@@ -118,7 +117,7 @@ export const postCommentRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: postCommentBody,
+          schema: CommentPostBodySchema,
         },
       },
       required: true,
@@ -126,7 +125,12 @@ export const postCommentRoute = createRoute({
   },
   responses: {
     201: {
-      description: 'comment posted succesfuly',
+      description: 'Comment posted succesfuly',
+      content: {
+        'application/json': {
+          schema: CommentSchema,
+        },
+      },
     },
     400: validationErrorResponse,
     500: {
@@ -141,12 +145,12 @@ export const postCommentRoute = createRoute({
 });
 
 export const deleteCommentRoute = createRoute({
-  operationId: 'readInfo',
-  tags: ['comments'],
+  operationId: 'deleteComment',
+  tags: ['comment'],
   method: 'delete',
   path: '/comment/{commentId}',
   request: {
-    params: deleteCommentParam,
+    params: CommentIdParamSchema,
   },
   responses: {
     200: {
