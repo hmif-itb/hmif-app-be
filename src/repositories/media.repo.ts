@@ -7,7 +7,7 @@ import { infoMedias, medias } from '~/db/schema';
 export const createMediasFromUrl = async (
   db: Database,
   urls: string[],
-  creatorId: string | null,
+  creatorId: string,
 ) => {
   return await db
     .insert(medias)
