@@ -40,10 +40,12 @@ app.doc('/doc', {
     { name: 'hello', description: 'Hello API' },
     { name: 'push', description: 'Push event API' },
     { name: 'auth', description: 'Auth API' },
-    { name: 'media' },
-    { name: 'info' },
-    { name: 'course' },
-    { name: 'open-graph' },
+    { name: 'media', description: 'Media API' },
+    { name: 'info', description: 'Info API' },
+    { name: 'course', description: 'Course API' },
+    { name: 'comment', description: 'Comment API' },
+    { name: 'reaction', description: 'Comment API' },
+    { name: 'open-graph', description: 'Scrape Open Graph API' },
   ],
 });
 app.get('/swagger', swaggerUI({ url: '/doc' }));
