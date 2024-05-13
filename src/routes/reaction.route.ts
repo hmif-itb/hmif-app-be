@@ -1,9 +1,11 @@
-import { createRoute, z } from '@hono/zod-openapi';
+import { createRoute } from '@hono/zod-openapi';
+import { z } from 'zod';
 import {
+  ReactionSchema,
   ReactionIdSchema,
   ReactionQuerySchema,
   ReactionResponseSchema,
-  ReactionSchema,
+  CreateOrUpdateReactionParamsSchema,
 } from '~/types/reaction.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
@@ -43,6 +45,40 @@ export const getReactionsRoute = createRoute({
   },
 });
 
+export const CreateOrUpdateReactionRoute = createRoute({
+  operationId: 'CreateOrUpdateReaction',
+  tags: ['reaction'],
+  method: 'put',
+  path: '/reaction',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: CreateOrUpdateReactionParamsSchema,
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'Updated reaction',
+      content: {
+        'application/json': {
+          schema: ReactionSchema,
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ValidationErrorSchema, ErrorSchema]),
+        },
+      },
+    },
+  },
+});
+
 export const deleteReactionRoute = createRoute({
   operationId: 'deleteReaction',
   tags: ['reaction'],
@@ -64,7 +100,7 @@ export const deleteReactionRoute = createRoute({
       description: 'Bad request',
       content: {
         'application/json': {
-          schema: z.union([ErrorSchema, ValidationErrorSchema]),
+          schema: z.union([ValidationErrorSchema, ErrorSchema]),
         },
       },
     },

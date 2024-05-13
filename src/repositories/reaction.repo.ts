@@ -1,13 +1,14 @@
-import { count, eq } from 'drizzle-orm';
+import { first, firstSure } from '~/db/helper';
 import { z } from 'zod';
-import { Database } from '~/db/drizzle';
-import { firstSure } from '~/db/helper';
 import { reactions } from '~/db/schema';
 import {
   ReactionQuerySchema,
   ReactionResponseSchema,
   ReactionCountSchema,
+  CreateOrUpdateReactionSchema,
 } from '~/types/reaction.types';
+import { Database } from '~/db/drizzle';
+import { count, eq } from 'drizzle-orm';
 
 export async function getReactions(
   db: Database,
@@ -45,6 +46,26 @@ export async function getReactions(
   };
 
   return result;
+}
+
+export async function createOrUpdateReaction(
+  db: Database,
+  data: z.infer<typeof CreateOrUpdateReactionSchema>,
+  creatorId: string,
+) {
+  const reaction = await db
+    .insert(reactions)
+    .values({
+      ...data,
+      creatorId,
+    })
+    .onConflictDoUpdate({
+      target: [reactions.infoId, reactions.commentId, reactions.creatorId],
+      set: data,
+    })
+    .returning()
+    .then(first);
+  return reaction;
 }
 
 export async function deleteReaction(db: Database, id: string) {

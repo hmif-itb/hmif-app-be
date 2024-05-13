@@ -1,10 +1,28 @@
-import { createSelectSchema } from 'drizzle-zod';
+import { createSelectSchema, createInsertSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { reactions } from '~/db/schema';
 
 export const ReactionSchema = createSelectSchema(reactions, {
   createdAt: z.union([z.string(), z.date()]),
 }).openapi('Reaction');
+
+export const CreateOrUpdateReactionSchema = createInsertSchema(reactions).omit({
+  id: true,
+  createdAt: true,
+  creatorId: true,
+});
+
+export const CreateOrUpdateReactionParamsSchema = z.object({
+  infoId: z.string().optional().openapi({
+    example: '1',
+  }),
+  commentId: z.string().optional().openapi({
+    example: '1',
+  }),
+  reaction: z.string().openapi({
+    example: 'haha',
+  }),
+});
 
 export const ReactionQuerySchema = z.object({
   infoId: z.string().optional(),
