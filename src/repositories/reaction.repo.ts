@@ -4,23 +4,20 @@ import { Database } from '~/db/drizzle';
 import { firstSure } from '~/db/helper';
 import { reactions } from '~/db/schema';
 import {
-  reactionQuerySchema,
-  reactionResponseSchema,
-  reactionCountSchema,
+  ReactionQuerySchema,
+  ReactionResponseSchema,
+  ReactionCountSchema,
 } from '~/types/reaction.types';
 
 export async function getReactions(
   db: Database,
-  q: z.infer<typeof reactionQuerySchema>,
+  q: z.infer<typeof ReactionQuerySchema>,
 ) {
-  let where;
-  if (q.infoId) {
-    where = eq(reactions.infoId, q.infoId);
-  } else if (q.commentId) {
-    where = eq(reactions.commentId, q.commentId);
-  } else {
-    return null;
-  }
+  const where = q.infoId
+    ? eq(reactions.infoId, q.infoId)
+    : q.commentId
+      ? eq(reactions.commentId, q.commentId)
+      : eq(reactions.id, '-1'); // Handle invalid query
 
   const reactionCount = await db
     .select({
@@ -33,7 +30,7 @@ export async function getReactions(
   if (!reactionCount.length) return null; // No reactions found
 
   let total = 0;
-  const reactionsMap: z.infer<typeof reactionCountSchema> = [];
+  const reactionsMap: z.infer<typeof ReactionCountSchema> = [];
   for (const r of reactionCount) {
     total += r.reactionsCount;
     reactionsMap.push({
@@ -42,7 +39,7 @@ export async function getReactions(
     });
   }
 
-  const result: z.infer<typeof reactionResponseSchema> = {
+  const result: z.infer<typeof ReactionResponseSchema> = {
     totalReactions: total,
     reactionsCount: reactionsMap,
   };

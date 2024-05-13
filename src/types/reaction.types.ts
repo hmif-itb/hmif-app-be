@@ -2,27 +2,27 @@ import { createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { reactions } from '~/db/schema';
 
-export const reactionSchema = createSelectSchema(reactions, {
+export const ReactionSchema = createSelectSchema(reactions, {
   createdAt: z.union([z.string(), z.date()]),
 }).openapi('Reaction');
 
-export const reactionQuerySchema = z.object({
+export const ReactionQuerySchema = z.object({
   infoId: z.string().optional(),
   commentId: z.string().optional(),
 });
 
-export const reactionCountSchema = z
+export const ReactionCountSchema = z
   .object({
     reaction: z.string(),
     count: z.number(),
   })
   .array();
 
-export const reactionResponseSchema = z.object({
+export const ReactionResponseSchema = z.object({
   totalReactions: z.number(),
-  reactionsCount: reactionCountSchema,
+  reactionsCount: ReactionCountSchema,
 });
 
-export const reactionIdSchema = z.object({
+export const ReactionIdSchema = z.object({
   reactionId: z.string(),
 });

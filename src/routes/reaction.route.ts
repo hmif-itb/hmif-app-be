@@ -1,9 +1,9 @@
 import { createRoute, z } from '@hono/zod-openapi';
 import {
-  reactionIdSchema,
-  reactionQuerySchema,
-  reactionResponseSchema,
-  reactionSchema,
+  ReactionIdSchema,
+  ReactionQuerySchema,
+  ReactionResponseSchema,
+  ReactionSchema,
 } from '~/types/reaction.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
@@ -13,14 +13,14 @@ export const getReactionsRoute = createRoute({
   method: 'get',
   path: '/reaction',
   request: {
-    query: reactionQuerySchema,
+    query: ReactionQuerySchema,
   },
   responses: {
     200: {
       description: 'Get reactions',
       content: {
         'application/json': {
-          schema: reactionResponseSchema,
+          schema: ReactionResponseSchema,
         },
       },
     },
@@ -49,14 +49,14 @@ export const deleteReactionRoute = createRoute({
   method: 'delete',
   path: '/reaction/{reactionId}',
   request: {
-    params: reactionIdSchema,
+    params: ReactionIdSchema,
   },
   responses: {
     200: {
       description: 'Reaction deleted',
       content: {
         'application/json': {
-          schema: reactionSchema,
+          schema: ReactionSchema,
         },
       },
     },
