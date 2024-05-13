@@ -154,7 +154,12 @@ export const deleteCommentRoute = createRoute({
   },
   responses: {
     200: {
-      description: 'successfully deleted comment',
+      description: 'Successfully deleted comment',
+      content: {
+        'application/json': {
+          schema: CommentSchema,
+        },
+      },
     },
     400: {
       description: 'Bad request',
