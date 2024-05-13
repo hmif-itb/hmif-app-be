@@ -1,18 +1,18 @@
 import { createRoute } from '@hono/zod-openapi';
 import { z } from 'zod';
-import { ReactionSchema, UpdateReactionSchema } from '~/types/reaction.types';
+import { ReactionSchema, CreateOrUpdateReactionSchema } from '~/types/reaction.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
-export const updateReactionRoute = createRoute({
-  operationId: 'updateReaction',
+export const CreateOrUpdateReactionRoute = createRoute({
+  operationId: 'CreateOrUpdateReaction',
   tags: ['reaction'],
   method: 'put',
-  path: '/reaction/{reactionId}',
+  path: '/reaction',
   request: {
     body: {
       content: {
         'application/json': {
-          schema: UpdateReactionSchema,
+          schema: CreateOrUpdateReactionSchema,
         },
       },
     },
