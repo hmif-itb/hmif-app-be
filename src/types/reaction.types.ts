@@ -11,9 +11,28 @@ export const ReactionSchema = createSelectSchema(reactions, {
     createdAt: true,
   });
 
-export const CreateOrUpdateReactionSchema = createInsertSchema(reactions)
-  .omit({
-    id: true,
-    createdAt: true,
-  });
+export const CreateOrUpdateReactionSchema = createInsertSchema(reactions).omit({
+  id: true,
+  createdAt: true,
+});
 
+export const ReactionQuerySchema = z.object({
+  infoId: z.string().optional(),
+  commentId: z.string().optional(),
+});
+
+export const ReactionCountSchema = z
+  .object({
+    reaction: z.string(),
+    count: z.number(),
+  })
+  .array();
+
+export const ReactionResponseSchema = z.object({
+  totalReactions: z.number(),
+  reactionsCount: ReactionCountSchema,
+});
+
+export const ReactionIdSchema = z.object({
+  reactionId: z.string(),
+});
