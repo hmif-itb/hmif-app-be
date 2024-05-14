@@ -42,3 +42,7 @@ export const JWTPayloadSchema = UserSchema.omit({
 export const LoginAccessTokenSchema = z.object({
   accessToken: z.string(),
 });
+
+export const LoginBypassParamSchema = z.object({
+  token: z.string(),
+});

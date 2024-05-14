@@ -22,6 +22,7 @@ const EnvSchema = z.object({
   R2_SECRET_ACCESS_KEY: z.string().default('not-specified'),
   R2_PUBLIC_URL: z.string().url().default('not-specified'),
   R2_BUCKET_NAME: z.string().default('hmifapp'),
+  LOGIN_BYPASS_KEY: z.string().default('default-bypass-key'),
 });
 
 const result = EnvSchema.safeParse(process.env);

@@ -3,6 +3,7 @@ import {
   CallbackQueryParamsSchema,
   JWTPayloadSchema,
   LoginAccessTokenSchema,
+  LoginBypassParamSchema,
 } from '~/types/login.types';
 import {
   authorizaitonErrorResponse,
@@ -149,5 +150,26 @@ export const selfRoute = createRoute({
     },
     401: authorizaitonErrorResponse,
     500: errorResponse,
+  },
+});
+
+export const loginBypassRoute = createRoute({
+  operationId: 'loginBypass',
+  tags: ['auth'],
+  method: 'get',
+  path: '/auth/login/bypass/{token}',
+  request: {
+    params: LoginBypassParamSchema,
+  },
+  responses: {
+    200: {
+      description: 'Login bypass successful',
+      content: {
+        'application/json': {
+          schema: JWTPayloadSchema,
+        },
+      },
+    },
+    400: errorResponse,
   },
 });

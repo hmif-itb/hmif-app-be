@@ -12,6 +12,7 @@ import {
 import {
   authCallbackRoute,
   loginAccessTokenRoute,
+  loginBypassRoute,
   loginRoute,
   logoutRoute,
   selfRoute,
@@ -173,6 +174,44 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
       500,
     );
   }
+});
+
+loginRouter.openapi(loginBypassRoute, async (c) => {
+  const { token } = c.req.valid('param');
+
+  if (token !== env.LOGIN_BYPASS_KEY) {
+    return c.json(
+      {
+        error: 'Invalid token',
+      },
+      401,
+    );
+  }
+
+  const user = await findUserByEmail(db, '18221000@std.stei.itb.ac.id');
+  if (!user) {
+    return c.json(
+      {
+        error:
+          'User not found in database, please run seeder with the file from Google Drive',
+      },
+      401,
+    );
+  }
+  const tokenPayload = JWTPayloadSchema.parse({
+    ...user,
+    picture:
+      'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/r176r3qcuqs3hg8o3dm93n35-asrielblunt.jpg',
+  });
+  const jwtToken = await generateJWT(tokenPayload);
+  setCookie(c, 'hmif-app.access-cookie', jwtToken, {
+    path: '/',
+    secure: true,
+    httpOnly: true,
+    maxAge: parseInt(env.TOKEN_EXPIRATION),
+    sameSite: 'None',
+  });
+  return c.json(tokenPayload, 200);
 });
 
 loginProtectedRouter.openapi(logoutRoute, async (c) => {
