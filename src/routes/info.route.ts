@@ -2,6 +2,7 @@ import { createRoute, z } from '@hono/zod-openapi';
 import {
   CreateInfoBodySchema,
   CreateReadRequestBodySchema,
+  InfoIdParamsSchema,
   InfoSchema,
   ListInfoParamsSchema,
   ListInfoSchema,
@@ -83,6 +84,29 @@ export const listInfoRoute = createRoute({
         },
       },
       description: 'Get list of infos based on filter',
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
+        },
+      },
+    },
+  },
+});
+
+export const deleteInfoRoute = createRoute({
+  operationId: 'deleteInfo',
+  tags: ['info'],
+  method: 'delete',
+  path: '/info/{infoId}',
+  request: {
+    params: InfoIdParamsSchema,
+  },
+  responses: {
+    200: {
+      description: 'Info deleted',
     },
     400: {
       description: 'Bad request',

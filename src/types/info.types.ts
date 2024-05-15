@@ -56,6 +56,16 @@ export const CreateReadRequestBodySchema = z.object({
   infoId: z.string(),
 });
 
+export const InfoIdParamsSchema = z.object({
+  infoId: z.string().openapi({
+    param: {
+      in: 'path',
+      description: 'Id of info',
+      example: 'uuid',
+    },
+  }),
+});
+
 export const ListInfoParamsSchema = z.object({
   search: z.string().optional().openapi({
     example: 'content',

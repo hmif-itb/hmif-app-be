@@ -3,9 +3,14 @@ import { db } from '~/db/drizzle';
 import {
   createInfo,
   createReadInfo,
+  deleteInfo,
   // getListInfos,
 } from '~/repositories/info.repo';
-import { createInfoRoute, postReadInfoRoute } from '~/routes/info.route';
+import {
+  createInfoRoute,
+  deleteInfoRoute,
+  postReadInfoRoute,
+} from '~/routes/info.route';
 import { InfoSchema } from '~/types/info.types';
 import { listInfoRoute } from '../routes/info.route';
 import { createAuthRouter } from './router-factory';
@@ -53,6 +58,19 @@ infoRouter.openapi(createInfoRoute, async (c) => {
       return c.json({ error: err.message }, 400);
     console.log(err);
     return c.json({ error: 'Something went wrong' }, 400);
+  }
+});
+
+infoRouter.openapi(deleteInfoRoute, async (c) => {
+  try {
+    const { infoId } = c.req.valid('param');
+    const info = await deleteInfo(db, infoId);
+    if (!info) {
+      return c.json({ error: 'Info not found' }, 404);
+    }
+    return c.json({}, 200);
+  } catch (err) {
+    return c.json(err, 500);
   }
 });
 
