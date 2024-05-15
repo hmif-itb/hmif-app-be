@@ -4,16 +4,9 @@
   "entries": [
     {
       "idx": 0,
-      "version": "5",
-      "when": 1714276945495,
-      "tag": "0000_plain_sharon_carter",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
       "version": "6",
-      "when": 1715578239048,
-      "tag": "0001_loud_thunderball",
+      "when": 1715755342617,
+      "tag": "0000_round_squadron_sinister",
       "breakpoints": true
     }
   ]

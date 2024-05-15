@@ -9,6 +9,7 @@ import {
   text,
   timestamp,
   unique,
+  boolean,
 } from 'drizzle-orm/pg-core';
 import webpush from 'web-push';
 
@@ -18,14 +19,16 @@ export const users = pgTable(
     id: text('id').primaryKey().$defaultFn(createId),
     nim: text('nim').unique().notNull(),
     email: text('email').unique().notNull(),
-    fullName: text('full_name'),
+    fullName: text('full_name').notNull(),
     major: text('jurusan', { enum: ['IF', 'STI'] }).notNull(),
     region: text('asal_kampus', {
       enum: ['Ganesha', 'Jatinangor'],
     }).notNull(),
-    angkatan: integer('angkatan'),
-    gender: text('jenis_kelamin', { enum: ['F', 'M'] }),
-    membershipStatus: text('status_keanggotaan'),
+    angkatan: integer('angkatan')
+      .references(() => angkatan.year)
+      .notNull(),
+    gender: text('jenis_kelamin', { enum: ['F', 'M'] }).notNull(),
+    membershipStatus: text('status_keanggotaan').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -38,13 +41,19 @@ export const users = pgTable(
 
 export type User = InferSelectModel<typeof users>;
 
-export const usersRelation = relations(users, ({ many }) => ({
+export const usersRelation = relations(users, ({ many, one }) => ({
   pushSubscriptions: many(pushSubscriptions),
   infos: many(infos),
   medias: many(medias),
   userReadInfos: many(userReadInfos),
   comments: many(comments),
   reactions: many(reactions),
+  angkatan: one(angkatan, {
+    fields: [users.angkatan],
+    references: [angkatan.year],
+  }),
+  userCourses: many(userCourses),
+  userUnsubscribeCategories: many(userUnsubscribeCategories),
 }));
 
 export const pushSubscriptions = pgTable(
@@ -105,10 +114,6 @@ export const infos = pgTable('infos', {
     .references(() => users.id)
     .notNull(),
   content: text('content').notNull(),
-  category: text('category'),
-  forAngkatan: integer('for_angkatan'),
-  forMatakuliah: text('for_matakuliah').references(() => courses.code),
-  forClass: text('for_class'),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
@@ -125,10 +130,9 @@ export const infosRelation = relations(infos, ({ one, many }) => ({
   infoMedias: many(infoMedias),
   comments: many(comments),
   reactions: many(reactions),
-  course: one(courses, {
-    fields: [infos.forMatakuliah],
-    references: [courses.code],
-  }),
+  infoCategories: many(infoCategories),
+  infoCourses: many(infoCourses),
+  infoAngkatan: many(infoAngkatan),
 }));
 
 export const medias = pgTable('medias', {
@@ -157,8 +161,12 @@ export const mediasRelation = relations(medias, ({ one, many }) => ({
 export const userReadInfos = pgTable(
   'user_read_infos',
   {
-    userId: text('user_id').references(() => users.id),
-    infoId: text('info_id').references(() => infos.id),
+    userId: text('user_id')
+      .references(() => users.id)
+      .notNull(),
+    infoId: text('info_id')
+      .references(() => infos.id)
+      .notNull(),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -182,8 +190,12 @@ export const userReadInfosRelation = relations(userReadInfos, ({ one }) => ({
 export const infoMedias = pgTable(
   'info_medias',
   {
-    infoId: text('info_id').references(() => infos.id),
-    mediaId: text('media_id').references(() => medias.id),
+    infoId: text('info_id')
+      .references(() => infos.id)
+      .notNull(),
+    mediaId: text('media_id')
+      .references(() => medias.id)
+      .notNull(),
   },
   (t) => ({ pk: primaryKey({ columns: [t.infoId, t.mediaId] }) }),
 );
@@ -296,5 +308,148 @@ export const courses = pgTable(
 export type Course = InferSelectModel<typeof courses>;
 
 export const coursesRelation = relations(courses, ({ many }) => ({
-  infos: many(infos),
+  infoCourses: many(infoCourses),
+  userCourses: many(userCourses),
 }));
+
+export const categories = pgTable('categories', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  name: text('name').unique().notNull(),
+  requiredPush: boolean('required_push').notNull(),
+});
+
+export type Category = InferSelectModel<typeof categories>;
+
+export const categoriesRelation = relations(categories, ({ many }) => ({
+  infoCategories: many(infoCategories),
+  userUnsubscribeCategories: many(userUnsubscribeCategories),
+}));
+
+export const angkatan = pgTable('angkatan', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  year: integer('year').unique().notNull(),
+  name: text('name').unique().notNull(),
+});
+
+export type Angkatan = InferSelectModel<typeof angkatan>;
+
+export const angkatanRelation = relations(angkatan, ({ many }) => ({
+  users: many(users),
+  infoAngkatan: many(infoAngkatan),
+}));
+
+export const infoCourses = pgTable(
+  'info_courses',
+  {
+    infoId: text('info_id')
+      .references(() => infos.id)
+      .notNull(),
+    courseId: text('course_id')
+      .references(() => courses.id)
+      .notNull(),
+    class: integer('class').notNull(),
+  },
+  (t) => ({ pk: primaryKey({ columns: [t.infoId, t.courseId] }) }),
+);
+
+export const infoCoursesRelation = relations(infoCourses, ({ one }) => ({
+  info: one(infos, { fields: [infoCourses.infoId], references: [infos.id] }),
+  course: one(courses, {
+    fields: [infoCourses.courseId],
+    references: [courses.id],
+  }),
+}));
+
+export const infoAngkatan = pgTable(
+  'info_angkatan',
+  {
+    infoId: text('info_id')
+      .references(() => infos.id)
+      .notNull(),
+    angkatanId: text('angkatan_id')
+      .references(() => angkatan.id)
+      .notNull(),
+  },
+  (t) => ({ pk: primaryKey({ columns: [t.infoId, t.angkatanId] }) }),
+);
+
+export const infoAngkatanRelation = relations(infoAngkatan, ({ one }) => ({
+  info: one(infos, { fields: [infoAngkatan.infoId], references: [infos.id] }),
+  angkatan: one(angkatan, {
+    fields: [infoAngkatan.angkatanId],
+    references: [angkatan.id],
+  }),
+}));
+
+export const infoCategories = pgTable(
+  'info_categories',
+  {
+    infoId: text('info_id')
+      .references(() => infos.id)
+      .notNull(),
+    categoryId: text('category_id')
+      .references(() => categories.id)
+      .notNull(),
+  },
+  (t) => ({ pk: primaryKey({ columns: [t.infoId, t.categoryId] }) }),
+);
+
+export const infoCategoriesRelation = relations(infoCategories, ({ one }) => ({
+  info: one(infos, {
+    fields: [infoCategories.infoId],
+    references: [infos.id],
+  }),
+  category: one(categories, {
+    fields: [infoCategories.categoryId],
+    references: [categories.id],
+  }),
+}));
+
+export const userCourses = pgTable(
+  'user_courses',
+  {
+    userId: text('user_id').references(() => users.id),
+    courseId: text('course_id').references(() => courses.id),
+    class: integer('class').notNull(),
+    semesterCodeTaken: text('semester_code_taken', {
+      enum: ['Ganjil', 'Genap'],
+    }).notNull(),
+    semesterYearTaken: integer('semester_year_taken').notNull(),
+  },
+  (t) => ({ pk: primaryKey({ columns: [t.userId, t.courseId] }) }),
+);
+
+export const userCoursesRelation = relations(userCourses, ({ one }) => ({
+  user: one(users, { fields: [userCourses.userId], references: [users.id] }),
+  course: one(courses, {
+    fields: [userCourses.courseId],
+    references: [courses.id],
+  }),
+}));
+
+export const userUnsubscribeCategories = pgTable(
+  'user_unsubscribe_categories',
+  {
+    userId: text('user_id')
+      .references(() => users.id)
+      .notNull(),
+    categoryId: text('category_id')
+      .references(() => categories.id)
+      .notNull(),
+  },
+  (t) => ({ pk: primaryKey({ columns: [t.userId, t.categoryId] }) }),
+);
+
+export const userUnsubscribeCategoriesRelation = relations(
+  userUnsubscribeCategories,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [userUnsubscribeCategories.userId],
+      references: [users.id],
+    }),
+    category: one(categories, {
+      fields: [userUnsubscribeCategories.categoryId],
+      references: [categories.id],
+    }),
+  }),
+);

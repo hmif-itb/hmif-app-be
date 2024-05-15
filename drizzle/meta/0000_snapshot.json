@@ -1,7 +1,245 @@
 {
+  "id": "d9b85257-a343-4981-a1aa-7154c4822e27",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
+    "public.angkatan": {
+      "name": "angkatan",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "year": {
+          "name": "year",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "angkatan_year_unique": {
+          "name": "angkatan_year_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "year"
+          ]
+        },
+        "angkatan_name_unique": {
+          "name": "angkatan_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      }
+    },
+    "public.categories": {
+      "name": "categories",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "required_push": {
+          "name": "required_push",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "categories_name_unique": {
+          "name": "categories_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      }
+    },
+    "public.comments": {
+      "name": "comments",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "replied_info_id": {
+          "name": "replied_info_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creator_id": {
+          "name": "creator_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "comments_replied_info_id_index": {
+          "name": "comments_replied_info_id_index",
+          "columns": [
+            "replied_info_id"
+          ],
+          "isUnique": false
+        },
+        "comments_creator_id_index": {
+          "name": "comments_creator_id_index",
+          "columns": [
+            "creator_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "comments_replied_info_id_infos_id_fk": {
+          "name": "comments_replied_info_id_infos_id_fk",
+          "tableFrom": "comments",
+          "tableTo": "infos",
+          "columnsFrom": [
+            "replied_info_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "comments_creator_id_users_id_fk": {
+          "name": "comments_creator_id_users_id_fk",
+          "tableFrom": "comments",
+          "tableTo": "users",
+          "columnsFrom": [
+            "creator_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.courses": {
+      "name": "courses",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "curriculum_year": {
+          "name": "curriculum_year",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "jurusan": {
+          "name": "jurusan",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "semester": {
+          "name": "semester",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "semester_code": {
+          "name": "semester_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sks": {
+          "name": "sks",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "courses_code_index": {
+          "name": "courses_code_index",
+          "columns": [
+            "code"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "courses_code_unique": {
+          "name": "courses_code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "code"
+          ]
+        }
+      }
+    },
     "public.google_subscriptions": {
       "name": "google_subscriptions",
       "schema": "",
@@ -49,18 +287,195 @@
         "google_subscriptions_user_id_users_id_fk": {
           "name": "google_subscriptions_user_id_users_id_fk",
           "tableFrom": "google_subscriptions",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.info_angkatan": {
+      "name": "info_angkatan",
+      "schema": "",
+      "columns": {
+        "info_id": {
+          "name": "info_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "angkatan_id": {
+          "name": "angkatan_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "info_angkatan_info_id_infos_id_fk": {
+          "name": "info_angkatan_info_id_infos_id_fk",
+          "tableFrom": "info_angkatan",
+          "tableTo": "infos",
+          "columnsFrom": [
+            "info_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "info_angkatan_angkatan_id_angkatan_id_fk": {
+          "name": "info_angkatan_angkatan_id_angkatan_id_fk",
+          "tableFrom": "info_angkatan",
+          "tableTo": "angkatan",
+          "columnsFrom": [
+            "angkatan_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "info_angkatan_info_id_angkatan_id_pk": {
+          "name": "info_angkatan_info_id_angkatan_id_pk",
+          "columns": [
+            "info_id",
+            "angkatan_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.info_categories": {
+      "name": "info_categories",
+      "schema": "",
+      "columns": {
+        "info_id": {
+          "name": "info_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category_id": {
+          "name": "category_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "info_categories_info_id_infos_id_fk": {
+          "name": "info_categories_info_id_infos_id_fk",
+          "tableFrom": "info_categories",
+          "tableTo": "infos",
+          "columnsFrom": [
+            "info_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "info_categories_category_id_categories_id_fk": {
+          "name": "info_categories_category_id_categories_id_fk",
+          "tableFrom": "info_categories",
+          "tableTo": "categories",
+          "columnsFrom": [
+            "category_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "info_categories_info_id_category_id_pk": {
+          "name": "info_categories_info_id_category_id_pk",
+          "columns": [
+            "info_id",
+            "category_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.info_courses": {
+      "name": "info_courses",
+      "schema": "",
+      "columns": {
+        "info_id": {
+          "name": "info_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "course_id": {
+          "name": "course_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "class": {
+          "name": "class",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "info_courses_info_id_infos_id_fk": {
+          "name": "info_courses_info_id_infos_id_fk",
+          "tableFrom": "info_courses",
+          "tableTo": "infos",
+          "columnsFrom": [
+            "info_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "info_courses_course_id_courses_id_fk": {
+          "name": "info_courses_course_id_courses_id_fk",
+          "tableFrom": "info_courses",
+          "tableTo": "courses",
+          "columnsFrom": [
+            "course_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "info_courses_info_id_course_id_pk": {
+          "name": "info_courses_info_id_course_id_pk",
+          "columns": [
+            "info_id",
+            "course_id"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "public.info_medias": {
@@ -71,13 +486,13 @@
           "name": "info_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "media_id": {
           "name": "media_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -85,28 +500,28 @@
         "info_medias_info_id_infos_id_fk": {
           "name": "info_medias_info_id_infos_id_fk",
           "tableFrom": "info_medias",
+          "tableTo": "infos",
           "columnsFrom": [
             "info_id"
           ],
-          "tableTo": "infos",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "info_medias_media_id_medias_id_fk": {
           "name": "info_medias_media_id_medias_id_fk",
           "tableFrom": "info_medias",
+          "tableTo": "medias",
           "columnsFrom": [
             "media_id"
           ],
-          "tableTo": "medias",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -134,37 +549,13 @@
           "name": "creator_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "content": {
           "name": "content",
           "type": "text",
           "primaryKey": false,
           "notNull": true
-        },
-        "category": {
-          "name": "category",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "for_angkatan": {
-          "name": "for_angkatan",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "for_matakuliah": {
-          "name": "for_matakuliah",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "for_class": {
-          "name": "for_class",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -179,15 +570,15 @@
         "infos_creator_id_users_id_fk": {
           "name": "infos_creator_id_users_id_fk",
           "tableFrom": "infos",
+          "tableTo": "users",
           "columnsFrom": [
             "creator_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -207,7 +598,7 @@
           "name": "creator_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "name": {
           "name": "name",
@@ -240,25 +631,25 @@
         "medias_creator_id_users_id_fk": {
           "name": "medias_creator_id_users_id_fk",
           "tableFrom": "medias",
+          "tableTo": "users",
           "columnsFrom": [
             "creator_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "medias_name_unique": {
           "name": "medias_name_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "name"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -305,18 +696,205 @@
         "push_subscriptions_user_id_users_id_fk": {
           "name": "push_subscriptions_user_id_users_id_fk",
           "tableFrom": "push_subscriptions",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.reactions": {
+      "name": "reactions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creator_id": {
+          "name": "creator_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "info_id": {
+          "name": "info_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "comment_id": {
+          "name": "comment_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reaction": {
+          "name": "reaction",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "reactions_info_id_index": {
+          "name": "reactions_info_id_index",
+          "columns": [
+            "info_id"
+          ],
+          "isUnique": false
+        },
+        "reactions_comment_id_index": {
+          "name": "reactions_comment_id_index",
+          "columns": [
+            "comment_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "reactions_creator_id_users_id_fk": {
+          "name": "reactions_creator_id_users_id_fk",
+          "tableFrom": "reactions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "creator_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "reactions_info_id_infos_id_fk": {
+          "name": "reactions_info_id_infos_id_fk",
+          "tableFrom": "reactions",
+          "tableTo": "infos",
+          "columnsFrom": [
+            "info_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "reactions_comment_id_comments_id_fk": {
+          "name": "reactions_comment_id_comments_id_fk",
+          "tableFrom": "reactions",
+          "tableTo": "comments",
+          "columnsFrom": [
+            "comment_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "reactions_creator_id_info_id_comment_id_unique": {
+          "name": "reactions_creator_id_info_id_comment_id_unique",
+          "nullsNotDistinct": true,
+          "columns": [
+            "creator_id",
+            "info_id",
+            "comment_id"
+          ]
+        }
+      }
+    },
+    "public.user_courses": {
+      "name": "user_courses",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "course_id": {
+          "name": "course_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "class": {
+          "name": "class",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "semester_code_taken": {
+          "name": "semester_code_taken",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "semester_year_taken": {
+          "name": "semester_year_taken",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_courses_user_id_users_id_fk": {
+          "name": "user_courses_user_id_users_id_fk",
+          "tableFrom": "user_courses",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_courses_course_id_courses_id_fk": {
+          "name": "user_courses_course_id_courses_id_fk",
+          "tableFrom": "user_courses",
+          "tableTo": "courses",
+          "columnsFrom": [
+            "course_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "user_courses_user_id_course_id_pk": {
+          "name": "user_courses_user_id_course_id_pk",
+          "columns": [
+            "user_id",
+            "course_id"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "public.user_read_infos": {
@@ -327,13 +905,13 @@
           "name": "user_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "info_id": {
           "name": "info_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -348,28 +926,28 @@
         "user_read_infos_user_id_users_id_fk": {
           "name": "user_read_infos_user_id_users_id_fk",
           "tableFrom": "user_read_infos",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "user_read_infos_info_id_infos_id_fk": {
           "name": "user_read_infos_info_id_infos_id_fk",
           "tableFrom": "user_read_infos",
+          "tableTo": "infos",
           "columnsFrom": [
             "info_id"
           ],
-          "tableTo": "infos",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -378,6 +956,63 @@
           "columns": [
             "user_id",
             "info_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.user_unsubscribe_categories": {
+      "name": "user_unsubscribe_categories",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category_id": {
+          "name": "category_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_unsubscribe_categories_user_id_users_id_fk": {
+          "name": "user_unsubscribe_categories_user_id_users_id_fk",
+          "tableFrom": "user_unsubscribe_categories",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_unsubscribe_categories_category_id_categories_id_fk": {
+          "name": "user_unsubscribe_categories_category_id_categories_id_fk",
+          "tableFrom": "user_unsubscribe_categories",
+          "tableTo": "categories",
+          "columnsFrom": [
+            "category_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "user_unsubscribe_categories_user_id_category_id_pk": {
+          "name": "user_unsubscribe_categories_user_id_category_id_pk",
+          "columns": [
+            "user_id",
+            "category_id"
           ]
         }
       },
@@ -409,37 +1044,37 @@
           "name": "full_name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "jurusan": {
           "name": "jurusan",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "asal_kampus": {
           "name": "asal_kampus",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "angkatan": {
           "name": "angkatan",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "jenis_kelamin": {
           "name": "jenis_kelamin",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "status_keanggotaan": {
           "name": "status_keanggotaan",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -449,23 +1084,52 @@
           "default": "now()"
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
+      "indexes": {
+        "users_nim_index": {
+          "name": "users_nim_index",
+          "columns": [
+            "nim"
+          ],
+          "isUnique": false
+        },
+        "users_email_index": {
+          "name": "users_email_index",
+          "columns": [
+            "email"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "users_angkatan_angkatan_year_fk": {
+          "name": "users_angkatan_angkatan_year_fk",
+          "tableFrom": "users",
+          "tableTo": "angkatan",
+          "columnsFrom": [
+            "angkatan"
+          ],
+          "columnsTo": [
+            "year"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "users_nim_unique": {
           "name": "users_nim_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "nim"
-          ],
-          "nullsNotDistinct": false
+          ]
         },
         "users_email_unique": {
           "name": "users_email_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "email"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     }
@@ -473,10 +1137,8 @@
   "enums": {},
   "schemas": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "70991f31-b86b-475a-a304-e9914da1d3f3",
-  "prevId": "00000000-0000-0000-0000-000000000000"
+    "tables": {}
+  }
 }
