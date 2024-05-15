@@ -1,7 +1,8 @@
 import { createRoute, z } from '@hono/zod-openapi';
 import {
+  CreateInfoBodySchema,
   CreateReadRequestBodySchema,
-  InfoParamSchema,
+  InfoIdParamsSchema,
   InfoSchema,
   ListInfoParamsSchema,
   ListInfoSchema,
@@ -41,7 +42,7 @@ export const createInfoRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: InfoParamSchema,
+          schema: CreateInfoBodySchema,
         },
       },
       required: true,
@@ -67,8 +68,8 @@ export const createInfoRoute = createRoute({
   },
 });
 
-export const listInfoRoute = createRoute({
-  operationId: 'getListInfos',
+export const getListInfoRoute = createRoute({
+  operationId: 'getListInfo',
   tags: ['info'],
   method: 'get',
   path: '/info',
@@ -89,6 +90,73 @@ export const listInfoRoute = createRoute({
       content: {
         'application/json': {
           schema: z.union([ErrorSchema, ValidationErrorSchema]),
+        },
+      },
+    },
+  },
+});
+
+export const getInfoByIdRoute = createRoute({
+  operationId: 'getInfoById',
+  tags: ['info'],
+  method: 'get',
+  path: '/info/{infoId}',
+  request: {
+    params: InfoIdParamsSchema,
+  },
+  responses: {
+    200: {
+      description: 'Get info by id',
+      content: {
+        'application/json': {
+          schema: InfoSchema,
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
+        },
+      },
+    },
+    404: {
+      description: 'Id not found',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
+        },
+      },
+    },
+  },
+});
+
+export const deleteInfoRoute = createRoute({
+  operationId: 'deleteInfo',
+  tags: ['info'],
+  method: 'delete',
+  path: '/info/{infoId}',
+  request: {
+    params: InfoIdParamsSchema,
+  },
+  responses: {
+    200: {
+      description: 'Info deleted',
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
+        },
+      },
+    },
+    404: {
+      description: 'Id not found',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
         },
       },
     },

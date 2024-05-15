@@ -1,4 +1,10 @@
 import { z } from '@hono/zod-openapi';
+import { createSelectSchema } from 'drizzle-zod';
+import { medias } from '~/db/schema';
+
+export const MediaSchema = createSelectSchema(medias, {
+  createdAt: z.union([z.string(), z.date()]),
+});
 
 export const BodyParamsSchema = z.object({
   fileName: z.string().openapi({
