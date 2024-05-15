@@ -28,7 +28,7 @@ export async function getReactions(
     .from(reactions)
     .where(where)
     .groupBy(reactions.reaction);
-  if (!reactionCount.length) return null; // No reactions found
+  // if (!reactionCount.length) return null; // No reactions found
 
   let total = 0;
   const reactionsMap: z.infer<typeof ReactionCountSchema> = [];

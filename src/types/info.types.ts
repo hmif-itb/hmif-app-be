@@ -1,40 +1,104 @@
 import { z } from '@hono/zod-openapi';
-import { createSelectSchema } from 'drizzle-zod';
-import { infos } from '~/db/schema';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import {
+  infoAngkatan,
+  infoCategories,
+  infoCourses,
+  infoMedias,
+  infos,
+} from '~/db/schema';
+import { CategorySchema } from './category.types';
+import { MediaSchema } from './media.types';
+import { AngkatanSchema } from './angkatan.types';
+import { CourseSchema } from './course.types';
+import { ReactionResponseSchema } from './reaction.types';
 
-export const InfoParamSchema = z.object({
-  content: z.string().openapi({
-    example: 'Tutor Sebaya dengan Dr. Asep Spakbor',
-  }),
-  category: z.string().openapi({
-    example: 'Akademik',
-  }),
-  forAngkatan: z.number().int().openapi({
-    example: 2021,
-  }),
-  mediaUrls: z
-    .array(z.string().url())
-    .optional()
-    .openapi({
-      example: [
-        'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/r176r3qcuqs3hg8o3dm93n35-asrielblunt.jpg',
-        'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/ba245cbm4238trmq4zv5kkif-semester-cat.png',
-      ],
-    }),
-  forMatakuliah: z.string().openapi({
-    example: 'II2111 Algoritma dan Struktur Data STI',
-  }),
-  forClass: z.string().openapi({
-    example: 'K01',
-  }),
+export const InfoCategorySchema = createSelectSchema(infoCategories).extend({
+  category: CategorySchema,
+});
+
+export const InfoMediaSchema = createSelectSchema(infoMedias).extend({
+  media: MediaSchema,
+});
+
+export const InfoAngkatanSchema = createSelectSchema(infoAngkatan).extend({
+  angkatan: AngkatanSchema,
+});
+
+export const InfoCourseSchema = createSelectSchema(infoCourses).extend({
+  course: CourseSchema,
 });
 
 export const InfoSchema = createSelectSchema(infos, {
   createdAt: z.union([z.string(), z.date()]),
-}).openapi('Info');
+})
+  .extend({
+    infoMedias: z.array(InfoMediaSchema).optional(),
+    infoCategories: z.array(InfoCategorySchema).optional(),
+    infoCourses: z.array(InfoCourseSchema).optional(),
+    infoAngkatan: z.array(InfoAngkatanSchema).optional(),
+    reactions: ReactionResponseSchema.optional(),
+  })
+  .openapi('Info');
+
+export const CreateInfoForCoursesFieldItemSchema = z.object({
+  courseId: z.string(),
+  class: z.number().optional(),
+});
+
+export const CreateInfoBodySchema = createInsertSchema(infos)
+  .omit({
+    id: true,
+    creatorId: true,
+    createdAt: true,
+  })
+  .extend({
+    mediaUrls: z
+      .array(z.string().url())
+      .optional()
+      .openapi({
+        example: [
+          'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/r176r3qcuqs3hg8o3dm93n35-asrielblunt.jpg',
+          'https://deleteMediaUrlsFieldIfNoMediaUrls.dev',
+        ],
+      }),
+    forCategories: z.array(z.string()).openapi({
+      example: ['categoryId1', 'categoryId2'],
+    }),
+    forAngkatan: z
+      .array(z.string())
+      .optional()
+      .openapi({
+        example: ['angkatanId1', 'deleteForAngkatanFieldIfWantToAllAngkatan'],
+      }),
+    forCourses: z
+      .array(CreateInfoForCoursesFieldItemSchema)
+      .optional()
+      .openapi({
+        example: [
+          {
+            courseId: 'deleteForCoursesFieldIfNoCourses',
+            class: 1,
+          },
+          {
+            courseId: 'deleteClassFieldIfWantToAllClass',
+          },
+        ],
+      }),
+  });
 
 export const CreateReadRequestBodySchema = z.object({
   infoId: z.string(),
+});
+
+export const InfoIdParamsSchema = z.object({
+  infoId: z.string().openapi({
+    param: {
+      in: 'path',
+      description: 'Id of info',
+      example: 'uuid',
+    },
+  }),
 });
 
 export const ListInfoParamsSchema = z.object({

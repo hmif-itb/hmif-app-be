@@ -3,11 +3,17 @@ import { db } from '~/db/drizzle';
 import {
   createInfo,
   createReadInfo,
+  deleteInfo,
+  getInfoById,
   getListInfos,
 } from '~/repositories/info.repo';
-import { createInfoRoute, postReadInfoRoute } from '~/routes/info.route';
-import { InfoSchema } from '~/types/info.types';
-import { listInfoRoute } from '../routes/info.route';
+import {
+  createInfoRoute,
+  deleteInfoRoute,
+  postReadInfoRoute,
+  getListInfoRoute,
+  getInfoByIdRoute,
+} from '~/routes/info.route';
 import { createAuthRouter } from './router-factory';
 
 export const infoRouter = createAuthRouter();
@@ -32,13 +38,20 @@ infoRouter.openapi(postReadInfoRoute, async (c) => {
 });
 
 infoRouter.openapi(createInfoRoute, async (c) => {
-  const { mediaUrls, ...data } = c.req.valid('json');
+  const { mediaUrls, forAngkatan, forCategories, forCourses, ...data } =
+    c.req.valid('json');
   const { id } = c.var.user;
 
   try {
-    const info = InfoSchema.parse(
-      await createInfo(db, { ...data, creatorId: id }, mediaUrls),
+    const info = await createInfo(
+      db,
+      { ...data, creatorId: id },
+      mediaUrls,
+      forAngkatan,
+      forCategories,
+      forCourses,
     );
+
     return c.json(info, 201);
   } catch (err) {
     if (err instanceof PostgresError)
@@ -48,7 +61,20 @@ infoRouter.openapi(createInfoRoute, async (c) => {
   }
 });
 
-infoRouter.openapi(listInfoRoute, async (c) => {
+infoRouter.openapi(deleteInfoRoute, async (c) => {
+  try {
+    const { infoId } = c.req.valid('param');
+    const info = await deleteInfo(db, infoId);
+    if (!info) {
+      return c.json({ error: 'Info not found' }, 404);
+    }
+    return c.json({}, 200);
+  } catch (err) {
+    return c.json(err, 400);
+  }
+});
+
+infoRouter.openapi(getListInfoRoute, async (c) => {
   const infos = await getListInfos(db, c.req.valid('query'), c.var.user.id);
   return c.json(
     {
@@ -56,4 +82,17 @@ infoRouter.openapi(listInfoRoute, async (c) => {
     },
     200,
   );
+});
+
+infoRouter.openapi(getInfoByIdRoute, async (c) => {
+  try {
+    const { infoId } = c.req.valid('param');
+    const info = await getInfoById(db, infoId);
+    if (!info) {
+      return c.json({ error: 'Info not found' }, 404);
+    }
+    return c.json(info, 200);
+  } catch (err) {
+    return c.json(err, 500);
+  }
 });
