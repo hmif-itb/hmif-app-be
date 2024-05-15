@@ -5,7 +5,7 @@ import { createInsertSchema } from 'drizzle-zod';
 import fs from 'fs';
 import postgres from 'postgres';
 import { z } from 'zod';
-import { courses, users } from './schema';
+import { angkatan, courses, users } from './schema';
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is required');
@@ -112,7 +112,44 @@ export async function runCourses() {
     });
 }
 
+export async function runAngkatanSeed() {
+  const filePath = 'src/db/seed/angkatan.csv';
+  const data: Array<typeof angkatan.$inferInsert> = [];
+
+  const dataSchema = createInsertSchema(angkatan);
+
+  fs.createReadStream(filePath)
+    .pipe(parse({ delimiter: ',', from_line: 2 }))
+    .on('data', (row) => {
+      const angkatan = dataSchema.parse({
+        year: +row[0],
+        name: row[1],
+      });
+      data.push(angkatan);
+    })
+    .on('end', () => {
+      console.log('📖 Finished reading angkatan CSV file');
+      console.log('💾 Started inserting angkatan into database...');
+      db.insert(angkatan)
+        .values(data)
+        .onConflictDoNothing()
+        .then(async () => {
+          await client.end();
+          console.log('✅ Inserted angkatan into database!');
+        })
+        .catch((err) => {
+          console.log('❌ Something went wrong while inserting angkatan!');
+          console.log(err);
+        });
+    })
+    .on('error', (err) => {
+      console.log('❌ Something went wrong while inserting angkatan!');
+      console.log(err);
+    });
+}
+
 if (require.main === module) {
+  void runAngkatanSeed();
   void runUserSeed();
   void runCourses();
 }
