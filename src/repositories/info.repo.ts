@@ -1,9 +1,8 @@
 import { InferInsertModel, SQL, and, eq, ilike, notInArray } from 'drizzle-orm';
 import { z } from 'zod';
-import { Database, db } from '~/db/drizzle';
+import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
 import {
-  categories,
   infoAngkatan,
   infoCategories,
   infoCourses,
@@ -13,6 +12,7 @@ import {
 } from '~/db/schema';
 import { CreateInfoBodySchema, ListInfoParamsSchema } from '~/types/info.types';
 import { createMediasFromUrl } from './media.repo';
+import { getReactions } from './reaction.repo';
 
 const INFOS_PER_PAGE = 10;
 
@@ -140,6 +140,7 @@ export async function deleteInfo(db: Database, id: string) {
   return info;
 }
 
+// TODO: get reaction counts
 export async function getListInfos(
   db: Database,
   q: z.infer<typeof ListInfoParamsSchema>,
@@ -168,7 +169,7 @@ export async function getListInfos(
 
   const where = and(searchQ, categoryQ, unreadQ);
 
-  return await db.query.infos.findMany({
+  let listInfo = await db.query.infos.findMany({
     where,
     limit: INFOS_PER_PAGE,
     offset: q.offset,
@@ -195,4 +196,47 @@ export async function getListInfos(
       },
     },
   });
+
+  listInfo = await Promise.all(
+    listInfo.map(async (info) => {
+      const reactions = await getReactions(db, { infoId: info?.id });
+      return { ...info, reactions };
+    }),
+  );
+
+  return listInfo;
+}
+
+export async function getInfoById(db: Database, id: string) {
+  const info = await db.query.infos.findFirst({
+    where: eq(infos.id, id),
+    with: {
+      infoMedias: {
+        with: {
+          media: true,
+        },
+      },
+      infoCategories: {
+        with: {
+          category: true,
+        },
+      },
+      infoCourses: {
+        with: {
+          course: true,
+        },
+      },
+      infoAngkatan: {
+        with: {
+          angkatan: true,
+        },
+      },
+    },
+  });
+
+  if (!info) return info;
+
+  // If user is found, then add reactions to the object
+  const reactions = await getReactions(db, { infoId: info?.id });
+  return { ...info, reactions };
 }

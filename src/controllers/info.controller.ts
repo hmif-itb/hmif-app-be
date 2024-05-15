@@ -4,15 +4,16 @@ import {
   createInfo,
   createReadInfo,
   deleteInfo,
+  getInfoById,
   getListInfos,
 } from '~/repositories/info.repo';
 import {
   createInfoRoute,
   deleteInfoRoute,
   postReadInfoRoute,
+  getListInfoRoute,
+  getInfoByIdRoute,
 } from '~/routes/info.route';
-import { InfoSchema } from '~/types/info.types';
-import { listInfoRoute } from '../routes/info.route';
 import { createAuthRouter } from './router-factory';
 
 export const infoRouter = createAuthRouter();
@@ -42,16 +43,15 @@ infoRouter.openapi(createInfoRoute, async (c) => {
   const { id } = c.var.user;
 
   try {
-    const info = InfoSchema.parse(
-      await createInfo(
-        db,
-        { ...data, creatorId: id },
-        mediaUrls,
-        forAngkatan,
-        forCategories,
-        forCourses,
-      ),
+    const info = await createInfo(
+      db,
+      { ...data, creatorId: id },
+      mediaUrls,
+      forAngkatan,
+      forCategories,
+      forCourses,
     );
+
     return c.json(info, 201);
   } catch (err) {
     if (err instanceof PostgresError)
@@ -70,11 +70,11 @@ infoRouter.openapi(deleteInfoRoute, async (c) => {
     }
     return c.json({}, 200);
   } catch (err) {
-    return c.json(err, 500);
+    return c.json(err, 400);
   }
 });
 
-infoRouter.openapi(listInfoRoute, async (c) => {
+infoRouter.openapi(getListInfoRoute, async (c) => {
   const infos = await getListInfos(db, c.req.valid('query'), c.var.user.id);
   return c.json(
     {
@@ -82,4 +82,17 @@ infoRouter.openapi(listInfoRoute, async (c) => {
     },
     200,
   );
+});
+
+infoRouter.openapi(getInfoByIdRoute, async (c) => {
+  try {
+    const { infoId } = c.req.valid('param');
+    const info = await getInfoById(db, infoId);
+    if (!info) {
+      return c.json({ error: 'Info not found' }, 404);
+    }
+    return c.json(info, 200);
+  } catch (err) {
+    return c.json(err, 500);
+  }
 });
