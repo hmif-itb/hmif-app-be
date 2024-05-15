@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { Database, db } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
 import {
+  categories,
   infoAngkatan,
   infoCategories,
   infoCourses,
@@ -139,36 +140,59 @@ export async function deleteInfo(db: Database, id: string) {
   return info;
 }
 
-// TODO: Recreate this!!
-// export async function getListInfos(
-//   db: Database,
-//   q: z.infer<typeof ListInfoParamsSchema>,
-//   userId: string,
-// ) {
-//   const searchQ = q.search ? ilike(infos.content, `%${q.search}%`) : undefined;
-//   const categoryQ = q.category ? eq(infos.category, q.category) : undefined;
-//   let unreadQ: SQL<unknown> | undefined;
+export async function getListInfos(
+  db: Database,
+  q: z.infer<typeof ListInfoParamsSchema>,
+  userId: string,
+) {
+  const searchQ = q.search ? ilike(infos.content, `%${q.search}%`) : undefined;
+  let unreadQ: SQL<unknown> | undefined;
+  let categoryQ: SQL<unknown> | undefined;
 
-//   if (q.unread === 'true') {
-//     const getReadInfosByUser = db
-//       .select({ infoId: userReadInfos.infoId })
-//       .from(userReadInfos)
-//       .where(eq(userReadInfos.userId, userId));
-//     unreadQ = notInArray(infos.id, getReadInfosByUser);
-//   }
+  if (q.unread === 'true') {
+    const getReadInfosByUser = db
+      .select({ infoId: userReadInfos.infoId })
+      .from(userReadInfos)
+      .where(eq(userReadInfos.userId, userId));
+    unreadQ = notInArray(infos.id, getReadInfosByUser);
+  }
 
-//   const where = and(searchQ, categoryQ, unreadQ);
+  if (q.category) {
+    const getInfosByCategory = db
+      .select({ infoId: infoCategories.infoId })
+      .from(infos)
+      .leftJoin(infoCategories, eq(infoCategories.infoId, infos.id))
+      .where(eq(infoCategories.categoryId, q.category));
+    categoryQ = notInArray(infos.id, getInfosByCategory);
+  }
 
-//   return await db.query.infos.findMany({
-//     where,
-//     limit: INFOS_PER_PAGE,
-//     offset: q.offset,
-//     with: {
-//       infoMedias: {
-//         with: {
-//           media: true,
-//         },
-//       },
-//     },
-//   });
-// }
+  const where = and(searchQ, categoryQ, unreadQ);
+
+  return await db.query.infos.findMany({
+    where,
+    limit: INFOS_PER_PAGE,
+    offset: q.offset,
+    with: {
+      infoMedias: {
+        with: {
+          media: true,
+        },
+      },
+      infoCategories: {
+        with: {
+          category: true,
+        },
+      },
+      infoCourses: {
+        with: {
+          course: true,
+        },
+      },
+      infoAngkatan: {
+        with: {
+          angkatan: true,
+        },
+      },
+    },
+  });
+}

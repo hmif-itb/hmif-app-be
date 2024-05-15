@@ -4,7 +4,7 @@ import {
   createInfo,
   createReadInfo,
   deleteInfo,
-  // getListInfos,
+  getListInfos,
 } from '~/repositories/info.repo';
 import {
   createInfoRoute,
@@ -74,12 +74,12 @@ infoRouter.openapi(deleteInfoRoute, async (c) => {
   }
 });
 
-// infoRouter.openapi(listInfoRoute, async (c) => {
-//   const infos = await getListInfos(db, c.req.valid('query'), c.var.user.id);
-//   return c.json(
-//     {
-//       infos,
-//     },
-//     200,
-//   );
-// });
+infoRouter.openapi(listInfoRoute, async (c) => {
+  const infos = await getListInfos(db, c.req.valid('query'), c.var.user.id);
+  return c.json(
+    {
+      infos,
+    },
+    200,
+  );
+});
