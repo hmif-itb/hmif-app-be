@@ -51,3 +51,18 @@ export const errorResponse = {
   },
   description: 'Bad request',
 } as const satisfies ResponseItem;
+
+export const ServerErrorSchema = z
+  .object({
+    error: z.string(),
+  })
+  .openapi('Internal Server Error');
+
+export const serverErrorResponse = {
+  content: {
+    'application/json': {
+      schema: ServerErrorSchema,
+    },
+  },
+  description: 'Something went wrong!',
+} as const satisfies ResponseItem;
