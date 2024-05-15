@@ -1,7 +1,7 @@
 import { createRoute, z } from '@hono/zod-openapi';
 import {
+  CreateInfoBodySchema,
   CreateReadRequestBodySchema,
-  InfoParamSchema,
   InfoSchema,
   ListInfoParamsSchema,
   ListInfoSchema,
@@ -41,7 +41,7 @@ export const createInfoRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: InfoParamSchema,
+          schema: CreateInfoBodySchema,
         },
       },
       required: true,
