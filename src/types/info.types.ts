@@ -1,10 +1,45 @@
 import { z } from '@hono/zod-openapi';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { infos } from '~/db/schema';
+import {
+  infoAngkatan,
+  infoCategories,
+  infoCourses,
+  infoMedias,
+  infos,
+} from '~/db/schema';
+import { CategorySchema } from './category.types';
+import { MediaSchema } from './media.types';
+import { AngkatanSchema } from './angkatan.types';
+import { CourseSchema } from './course.types';
+import { ReactionResponseSchema } from './reaction.types';
+
+export const InfoCategorySchema = createSelectSchema(infoCategories).extend({
+  category: CategorySchema,
+});
+
+export const InfoMediaSchema = createSelectSchema(infoMedias).extend({
+  media: MediaSchema,
+});
+
+export const InfoAngkatanSchema = createSelectSchema(infoAngkatan).extend({
+  angkatan: AngkatanSchema,
+});
+
+export const InfoCourseSchema = createSelectSchema(infoCourses).extend({
+  course: CourseSchema,
+});
 
 export const InfoSchema = createSelectSchema(infos, {
   createdAt: z.union([z.string(), z.date()]),
-}).openapi('Info');
+})
+  .extend({
+    infoMedias: z.array(InfoMediaSchema).optional(),
+    infoCategories: z.array(InfoCategorySchema).optional(),
+    infoCourses: z.array(InfoCourseSchema).optional(),
+    infoAngkatan: z.array(InfoAngkatanSchema).optional(),
+    reactions: ReactionResponseSchema.optional(),
+  })
+  .openapi('Info');
 
 export const CreateInfoForCoursesFieldItemSchema = z.object({
   courseId: z.string(),
