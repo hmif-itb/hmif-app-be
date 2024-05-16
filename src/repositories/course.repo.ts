@@ -12,11 +12,7 @@ import {
 
 // User Course Repository
 
-export async function createUserCourse(
-  db: Database,
-  data: z.infer<typeof CreateUserCourseSchema>,
-  userId: string,
-) {
+function getCurrentSemesterCodeAndYear() {
   // Get current time to determine semester code and year
   const timeNow = new Date();
   const currentMonth = timeNow.getMonth();
@@ -33,6 +29,17 @@ export async function createUserCourse(
     semesterYearTaken = currentYear;
   }
 
+  return { semesterCodeTaken, semesterYearTaken };
+}
+
+export async function createUserCourse(
+  db: Database,
+  data: z.infer<typeof CreateUserCourseSchema>,
+  userId: string,
+) {
+  const { semesterCodeTaken, semesterYearTaken } =
+    getCurrentSemesterCodeAndYear();
+
   const userCourse = await db
     .insert(userCourses)
     .values({
@@ -47,9 +54,22 @@ export async function createUserCourse(
   return userCourse;
 }
 
-export async function getUserCourse(db: Database, userId: string) {
+export async function getUserCourse(
+  db: Database,
+  userId: string,
+  current: boolean = false, // Only gets user courses in this semester and year
+) {
+  const { semesterCodeTaken, semesterYearTaken } =
+    getCurrentSemesterCodeAndYear();
+
+  const where = and(
+    eq(userCourses.userId, userId),
+    current ? eq(userCourses.semesterCodeTaken, semesterCodeTaken) : undefined,
+    current ? eq(userCourses.semesterYearTaken, semesterYearTaken) : undefined,
+  );
+
   const userCourse = await db.query.userCourses.findMany({
-    where: eq(userCourses.userId, userId),
+    where,
     with: {
       course: true,
     },

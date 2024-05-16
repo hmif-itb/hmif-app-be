@@ -260,8 +260,8 @@ export const getUserCourseRoute = createRoute({
   },
 });
 
-export const getUserCurrentCourseRoute = createRoute({
-  operationId: 'getUserCurrentCourse',
+export const getCurrentUserCourseRoute = createRoute({
+  operationId: 'getCurrentUserCourse',
   tags: ['course'],
   method: 'get',
   path: '/course/take/current',

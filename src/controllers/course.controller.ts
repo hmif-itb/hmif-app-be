@@ -6,6 +6,7 @@ import {
   updateCourseRoute,
   createUserCourseRoute,
   getUserCourseRoute,
+  getCurrentUserCourseRoute,
 } from '~/routes/course.route';
 import { createAuthRouter } from './router-factory';
 import {
@@ -45,6 +46,19 @@ courseRouter.openapi(getUserCourseRoute, async (c) => {
   try {
     const userId = c.var.user.id;
     const userCourses = await getUserCourse(db, userId);
+    return c.json(userCourses, 200);
+  } catch (err) {
+    if (err instanceof Error) {
+      return c.json({ error: err.message }, 400);
+    }
+    return c.json({ error: 'Something went wrong' }, 500);
+  }
+});
+
+courseRouter.openapi(getCurrentUserCourseRoute, async (c) => {
+  try {
+    const userId = c.var.user.id;
+    const userCourses = await getUserCourse(db, userId, true);
     return c.json(userCourses, 200);
   } catch (err) {
     if (err instanceof Error) {
