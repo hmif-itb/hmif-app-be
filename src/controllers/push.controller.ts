@@ -1,5 +1,6 @@
 import { db } from '~/db/drizzle';
 import { sendNotificationToAll } from '~/lib/push-manager';
+import webpush from 'web-push';
 import {
   createOrUpdatePushSubscription,
   getAllPushSubscriptions,
@@ -21,11 +22,12 @@ pushRouter.openapi(registerPushRoute, async (c) => {
 
 pushRouter.openapi(pushBroadcastRoute, async (c) => {
   const subscriptions = await getAllPushSubscriptions(db);
-  void sendNotificationToAll(subscriptions, c.req.valid('json')).then(
-    async (results) => {
-      await removeFailedPushSubscriptions(db, results);
-    },
-  );
+  void sendNotificationToAll(
+    subscriptions.filter((s) => s.keys !== null) as webpush.PushSubscription[],
+    c.req.valid('json'),
+  ).then(async (results) => {
+    await removeFailedPushSubscriptions(db, results);
+  });
 
   return c.json({}, 200);
 });
