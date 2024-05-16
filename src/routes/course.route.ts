@@ -6,6 +6,9 @@ import {
   CourseSchema,
   CreateCourseSchema,
   UpdateCourseSchema,
+  CreateUserCourseSchema,
+  UserCourseSchema,
+  ListUserCourseSchema,
 } from '~/types/course.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
@@ -178,6 +181,138 @@ export const deleteCourseRoute = createRoute({
     },
     404: {
       description: 'Course not found',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
+        },
+      },
+    },
+  },
+});
+
+// User Courses Routes
+
+export const createUserCourseRoute = createRoute({
+  operationId: 'createUserCourse',
+  tags: ['course'],
+  method: 'post',
+  path: '/course/take',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: CreateUserCourseSchema,
+        },
+      },
+      required: true,
+    },
+  },
+  responses: {
+    201: {
+      description: 'Course added to user courses',
+      content: {
+        'application/json': {
+          schema: UserCourseSchema,
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ValidationErrorSchema, ErrorSchema]),
+        },
+      },
+    },
+    404: {
+      description: 'Course not found',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
+        },
+      },
+    },
+  },
+});
+
+export const getUserCourseRoute = createRoute({
+  operationId: 'getUserCourse',
+  tags: ['course'],
+  method: 'get',
+  path: '/course/take',
+  // TODO: Add query schema
+  responses: {
+    200: {
+      description: 'Get user courses',
+      content: {
+        'application/json': {
+          schema: ListUserCourseSchema,
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ValidationErrorSchema, ErrorSchema]),
+        },
+      },
+    },
+  },
+});
+
+export const getUserCurrentCourseRoute = createRoute({
+  operationId: 'getUserCurrentCourse',
+  tags: ['course'],
+  method: 'get',
+  path: '/course/take/current',
+  responses: {
+    200: {
+      description: 'Get user current course',
+      content: {
+        'application/json': {
+          schema: ListUserCourseSchema,
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ValidationErrorSchema, ErrorSchema]),
+        },
+      },
+    },
+  },
+});
+
+export const deleteUserCourseRoute = createRoute({
+  operationId: 'deleteUserCourse',
+  tags: ['course'],
+  method: 'delete',
+  path: '/course/take/{courseId}',
+  request: {
+    params: CourseIdRequestBodySchema,
+  },
+  responses: {
+    200: {
+      description: 'Deleted user course',
+      content: {
+        'application/json': {
+          schema: UserCourseSchema,
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ValidationErrorSchema, ErrorSchema]),
+        },
+      },
+    },
+    404: {
+      description: 'User course not found',
       content: {
         'application/json': {
           schema: ErrorSchema,
