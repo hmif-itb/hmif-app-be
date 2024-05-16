@@ -25,7 +25,7 @@ export const users = pgTable(
       enum: ['Ganesha', 'Jatinangor'],
     }).notNull(),
     angkatan: integer('angkatan')
-      .references(() => angkatan.year)
+      .references(() => angkatan.year, { onDelete: 'cascade' })
       .notNull(),
     gender: text('jenis_kelamin', { enum: ['F', 'M'] }).notNull(),
     membershipStatus: text('status_keanggotaan').notNull(),
@@ -60,7 +60,9 @@ export const pushSubscriptions = pgTable(
   'push_subscriptions',
   {
     endpoint: text('endpoint').primaryKey(),
-    userId: text('user_id').references(() => users.id),
+    userId: text('user_id').references(() => users.id, {
+      onDelete: 'set null',
+    }),
     keys: json('keys').$type<webpush.PushSubscription['keys']>().notNull(),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
@@ -85,7 +87,7 @@ export const pushSubscriptionsRelation = relations(
 
 export const googleSubscriptions = pgTable('google_subscriptions', {
   userId: text('user_id')
-    .references(() => users.id)
+    .references(() => users.id, { onDelete: 'cascade' })
     .primaryKey(),
   idToken: text('id_token').notNull(),
   refreshToken: text('refresh_token').notNull(),
@@ -111,7 +113,7 @@ export const googleSubscriptionsRelation = relations(
 export const infos = pgTable('infos', {
   id: text('id').primaryKey().$defaultFn(createId),
   creatorId: text('creator_id')
-    .references(() => users.id)
+    .references(() => users.id, { onDelete: 'cascade' })
     .notNull(),
   content: text('content').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true })
@@ -138,7 +140,7 @@ export const infosRelation = relations(infos, ({ one, many }) => ({
 export const medias = pgTable('medias', {
   id: text('id').primaryKey().$defaultFn(createId),
   creatorId: text('creator_id')
-    .references(() => users.id)
+    .references(() => users.id, { onDelete: 'cascade' })
     .notNull(),
   name: text('name').unique().notNull(),
   type: text('type').notNull(),
@@ -162,10 +164,10 @@ export const userReadInfos = pgTable(
   'user_read_infos',
   {
     userId: text('user_id')
-      .references(() => users.id)
+      .references(() => users.id, { onDelete: 'cascade' })
       .notNull(),
     infoId: text('info_id')
-      .references(() => infos.id)
+      .references(() => infos.id, { onDelete: 'cascade' })
       .notNull(),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
@@ -191,10 +193,10 @@ export const infoMedias = pgTable(
   'info_medias',
   {
     infoId: text('info_id')
-      .references(() => infos.id)
+      .references(() => infos.id, { onDelete: 'cascade' })
       .notNull(),
     mediaId: text('media_id')
-      .references(() => medias.id)
+      .references(() => medias.id, { onDelete: 'cascade' })
       .notNull(),
   },
   (t) => ({ pk: primaryKey({ columns: [t.infoId, t.mediaId] }) }),
@@ -216,10 +218,10 @@ export const comments = pgTable(
   {
     id: text('id').primaryKey().$defaultFn(createId),
     repliedInfoId: text('replied_info_id')
-      .references(() => infos.id)
+      .references(() => infos.id, { onDelete: 'cascade' })
       .notNull(),
     creatorId: text('creator_id')
-      .references(() => users.id)
+      .references(() => users.id, { onDelete: 'cascade' })
       .notNull(),
     content: text('content').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true })
@@ -251,10 +253,12 @@ export const reactions = pgTable(
   {
     id: text('id').primaryKey().$defaultFn(createId),
     creatorId: text('creator_id')
-      .references(() => users.id)
+      .references(() => users.id, { onDelete: 'cascade' })
       .notNull(),
-    infoId: text('info_id').references(() => infos.id),
-    commentId: text('comment_id').references(() => comments.id),
+    infoId: text('info_id').references(() => infos.id, { onDelete: 'cascade' }),
+    commentId: text('comment_id').references(() => comments.id, {
+      onDelete: 'cascade',
+    }),
     reaction: text('reaction').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
@@ -342,12 +346,12 @@ export const infoCourses = pgTable(
   'info_courses',
   {
     infoId: text('info_id')
-      .references(() => infos.id)
+      .references(() => infos.id, { onDelete: 'cascade' })
       .notNull(),
     courseId: text('course_id')
-      .references(() => courses.id)
+      .references(() => courses.id, { onDelete: 'cascade' })
       .notNull(),
-    class: integer('class').notNull(),
+    class: integer('class'),
   },
   (t) => ({ pk: primaryKey({ columns: [t.infoId, t.courseId] }) }),
 );
@@ -364,10 +368,10 @@ export const infoAngkatan = pgTable(
   'info_angkatan',
   {
     infoId: text('info_id')
-      .references(() => infos.id)
+      .references(() => infos.id, { onDelete: 'cascade' })
       .notNull(),
     angkatanId: text('angkatan_id')
-      .references(() => angkatan.id)
+      .references(() => angkatan.id, { onDelete: 'cascade' })
       .notNull(),
   },
   (t) => ({ pk: primaryKey({ columns: [t.infoId, t.angkatanId] }) }),
@@ -385,10 +389,10 @@ export const infoCategories = pgTable(
   'info_categories',
   {
     infoId: text('info_id')
-      .references(() => infos.id)
+      .references(() => infos.id, { onDelete: 'cascade' })
       .notNull(),
     categoryId: text('category_id')
-      .references(() => categories.id)
+      .references(() => categories.id, { onDelete: 'cascade' })
       .notNull(),
   },
   (t) => ({ pk: primaryKey({ columns: [t.infoId, t.categoryId] }) }),
@@ -408,8 +412,10 @@ export const infoCategoriesRelation = relations(infoCategories, ({ one }) => ({
 export const userCourses = pgTable(
   'user_courses',
   {
-    userId: text('user_id').references(() => users.id),
-    courseId: text('course_id').references(() => courses.id),
+    userId: text('user_id').references(() => users.id, { onDelete: 'cascade' }),
+    courseId: text('course_id').references(() => courses.id, {
+      onDelete: 'cascade',
+    }),
     class: integer('class').notNull(),
     semesterCodeTaken: text('semester_code_taken', {
       enum: ['Ganjil', 'Genap'],
@@ -431,10 +437,10 @@ export const userUnsubscribeCategories = pgTable(
   'user_unsubscribe_categories',
   {
     userId: text('user_id')
-      .references(() => users.id)
+      .references(() => users.id, { onDelete: 'cascade' })
       .notNull(),
     categoryId: text('category_id')
-      .references(() => categories.id)
+      .references(() => categories.id, { onDelete: 'cascade' })
       .notNull(),
   },
   (t) => ({ pk: primaryKey({ columns: [t.userId, t.categoryId] }) }),
