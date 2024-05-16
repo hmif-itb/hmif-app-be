@@ -1,6 +1,6 @@
 import { InferInsertModel, eq, inArray } from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
-import { firstSure } from '~/db/helper';
+import { first, firstSure } from '~/db/helper';
 import { pushSubscriptions } from '~/db/schema';
 import { sendNotificationToAll } from '~/lib/push-manager';
 
@@ -56,4 +56,19 @@ export async function removeFailedPushSubscriptions(
 
 export async function getAllPushSubscriptions(db: Database) {
   return await db.query.pushSubscriptions.findMany();
+}
+
+export async function deleteKeysPushSubscriptions(
+  db: Database,
+  userId: string,
+) {
+  const pushSubscription = await db
+    .update(pushSubscriptions)
+    .set({
+      keys: null,
+    })
+    .where(eq(pushSubscriptions.userId, userId))
+    .returning()
+    .then(first);
+  return pushSubscription;
 }
