@@ -7,6 +7,7 @@ import {
   createUserCourseRoute,
   getUserCourseRoute,
   getCurrentUserCourseRoute,
+  deleteUserCourseRoute,
 } from '~/routes/course.route';
 import { createAuthRouter } from './router-factory';
 import {
@@ -17,6 +18,7 @@ import {
   updateCourse,
   createUserCourse,
   getUserCourse,
+  deleteUserCourse,
 } from '~/repositories/course.repo';
 import { db } from '~/db/drizzle';
 import { PostgresError } from 'postgres';
@@ -60,6 +62,22 @@ courseRouter.openapi(getCurrentUserCourseRoute, async (c) => {
     const userId = c.var.user.id;
     const userCourses = await getUserCourse(db, userId, true);
     return c.json(userCourses, 200);
+  } catch (err) {
+    if (err instanceof Error) {
+      return c.json({ error: err.message }, 400);
+    }
+    return c.json({ error: 'Something went wrong' }, 500);
+  }
+});
+
+courseRouter.openapi(deleteUserCourseRoute, async (c) => {
+  try {
+    const userId = c.var.user.id;
+    const { courseId } = c.req.valid('param');
+    const userCourse = await deleteUserCourse(db, userId, courseId);
+
+    if (!userCourse) return c.json({ error: 'Course not found' }, 404);
+    return c.json(userCourse, 200);
   } catch (err) {
     if (err instanceof Error) {
       return c.json({ error: err.message }, 400);

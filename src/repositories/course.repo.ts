@@ -77,6 +77,21 @@ export async function getUserCourse(
   return userCourse;
 }
 
+export async function deleteUserCourse(
+  db: Database,
+  userId: string,
+  courseId: string,
+) {
+  const userCourse = await db
+    .delete(userCourses)
+    .where(
+      and(eq(userCourses.userId, userId), eq(userCourses.courseId, courseId)),
+    )
+    .returning()
+    .then(first);
+  return userCourse;
+}
+
 // Course Repository
 
 export async function getListCourses(
