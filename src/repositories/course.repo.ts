@@ -2,12 +2,52 @@ import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
-import { courses } from '~/db/schema';
+import { courses, userCourses } from '~/db/schema';
 import {
   CreateCourseSchema,
+  CreateUserCourseSchema,
   ListCourseParamsSchema,
   UpdateCourseSchema,
 } from '~/types/course.types';
+
+// User Course Repository
+
+export async function createUserCourse(
+  db: Database,
+  data: z.infer<typeof CreateUserCourseSchema>,
+  userId: string,
+) {
+  // Get current time to determine semester code and year
+  const timeNow = new Date();
+  const currentMonth = timeNow.getMonth();
+  const currentYear = timeNow.getFullYear();
+
+  let semesterCodeTaken: 'Ganjil' | 'Genap', semesterYearTaken: number;
+  if (currentMonth <= 6) {
+    // If January - June, it's Genap semester of last year
+    semesterCodeTaken = 'Genap';
+    semesterYearTaken = currentYear - 1;
+  } else {
+    // If July - December, it's Ganjil semester of current year
+    semesterCodeTaken = 'Ganjil';
+    semesterYearTaken = currentYear;
+  }
+
+  const userCourse = await db
+    .insert(userCourses)
+    .values({
+      ...data,
+      userId,
+      semesterCodeTaken,
+      semesterYearTaken,
+    })
+    .returning()
+    .then(firstSure);
+
+  return userCourse;
+}
+
+// Course Repository
 
 export async function getListCourses(
   db: Database,
