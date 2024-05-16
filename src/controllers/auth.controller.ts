@@ -217,15 +217,10 @@ loginRouter.openapi(loginBypassRoute, async (c) => {
 
 loginProtectedRouter.openapi(logoutRoute, async (c) => {
   try {
-    const pushSubscription = await deleteKeysPushSubscriptions(
-      db,
-      c.var.user.id,
-    );
+    await deleteKeysPushSubscriptions(db, c.var.user.id);
 
-    if (!pushSubscription)
-      return c.json({ error: 'Push subscription not found' }, 404);
     deleteCookie(c, 'hmif-app.access-cookie');
-    return c.json(pushSubscription, 200);
+    return c.json({}, 200);
   } catch (err) {
     if (err instanceof Error) {
       return c.json(
