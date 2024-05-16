@@ -2,19 +2,6 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { courses, userCourses } from '~/db/schema';
 
-// User Course Schemas
-
-export const UserCourseSchema =
-  createSelectSchema(userCourses).openapi('UserCourse');
-
-export const ListUserCourseSchema = z.array(UserCourseSchema);
-
-export const CreateUserCourseSchema = createInsertSchema(userCourses).omit({
-  semesterCodeTaken: true,
-  semesterYearTaken: true,
-  userId: true,
-});
-
 // Course Schemas
 
 export const CourseSchema = createSelectSchema(courses).openapi('Course');
@@ -29,6 +16,7 @@ export const UpdateCourseSchema = CreateCourseSchema.partial();
 export const SingleCourseSchema = z.object({
   course: CourseSchema,
 });
+
 export const ListCourseSchema = z.object({
   courses: z.array(CourseSchema),
 });
@@ -47,4 +35,20 @@ export const ListCourseParamsSchema = z.object({
 
 export const CourseIdRequestBodySchema = z.object({
   courseId: z.string(),
+});
+
+// User Course Schemas
+
+export const UserCourseSchema = createSelectSchema(userCourses)
+  .extend({
+    courses: CourseSchema.optional(),
+  })
+  .openapi('UserCourse');
+
+export const ListUserCourseSchema = z.array(UserCourseSchema);
+
+export const CreateUserCourseSchema = createInsertSchema(userCourses).omit({
+  semesterCodeTaken: true,
+  semesterYearTaken: true,
+  userId: true,
 });

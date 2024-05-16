@@ -240,7 +240,6 @@ export const getUserCourseRoute = createRoute({
   tags: ['course'],
   method: 'get',
   path: '/course/take',
-  // TODO: Add query schema
   responses: {
     200: {
       description: 'Get user courses',

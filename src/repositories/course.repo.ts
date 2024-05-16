@@ -47,6 +47,16 @@ export async function createUserCourse(
   return userCourse;
 }
 
+export async function getUserCourse(db: Database, userId: string) {
+  const userCourse = await db.query.userCourses.findMany({
+    where: eq(userCourses.userId, userId),
+    with: {
+      course: true,
+    },
+  });
+  return userCourse;
+}
+
 // Course Repository
 
 export async function getListCourses(

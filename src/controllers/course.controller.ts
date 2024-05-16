@@ -5,6 +5,7 @@ import {
   getCourseByIdRoute,
   updateCourseRoute,
   createUserCourseRoute,
+  getUserCourseRoute,
 } from '~/routes/course.route';
 import { createAuthRouter } from './router-factory';
 import {
@@ -14,6 +15,7 @@ import {
   getCourseById,
   updateCourse,
   createUserCourse,
+  getUserCourse,
 } from '~/repositories/course.repo';
 import { db } from '~/db/drizzle';
 import { PostgresError } from 'postgres';
@@ -36,6 +38,19 @@ courseRouter.openapi(createUserCourseRoute, async (c) => {
       return c.json({ error: 'Course has already been taken' }, 400);
     }
     return c.json(err, 400);
+  }
+});
+
+courseRouter.openapi(getUserCourseRoute, async (c) => {
+  try {
+    const userId = c.var.user.id;
+    const userCourses = await getUserCourse(db, userId);
+    return c.json(userCourses, 200);
+  } catch (err) {
+    if (err instanceof Error) {
+      return c.json({ error: err.message }, 400);
+    }
+    return c.json({ error: 'Something went wrong' }, 500);
   }
 });
 
