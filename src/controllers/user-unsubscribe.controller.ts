@@ -1,4 +1,5 @@
 import {
+  deleteUserUnsubscribeCategory,
   getListUserUnsubscribeCategory,
   getUserUnsubscribeCategory,
   postListUserUnsubcribeCategory,
@@ -11,6 +12,8 @@ import {
   getListUserUnsubscribeCategoryRoute,
   postUserUnsubscribeCategoryRoute,
   postListUserUnsubscribeCategoryRoute,
+  deleteListUserUnsubscribeRoute,
+  deleteUserUnsubscribeCategoryRoute,
 } from '~/routes/user-unsubscribe.route';
 import { PostUserUnsubscribeCategorySchema } from '~/types/user-unsubscribe.types';
 import { z } from 'zod';
@@ -42,10 +45,6 @@ userUnsubscribeRouter.openapi(
       const categories = await getListUserUnsubscribeCategory(db, id);
       const categoriesArray = categories.map((category) => category.categoryId);
 
-      if (!categories) {
-        return c.json({ error: 'User is subscribed to all categories!' }, 400);
-      }
-
       const data = {
         userId: id,
         categoryId: categoriesArray,
@@ -65,7 +64,7 @@ userUnsubscribeRouter.openapi(postUserUnsubscribeCategoryRoute, async (c) => {
     categoryId,
   };
 
-  const requiredToSubscribe = true; // TODO: check if category is required
+  const requiredToSubscribe = false; // TODO: check if category is required
   if (requiredToSubscribe) {
     return c.json({ error: 'Subscription to this category is required!' }, 400);
   }
@@ -114,3 +113,30 @@ userUnsubscribeRouter.openapi(
     }
   },
 );
+
+userUnsubscribeRouter.openapi(deleteUserUnsubscribeCategoryRoute, async (c) => {
+  const { id } = c.var.user;
+  const { categoryId } = c.req.valid('json');
+
+  try {
+    const res = await deleteUserUnsubscribeCategory(
+      db,
+      {
+        userId: id,
+        categoryId,
+      },
+      id,
+    );
+
+    if (!res) {
+      return c.json(
+        { error: 'User is already subscribed to that category!' },
+        400,
+      );
+    }
+
+    return c.json(res, 201);
+  } catch (e) {
+    return c.json({ error: 'Something went wrong!' }, 500);
+  }
+});

@@ -2,6 +2,7 @@ import { Database } from '~/db/drizzle';
 import { InferInsertModel, and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import {
+  DeleteUserUnsubscribeCategorySchema,
   GetUserUnsubscribeCategorySchema,
   PostListUserUnsubscribeCategorySchema,
   PostUserUnsubscribeCategorySchema,
@@ -59,6 +60,23 @@ export async function postListUserUnsubcribeCategory(
     .insert(userUnsubscribeCategories)
     .values(q)
     .onConflictDoNothing()
+    .returning()
+    .then(firstSure);
+}
+
+export async function deleteUserUnsubscribeCategory(
+  db: Database,
+  q: z.infer<typeof DeleteUserUnsubscribeCategorySchema>,
+  userId: string,
+) {
+  return await db
+    .delete(userUnsubscribeCategories)
+    .where(
+      and(
+        eq(userUnsubscribeCategories.userId, userId),
+        eq(userUnsubscribeCategories.categoryId, q.categoryId),
+      ),
+    )
     .returning()
     .then(firstSure);
 }

@@ -6,6 +6,9 @@ import {
   ServerErrorSchema,
 } from '~/types/responses.type';
 import {
+  DeleteListUserUnsubscribeCategorySchema,
+  DeleteUserUnsubscribeCategoryParamsSchema,
+  DeleteUserUnsubscribeCategorySchema,
   GetListUserUnsubscribeCategorySchema,
   GetUserUnsubscribeCategoryParamsSchema,
   GetUserUnsubscribeCategorySchema,
@@ -55,7 +58,7 @@ export const getListUserUnsubscribeCategoryRoute = createRoute({
   operationId: 'getListUserUnsubscribeCategory',
   tags: ['unsubscribe'],
   method: 'get',
-  path: '/unsubscribe/category',
+  path: '/unsubscribe/categories',
   description: 'Get list of categories which user unsubscribes to',
   responses: {
     200: {
@@ -63,14 +66,6 @@ export const getListUserUnsubscribeCategoryRoute = createRoute({
       content: {
         'application/json': {
           schema: GetListUserUnsubscribeCategorySchema,
-        },
-      },
-    },
-    400: {
-      description: 'Bad request',
-      content: {
-        'application/json': {
-          schema: z.union([ErrorSchema, ValidationErrorSchema]),
         },
       },
     },
@@ -159,6 +154,94 @@ export const postListUserUnsubscribeCategoryRoute = createRoute({
           'application/json': {
             schema: z.union([ErrorSchema, ValidationErrorSchema]),
           },
+        },
+      },
+    },
+    500: {
+      description: 'Internal server error',
+      content: {
+        'application/json': {
+          schema: ServerErrorSchema,
+        },
+      },
+    },
+  },
+});
+
+export const deleteUserUnsubscribeCategoryRoute = createRoute({
+  operationId: 'deleteUserUnsubscribeCategory',
+  tags: ['unsubscribe'],
+  method: 'delete',
+  path: '/unsubscribe/category',
+  description: 'Remove user unsubscription from a category',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: DeleteUserUnsubscribeCategoryParamsSchema,
+        },
+      },
+      required: true,
+    },
+  },
+  responses: {
+    201: {
+      description: 'Subscribed user to the category',
+      content: {
+        'application/json': {
+          schema: DeleteUserUnsubscribeCategorySchema,
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
+        },
+      },
+    },
+    500: {
+      description: 'Internal server error',
+      content: {
+        'application/json': {
+          schema: ServerErrorSchema,
+        },
+      },
+    },
+  },
+});
+
+export const deleteListUserUnsubscribeRoute = createRoute({
+  operationId: 'deleteListUserUnsubscribe',
+  tags: ['unsubscribe'],
+  method: 'delete',
+  path: '/unsubscribe/categories',
+  description: 'Remove user unsubscription from multiple categories',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: DeleteUserUnsubscribeCategoryParamsSchema,
+        },
+      },
+      required: true,
+    },
+  },
+  responses: {
+    201: {
+      description: 'User is subscribed to all given categories',
+      content: {
+        'application/json': {
+          schema: DeleteListUserUnsubscribeCategorySchema,
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
         },
       },
     },
