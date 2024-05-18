@@ -30,10 +30,17 @@ userUnsubscribeRouter.openapi(getUserUnsubscribeCategoryRoute, async (c) => {
   });
 
   if (!category) {
-    return c.json({ error: 'User is subscribed to that category!' }, 400);
+    return c.json(
+      { error: `User is subscribed to the category with id ${categoryId}!` },
+      400,
+    );
   }
 
-  return c.json(category, 200);
+  const response = {
+    ...category,
+    unsubscribed: true,
+  };
+  return c.json(response, 200);
 });
 
 userUnsubscribeRouter.openapi(
