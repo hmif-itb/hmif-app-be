@@ -6,16 +6,15 @@ import {
   ServerErrorSchema,
 } from '~/types/responses.type';
 import {
-  DeleteListUserUnsubscribeCategorySchema,
+  DeleteListUserUnsubscribeCategoryParamsSchema,
+  DeleteListUserUnsubscribeCategoryResponseSchema,
   DeleteUserUnsubscribeCategoryParamsSchema,
   DeleteUserUnsubscribeCategorySchema,
   GetListUserUnsubscribeCategorySchema,
   GetUserUnsubscribeCategoryParamsSchema,
   GetUserUnsubscribeCategoryResponseSchema,
-  GetUserUnsubscribeCategorySchema,
   PostListUserUnsubscribeCategoryParamsSchema,
   PostListUserUnsubscribeCategoryResponseSchema,
-  PostListUserUnsubscribeCategorySchema,
   PostUserUnsubscribeCategoryParamsSchema,
   PostUserUnsubscribeCategorySchema,
 } from '~/types/user-unsubscribe.types';
@@ -225,7 +224,7 @@ export const deleteListUserUnsubscribeRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: DeleteUserUnsubscribeCategoryParamsSchema,
+          schema: DeleteListUserUnsubscribeCategoryParamsSchema,
         },
       },
       required: true,
@@ -236,7 +235,7 @@ export const deleteListUserUnsubscribeRoute = createRoute({
       description: 'User is subscribed to all given categories',
       content: {
         'application/json': {
-          schema: DeleteListUserUnsubscribeCategorySchema,
+          schema: DeleteListUserUnsubscribeCategoryResponseSchema,
         },
       },
     },

@@ -66,6 +66,10 @@ export const DeleteUserUnsubscribeCategoryParamsSchema = z.object({
   categoryId: z.string().openapi({ example: '1' }),
 });
 
+export const DeleteListUserUnsubscribeCategoryParamsSchema = z.object({
+  categoryId: z.array(z.string()).openapi({ example: ['1', '2', '3'] }),
+});
+
 // Response types
 export const GetUserUnsubscribeCategoryResponseSchema = z.object({
   ...GetUserUnsubscribeCategorySchema.shape,
@@ -81,6 +85,16 @@ export const PostListUserUnsubscribeCategoryResponseSchema = z.object({
     example: ['3', '4'],
   }),
   categoriesAlreadyUnsubscribed: z.array(z.string()).openapi({
+    example: ['5', '6'],
+  }),
+});
+
+export const DeleteListUserUnsubscribeCategoryResponseSchema = z.object({
+  ...DeleteListUserUnsubscribeCategorySchema.shape,
+  categoriesNotFound: z.array(z.string()).openapi({
+    example: ['3', '4'],
+  }),
+  categoriesAlreadySubscribed: z.array(z.string()).openapi({
     example: ['5', '6'],
   }),
 });

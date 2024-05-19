@@ -16,6 +16,8 @@ import {
   deleteUserUnsubscribeCategoryRoute,
 } from '~/routes/user-unsubscribe.route';
 import {
+  DeleteListUserUnsubscribeCategoryResponseSchema,
+  DeleteUserUnsubscribeCategorySchema,
   GetUserUnsubscribeCategoryResponseSchema,
   PostUserUnsubscribeCategorySchema,
 } from '~/types/user-unsubscribe.types';
@@ -228,6 +230,87 @@ userUnsubscribeRouter.openapi(deleteUserUnsubscribeCategoryRoute, async (c) => {
     }
 
     return c.json(res, 201);
+  } catch (e) {
+    return c.json({ error: 'Something went wrong!' }, 500);
+  }
+});
+
+userUnsubscribeRouter.openapi(deleteListUserUnsubscribeRoute, async (c) => {
+  const { id } = c.var.user;
+  const categoryIds = c.req.valid('json').categoryId;
+
+  try {
+    const existingCategories: string[] = [];
+    const checkExistingCategoryPromises: Array<
+      Promise<false | z.infer<typeof CategorySchema>>
+    > = [];
+
+    categoryIds.forEach((categoryId) => {
+      checkExistingCategoryPromises.push(isCategoryExists(db, categoryId));
+    });
+
+    const res = await Promise.allSettled(checkExistingCategoryPromises);
+    res.forEach((result) => {
+      if (result.status === 'fulfilled') {
+        if (result.value) {
+          existingCategories.push(result.value.id);
+        }
+      }
+    });
+
+    if (existingCategories.length === 0) {
+      return c.json({ error: 'All categories does not exist!' }, 400);
+    }
+
+    const notFoundCategories = categoryIds.filter(
+      (categoryId) => !existingCategories.includes(categoryId),
+    );
+
+    const deletePromises: Array<
+      Promise<z.infer<typeof DeleteUserUnsubscribeCategorySchema>>
+    > = [];
+
+    existingCategories.forEach((categoryId) => {
+      deletePromises.push(
+        deleteUserUnsubscribeCategory(
+          db,
+          {
+            userId: id,
+            categoryId,
+          },
+          id,
+        ),
+      );
+    });
+
+    const resDelete = await Promise.allSettled(deletePromises);
+    const deletedCategories: string[] = [];
+    const alreadySubscribedCategories: string[] = [];
+
+    resDelete.forEach((result) => {
+      if (result.status === 'fulfilled') {
+        if (result.value) {
+          deletedCategories.push(result.value.categoryId);
+        }
+      }
+    });
+
+    existingCategories.forEach((categoryId) => {
+      if (!deletedCategories.includes(categoryId)) {
+        alreadySubscribedCategories.push(categoryId);
+      }
+    });
+
+    const returnObj: z.infer<
+      typeof DeleteListUserUnsubscribeCategoryResponseSchema
+    > = {
+      userId: id,
+      categoryId: deletedCategories,
+      categoriesNotFound: notFoundCategories,
+      categoriesAlreadySubscribed: alreadySubscribedCategories,
+    };
+
+    return c.json(returnObj, 201);
   } catch (e) {
     return c.json({ error: 'Something went wrong!' }, 500);
   }
