@@ -18,6 +18,7 @@ import {
   selfRoute,
 } from '../routes/auth.route';
 import { createAuthRouter, createRouter } from './router-factory';
+import { deleteKeysPushSubscriptions } from '~/repositories/push.repo';
 
 export const loginRouter = createRouter();
 export const loginProtectedRouter = createAuthRouter();
@@ -215,8 +216,28 @@ loginRouter.openapi(loginBypassRoute, async (c) => {
 });
 
 loginProtectedRouter.openapi(logoutRoute, async (c) => {
-  deleteCookie(c, 'hmif-app.access-cookie');
-  return c.json({}, 200);
+  try {
+    await deleteKeysPushSubscriptions(db, c.var.user.id);
+
+    deleteCookie(c, 'hmif-app.access-cookie');
+    return c.json({}, 200);
+  } catch (err) {
+    if (err instanceof Error) {
+      return c.json(
+        {
+          error: err.message,
+        },
+        400,
+      );
+    } else {
+      return c.json(
+        {
+          error: 'Something went wrong',
+        },
+        400,
+      );
+    }
+  }
 });
 
 loginProtectedRouter.openapi(selfRoute, async (c) => {
