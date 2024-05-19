@@ -11,7 +11,10 @@ import {
   DeleteUserUnsubscribeCategorySchema,
   GetListUserUnsubscribeCategorySchema,
   GetUserUnsubscribeCategoryParamsSchema,
+  GetUserUnsubscribeCategoryResponseSchema,
   GetUserUnsubscribeCategorySchema,
+  PostListUserUnsubscribeCategoryParamsSchema,
+  PostListUserUnsubscribeCategoryResponseSchema,
   PostListUserUnsubscribeCategorySchema,
   PostUserUnsubscribeCategoryParamsSchema,
   PostUserUnsubscribeCategorySchema,
@@ -31,7 +34,7 @@ export const getUserUnsubscribeCategoryRoute = createRoute({
       description: 'Selected a category which user unsubscribed to',
       content: {
         'application/json': {
-          schema: GetUserUnsubscribeCategorySchema,
+          schema: GetUserUnsubscribeCategoryResponseSchema,
         },
       },
     },
@@ -134,7 +137,7 @@ export const postListUserUnsubscribeCategoryRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: PostListUserUnsubscribeCategorySchema,
+          schema: PostListUserUnsubscribeCategoryParamsSchema,
         },
       },
       required: true,
@@ -145,7 +148,7 @@ export const postListUserUnsubscribeCategoryRoute = createRoute({
       description: 'User unsubscribed to all given categories',
       content: {
         'application/json': {
-          schema: PostUserUnsubscribeCategorySchema,
+          schema: PostListUserUnsubscribeCategoryResponseSchema,
         },
       },
       400: {

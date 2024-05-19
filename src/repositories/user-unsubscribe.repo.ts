@@ -80,8 +80,7 @@ export async function postListUserUnsubcribeCategory(
     .insert(userUnsubscribeCategories)
     .values(q)
     .onConflictDoNothing()
-    .returning()
-    .then(firstSure);
+    .returning();
 }
 
 /**

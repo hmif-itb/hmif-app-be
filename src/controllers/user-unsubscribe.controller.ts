@@ -16,7 +16,7 @@ import {
   deleteUserUnsubscribeCategoryRoute,
 } from '~/routes/user-unsubscribe.route';
 import {
-  GetUserUnsubscribeCategorySchema,
+  GetUserUnsubscribeCategoryResponseSchema,
   PostUserUnsubscribeCategorySchema,
 } from '~/types/user-unsubscribe.types';
 import { z } from 'zod';
@@ -43,15 +43,13 @@ userUnsubscribeRouter.openapi(getUserUnsubscribeCategoryRoute, async (c) => {
       categoryId,
     });
 
-    let response = {};
+    let response: z.infer<typeof GetUserUnsubscribeCategoryResponseSchema> = {
+      userId: id,
+      categoryId,
+      unsubscribed: false,
+    };
 
-    if (!category) {
-      response = {
-        userId: id,
-        categoryId,
-        unsubscribed: false,
-      };
-    } else {
+    if (category) {
       response = {
         ...category,
         unsubscribed: true,
@@ -103,12 +101,21 @@ userUnsubscribeRouter.openapi(postUserUnsubscribeCategoryRoute, async (c) => {
 
     if (requiredPush) {
       return c.json(
-        { error: 'Subscription to this category is required!' },
+        {
+          error: `Subscription to category with id '${categoryId}' is required!`,
+        },
         400,
       );
     }
 
-    const res = await postUserUnsubcribeCategory(db, data);
+    let res = await postUserUnsubcribeCategory(db, data);
+    if (!res) {
+      // If unsubscription is already in DB
+      res = {
+        userId: id,
+        categoryId,
+      };
+    }
     return c.json(res, 201);
   } catch (e) {
     return c.json({ error: 'Something went wrong!' }, 500);
@@ -130,7 +137,6 @@ userUnsubscribeRouter.openapi(
     > = [];
 
     categoryIds.forEach((categoryId) => {
-      // TODO: CHECK IF CATEGORY IS REQUIRED. IF NOT, ADD data TO subsNotRequired. IF YES, ADD categoryId TO subsRequired
       checkRequiredPromises.push(checkRequired(db, categoryId));
     });
 
@@ -138,7 +144,7 @@ userUnsubscribeRouter.openapi(
     res.forEach((result) => {
       if (result.status === 'fulfilled') {
         // Category was not found
-        if (result.value.id === null) {
+        if (result.value.requiredPush === null) {
           categoriesNotFound.push(result.value.id);
         } else if (result.value.requiredPush) {
           subsRequired.push(result.value.id);
@@ -168,9 +174,22 @@ userUnsubscribeRouter.openapi(
         db,
         categoriesToUnsubscribe,
       );
+
+      const categoriesAlreadyUnsubscribed: string[] = [];
+      const insertedCategoriesSet = new Set(res.map((data) => data.categoryId));
+
+      categoriesToUnsubscribe.forEach((data) => {
+        if (!insertedCategoriesSet.has(data.categoryId)) {
+          categoriesAlreadyUnsubscribed.push(data.categoryId);
+        }
+      });
+
       const returnObj = {
-        ...res,
+        userId: id,
+        categoryId: res.map((data) => data.categoryId),
         requiredSubscriptions: subsRequired,
+        categoriesNotFound,
+        categoriesAlreadyUnsubscribed,
       };
       return c.json(returnObj, 201);
     } catch (e) {
@@ -184,6 +203,14 @@ userUnsubscribeRouter.openapi(deleteUserUnsubscribeCategoryRoute, async (c) => {
   const { categoryId } = c.req.valid('json');
 
   try {
+    const categoryExist = await isCategoryExists(db, categoryId);
+    if (!categoryExist) {
+      return c.json(
+        { error: `Category with id ${categoryId} does not exist!` },
+        400,
+      );
+    }
+
     const res = await deleteUserUnsubscribeCategory(
       db,
       {
