@@ -15,8 +15,13 @@ import {
   deleteListUserUnsubscribeRoute,
   deleteUserUnsubscribeCategoryRoute,
 } from '~/routes/user-unsubscribe.route';
-import { PostUserUnsubscribeCategorySchema } from '~/types/user-unsubscribe.types';
+import {
+  GetUserUnsubscribeCategorySchema,
+  PostUserUnsubscribeCategorySchema,
+} from '~/types/user-unsubscribe.types';
 import { z } from 'zod';
+import { checkRequired, isCategoryExists } from '~/repositories/category.repo';
+import { CategoryNotFoundSchema, CategorySchema } from '~/types/category.types';
 
 export const userUnsubscribeRouter = createAuthRouter();
 
@@ -24,23 +29,39 @@ userUnsubscribeRouter.openapi(getUserUnsubscribeCategoryRoute, async (c) => {
   const { id } = c.var.user;
   const { categoryId } = c.req.valid('param');
 
-  const category = await getUserUnsubscribeCategory(db, {
-    userId: id,
-    categoryId,
-  });
+  try {
+    const categoryExist = await isCategoryExists(db, categoryId);
+    if (!categoryExist) {
+      return c.json(
+        { error: `Category with id ${categoryId} does not exist!` },
+        400,
+      );
+    }
 
-  if (!category) {
-    return c.json(
-      { error: `User is subscribed to the category with id ${categoryId}!` },
-      400,
-    );
+    const category = await getUserUnsubscribeCategory(db, {
+      userId: id,
+      categoryId,
+    });
+
+    let response = {};
+
+    if (!category) {
+      response = {
+        userId: id,
+        categoryId,
+        unsubscribed: false,
+      };
+    } else {
+      response = {
+        ...category,
+        unsubscribed: true,
+      };
+    }
+
+    return c.json(response, 200);
+  } catch (e) {
+    return c.json({ error: 'Something went wrong!' }, 500);
   }
-
-  const response = {
-    ...category,
-    unsubscribed: true,
-  };
-  return c.json(response, 200);
 });
 
 userUnsubscribeRouter.openapi(
@@ -71,12 +92,22 @@ userUnsubscribeRouter.openapi(postUserUnsubscribeCategoryRoute, async (c) => {
     categoryId,
   };
 
-  const requiredToSubscribe = false; // TODO: check if category is required
-  if (requiredToSubscribe) {
-    return c.json({ error: 'Subscription to this category is required!' }, 400);
-  }
-
   try {
+    const { requiredPush } = await checkRequired(db, categoryId);
+    if (requiredPush === null) {
+      return c.json(
+        { error: `Category with id ${categoryId} does not exist!` },
+        400,
+      );
+    }
+
+    if (requiredPush) {
+      return c.json(
+        { error: 'Subscription to this category is required!' },
+        400,
+      );
+    }
+
     const res = await postUserUnsubcribeCategory(db, data);
     return c.json(res, 201);
   } catch (e) {
@@ -90,26 +121,53 @@ userUnsubscribeRouter.openapi(
     const { id } = c.var.user;
     const categoryIds = c.req.valid('json').categoryId;
 
-    const subsNotRequired: Array<
-      z.infer<typeof PostUserUnsubscribeCategorySchema>
+    const subsNotRequired: string[] = [];
+    const subsRequired: string[] = [];
+    const categoriesNotFound: string[] = [];
+
+    const checkRequiredPromises: Array<
+      Promise<z.infer<typeof CategoryNotFoundSchema | typeof CategorySchema>>
     > = [];
-    const subsRequired: Array<
-      z.infer<typeof PostUserUnsubscribeCategorySchema>
-    > = [];
+
     categoryIds.forEach((categoryId) => {
       // TODO: CHECK IF CATEGORY IS REQUIRED. IF NOT, ADD data TO subsNotRequired. IF YES, ADD categoryId TO subsRequired
-      const data = {
-        userId: id,
-        categoryId,
-      };
+      checkRequiredPromises.push(checkRequired(db, categoryId));
+    });
+
+    const res = await Promise.allSettled(checkRequiredPromises);
+    res.forEach((result) => {
+      if (result.status === 'fulfilled') {
+        // Category was not found
+        if (result.value.id === null) {
+          categoriesNotFound.push(result.value.id);
+        } else if (result.value.requiredPush) {
+          subsRequired.push(result.value.id);
+        } else {
+          subsNotRequired.push(result.value.id);
+        }
+      }
     });
 
     if (subsNotRequired.length === 0) {
       return c.json({ error: 'All categories are required!' }, 400);
     }
 
+    const categoriesToUnsubscribe: Array<
+      z.infer<typeof PostUserUnsubscribeCategorySchema>
+    > = [];
+
+    subsNotRequired.forEach((categoryId) => {
+      categoriesToUnsubscribe.push({
+        userId: id,
+        categoryId,
+      });
+    });
+
     try {
-      const res = await postListUserUnsubcribeCategory(db, subsNotRequired);
+      const res = await postListUserUnsubcribeCategory(
+        db,
+        categoriesToUnsubscribe,
+      );
       const returnObj = {
         ...res,
         requiredSubscriptions: subsRequired,

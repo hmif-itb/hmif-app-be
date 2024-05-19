@@ -32,7 +32,6 @@ export const PostUserUnsubscribeCategoryParamsSchema = z.object({
   categoryId: z.string(),
 });
 
-// TODO: ADD DELETE METHODS TYPES
 export const DeleteUserUnsubscribeCategorySchema = createSelectSchema(
   userUnsubscribeCategories,
 );

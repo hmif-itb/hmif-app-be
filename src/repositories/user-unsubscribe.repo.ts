@@ -4,13 +4,17 @@ import { z } from 'zod';
 import {
   DeleteUserUnsubscribeCategorySchema,
   GetUserUnsubscribeCategorySchema,
-  PostListUserUnsubscribeCategorySchema,
   PostUserUnsubscribeCategorySchema,
 } from '~/types/user-unsubscribe.types';
 import { userUnsubscribeCategories } from '~/db/schema';
 import { firstSure } from '~/db/helper';
 
-// Select a specific category
+/**
+ * Check if a user is unsubscribed to a category with the given categoryId
+ * @param db Database to be used
+ * @param q \{userId to be checked, categoryId to be checked\}
+ * @returns \{userId, categoryId\} if the user is unsubscribed to the category, undefined otherwise
+ */
 export async function getUserUnsubscribeCategory(
   db: Database,
   q: z.infer<typeof GetUserUnsubscribeCategorySchema>,
@@ -24,6 +28,12 @@ export async function getUserUnsubscribeCategory(
   });
 }
 
+/**
+ * Get the list of all categories which the user is unsubscribed to
+ * @param db Database to be used
+ * @param userId Id of the user whose unsubscriptions will be checked
+ * @returns Array of categoryIds which the user has unsubscribed to, or an empty array if the user has not unsubscribed to any category
+ */
 export async function getListUserUnsubscribeCategory(
   db: Database,
   userId: string,
@@ -38,7 +48,12 @@ export async function getListUserUnsubscribeCategory(
   return res;
 }
 
-// Insert an unsubscription
+/**
+ * Insert a single category unsubscription
+ * @param db Database to be used
+ * @param q \{userId who unsubcribes, categoryId to be unsubscribed to\}
+ * @returns \{userId, categoryId\}
+ */
 export async function postUserUnsubcribeCategory(
   db: Database,
   q: InferInsertModel<typeof userUnsubscribeCategories>,
@@ -51,7 +66,12 @@ export async function postUserUnsubcribeCategory(
     .then(firstSure);
 }
 
-// Insert multiple unsubscriptions
+/**
+ * Insert multiple category unsubscriptions
+ * @param db Database to be used
+ * @param q Array of \{userId who unsubcribes, categoryId to be unsubscribed to\}
+ * @returns Array of \{userId, categoryId\}
+ */
 export async function postListUserUnsubcribeCategory(
   db: Database,
   q: Array<z.infer<typeof PostUserUnsubscribeCategorySchema>>,
@@ -64,6 +84,12 @@ export async function postListUserUnsubcribeCategory(
     .then(firstSure);
 }
 
+/**
+ * Delete a single category unsubscription (Subscribes a user back to a category)
+ * @param db Database to be used
+ * @param q \{userId who unsubcribes, categoryId to be subscribed to\}
+ * @returns \{userId, categoryId\}
+ */
 export async function deleteUserUnsubscribeCategory(
   db: Database,
   q: z.infer<typeof DeleteUserUnsubscribeCategorySchema>,
