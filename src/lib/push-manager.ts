@@ -17,6 +17,7 @@ export interface PushData {
     }>;
     badge?: string;
     data?: any;
+    body?: string;
     icon?: string;
     image?: string;
     tag?: string;

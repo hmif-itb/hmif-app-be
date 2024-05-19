@@ -1,4 +1,4 @@
-import { InferInsertModel, eq, inArray } from 'drizzle-orm';
+import { InferInsertModel, eq, inArray, isNotNull } from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
 import { pushSubscriptions } from '~/db/schema';
@@ -55,7 +55,9 @@ export async function removeFailedPushSubscriptions(
 }
 
 export async function getAllPushSubscriptions(db: Database) {
-  return await db.query.pushSubscriptions.findMany();
+  return await db.query.pushSubscriptions.findMany({
+    where: isNotNull(pushSubscriptions.userId),
+  });
 }
 
 export async function deleteKeysPushSubscriptions(

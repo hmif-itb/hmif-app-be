@@ -14,4 +14,9 @@ export const PushSubscriptionSchema = z
 
 export const PushBroadcastSchema = z.object({
   title: z.string(),
+  options: z
+    .object({
+      body: z.string().optional(),
+    })
+    .optional(),
 });
