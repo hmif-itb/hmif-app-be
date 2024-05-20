@@ -35,7 +35,7 @@ export const getCategoryByIdRoute = createRoute({
   operationId: 'getCategoryById',
   tags: ['category'],
   method: 'get',
-  path: '/category/{id}',
+  path: '/category/{categoryId}',
   request: {
     params: CategoryParamSchema,
   },

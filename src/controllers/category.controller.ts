@@ -15,8 +15,8 @@ categoryRouter.openapi(getListCategoryRoute, async (c) => {
 
 categoryRouter.openapi(getCategoryByIdRoute, async (c) => {
   try {
-    const { id } = c.req.valid('param');
-    const category = await getCategoryById(db, id);
+    const { categoryId } = c.req.valid('param');
+    const category = await getCategoryById(db, categoryId);
     if (!category) return c.json({ error: 'Category not found' }, 404);
     return c.json(category, 200);
   } catch (err) {
