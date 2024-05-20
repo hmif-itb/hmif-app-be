@@ -42,3 +42,13 @@ export async function checkRequired(db: Database, categoryId: string) {
     requiredPush: category.requiredPush,
   };
 }
+
+export async function getCategoryList(db: Database) {
+  return await db.select().from(categories);
+}
+
+export async function getCategoryById(db: Database, id: string) {
+  return await db.query.categories.findFirst({
+    where: eq(categories.id, id),
+  });
+}

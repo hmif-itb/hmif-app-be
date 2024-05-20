@@ -8,6 +8,7 @@ import { commentRouter } from './comment.controller';
 import { courseRouter } from './course.controller';
 import { reactionRouter } from './reaction.controller';
 import { userUnsubscribeRouter } from './user-unsubscribe.controller';
+import { categoryRouter } from './category.controller';
 
 const unprotectedApiRouter = new OpenAPIHono();
 unprotectedApiRouter.route('/', loginRouter);
@@ -22,6 +23,7 @@ protectedApiRouter.route('/', commentRouter);
 protectedApiRouter.route('/', courseRouter);
 protectedApiRouter.route('/', reactionRouter);
 protectedApiRouter.route('/', userUnsubscribeRouter);
+protectedApiRouter.route('/', categoryRouter);
 
 export const apiRouter = new OpenAPIHono();
 apiRouter.route('/', unprotectedApiRouter);
