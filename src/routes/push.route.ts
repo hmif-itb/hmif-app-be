@@ -51,3 +51,26 @@ export const pushBroadcastRoute = createRoute({
     400: validationErrorResponse,
   },
 });
+
+export const pushLogoutRoute = createRoute({
+  operationId: 'logoutPush',
+  tags: ['push'],
+  method: 'put',
+  path: '/push/logout',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: PushSubscriptionSchema,
+        },
+      },
+      required: true,
+    },
+  },
+  responses: {
+    200: {
+      description: 'Push subscription logged out',
+    },
+    400: validationErrorResponse,
+  },
+});

@@ -1,4 +1,10 @@
-import { InferInsertModel, eq, inArray, isNotNull } from 'drizzle-orm';
+import {
+  InferInsertModel,
+  and,
+  eq,
+  inArray,
+  isNotNull,
+} from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
 import { pushSubscriptions } from '~/db/schema';
@@ -60,16 +66,21 @@ export async function getAllPushSubscriptions(db: Database) {
   });
 }
 
-export async function deleteKeysPushSubscriptions(
+export async function putLogoutPushSubscriptions(
   db: Database,
-  userId: string,
+  data: Omit<InferInsertModel<typeof pushSubscriptions>, 'createdAt'>,
 ) {
   const pushSubscription = await db
     .update(pushSubscriptions)
     .set({
-      keys: null,
+      userId: null,
     })
-    .where(eq(pushSubscriptions.userId, userId))
+    .where(
+      and(
+        eq(pushSubscriptions.keys, data.keys),
+        eq(pushSubscriptions.endpoint, data.endpoint),
+      ),
+    )
     .returning()
     .then(first);
   return pushSubscription;

@@ -63,7 +63,7 @@ export const pushSubscriptions = pgTable(
     userId: text('user_id').references(() => users.id, {
       onDelete: 'set null',
     }),
-    keys: json('keys').$type<webpush.PushSubscription['keys']>(),
+    keys: json('keys').$type<webpush.PushSubscription['keys']>().notNull(),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
