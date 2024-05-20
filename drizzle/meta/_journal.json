@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1715755342617,
-      "tag": "0000_round_squadron_sinister",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1715786516495,
-      "tag": "0001_robust_avengers",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1715825501583,
-      "tag": "0002_equal_bruce_banner",
+      "when": 1716205876620,
+      "tag": "0000_sleepy_hydra",
       "breakpoints": true
     }
   ]

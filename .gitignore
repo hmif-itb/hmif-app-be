@@ -3,3 +3,4 @@ node_modules
 
 # Ignore seed csv data
 src/db/seed/database.csv
+src/db/seed/database-all.csv

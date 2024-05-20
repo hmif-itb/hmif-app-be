@@ -115,6 +115,7 @@ export const infos = pgTable('infos', {
   creatorId: text('creator_id')
     .references(() => users.id, { onDelete: 'cascade' })
     .notNull(),
+  title: text('title').notNull(),
   content: text('content').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
