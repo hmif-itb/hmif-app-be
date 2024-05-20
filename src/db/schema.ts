@@ -412,10 +412,14 @@ export const infoCategoriesRelation = relations(infoCategories, ({ one }) => ({
 export const userCourses = pgTable(
   'user_courses',
   {
-    userId: text('user_id').references(() => users.id, { onDelete: 'cascade' }),
-    courseId: text('course_id').references(() => courses.id, {
-      onDelete: 'cascade',
-    }),
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    courseId: text('course_id')
+      .references(() => courses.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
     class: integer('class').notNull(),
     semesterCodeTaken: text('semester_code_taken', {
       enum: ['Ganjil', 'Genap'],

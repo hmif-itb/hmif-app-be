@@ -11,3 +11,9 @@ export const ListCategorySchema = z.object({
 export const CategoryParamSchema = z.object({
   categoryId: z.string(),
 });
+
+export const CategoryNotFoundSchema = createSelectSchema(categories, {
+  id: z.string(),
+  name: z.null(),
+  requiredPush: z.null(),
+});
