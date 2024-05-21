@@ -1,6 +1,6 @@
 {
-  "id": "ec9a279a-08a3-4578-8eef-4a3976d537a8",
-  "prevId": "38be6ac6-fe63-418c-9fcb-aee4d5feee48",
+  "id": "76ca4631-434e-411e-ab63-57cd64fbcd1c",
+  "prevId": "b141f29d-51bf-45ff-85a2-d42f891d58f5",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -551,6 +551,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "content": {
           "name": "content",
           "type": "text",
@@ -830,13 +836,13 @@
           "name": "user_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "course_id": {
           "name": "course_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "class": {
           "name": "class",
