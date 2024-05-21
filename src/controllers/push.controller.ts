@@ -11,8 +11,9 @@ import {
   pushLogoutRoute,
   registerPushRoute,
 } from '~/routes/push.route';
-import { createAuthRouter } from './router-factory';
+import { createAuthRouter, createRouter } from './router-factory';
 
+export const pushPubRouter = createRouter();
 export const pushRouter = createAuthRouter();
 
 pushRouter.openapi(registerPushRoute, async (c) => {
@@ -35,7 +36,7 @@ pushRouter.openapi(pushBroadcastRoute, async (c) => {
   return c.json({}, 200);
 });
 
-pushRouter.openapi(pushLogoutRoute, async (c) => {
+pushPubRouter.openapi(pushLogoutRoute, async (c) => {
   await putLogoutPushSubscriptions(db, {
     ...c.req.valid('json'),
   });

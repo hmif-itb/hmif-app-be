@@ -1,6 +1,7 @@
 import { createRoute } from '@hono/zod-openapi';
 import {
   PushBroadcastSchema,
+  PushLogoutSchema,
   PushSubscriptionSchema,
 } from '~/types/push.types';
 import { validationErrorResponse } from '~/types/responses.type';
@@ -61,7 +62,7 @@ export const pushLogoutRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: PushSubscriptionSchema,
+          schema: PushLogoutSchema,
         },
       },
       required: true,

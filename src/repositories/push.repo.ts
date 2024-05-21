@@ -62,7 +62,7 @@ export async function getAllPushSubscriptions(db: Database) {
 
 export async function putLogoutPushSubscriptions(
   db: Database,
-  data: Omit<InferInsertModel<typeof pushSubscriptions>, 'createdAt'>,
+  data: { endpoint: string },
 ) {
   const pushSubscription = await db
     .update(pushSubscriptions)
