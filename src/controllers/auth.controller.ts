@@ -28,8 +28,6 @@ const generateJWT = async (payload: object) => {
     {
       ...payload,
       exp: now.valueOf() / 1000 + parseInt(env.TOKEN_EXPIRATION),
-      iat: now.valueOf() / 1000,
-      nbf: now.valueOf() / 1000,
     },
     env.JWT_SECRET,
   );
