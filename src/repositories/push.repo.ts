@@ -60,16 +60,16 @@ export async function getAllPushSubscriptions(db: Database) {
   });
 }
 
-export async function deleteKeysPushSubscriptions(
+export async function putLogoutPushSubscriptions(
   db: Database,
-  userId: string,
+  data: { endpoint: string },
 ) {
   const pushSubscription = await db
     .update(pushSubscriptions)
     .set({
-      keys: null,
+      userId: null,
     })
-    .where(eq(pushSubscriptions.userId, userId))
+    .where(eq(pushSubscriptions.endpoint, data.endpoint))
     .returning()
     .then(first);
   return pushSubscription;

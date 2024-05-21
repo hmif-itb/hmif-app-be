@@ -1,0 +1,1 @@
+ALTER TABLE "push_subscriptions" ALTER COLUMN "keys" SET NOT NULL;
