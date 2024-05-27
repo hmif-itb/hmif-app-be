@@ -3,7 +3,10 @@ import { deleteCookie, setCookie } from 'hono/cookie';
 import { sign } from 'hono/jwt';
 import { env } from '~/configs/env.config';
 import { db } from '~/db/drizzle';
-import { findUserByEmail } from '~/repositories/auth.repo';
+import {
+  findUserByEmail,
+  getUserAndUpdatePicture,
+} from '~/repositories/auth.repo';
 import {
   GoogleTokenDataSchema,
   GoogleUserSchema,
@@ -66,7 +69,7 @@ loginRouter.openapi(loginAccessTokenRoute, async (c) => {
     const userInfo = GoogleUserSchema.parse(await userInfoResponse.json());
     // Find user in db, if not found return forbidden
     const { email, picture } = userInfo;
-    const user = await findUserByEmail(db, email);
+    const user = await getUserAndUpdatePicture(db, email, picture);
     if (!user) {
       return c.json(
         {
@@ -77,7 +80,7 @@ loginRouter.openapi(loginAccessTokenRoute, async (c) => {
     }
 
     // Create cookie
-    const tokenPayload = JWTPayloadSchema.parse({ ...user, picture });
+    const tokenPayload = JWTPayloadSchema.parse(user);
     const token = await generateJWT(tokenPayload);
 
     setCookie(c, 'hmif-app.access-cookie', token, {

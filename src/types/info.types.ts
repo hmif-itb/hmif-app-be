@@ -7,10 +7,11 @@ import {
   infoMedias,
   infos,
 } from '~/db/schema';
-import { CategorySchema } from './category.types';
-import { MediaSchema } from './media.types';
 import { AngkatanSchema } from './angkatan.types';
+import { CategorySchema } from './category.types';
 import { CourseSchema } from './course.types';
+import { JWTPayloadSchema } from './login.types';
+import { MediaSchema } from './media.types';
 import { ReactionResponseSchema } from './reaction.types';
 
 export const InfoCategorySchema = createSelectSchema(infoCategories).extend({
@@ -38,6 +39,7 @@ export const InfoSchema = createSelectSchema(infos, {
     infoCourses: z.array(InfoCourseSchema).optional(),
     infoAngkatan: z.array(InfoAngkatanSchema).optional(),
     reactions: ReactionResponseSchema.optional(),
+    creator: JWTPayloadSchema,
   })
   .openapi('Info');
 

@@ -10,9 +10,9 @@ import {
 import {
   createInfoRoute,
   deleteInfoRoute,
-  postReadInfoRoute,
-  getListInfoRoute,
   getInfoByIdRoute,
+  getListInfoRoute,
+  postReadInfoRoute,
 } from '~/routes/info.route';
 import { createAuthRouter } from './router-factory';
 
