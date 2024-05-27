@@ -1,6 +1,7 @@
 import { createId } from '@paralleldrive/cuid2';
 import { InferSelectModel, relations } from 'drizzle-orm';
 import {
+  boolean,
   index,
   integer,
   json,
@@ -9,7 +10,6 @@ import {
   text,
   timestamp,
   unique,
-  boolean,
 } from 'drizzle-orm/pg-core';
 import webpush from 'web-push';
 
@@ -21,6 +21,7 @@ export const users = pgTable(
     email: text('email').unique().notNull(),
     fullName: text('full_name').notNull(),
     major: text('jurusan', { enum: ['IF', 'STI'] }).notNull(),
+    picture: text('picture'),
     region: text('asal_kampus', {
       enum: ['Ganesha', 'Jatinangor'],
     }).notNull(),

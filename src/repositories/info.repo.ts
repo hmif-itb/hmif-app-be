@@ -194,6 +194,7 @@ export async function getListInfos(
           angkatan: true,
         },
       },
+      creator: true,
     },
   });
 
@@ -231,6 +232,7 @@ export async function getInfoById(db: Database, id: string) {
           angkatan: true,
         },
       },
+      creator: true,
     },
   });
 

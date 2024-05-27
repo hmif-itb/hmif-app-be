@@ -53,7 +53,7 @@ export const createInfoRoute = createRoute({
       description: 'Info created',
       content: {
         'application/json': {
-          schema: InfoSchema,
+          schema: InfoSchema.omit({ creator: true }),
         },
       },
     },
