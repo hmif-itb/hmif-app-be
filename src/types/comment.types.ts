@@ -1,10 +1,13 @@
 import { z } from '@hono/zod-openapi';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { comments } from '~/db/schema';
+import { JWTPayloadSchema } from './login.types';
 
 export const CommentSchema = createSelectSchema(comments, {
   createdAt: z.union([z.string(), z.date()]),
-}).openapi('Comment');
+})
+  .extend({ creator: JWTPayloadSchema })
+  .openapi('Comment');
 
 export const CommentListSchema = z.object({
   comment: z.array(CommentSchema),

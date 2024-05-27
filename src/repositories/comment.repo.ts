@@ -2,12 +2,12 @@ import { and, asc, count, desc, eq, getTableColumns } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
-import { comments, reactions } from '~/db/schema';
+import { comments, reactions, users } from '~/db/schema';
 import {
-  CommentUpdateBodySchema,
   CommentIdParamSchema,
   CommentListQuerySchema,
   CommentPostBodySchema,
+  CommentUpdateBodySchema,
 } from '~/types/comment.types';
 
 export async function getCommentList(
@@ -24,10 +24,11 @@ export async function getCommentList(
   const where = and(infoIdQ);
 
   const result = await db
-    .select({ ...getTableColumns(comments) })
+    .select({ ...getTableColumns(comments), creator: users })
     .from(comments)
     .where(where)
     .leftJoin(reactions, eq(reactions.commentId, comments.id))
+    .innerJoin(users, eq(users.id, comments.creatorId))
     .orderBy(sortQ)
     .groupBy(comments.id);
   return result;
@@ -39,6 +40,9 @@ export async function getCommentById(
 ) {
   return await db.query.comments.findFirst({
     where: eq(comments.id, q.commentId),
+    with: {
+      creator: true,
+    },
   });
 }
 

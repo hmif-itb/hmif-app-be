@@ -1,20 +1,20 @@
+import { PostgresError } from 'postgres';
+import { db } from '~/db/drizzle';
 import {
-  getCommentsListRoute,
-  getCommentsByIdRoute,
-  postCommentRoute,
+  createComment,
+  deleteComment,
+  getCommentById,
+  getCommentList,
+  updateCommentContent,
+} from '~/repositories/comment.repo';
+import {
   deleteCommentRoute,
+  getCommentsByIdRoute,
+  getCommentsListRoute,
+  postCommentRoute,
   updateCommentContentRoute,
 } from '~/routes/comment.route';
 import { createAuthRouter } from './router-factory';
-import {
-  getCommentList,
-  getCommentById,
-  createComment,
-  deleteComment,
-  updateCommentContent,
-} from '~/repositories/comment.repo';
-import { db } from '~/db/drizzle';
-import { PostgresError } from 'postgres';
 
 export const commentRouter = createAuthRouter();
 
@@ -38,7 +38,7 @@ commentRouter.openapi(postCommentRoute, async (c) => {
     const data = c.req.valid('json');
     const userId = c.var.user.id;
     const comment = await createComment(db, data, userId);
-    return c.json(comment, 201);
+    return c.json({ ...comment, creator: c.var.user }, 201);
   } catch (err) {
     if (err instanceof PostgresError)
       return c.json({ error: err.message }, 400);
@@ -53,7 +53,7 @@ commentRouter.openapi(deleteCommentRoute, async (c) => {
     if (!comment) {
       return c.json({ error: 'Comment not found' }, 404);
     }
-    return c.json(comment, 200);
+    return c.json({ ...comment, creator: c.var.user }, 200);
   } catch (err) {
     return c.json(err, 500);
   }
@@ -65,7 +65,7 @@ commentRouter.openapi(updateCommentContentRoute, async (c) => {
     const param = c.req.valid('param');
     const comment = await updateCommentContent(db, param, data);
     if (!comment) return c.json({ error: 'Comment not found' }, 404);
-    return c.json(comment, 200);
+    return c.json({ ...comment, creator: c.var.user }, 200);
   } catch (e) {
     if (e instanceof Error) return c.json({ error: e.message }, 400);
     return c.json({ error: 'Bad request' }, 400);

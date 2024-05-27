@@ -1,16 +1,16 @@
 import { createRoute, z } from '@hono/zod-openapi';
 import {
+  CommentIdParamSchema,
   CommentListQuerySchema,
   CommentListSchema,
-  CommentIdParamSchema,
-  CommentSchema,
   CommentPostBodySchema,
+  CommentSchema,
   CommentUpdateBodySchema,
 } from '~/types/comment.types';
 import {
   ErrorSchema,
-  validationErrorResponse,
   ValidationErrorSchema,
+  validationErrorResponse,
 } from '~/types/responses.type';
 
 export const getCommentsListRoute = createRoute({
