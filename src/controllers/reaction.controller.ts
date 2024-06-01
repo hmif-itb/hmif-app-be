@@ -6,7 +6,8 @@ import {
 } from '~/repositories/reaction.repo';
 import {
   CreateOrUpdateReactionRoute,
-  deleteReactionRoute,
+  deleteCommentReactionRoute,
+  deleteInfoReactionRoute,
   getReactionsRoute,
 } from '~/routes/reaction.route';
 import { createAuthRouter } from './router-factory';
@@ -58,10 +59,32 @@ reactionRouter.openapi(CreateOrUpdateReactionRoute, async (c) => {
   }
 });
 
-reactionRouter.openapi(deleteReactionRoute, async (c) => {
+reactionRouter.openapi(deleteCommentReactionRoute, async (c) => {
   try {
-    const { reactionId } = c.req.valid('param');
-    const reaction = await deleteReaction(db, reactionId);
+    const { commentId } = c.req.valid('param');
+    const reaction = await deleteReaction(
+      db,
+      commentId,
+      c.var.user.id,
+      'comment',
+    );
+
+    if (!reaction) return c.json({ error: 'Reaction not found' }, 404);
+    return c.json(reaction, 200);
+  } catch (err) {
+    return c.json(
+      {
+        error: 'Something went wrong',
+      },
+      400,
+    );
+  }
+});
+
+reactionRouter.openapi(deleteInfoReactionRoute, async (c) => {
+  try {
+    const { infoId } = c.req.valid('param');
+    const reaction = await deleteReaction(db, infoId, c.var.user.id, 'info');
 
     if (!reaction) return c.json({ error: 'Reaction not found' }, 404);
     return c.json(reaction, 200);

@@ -1,11 +1,12 @@
 import { createRoute } from '@hono/zod-openapi';
 import { z } from 'zod';
 import {
-  ReactionSchema,
-  ReactionIdSchema,
+  CommentIdSchema,
+  CreateOrUpdateReactionParamsSchema,
+  InfoIdSchema,
   ReactionQuerySchema,
   ReactionResponseSchema,
-  CreateOrUpdateReactionParamsSchema,
+  ReactionSchema,
 } from '~/types/reaction.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
@@ -79,13 +80,49 @@ export const CreateOrUpdateReactionRoute = createRoute({
   },
 });
 
-export const deleteReactionRoute = createRoute({
-  operationId: 'deleteReaction',
+export const deleteCommentReactionRoute = createRoute({
+  operationId: 'deleteCommentReaction',
   tags: ['reaction'],
   method: 'delete',
-  path: '/reaction/{reactionId}',
+  path: '/reaction/comment/{reactionId}',
   request: {
-    params: ReactionIdSchema,
+    params: CommentIdSchema,
+  },
+  responses: {
+    200: {
+      description: 'Reaction deleted',
+      content: {
+        'application/json': {
+          schema: ReactionSchema,
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ValidationErrorSchema, ErrorSchema]),
+        },
+      },
+    },
+    404: {
+      description: 'Not found',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
+        },
+      },
+    },
+  },
+});
+
+export const deleteInfoReactionRoute = createRoute({
+  operationId: 'deleteInfoReaction',
+  tags: ['reaction'],
+  method: 'delete',
+  path: '/reaction/info/{reactionId}',
+  request: {
+    params: InfoIdSchema,
   },
   responses: {
     200: {

@@ -47,3 +47,11 @@ export const ReactionResponseSchema = z
 export const ReactionIdSchema = z.object({
   reactionId: z.string(),
 });
+
+export const CommentIdSchema = z.object({
+  commentId: z.string(),
+});
+
+export const InfoIdSchema = z.object({
+  infoId: z.string(),
+});

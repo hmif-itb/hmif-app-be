@@ -65,10 +65,22 @@ export async function createOrUpdateReaction(
   return reaction;
 }
 
-export async function deleteReaction(db: Database, id: string) {
+export async function deleteReaction(
+  db: Database,
+  id: string,
+  userId: string,
+  type: 'comment' | 'info',
+) {
   return await db
     .delete(reactions)
-    .where(eq(reactions.id, id))
+    .where(
+      and(
+        eq(reactions.creatorId, userId),
+        type === 'comment'
+          ? eq(reactions.commentId, id)
+          : eq(reactions.infoId, id),
+      ),
+    )
     .returning()
     .then(firstSure);
 }
