@@ -1,4 +1,4 @@
-import { count, eq, inArray } from 'drizzle-orm';
+import { and, count, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
@@ -12,6 +12,7 @@ import {
 export async function getReactions(
   db: Database,
   q: z.infer<typeof ReactionQuerySchema>,
+  userId: string,
 ) {
   const where = q.infoId
     ? eq(reactions.infoId, q.infoId)
@@ -27,10 +28,18 @@ export async function getReactions(
     .from(reactions)
     .where(where)
     .groupBy(reactions.reaction);
+  const userReaction = await db
+    .select({
+      reaction: reactions.reaction,
+    })
+    .from(reactions)
+    .where(and(eq(reactions.creatorId, userId), where))
+    .then(first);
 
   const result: z.infer<typeof ReactionResponseSchema> = {
     totalReactions: reactionCount.reduce((acc, r) => acc + r.count, 0),
     reactionsCount: reactionCount,
+    userReaction: userReaction?.reaction,
   };
 
   return result;
@@ -67,7 +76,11 @@ export async function deleteReaction(db: Database, id: string) {
 /**
  * Get batch of comments reactions
  */
-export async function getCommentsReactions(db: Database, commentIds: string[]) {
+export async function getCommentsReactions(
+  db: Database,
+  commentIds: string[],
+  userId: string,
+) {
   const where = inArray(reactions.commentId, commentIds);
 
   const reactionCount = await db
@@ -79,6 +92,13 @@ export async function getCommentsReactions(db: Database, commentIds: string[]) {
     .from(reactions)
     .where(where)
     .groupBy(reactions.reaction, reactions.commentId);
+  const userReactions = await db
+    .select({
+      reaction: reactions.reaction,
+      commentId: reactions.commentId,
+    })
+    .from(reactions)
+    .where(and(eq(reactions.creatorId, userId), where));
 
   const result: Record<string, z.infer<typeof ReactionResponseSchema>> = {};
   reactionCount.forEach((r) => {
@@ -89,6 +109,8 @@ export async function getCommentsReactions(db: Database, commentIds: string[]) {
       result[r.commentId] = {
         totalReactions: 0,
         reactionsCount: [],
+        userReaction: userReactions.find((ur) => ur.commentId === r.commentId)
+          ?.reaction,
       };
     }
     result[r.commentId].totalReactions += r.count;

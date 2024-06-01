@@ -40,6 +40,7 @@ export const ReactionResponseSchema = z
   .object({
     totalReactions: z.number(),
     reactionsCount: ReactionCountSchema,
+    userReaction: z.string().optional(),
   })
   .openapi('ReactionAggregate');
 

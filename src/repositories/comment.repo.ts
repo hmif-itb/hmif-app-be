@@ -14,6 +14,7 @@ import { getCommentsReactions } from './reaction.repo';
 export async function getCommentList(
   db: Database,
   q: z.infer<typeof CommentListQuerySchema>,
+  userId: string,
 ) {
   const infoIdQ = q.infoId ? eq(comments.repliedInfoId, q.infoId) : undefined;
   const sortQ =
@@ -31,6 +32,7 @@ export async function getCommentList(
   const reactions = await getCommentsReactions(
     db,
     result.map((r) => r.id),
+    userId,
   );
   return result.map((r) => ({
     ...r,

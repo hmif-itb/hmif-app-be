@@ -20,7 +20,7 @@ export const commentRouter = createAuthRouter();
 
 commentRouter.openapi(getCommentsListRoute, async (c) => {
   const query = c.req.valid('query');
-  const comment = await getCommentList(db, query);
+  const comment = await getCommentList(db, query, c.var.user.id);
   return c.json({ comment }, 200);
 });
 

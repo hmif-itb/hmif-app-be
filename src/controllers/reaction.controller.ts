@@ -1,4 +1,4 @@
-import { createAuthRouter } from './router-factory';
+import { db } from '~/db/drizzle';
 import {
   createOrUpdateReaction,
   deleteReaction,
@@ -9,13 +9,17 @@ import {
   deleteReactionRoute,
   getReactionsRoute,
 } from '~/routes/reaction.route';
-import { db } from '~/db/drizzle';
+import { createAuthRouter } from './router-factory';
 
 export const reactionRouter = createAuthRouter();
 
 reactionRouter.openapi(getReactionsRoute, async (c) => {
   try {
-    const reactions = await getReactions(db, c.req.valid('query'));
+    const reactions = await getReactions(
+      db,
+      c.req.valid('query'),
+      c.var.user.id,
+    );
     if (!reactions) return c.json({ error: 'No reactions found' }, 404);
     return c.json(reactions, 200);
   } catch (err) {
