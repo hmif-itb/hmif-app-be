@@ -30,7 +30,7 @@ export async function getCommentList(
     .leftJoin(reactions, eq(reactions.commentId, comments.id))
     .innerJoin(users, eq(users.id, comments.creatorId))
     .orderBy(sortQ)
-    .groupBy(comments.id);
+    .groupBy(comments.id, users.id);
   return result;
 }
 
