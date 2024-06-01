@@ -200,7 +200,7 @@ export async function getListInfos(
 
   listInfo = await Promise.all(
     listInfo.map(async (info) => {
-      const reactions = await getReactions(db, { infoId: info?.id });
+      const reactions = await getReactions(db, { infoId: info?.id }, userId);
       return { ...info, reactions };
     }),
   );
@@ -208,7 +208,7 @@ export async function getListInfos(
   return listInfo;
 }
 
-export async function getInfoById(db: Database, id: string) {
+export async function getInfoById(db: Database, id: string, userId: string) {
   const info = await db.query.infos.findFirst({
     where: eq(infos.id, id),
     with: {
@@ -239,6 +239,6 @@ export async function getInfoById(db: Database, id: string) {
   if (!info) return info;
 
   // If user is found, then add reactions to the object
-  const reactions = await getReactions(db, { infoId: info?.id });
+  const reactions = await getReactions(db, { infoId: info?.id }, userId);
   return { ...info, reactions };
 }

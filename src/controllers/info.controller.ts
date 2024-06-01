@@ -87,7 +87,7 @@ infoRouter.openapi(getListInfoRoute, async (c) => {
 infoRouter.openapi(getInfoByIdRoute, async (c) => {
   try {
     const { infoId } = c.req.valid('param');
-    const info = await getInfoById(db, infoId);
+    const info = await getInfoById(db, infoId, c.var.user.id);
     if (!info) {
       return c.json({ error: 'Info not found' }, 404);
     }
