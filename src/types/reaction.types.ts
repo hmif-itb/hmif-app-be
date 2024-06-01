@@ -1,4 +1,4 @@
-import { createSelectSchema, createInsertSchema } from 'drizzle-zod';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { reactions } from '~/db/schema';
 
@@ -36,10 +36,12 @@ export const ReactionCountSchema = z
   })
   .array();
 
-export const ReactionResponseSchema = z.object({
-  totalReactions: z.number(),
-  reactionsCount: ReactionCountSchema,
-});
+export const ReactionResponseSchema = z
+  .object({
+    totalReactions: z.number(),
+    reactionsCount: ReactionCountSchema,
+  })
+  .openapi('ReactionAggregate');
 
 export const ReactionIdSchema = z.object({
   reactionId: z.string(),

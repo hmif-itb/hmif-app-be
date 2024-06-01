@@ -2,6 +2,7 @@ import { z } from '@hono/zod-openapi';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { comments } from '~/db/schema';
 import { JWTPayloadSchema } from './login.types';
+import { ReactionResponseSchema } from './reaction.types';
 
 export const CommentSchema = createSelectSchema(comments, {
   createdAt: z.union([z.string(), z.date()]),
@@ -10,7 +11,11 @@ export const CommentSchema = createSelectSchema(comments, {
   .openapi('Comment');
 
 export const CommentListSchema = z.object({
-  comment: z.array(CommentSchema),
+  comment: z.array(
+    CommentSchema.extend({ reactions: ReactionResponseSchema }).openapi(
+      'CommentWithReactions',
+    ),
+  ),
 });
 
 export const CommentListQuerySchema = z.object({
@@ -22,7 +27,7 @@ export const CommentListQuerySchema = z.object({
     },
   }),
   sort: z
-    .enum(['popular', 'oldest', 'newest'])
+    .enum(['oldest', 'newest'])
     .optional()
     .default('newest')
     .openapi({

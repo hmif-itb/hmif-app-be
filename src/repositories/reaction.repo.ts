@@ -1,14 +1,13 @@
-import { first, firstSure } from '~/db/helper';
+import { count, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
+import { Database } from '~/db/drizzle';
+import { first, firstSure } from '~/db/helper';
 import { reactions } from '~/db/schema';
 import {
+  CreateOrUpdateReactionSchema,
   ReactionQuerySchema,
   ReactionResponseSchema,
-  ReactionCountSchema,
-  CreateOrUpdateReactionSchema,
 } from '~/types/reaction.types';
-import { Database } from '~/db/drizzle';
-import { count, eq } from 'drizzle-orm';
 
 export async function getReactions(
   db: Database,
@@ -23,26 +22,15 @@ export async function getReactions(
   const reactionCount = await db
     .select({
       reaction: reactions.reaction,
-      reactionsCount: count(reactions.reaction),
+      count: count(reactions.reaction),
     })
     .from(reactions)
     .where(where)
     .groupBy(reactions.reaction);
-  // if (!reactionCount.length) return null; // No reactions found
-
-  let total = 0;
-  const reactionsMap: z.infer<typeof ReactionCountSchema> = [];
-  for (const r of reactionCount) {
-    total += r.reactionsCount;
-    reactionsMap.push({
-      reaction: r.reaction,
-      count: r.reactionsCount,
-    });
-  }
 
   const result: z.infer<typeof ReactionResponseSchema> = {
-    totalReactions: total,
-    reactionsCount: reactionsMap,
+    totalReactions: reactionCount.reduce((acc, r) => acc + r.count, 0),
+    reactionsCount: reactionCount,
   };
 
   return result;
@@ -74,4 +62,41 @@ export async function deleteReaction(db: Database, id: string) {
     .where(eq(reactions.id, id))
     .returning()
     .then(firstSure);
+}
+
+/**
+ * Get batch of comments reactions
+ */
+export async function getCommentsReactions(db: Database, commentIds: string[]) {
+  const where = inArray(reactions.commentId, commentIds);
+
+  const reactionCount = await db
+    .select({
+      reaction: reactions.reaction,
+      count: count(reactions.reaction),
+      commentId: reactions.commentId,
+    })
+    .from(reactions)
+    .where(where)
+    .groupBy(reactions.reaction, reactions.commentId);
+
+  const result: Record<string, z.infer<typeof ReactionResponseSchema>> = {};
+  reactionCount.forEach((r) => {
+    if (!r.commentId) {
+      return;
+    }
+    if (!result[r.commentId]) {
+      result[r.commentId] = {
+        totalReactions: 0,
+        reactionsCount: [],
+      };
+    }
+    result[r.commentId].totalReactions += r.count;
+    result[r.commentId].reactionsCount.push({
+      reaction: r.reaction,
+      count: r.count,
+    });
+  });
+
+  return result;
 }

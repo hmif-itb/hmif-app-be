@@ -1,14 +1,15 @@
-import { and, asc, count, desc, eq, getTableColumns } from 'drizzle-orm';
+import { and, asc, desc, eq, getTableColumns } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
-import { comments, reactions, users } from '~/db/schema';
+import { comments, users } from '~/db/schema';
 import {
   CommentIdParamSchema,
   CommentListQuerySchema,
   CommentPostBodySchema,
   CommentUpdateBodySchema,
 } from '~/types/comment.types';
+import { getCommentsReactions } from './reaction.repo';
 
 export async function getCommentList(
   db: Database,
@@ -16,22 +17,25 @@ export async function getCommentList(
 ) {
   const infoIdQ = q.infoId ? eq(comments.repliedInfoId, q.infoId) : undefined;
   const sortQ =
-    q.sort === 'popular'
-      ? desc(count(reactions.commentId))
-      : q.sort === 'oldest'
-        ? asc(comments.createdAt)
-        : desc(comments.createdAt);
+    q.sort === 'oldest' ? asc(comments.createdAt) : desc(comments.createdAt);
   const where = and(infoIdQ);
 
   const result = await db
     .select({ ...getTableColumns(comments), creator: users })
     .from(comments)
     .where(where)
-    .leftJoin(reactions, eq(reactions.commentId, comments.id))
     .innerJoin(users, eq(users.id, comments.creatorId))
     .orderBy(sortQ)
     .groupBy(comments.id, users.id);
-  return result;
+
+  const reactions = await getCommentsReactions(
+    db,
+    result.map((r) => r.id),
+  );
+  return result.map((r) => ({
+    ...r,
+    reactions: reactions[r.id] || [],
+  }));
 }
 
 export async function getCommentById(
