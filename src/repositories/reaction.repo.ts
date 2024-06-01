@@ -93,6 +93,9 @@ export async function getCommentsReactions(
   commentIds: string[],
   userId: string,
 ) {
+  if (commentIds.length === 0) {
+    return {};
+  }
   const where = inArray(reactions.commentId, commentIds);
 
   const reactionCount = await db
