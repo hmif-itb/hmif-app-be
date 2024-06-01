@@ -84,7 +84,7 @@ export const deleteCommentReactionRoute = createRoute({
   operationId: 'deleteCommentReaction',
   tags: ['reaction'],
   method: 'delete',
-  path: '/reaction/comment/{reactionId}',
+  path: '/reaction/comment/{commentId}',
   request: {
     params: CommentIdSchema,
   },
@@ -120,7 +120,7 @@ export const deleteInfoReactionRoute = createRoute({
   operationId: 'deleteInfoReaction',
   tags: ['reaction'],
   method: 'delete',
-  path: '/reaction/info/{reactionId}',
+  path: '/reaction/info/{infoId}',
   request: {
     params: InfoIdSchema,
   },
