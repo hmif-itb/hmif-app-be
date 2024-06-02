@@ -27,8 +27,8 @@ export const GoogleUserSchema = z.object({
   picture: z.string(),
   email: z.string(),
   email_verified: z.string().optional(),
-  locale: z.string(),
-  hd: z.string(),
+  locale: z.string().optional(),
+  hd: z.string().optional(),
 });
 
 export const JWTPayloadSchema = UserSchema.omit({
