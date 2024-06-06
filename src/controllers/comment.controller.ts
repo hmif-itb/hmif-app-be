@@ -1,5 +1,5 @@
-import { PostgresError } from 'postgres';
 import { db } from '~/db/drizzle';
+import { PostgresError } from '~/db/helper';
 import {
   createComment,
   deleteComment,
@@ -42,7 +42,7 @@ commentRouter.openapi(postCommentRoute, async (c) => {
   } catch (err) {
     if (err instanceof PostgresError)
       return c.json({ error: err.message }, 400);
-    return c.json(err, 400);
+    return c.json(err as object, 400);
   }
 });
 
@@ -55,7 +55,7 @@ commentRouter.openapi(deleteCommentRoute, async (c) => {
     }
     return c.json({ ...comment, creator: c.var.user }, 200);
   } catch (err) {
-    return c.json(err, 500);
+    return c.json(err as object, 500);
   }
 });
 

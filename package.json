@@ -5,6 +5,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production tsx src/index.ts",
     "dev": "tsx watch src/index.ts",
+    "dev-bun": "bun run --hot src/index.ts",
     "db:migrations": "drizzle-kit generate",
     "db:migrate": "tsx src/db/migrate.ts",
     "db:seed": "tsx src/db/seed.ts",
@@ -36,6 +37,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/bun": "^1.1.3",
     "@types/node": "^20.11.17",
     "@types/web-push": "^3.6.3",
     "@typescript-eslint/eslint-plugin": "^6.4.0",

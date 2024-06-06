@@ -1,4 +1,3 @@
-import { serve } from '@hono/node-server';
 import { swaggerUI } from '@hono/swagger-ui';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import fs from 'fs';
@@ -54,7 +53,13 @@ app.get('/swagger', swaggerUI({ url: '/doc' }));
 
 console.log(`Server is running on port ${env.PORT}`);
 
-serve({
-  fetch: app.fetch,
-  port: env.PORT,
-});
+if (typeof Bun === 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const serve = require('@hono/node-server');
+  serve({
+    fetch: app.fetch,
+    port: env.PORT,
+  });
+}
+
+export default app;

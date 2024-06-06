@@ -1,28 +1,28 @@
-import {
-  createCourseRoute,
-  deleteCourseRoute,
-  listCourseRoute,
-  getCourseByIdRoute,
-  updateCourseRoute,
-  createUserCourseRoute,
-  getUserCourseRoute,
-  getCurrentUserCourseRoute,
-  deleteUserCourseRoute,
-} from '~/routes/course.route';
-import { createAuthRouter } from './router-factory';
+import { db } from '~/db/drizzle';
+import { PostgresError } from '~/db/helper';
 import {
   createCourse,
-  deleteCourse,
-  getListCourses,
-  getCourseById,
-  updateCourse,
   createUserCourse,
-  getUserCourse,
+  deleteCourse,
   deleteUserCourse,
+  getCourseById,
+  getListCourses,
+  getUserCourse,
+  updateCourse,
 } from '~/repositories/course.repo';
-import { db } from '~/db/drizzle';
-import { PostgresError } from 'postgres';
+import {
+  createCourseRoute,
+  createUserCourseRoute,
+  deleteCourseRoute,
+  deleteUserCourseRoute,
+  getCourseByIdRoute,
+  getCurrentUserCourseRoute,
+  getUserCourseRoute,
+  listCourseRoute,
+  updateCourseRoute,
+} from '~/routes/course.route';
 import { CourseSchema } from '~/types/course.types';
+import { createAuthRouter } from './router-factory';
 
 export const courseRouter = createAuthRouter();
 
@@ -40,7 +40,7 @@ courseRouter.openapi(createUserCourseRoute, async (c) => {
         return c.json({ error: 'Course not found' }, 404);
       return c.json({ error: 'Course has already been taken' }, 400);
     }
-    return c.json(err, 400);
+    return c.json(err as object, 400);
   }
 });
 
@@ -141,7 +141,7 @@ courseRouter.openapi(createCourseRoute, async (c) => {
   } catch (err) {
     if (err instanceof PostgresError)
       return c.json({ error: 'Course has already been created' }, 400);
-    return c.json(err, 400);
+    return c.json(err as object, 400);
   }
 });
 

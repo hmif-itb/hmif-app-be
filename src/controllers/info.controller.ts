@@ -1,5 +1,5 @@
-import { PostgresError } from 'postgres';
 import { db } from '~/db/drizzle';
+import { PostgresError } from '~/db/helper';
 import {
   createInfo,
   createReadInfo,
@@ -33,7 +33,7 @@ infoRouter.openapi(postReadInfoRoute, async (c) => {
   } catch (err) {
     if (err instanceof PostgresError)
       return c.json({ error: 'User have already read this info' }, 400);
-    return c.json(err, 400);
+    return c.json(err as object, 400);
   }
 });
 
@@ -56,7 +56,6 @@ infoRouter.openapi(createInfoRoute, async (c) => {
   } catch (err) {
     if (err instanceof PostgresError)
       return c.json({ error: err.message }, 400);
-    console.log(err);
     return c.json({ error: 'Something went wrong' }, 400);
   }
 });
@@ -70,7 +69,7 @@ infoRouter.openapi(deleteInfoRoute, async (c) => {
     }
     return c.json({}, 200);
   } catch (err) {
-    return c.json(err, 400);
+    return c.json(err as object, 400);
   }
 });
 
@@ -93,6 +92,6 @@ infoRouter.openapi(getInfoByIdRoute, async (c) => {
     }
     return c.json(info, 200);
   } catch (err) {
-    return c.json(err, 500);
+    return c.json(err as object, 500);
   }
 });
