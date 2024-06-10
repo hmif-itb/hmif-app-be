@@ -64,9 +64,12 @@ export const CreateInfoBodySchema = createInsertSchema(infos)
           'https://deleteMediaUrlsFieldIfNoMediaUrls.dev',
         ],
       }),
-    forCategories: z.array(z.string()).openapi({
-      example: ['categoryId1', 'categoryId2'],
-    }),
+    forCategories: z
+      .array(z.string())
+      .min(1)
+      .openapi({
+        example: ['categoryId1', 'categoryId2'],
+      }),
     forAngkatan: z
       .array(z.string())
       .optional()
