@@ -45,7 +45,7 @@ export async function createInfo(
     );
 
     // If mediaUrls is supplied, then create those Media and attach them to the info with InfoMedia
-    if (mediaUrls) {
+    if (mediaUrls && mediaUrls.length > 0) {
       const newMedias = await createMediasFromUrl(
         tx,
         mediaUrls,
@@ -62,7 +62,7 @@ export async function createInfo(
     }
 
     // If forAngkatan is supplied, then attach angkatan to the info with InfoAngkatan
-    if (forAngkatan) {
+    if (forAngkatan && forAngkatan.length > 0) {
       await createInfoAngkatan(
         tx,
         forAngkatan.map((angkatanId) => ({
@@ -73,7 +73,7 @@ export async function createInfo(
     }
 
     // If forCourses is supplied, then attach courses to the info with InfoCourses
-    if (forCourses) {
+    if (forCourses && forCourses.length > 0) {
       await createInfoCourses(
         tx,
         forCourses.map((course) => ({
