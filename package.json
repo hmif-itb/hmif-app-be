@@ -33,7 +33,6 @@
     "googleapis": "^140.0.0",
     "hono": "^4.2.9",
     "install": "^0.13.0",
-    "jsonwebtoken": "^9.0.2",
     "open-graph-scraper": "^6.5.1",
     "pg": "^8.11.3",
     "postgres": "^3.4.4",
