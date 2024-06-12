@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS "testimonies" (
 	"user_id" text,
 	"course_id" text NOT NULL,
 	"user_name" text,
-	"content" text NOT NULL,
+	"overview" text NOT NULL,
 	"assignments" text NOT NULL,
 	"lecturer" text NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL

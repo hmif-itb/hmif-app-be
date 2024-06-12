@@ -88,6 +88,7 @@ export async function runCourses() {
         code: row[4],
         name: row[5],
         credits: +row[6],
+        type: row[7],
       });
       data.push(course);
     })

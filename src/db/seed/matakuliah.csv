@@ -1,58 +1,58 @@
-curriculum_year,major,semester,semester_code,code,name,sks
-2019,STI,3,Ganjil,II2130,Sistem dan Arsitektur Komputer,3
-2019,STI,4,Genap,II2250,Manajemen Basis Data,2
-2019,STI,3,Ganjil,II2110,Matematika STI,3
-2019,STI,4,Genap,II2260,Sistem Embedded,3
-2019,STI,3,Ganjil,II2111,Probabilitas dan Statistik,3
-2019,STI,4,Genap,II2230,Jaringan Komputer,3
-2019,STI,3,Ganjil,TI3005,Organisasi & Manajemen Perusahaan Industri,2
-2019,STI,4,Genap,II2220,Manajemen Sumber Daya STI,3
-2019,STI,3,Ganjil,IF2140,Pemodelan Basis Data,3
-2019,STI,4,Genap,II2240,Analisis Kebutuhan Sistem,3
-2019,STI,3,Ganjil,IF2111,Algoritma dan Struktur Data STI,3
-2019,STI,4,Genap,IF2212,Pemrograman Berorientasi Objek STI,3
-2019,STI,5,Ganjil,II3150,Sistem Multimedia,3
-2019,STI,6,Genap,II3260,Platform dan Pengembangan Aplikasi Mobile,3
-2019,STI,5,Ganjil,II3160,Teknologi Sistem Terintegrasi,3
-2019,STI,6,Genap,II3230,Keamanan Informasi,3
-2019,STI,5,Ganjil,II3120,Layanan Sistem dan Teknologi Informasi,3
-2019,STI,6,Genap,II2221,Manajemen Proyek STI,3
-2019,STI,5,Ganjil,II3131,Interaksi Manusia Komputer,3
-2019,STI,6,Genap,II3220,Arsitektur Enterprise,3
-2019,STI,5,Ganjil,II3121,Analisis Kebutuhan Enterprise,3
-2019,STI,6,Genap,II3240,Rekayasa Sistem dan Teknologi Informasi,3
-2019,STI,5,Ganjil,IF3152,Rekayasa Perangkat Lunak STI,3
-2019,STI,7,Ganjil,II4090,Kerja Praktek,2
-2019,STI,8,Genap,II4092,Tugas Akhir 2,4
-2019,STI,7,Ganjil,II4091,Tugas Akhir 1 & Seminar,2
-2019,STI,8,Genap,II4472,Komunikasi Interpersonal,2
-2019,STI,7,Ganjil,II4370,Hukum & Etika Teknologi Informasi,2
-2019,STI,7,Ganjil,II4371,Kapita Selekta STI,2
-2019,IF,3,Ganjil,IF2121,Logika Komputasional,2
-2019,IF,4,Genap,IF2210,Pemrograman Berorientasi Objek,3
-2019,IF,3,Ganjil,IF2110,Algoritma & Struktur Data,4
-2019,IF,4,Genap,IF2211,Strategi Algoritma,3
-2019,IF,3,Ganjil,IF2120,Matematika Diskrit,3
-2019,IF,4,Genap,IF2220,Probabilitas dan Statistika,3
-2019,IF,3,Ganjil,IF2124,Teori Bahasa Formal dan Otomata,3
-2019,IF,4,Genap,IF2230,Sistem Operasi,3
-2019,IF,3,Ganjil,IF2123,Aljabar Linier dan Geometri,3
-2019,IF,4,Genap,IF2240,Basis Data,3
-2019,IF,3,Ganjil,IF2130,Organisasi dan Arsitektur Komputer,3
-2019,IF,4,Genap,IF2250,Rekayasa Perangkat Lunak,3
-2019,IF,5,Ganjil,IF3170,Inteligensi Buatan,3
-2019,IF,6,Genap,IF3210,Pengembangan Aplikasi pada Platform Khusus,3
-2019,IF,5,Ganjil,IF3110,Pengembangan Aplikasi Berbasis Web,2
-2019,IF,6,Genap,IF3270,Pembelajaran Mesin,2
-2019,IF,5,Ganjil,IF3130,Jaringan Komputer,3
-2019,IF,6,Genap,IF3230,Sistem Paralel dan Terdistribusi,3
-2019,IF,5,Ganjil,IF3141,Sistem Informasi,3
-2019,IF,6,Genap,IF3250,Proyek Perangkat Lunak,4
-2019,IF,5,Ganjil,IF3150,Manajemen Proyek Perangkat Lunak,2
-2019,IF,6,Genap,IF3260,Grafika Komputer,3
-2019,IF,5,Ganjil,IF3140,Manajemen Basis Data,2
-2019,IF,6,Genap,IF3280,Socio-informatika dan Profesionalisme,3
-2019,IF,5,Ganjil,IF3151,Interaksi Manusia Komputer,3
-2019,IF,7,Ganjil,IF4090,Kerja Praktek,2
-2019,IF,8,Genap,IF4092,Tugas Akhir 2,4
-2019,IF,7,Ganjil,IF4091,Tugas Akhir 1 dan Seminar,2
+curriculum_year,major,semester,semester_code,code,name,sks,type
+2019,STI,3,Ganjil,II2130,Sistem dan Arsitektur Komputer,3,Mandatory
+2019,STI,4,Genap,II2250,Manajemen Basis Data,2,Mandatory
+2019,STI,3,Ganjil,II2110,Matematika STI,3,Mandatory
+2019,STI,4,Genap,II2260,Sistem Embedded,3,Mandatory
+2019,STI,3,Ganjil,II2111,Probabilitas dan Statistik,3,Mandatory
+2019,STI,4,Genap,II2230,Jaringan Komputer,3,Mandatory
+2019,STI,3,Ganjil,TI3005,Organisasi & Manajemen Perusahaan Industri,2,Mandatory
+2019,STI,4,Genap,II2220,Manajemen Sumber Daya STI,3,Mandatory
+2019,STI,3,Ganjil,IF2140,Pemodelan Basis Data,3,Mandatory
+2019,STI,4,Genap,II2240,Analisis Kebutuhan Sistem,3,Mandatory
+2019,STI,3,Ganjil,IF2111,Algoritma dan Struktur Data STI,3,Mandatory
+2019,STI,4,Genap,IF2212,Pemrograman Berorientasi Objek STI,3,Mandatory
+2019,STI,5,Ganjil,II3150,Sistem Multimedia,3,Mandatory
+2019,STI,6,Genap,II3260,Platform dan Pengembangan Aplikasi Mobile,3,Mandatory
+2019,STI,5,Ganjil,II3160,Teknologi Sistem Terintegrasi,3,Mandatory
+2019,STI,6,Genap,II3230,Keamanan Informasi,3,Mandatory
+2019,STI,5,Ganjil,II3120,Layanan Sistem dan Teknologi Informasi,3,Mandatory
+2019,STI,6,Genap,II2221,Manajemen Proyek STI,3,Mandatory
+2019,STI,5,Ganjil,II3131,Interaksi Manusia Komputer,3,Mandatory
+2019,STI,6,Genap,II3220,Arsitektur Enterprise,3,Mandatory
+2019,STI,5,Ganjil,II3121,Analisis Kebutuhan Enterprise,3,Mandatory
+2019,STI,6,Genap,II3240,Rekayasa Sistem dan Teknologi Informasi,3,Mandatory
+2019,STI,5,Ganjil,IF3152,Rekayasa Perangkat Lunak STI,3,Mandatory
+2019,STI,7,Ganjil,II4090,Kerja Praktek,2,Mandatory
+2019,STI,8,Genap,II4092,Tugas Akhir 2,4,Mandatory
+2019,STI,7,Ganjil,II4091,Tugas Akhir 1 & Seminar,2,Mandatory
+2019,STI,8,Genap,II4472,Komunikasi Interpersonal,2,Mandatory
+2019,STI,7,Ganjil,II4370,Hukum & Etika Teknologi Informasi,2,Mandatory
+2019,STI,7,Ganjil,II4371,Kapita Selekta STI,2,Mandatory
+2019,IF,3,Ganjil,IF2121,Logika Komputasional,2,Mandatory
+2019,IF,4,Genap,IF2210,Pemrograman Berorientasi Objek,3,Mandatory
+2019,IF,3,Ganjil,IF2110,Algoritma & Struktur Data,4,Mandatory
+2019,IF,4,Genap,IF2211,Strategi Algoritma,3,Mandatory
+2019,IF,3,Ganjil,IF2120,Matematika Diskrit,3,Mandatory
+2019,IF,4,Genap,IF2220,Probabilitas dan Statistika,3,Mandatory
+2019,IF,3,Ganjil,IF2124,Teori Bahasa Formal dan Otomata,3,Mandatory
+2019,IF,4,Genap,IF2230,Sistem Operasi,3,Mandatory
+2019,IF,3,Ganjil,IF2123,Aljabar Linier dan Geometri,3,Mandatory
+2019,IF,4,Genap,IF2240,Basis Data,3,Mandatory
+2019,IF,3,Ganjil,IF2130,Organisasi dan Arsitektur Komputer,3,Mandatory
+2019,IF,4,Genap,IF2250,Rekayasa Perangkat Lunak,3,Mandatory
+2019,IF,5,Ganjil,IF3170,Inteligensi Buatan,3,Mandatory
+2019,IF,6,Genap,IF3210,Pengembangan Aplikasi pada Platform Khusus,3,Mandatory
+2019,IF,5,Ganjil,IF3110,Pengembangan Aplikasi Berbasis Web,2,Mandatory
+2019,IF,6,Genap,IF3270,Pembelajaran Mesin,2,Mandatory
+2019,IF,5,Ganjil,IF3130,Jaringan Komputer,3,Mandatory
+2019,IF,6,Genap,IF3230,Sistem Paralel dan Terdistribusi,3,Mandatory
+2019,IF,5,Ganjil,IF3141,Sistem Informasi,3,Mandatory
+2019,IF,6,Genap,IF3250,Proyek Perangkat Lunak,4,Mandatory
+2019,IF,5,Ganjil,IF3150,Manajemen Proyek Perangkat Lunak,2,Mandatory
+2019,IF,6,Genap,IF3260,Grafika Komputer,3,Mandatory
+2019,IF,5,Ganjil,IF3140,Manajemen Basis Data,2,Mandatory
+2019,IF,6,Genap,IF3280,Socio-informatika dan Profesionalisme,3,Mandatory
+2019,IF,5,Ganjil,IF3151,Interaksi Manusia Komputer,3,Mandatory
+2019,IF,7,Ganjil,IF4090,Kerja Praktek,2,Mandatory
+2019,IF,8,Genap,IF4092,Tugas Akhir 2,4,Mandatory
+2019,IF,7,Ganjil,IF4091,Tugas Akhir 1 dan Seminar,2,Mandatory

@@ -484,7 +484,7 @@ export const testimonies = pgTable(
         onDelete: 'cascade',
       }),
     userName: text('user_name'),
-    overview: text('content').notNull(),
+    overview: text('overview').notNull(),
     assignments: text('assignments').notNull(),
     lecturer: text('lecturer').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true })

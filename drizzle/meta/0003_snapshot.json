@@ -1,5 +1,5 @@
 {
-  "id": "577acaed-3f09-4890-a1b9-74aee46aab03",
+  "id": "2ca0e018-6d7a-4555-9506-4ee4b6101c21",
   "prevId": "8ead1210-b39e-49df-a181-e6813c074056",
   "version": "6",
   "dialect": "postgresql",
@@ -863,8 +863,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "content": {
-          "name": "content",
+        "overview": {
+          "name": "overview",
           "type": "text",
           "primaryKey": false,
           "notNull": true
