@@ -59,6 +59,29 @@ export const getCalendarEventRoute = createRoute({
   },
 });
 
+export const getCalendarEventByIdRoute = createRoute({
+  operationId: 'getCalendarEventById',
+  tags: ['calendar'],
+  method: 'get',
+  path: '/calendar/{eventId}',
+  request: {
+    params: CalendarEventIdParamsSchema,
+  },
+  responses: {
+    200: {
+      description: 'Get event by id',
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
+        },
+      },
+    },
+  },
+});
+
 export const updateCalendarEventRoute = createRoute({
   operationId: 'updateCalendarEvent',
   tags: ['calendar'],

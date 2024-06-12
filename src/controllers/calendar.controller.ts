@@ -1,5 +1,6 @@
 import {
   deleteCalendarEventRoute,
+  getCalendarEventByIdRoute,
   getCalendarEventRoute,
   postCalendarEventRoute,
   updateCalendarEventRoute,
@@ -64,6 +65,25 @@ calendarRouter.openapi(getCalendarEventRoute, async (c) => {
 
     console.log(response.data.items?.length);
     return c.json(response.data.items?.reverse(), 200);
+  } catch (error) {
+    if (error instanceof GaxiosError) {
+      return c.json({ error: error.message }, 400);
+    }
+    return c.json({ error: 'Something went wrong' }, 500);
+  }
+});
+
+calendarRouter.openapi(getCalendarEventByIdRoute, async (c) => {
+  const { eventId } = c.req.valid('param');
+
+  try {
+    const response = await google.calendar('v3').events.get({
+      auth: googleAuth,
+      calendarId: env.GOOGLE_CALENDAR_ID,
+      eventId,
+    });
+
+    return c.json(response.data, 200);
   } catch (error) {
     if (error instanceof GaxiosError) {
       return c.json({ error: error.message }, 400);
