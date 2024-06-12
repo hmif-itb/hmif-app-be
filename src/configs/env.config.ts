@@ -23,6 +23,8 @@ const EnvSchema = z.object({
   R2_PUBLIC_URL: z.string().url().default('not-specified'),
   R2_BUCKET_NAME: z.string().default('hmifapp'),
   LOGIN_BYPASS_KEY: z.string().default('default-bypass-key'),
+  GOOGLE_CALENDAR_SECRET_PATH: z.string().default('google_credentials.json'),
+  GOOGLE_CALENDAR_ID: z.string().default('primary'),
 });
 
 const result = EnvSchema.safeParse(process.env);
