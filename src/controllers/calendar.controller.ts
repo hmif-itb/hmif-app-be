@@ -64,7 +64,7 @@ calendarRouter.openapi(getCalendarEventRoute, async (c) => {
     });
 
     console.log(response.data.items?.length);
-    return c.json(response.data.items?.reverse(), 200);
+    return c.json(response.data.items?.reverse() ?? [], 200);
   } catch (error) {
     if (error instanceof GaxiosError) {
       return c.json({ error: error.message }, 400);

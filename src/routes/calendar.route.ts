@@ -4,6 +4,8 @@ import {
   CalendarEventIdParamsSchema,
   GetCalendarEventParamsSchema,
   UpdateCalendarEventBodySchema,
+  CalendarEvent,
+  CalendarEventList,
 } from '~/types/calendar.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
@@ -24,6 +26,11 @@ export const postCalendarEventRoute = createRoute({
   responses: {
     201: {
       description: 'Event succesfully created',
+      content: {
+        'application/json': {
+          schema: CalendarEvent,
+        },
+      },
     },
     400: {
       description: 'Bad request',
@@ -47,6 +54,11 @@ export const getCalendarEventRoute = createRoute({
   responses: {
     200: {
       description: 'Get list of categories',
+      content: {
+        'application/json': {
+          schema: CalendarEventList,
+        },
+      },
     },
     400: {
       description: 'Bad request',
@@ -70,6 +82,11 @@ export const getCalendarEventByIdRoute = createRoute({
   responses: {
     200: {
       description: 'Get event by id',
+      content: {
+        'application/json': {
+          schema: CalendarEvent,
+        },
+      },
     },
     400: {
       description: 'Bad request',
@@ -100,6 +117,11 @@ export const updateCalendarEventRoute = createRoute({
   responses: {
     200: {
       description: 'Event succesfully updated',
+      content: {
+        'application/json': {
+          schema: CalendarEvent,
+        },
+      },
     },
     400: {
       description: 'Bad request',
