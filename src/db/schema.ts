@@ -55,6 +55,7 @@ export const usersRelation = relations(users, ({ many, one }) => ({
   }),
   userCourses: many(userCourses),
   userUnsubscribeCategories: many(userUnsubscribeCategories),
+  testimonies: many(testimonies),
 }));
 
 export const pushSubscriptions = pgTable(
@@ -297,7 +298,10 @@ export const courses = pgTable(
   {
     id: text('id').primaryKey().$defaultFn(createId),
     curriculumYear: integer('curriculum_year').notNull(),
-    major: text('jurusan', { enum: ['IF', 'STI'] }).notNull(),
+    major: text('jurusan', { enum: ['IF', 'STI', 'OTHER'] }).notNull(),
+    type: text('type', { enum: ['Mandatory', 'Elective'] })
+      .default('Elective')
+      .notNull(),
     semester: integer('semester').notNull(),
     semesterCode: text('semester_code', {
       enum: ['Ganjil', 'Genap'],
@@ -316,6 +320,7 @@ export type Course = InferSelectModel<typeof courses>;
 export const coursesRelation = relations(courses, ({ many }) => ({
   infoCourses: many(infoCourses),
   userCourses: many(userCourses),
+  testimonies: many(testimonies),
 }));
 
 export const categories = pgTable('categories', {
@@ -465,3 +470,37 @@ export const userUnsubscribeCategoriesRelation = relations(
     }),
   }),
 );
+
+export const testimonies = pgTable(
+  'testimonies',
+  {
+    id: text('id').primaryKey().$defaultFn(createId),
+    userId: text('user_id').references(() => users.id, {
+      onDelete: 'set null',
+    }),
+    courseId: text('course_id')
+      .notNull()
+      .references(() => courses.id, {
+        onDelete: 'cascade',
+      }),
+    userName: text('user_name'),
+    overview: text('content').notNull(),
+    assignments: text('assignments').notNull(),
+    lecturer: text('lecturer').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => ({
+    userIdIdx: index().on(t.userId),
+    courseIdIdx: index().on(t.courseId),
+  }),
+);
+
+export const testimoniesRelation = relations(testimonies, ({ one }) => ({
+  user: one(users, { fields: [testimonies.userId], references: [users.id] }),
+  course: one(courses, {
+    fields: [testimonies.courseId],
+    references: [courses.id],
+  }),
+}));
