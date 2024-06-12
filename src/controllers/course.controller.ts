@@ -8,6 +8,7 @@ import {
   getUserCourseRoute,
   getCurrentUserCourseRoute,
   deleteUserCourseRoute,
+  createOrUpdateBatchUserCourseRoute,
 } from '~/routes/course.route';
 import { createAuthRouter } from './router-factory';
 import {
@@ -19,6 +20,7 @@ import {
   createUserCourse,
   getUserCourse,
   deleteUserCourse,
+  batchCreateOrUpdateUserCourse,
 } from '~/repositories/course.repo';
 import { db } from '~/db/drizzle';
 import { PostgresError } from 'postgres';
@@ -196,4 +198,24 @@ courseRouter.openapi(deleteCourseRoute, async (c) => {
       );
     }
   }
+});
+
+courseRouter.openapi(createOrUpdateBatchUserCourseRoute, async (c) => {
+  const userId = c.var.user.id;
+  const data = c.req.valid('json');
+
+  const existingCourses = (
+    await Promise.all(
+      data.map(async (d) => {
+        if (await getCourseById(db, d.courseId)) return d;
+      }),
+    )
+  ).filter((d) => d !== undefined);
+
+  const userCourses = await batchCreateOrUpdateUserCourse(
+    db,
+    existingCourses,
+    userId,
+  );
+  return c.json(userCourses, 201);
 });
