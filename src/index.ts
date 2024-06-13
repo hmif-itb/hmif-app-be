@@ -48,6 +48,7 @@ app.doc('/doc', {
     { name: 'open-graph', description: 'Scrape Open Graph API' },
     { name: 'category', description: 'Category API' },
     { name: 'unsubscribe', description: 'Unsubscribe API' },
+    { name: 'calendar', description: 'Calendar API' },
   ],
 });
 app.get('/swagger', swaggerUI({ url: '/doc' }));
