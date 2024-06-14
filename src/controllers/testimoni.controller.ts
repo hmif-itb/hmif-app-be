@@ -6,10 +6,7 @@ import { getTestiByCourseId } from '~/repositories/testimoni.repo';
 export const testiRoute = createAuthRouter();
 
 testiRoute.openapi(getTestiByCourseIdRoute, async (c) => {
-    const { courseId } = c.req.valid('param')
-    const testi = await getTestiByCourseId(db, courseId);
-    return c.json(
-        testi,
-        200,
-    );
-  });
+  const { courseId } = c.req.valid('param');
+  const testi = await getTestiByCourseId(db, courseId);
+  return c.json(testi, 200);
+});
