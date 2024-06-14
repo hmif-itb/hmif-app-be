@@ -34,6 +34,7 @@ app.use(
     origin: env.ALLOWED_ORIGINS,
   }),
 );
+app.get('/', (c) => c.json({ message: 'Server runs successfully' }));
 app.route('/api', apiRouter);
 app.doc('/doc', {
   openapi: '3.1.0',
