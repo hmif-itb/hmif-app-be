@@ -54,6 +54,7 @@ app.doc('/doc', {
     { name: 'category', description: 'Category API' },
     { name: 'unsubscribe', description: 'Unsubscribe API' },
     { name: 'calendar', description: 'Calendar API' },
+    { name: 'testimoni', description: 'Testimoni API' },
   ],
 });
 app.get('/swagger', swaggerUI({ url: '/doc' }));
