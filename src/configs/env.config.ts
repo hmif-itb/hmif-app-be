@@ -25,6 +25,7 @@ const EnvSchema = z.object({
   LOGIN_BYPASS_KEY: z.string().default('default-bypass-key'),
   GOOGLE_CALENDAR_SECRET_PATH: z.string().default('google_credentials.json'),
   GOOGLE_CALENDAR_ID: z.string().default('primary'),
+  SENTRY_DSN: z.string().url().optional(),
 });
 
 const result = EnvSchema.safeParse(process.env);

@@ -1,3 +1,7 @@
+import { GaxiosError } from 'gaxios';
+import { calendar_v3, google } from 'googleapis';
+import { env } from '~/configs/env.config';
+import { googleAuth } from '~/lib/googleapi';
 import {
   deleteCalendarEventRoute,
   getCalendarEventByIdRoute,
@@ -6,10 +10,6 @@ import {
   updateCalendarEventRoute,
 } from '~/routes/calendar.route';
 import { createAuthRouter } from './router-factory';
-import { google, calendar_v3 } from 'googleapis';
-import { GaxiosError } from 'gaxios';
-import { googleAuth } from '~/lib/googleapi';
-import { env } from '~/configs/env.config';
 
 export const calendarRouter = createAuthRouter();
 
@@ -44,7 +44,7 @@ calendarRouter.openapi(postCalendarEventRoute, async (c) => {
     if (error instanceof GaxiosError) {
       return c.json({ error: error.message }, 400);
     }
-    return c.json({ error: 'Something went wrong' }, 500);
+    throw error;
   }
 });
 
@@ -69,7 +69,7 @@ calendarRouter.openapi(getCalendarEventRoute, async (c) => {
     if (error instanceof GaxiosError) {
       return c.json({ error: error.message }, 400);
     }
-    return c.json({ error: 'Something went wrong' }, 500);
+    throw error;
   }
 });
 
@@ -88,7 +88,7 @@ calendarRouter.openapi(getCalendarEventByIdRoute, async (c) => {
     if (error instanceof GaxiosError) {
       return c.json({ error: error.message }, 400);
     }
-    return c.json({ error: 'Something went wrong' }, 500);
+    throw error;
   }
 });
 
@@ -149,6 +149,6 @@ calendarRouter.openapi(deleteCalendarEventRoute, async (c) => {
     if (error instanceof GaxiosError) {
       return c.json({ error: error.message }, 400);
     }
-    return c.json({ error: 'Something went wrong' }, 500);
+    throw error;
   }
 });

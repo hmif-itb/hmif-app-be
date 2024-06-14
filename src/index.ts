@@ -1,4 +1,5 @@
 import { serve } from '@hono/node-server';
+import { sentry } from '@hono/sentry';
 import { swaggerUI } from '@hono/swagger-ui';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import fs from 'fs';
@@ -20,6 +21,10 @@ const app = new OpenAPIHono({
     }
   },
 });
+
+if (env.SENTRY_DSN) {
+  app.use('*', sentry({ dsn: env.SENTRY_DSN }));
+}
 
 app.use(logger());
 app.use(

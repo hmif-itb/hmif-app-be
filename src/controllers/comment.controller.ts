@@ -42,7 +42,7 @@ commentRouter.openapi(postCommentRoute, async (c) => {
   } catch (err) {
     if (err instanceof PostgresError)
       return c.json({ error: err.message }, 400);
-    return c.json(err, 400);
+    throw err;
   }
 });
 

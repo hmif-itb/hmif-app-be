@@ -33,7 +33,7 @@ infoRouter.openapi(postReadInfoRoute, async (c) => {
   } catch (err) {
     if (err instanceof PostgresError)
       return c.json({ error: 'User have already read this info' }, 400);
-    return c.json(err, 400);
+    throw err;
   }
 });
 
@@ -56,22 +56,17 @@ infoRouter.openapi(createInfoRoute, async (c) => {
   } catch (err) {
     if (err instanceof PostgresError)
       return c.json({ error: err.message }, 400);
-    console.log(err);
-    return c.json({ error: 'Something went wrong' }, 400);
+    throw err;
   }
 });
 
 infoRouter.openapi(deleteInfoRoute, async (c) => {
-  try {
-    const { infoId } = c.req.valid('param');
-    const info = await deleteInfo(db, infoId);
-    if (!info) {
-      return c.json({ error: 'Info not found' }, 404);
-    }
-    return c.json({}, 200);
-  } catch (err) {
-    return c.json(err, 400);
+  const { infoId } = c.req.valid('param');
+  const info = await deleteInfo(db, infoId);
+  if (!info) {
+    return c.json({ error: 'Info not found' }, 404);
   }
+  return c.json({}, 200);
 });
 
 infoRouter.openapi(getListInfoRoute, async (c) => {
@@ -85,14 +80,10 @@ infoRouter.openapi(getListInfoRoute, async (c) => {
 });
 
 infoRouter.openapi(getInfoByIdRoute, async (c) => {
-  try {
-    const { infoId } = c.req.valid('param');
-    const info = await getInfoById(db, infoId, c.var.user.id);
-    if (!info) {
-      return c.json({ error: 'Info not found' }, 404);
-    }
-    return c.json(info, 200);
-  } catch (err) {
-    return c.json(err, 500);
+  const { infoId } = c.req.valid('param');
+  const info = await getInfoById(db, infoId, c.var.user.id);
+  if (!info) {
+    return c.json({ error: 'Info not found' }, 404);
   }
+  return c.json(info, 200);
 });
