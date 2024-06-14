@@ -23,7 +23,10 @@ const app = new OpenAPIHono({
 });
 
 if (env.SENTRY_DSN) {
-  app.use('*', sentry({ dsn: env.SENTRY_DSN }));
+  app.use(
+    '*',
+    sentry({ dsn: env.SENTRY_DSN, environment: env.SENTRY_ENVIRONMENT }),
+  );
 }
 
 app.use(logger());
