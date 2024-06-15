@@ -52,3 +52,10 @@ export const CreateUserCourseSchema = createInsertSchema(userCourses).omit({
   semesterYearTaken: true,
   userId: true,
 });
+
+export const BatchCreateOrUpdateUserCourseSchema = z.array(
+  CreateUserCourseSchema,
+);
+
+export const BatchCreateOrUpdateUserCourseResponseSchema =
+  z.array(UserCourseSchema);

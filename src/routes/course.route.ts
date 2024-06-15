@@ -9,6 +9,8 @@ import {
   CreateUserCourseSchema,
   UserCourseSchema,
   ListUserCourseSchema,
+  BatchCreateOrUpdateUserCourseSchema,
+  BatchCreateOrUpdateUserCourseResponseSchema,
 } from '~/types/course.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
@@ -315,6 +317,41 @@ export const deleteUserCourseRoute = createRoute({
       content: {
         'application/json': {
           schema: ErrorSchema,
+        },
+      },
+    },
+  },
+});
+
+export const createOrUpdateBatchUserCourseRoute = createRoute({
+  operationId: 'createOrUpdateBatchUserCourse',
+  tags: ['course'],
+  method: 'put',
+  path: '/course/take/batch',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: BatchCreateOrUpdateUserCourseSchema,
+        },
+      },
+      required: true,
+    },
+  },
+  responses: {
+    201: {
+      description: 'Courses added to user courses',
+      content: {
+        'application/json': {
+          schema: BatchCreateOrUpdateUserCourseResponseSchema,
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ValidationErrorSchema, ErrorSchema]),
         },
       },
     },
