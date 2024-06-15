@@ -85,7 +85,7 @@ calendarRouter.openapi(getCalendarEventByIdRoute, async (c) => {
 
     return c.json(response.data, 200);
   } catch (error) {
-    if (error instanceof GaxiosError) {
+    if (error instanceof GaxiosError && error.message === 'Not Found') {
       return c.json({ error: error.message }, 400);
     }
     throw error;
@@ -96,24 +96,30 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
   const { eventId } = c.req.valid('param');
   const { title, description, start, end } = c.req.valid('json');
 
-  const response = await google.calendar('v3').events.get({
-    auth: googleAuth,
-    calendarId: env.GOOGLE_CALENDAR_ID,
-    eventId,
-  });
-  if (response.status !== 200) {
-    return c.json({ error: 'Event not found' }, 404);
+  let fetchedData: calendar_v3.Schema$Event;
+  try {
+    const response = await google.calendar('v3').events.get({
+      auth: googleAuth,
+      calendarId: env.GOOGLE_CALENDAR_ID,
+      eventId,
+    });
+    fetchedData = response.data;
+  } catch (error) {
+    if (error instanceof GaxiosError && error.message === 'Not Found') {
+      return c.json({ error: error.message }, 404);
+    }
+    throw error;
   }
 
   const event: calendar_v3.Schema$Event = {
-    summary: title ?? response.data.summary,
-    description: description ?? response.data.description,
+    summary: title ?? fetchedData.summary,
+    description: description ?? fetchedData.description,
     start: {
-      dateTime: start?.toISOString() ?? response.data.start?.dateTime,
+      dateTime: start?.toISOString() ?? fetchedData.start?.dateTime,
       timeZone: 'Asia/Jakarta',
     },
     end: {
-      dateTime: end?.toISOString() ?? response.data.end?.dateTime,
+      dateTime: end?.toISOString() ?? fetchedData.end?.dateTime,
       timeZone: 'Asia/Jakarta',
     },
   };
@@ -132,7 +138,7 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
     if (error instanceof GaxiosError) {
       return c.json({ error: error.message }, 400);
     }
-    return c.json({ error: 'Something went wrong' }, 500);
+    throw error;
   }
 });
 

@@ -10,10 +10,8 @@ import {
   deleteUserCourseRoute,
   createOrUpdateBatchUserCourseRoute,
 } from '~/routes/course.route';
-
 import { PostgresError } from 'postgres';
 import { db } from '~/db/drizzle';
-
 import {
   createCourse,
   createUserCourse,
