@@ -23,24 +23,10 @@ import {
   getCourseById,
   getListCourses,
   getUserCourse,
-
-  deleteUserCourse,
   batchCreateOrUpdateUserCourse,
-
   updateCourse,
 
 } from '~/repositories/course.repo';
-import {
-  createCourseRoute,
-  createUserCourseRoute,
-  deleteCourseRoute,
-  deleteUserCourseRoute,
-  getCourseByIdRoute,
-  getCurrentUserCourseRoute,
-  getUserCourseRoute,
-  listCourseRoute,
-  updateCourseRoute,
-} from '~/routes/course.route';
 import { CourseSchema } from '~/types/course.types';
 import { createAuthRouter } from './router-factory';
 
