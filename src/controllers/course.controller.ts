@@ -204,17 +204,26 @@ courseRouter.openapi(createOrUpdateBatchUserCourseRoute, async (c) => {
   const userId = c.var.user.id;
   const data = c.req.valid('json');
 
-  const existingCourses = (
-    await Promise.all(
-      data.map(async (d) => {
-        if (await getCourseById(db, d.courseId)) return d;
-      }),
-    )
-  ).filter((d) => d !== undefined);
+  const existingCourses = await Promise.all(
+    data.map(async (d) => {
+      if (await getCourseById(db, d.courseId)) return d;
+    }),
+  );
+
+  // Filter out undefined values
+  const validCourses = existingCourses.filter((d) => d !== undefined) as Array<{
+    courseId: string;
+    class: number;
+  }>;
+
+  // Check if there are any courses not found
+  if (validCourses.length !== data.length) {
+    return c.json({ error: 'Some courses not found' }, 404);
+  }
 
   const userCourses = await batchCreateOrUpdateUserCourse(
     db,
-    existingCourses,
+    validCourses,
     userId,
   );
   return c.json(userCourses, 201);
