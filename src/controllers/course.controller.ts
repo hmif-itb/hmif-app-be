@@ -1,4 +1,3 @@
-
 import {
   createCourseRoute,
   deleteCourseRoute,
@@ -25,7 +24,6 @@ import {
   getUserCourse,
   batchCreateOrUpdateUserCourse,
   updateCourse,
-
 } from '~/repositories/course.repo';
 import { CourseSchema } from '~/types/course.types';
 import { createAuthRouter } from './router-factory';
