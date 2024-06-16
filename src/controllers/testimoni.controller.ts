@@ -1,12 +1,12 @@
 import { db } from '~/db/drizzle';
-import { getTestiByCourseIdRoute } from '~/routes/testimoni.route';
+import { getTestimoniByCourseIdRoute } from '~/routes/testimoni.route';
 import { createAuthRouter } from './router-factory';
-import { getTestiByCourseId } from '~/repositories/testimoni.repo';
+import { getTestimoniByCourseId } from '~/repositories/testimoni.repo';
 
-export const testiRoute = createAuthRouter();
+export const testimoniRoute = createAuthRouter();
 
-testiRoute.openapi(getTestiByCourseIdRoute, async (c) => {
+testimoniRoute.openapi(getTestimoniByCourseIdRoute, async (c) => {
   const { courseId } = c.req.valid('param');
-  const testi = await getTestiByCourseId(db, courseId);
+  const testi = await getTestimoniByCourseId(db, courseId);
   return c.json(testi, 200);
 });

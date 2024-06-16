@@ -5,7 +5,7 @@ import {
 } from '~/types/testimoni.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
-export const getTestiByCourseIdRoute = createRoute({
+export const getTestimoniByCourseIdRoute = createRoute({
   operationId: 'getTestiByCourseId',
   tags: ['testimoni'],
   method: 'get',
@@ -19,6 +19,14 @@ export const getTestiByCourseIdRoute = createRoute({
       content: {
         'application/json': {
           schema: ListTestimoniSchema,
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ValidationErrorSchema, ErrorSchema]),
         },
       },
     },

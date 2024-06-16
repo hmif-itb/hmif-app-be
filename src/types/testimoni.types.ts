@@ -1,4 +1,6 @@
 import { z } from '@hono/zod-openapi';
+import { createSelectSchema } from 'drizzle-zod';
+import { testimonies } from '~/db/schema';
 
 export const CourseIdParamsSchema = z.object({
   courseId: z.string().openapi({
@@ -10,15 +12,8 @@ export const CourseIdParamsSchema = z.object({
   }),
 });
 
-export const TestimoniSchema = z.object({
-  id: z.string(),
-  userId: z.string().nullable(),
-  courseId: z.string(),
-  userName: z.string().nullable(),
-  overview: z.string(),
-  assignments: z.string(),
-  lecturer: z.string(),
-  createdAt: z.string(),
-});
+export const TestimoniSchema = createSelectSchema(testimonies, {
+  createdAt: z.union([z.string(), z.date()]),
+}).openapi('Testimoni');
 
 export const ListTestimoniSchema = z.array(TestimoniSchema);
