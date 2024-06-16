@@ -6,7 +6,7 @@ import {
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
 export const getTestimoniByCourseIdRoute = createRoute({
-  operationId: 'getTestiByCourseId',
+  operationId: 'getTestimoniByCourseId',
   tags: ['testimoni'],
   method: 'get',
   path: '/testimoni/course/{courseId}',
