@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { eq } from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
 import { firstSure } from '~/db/helper';
 import { testimonies } from '~/db/schema';
@@ -17,4 +18,10 @@ export async function createTestimoni(
     })
     .returning()
     .then(firstSure);
+}
+
+export async function getTestimoniByCourseId(db: Database, courseId: string) {
+  return await db.query.testimonies.findMany({
+    where: eq(testimonies.courseId, courseId),
+  });
 }
