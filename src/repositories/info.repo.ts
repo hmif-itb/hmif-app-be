@@ -1,8 +1,17 @@
-import { InferInsertModel, SQL, and, eq, ilike, notInArray } from 'drizzle-orm';
+import {
+  InferInsertModel,
+  SQL,
+  and,
+  eq,
+  ilike,
+  inArray,
+  notInArray,
+} from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
 import {
+  categories,
   infoAngkatan,
   infoCategories,
   infoCourses,
@@ -162,9 +171,10 @@ export async function getListInfos(
     const getInfosByCategory = db
       .select({ infoId: infoCategories.infoId })
       .from(infos)
-      .leftJoin(infoCategories, eq(infoCategories.infoId, infos.id))
-      .where(eq(infoCategories.categoryId, q.category));
-    categoryQ = notInArray(infos.id, getInfosByCategory);
+      .innerJoin(infoCategories, eq(infoCategories.infoId, infos.id))
+      .innerJoin(categories, eq(infoCategories.categoryId, categories.id))
+      .where(eq(categories.name, q.category));
+    categoryQ = inArray(infos.id, getInfosByCategory);
   }
 
   const where = and(searchQ, categoryQ, unreadQ);
