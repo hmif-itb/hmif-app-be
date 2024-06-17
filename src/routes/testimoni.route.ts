@@ -3,7 +3,7 @@ import {
   PostTestimoniBodySchema,
   TestimoniSchema,
   CourseIdParamsSchema,
-  ListTestimoniSchema
+  ListTestimoniSchema,
 } from '~/types/testimoni.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
