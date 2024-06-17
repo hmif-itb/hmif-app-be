@@ -1,9 +1,10 @@
 import { serve } from '@hono/node-server';
-import { sentry } from '@hono/sentry';
 import { swaggerUI } from '@hono/swagger-ui';
 import { OpenAPIHono } from '@hono/zod-openapi';
+import * as Sentry from '@sentry/node';
 import fs from 'fs';
 import { cors } from 'hono/cors';
+import { HTTPException } from 'hono/http-exception';
 import { logger } from 'hono/logger';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -22,9 +23,20 @@ const app = new OpenAPIHono({
   },
 });
 
-if (env.SENTRY_DSN) {
-  app.use('*', sentry({ dsn: env.SENTRY_DSN }));
-}
+Sentry.init({
+  dsn: env.SENTRY_DSN,
+  environment: env.SENTRY_ENVIRONMENT,
+});
+
+app.onError((err, c) => {
+  if (err instanceof HTTPException) {
+    // Get the custom response
+    return err.getResponse();
+  }
+
+  Sentry.captureException(err);
+  return c.json({ error: 'Something went wrong' }, 500);
+});
 
 app.use(logger());
 app.use(
@@ -34,6 +46,7 @@ app.use(
     origin: env.ALLOWED_ORIGINS,
   }),
 );
+app.get('/', (c) => c.json({ message: 'Server runs successfully' }));
 app.route('/api', apiRouter);
 app.doc('/doc', {
   openapi: '3.1.0',

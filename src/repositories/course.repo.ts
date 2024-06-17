@@ -1,9 +1,10 @@
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
 import { courses, userCourses } from '~/db/schema';
 import {
+  BatchCreateOrUpdateUserCourseSchema,
   CreateCourseSchema,
   CreateUserCourseSchema,
   ListCourseParamsSchema,
@@ -52,6 +53,34 @@ export async function createUserCourse(
     .then(firstSure);
 
   return userCourse;
+}
+
+export async function batchCreateOrUpdateUserCourse(
+  db: Database,
+  data: z.infer<typeof BatchCreateOrUpdateUserCourseSchema>,
+  userId: string,
+) {
+  const { semesterCodeTaken, semesterYearTaken } =
+    getCurrentSemesterCodeAndYear();
+
+  const newUserCourses = await db
+    .insert(userCourses)
+    .values(
+      data.map((d) => ({
+        ...d,
+        userId,
+        semesterCodeTaken,
+        semesterYearTaken,
+      })),
+    )
+    .onConflictDoUpdate({
+      target: [userCourses.userId, userCourses.courseId],
+      set: {
+        class: sql`excluded.class`,
+      },
+    })
+    .returning();
+  return newUserCourses;
 }
 
 export async function getUserCourse(

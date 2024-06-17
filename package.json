@@ -17,10 +17,10 @@
     "@aws-sdk/client-s3": "^3.556.0",
     "@aws-sdk/s3-request-presigner": "^3.563.0",
     "@hono/node-server": "^1.8.2",
-    "@hono/sentry": "^1.1.0",
     "@hono/swagger-ui": "^0.2.1",
     "@hono/zod-openapi": "^0.9.9",
     "@paralleldrive/cuid2": "^2.2.2",
+    "@sentry/node": "^8.9.2",
     "@types/jsonwebtoken": "^9.0.6",
     "aws-sdk": "^2.1607.0",
     "cross-env": "^7.0.3",
@@ -54,5 +54,6 @@
     "prettier": "^3.2.5",
     "tsx": "^3.14.0",
     "typescript": "^5.4.3"
-  }
+  },
+  "packageManager": "pnpm@9.0.6"
 }

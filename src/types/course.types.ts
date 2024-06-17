@@ -41,7 +41,7 @@ export const CourseIdRequestBodySchema = z.object({
 
 export const UserCourseSchema = createSelectSchema(userCourses)
   .extend({
-    courses: CourseSchema.optional(),
+    course: CourseSchema.optional(),
   })
   .openapi('UserCourse');
 
@@ -52,3 +52,10 @@ export const CreateUserCourseSchema = createInsertSchema(userCourses).omit({
   semesterYearTaken: true,
   userId: true,
 });
+
+export const BatchCreateOrUpdateUserCourseSchema = z.array(
+  CreateUserCourseSchema,
+);
+
+export const BatchCreateOrUpdateUserCourseResponseSchema =
+  z.array(UserCourseSchema);
