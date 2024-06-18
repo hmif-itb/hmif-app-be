@@ -309,6 +309,7 @@ export const courses = pgTable(
     code: text('code').unique().notNull(),
     name: text('name').notNull(),
     credits: integer('sks').notNull(),
+    dingdongUrl: text('dingdong_url'),
   },
   (t) => ({
     codeIdx: index().on(t.code),

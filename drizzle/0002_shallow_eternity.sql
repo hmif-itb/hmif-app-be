@@ -1,0 +1,1 @@
+ALTER TABLE "infos" ALTER COLUMN "for_class" SET DATA TYPE integer;
