@@ -61,10 +61,11 @@ courseRouter.openapi(getCurrentUserCourseRoute, async (c) => {
 courseRouter.openapi(deleteUserCourseRoute, async (c) => {
   try {
     const userId = c.var.user.id;
-    const { courseId } = c.req.valid('param');
-    const userCourse = await deleteUserCourse(db, userId, courseId);
+    const { courseIds } = c.req.valid('json');
+    const userCourse = await deleteUserCourse(db, userId, courseIds);
 
-    if (!userCourse) return c.json({ error: 'Course not found' }, 404);
+    if (userCourse.length === 0)
+      return c.json({ error: 'Course not found' }, 404);
     return c.json(userCourse, 200);
   } catch (err) {
     if (err instanceof Error) {

@@ -109,16 +109,25 @@ export async function getUserCourse(
 export async function deleteUserCourse(
   db: Database,
   userId: string,
-  courseId: string,
+  courseIds: string | string[],
 ) {
-  const userCourse = await db
-    .delete(userCourses)
-    .where(
-      and(eq(userCourses.userId, userId), eq(userCourses.courseId, courseId)),
-    )
-    .returning()
-    .then(first);
-  return userCourse;
+  const userCourseList = [];
+  if (typeof courseIds === 'string') {
+    courseIds = [courseIds];
+  }
+  for (const courseId of courseIds) {
+    const userCourse = await db
+      .delete(userCourses)
+      .where(
+        and(eq(userCourses.userId, userId), eq(userCourses.courseId, courseId)),
+      )
+      .returning()
+      .then(first);
+    if (userCourse) {
+      userCourseList.push(userCourse);
+    }
+  }
+  return userCourseList;
 }
 
 // Course Repository
