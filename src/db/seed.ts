@@ -89,6 +89,7 @@ export async function runCourses() {
         name: row[5],
         credits: +row[6],
         type: row[7],
+        dingdongUrl: row[8],
       });
       data.push(course);
     })

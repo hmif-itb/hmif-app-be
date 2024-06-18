@@ -1,58 +1,58 @@
-curriculum_year,major,semester,semester_code,code,name,sks,type
-2019,STI,3,Ganjil,II2130,Sistem dan Arsitektur Komputer,3,Mandatory
-2019,STI,4,Genap,II2250,Manajemen Basis Data,2,Mandatory
-2019,STI,3,Ganjil,II2110,Matematika STI,3,Mandatory
-2019,STI,4,Genap,II2260,Sistem Embedded,3,Mandatory
-2019,STI,3,Ganjil,II2111,Probabilitas dan Statistik,3,Mandatory
-2019,STI,4,Genap,II2230,Jaringan Komputer,3,Mandatory
-2019,STI,3,Ganjil,TI3005,Organisasi & Manajemen Perusahaan Industri,2,Mandatory
-2019,STI,4,Genap,II2220,Manajemen Sumber Daya STI,3,Mandatory
-2019,STI,3,Ganjil,IF2140,Pemodelan Basis Data,3,Mandatory
-2019,STI,4,Genap,II2240,Analisis Kebutuhan Sistem,3,Mandatory
-2019,STI,3,Ganjil,IF2111,Algoritma dan Struktur Data STI,3,Mandatory
-2019,STI,4,Genap,IF2212,Pemrograman Berorientasi Objek STI,3,Mandatory
-2019,STI,5,Ganjil,II3150,Sistem Multimedia,3,Mandatory
-2019,STI,6,Genap,II3260,Platform dan Pengembangan Aplikasi Mobile,3,Mandatory
-2019,STI,5,Ganjil,II3160,Teknologi Sistem Terintegrasi,3,Mandatory
-2019,STI,6,Genap,II3230,Keamanan Informasi,3,Mandatory
-2019,STI,5,Ganjil,II3120,Layanan Sistem dan Teknologi Informasi,3,Mandatory
-2019,STI,6,Genap,II2221,Manajemen Proyek STI,3,Mandatory
-2019,STI,5,Ganjil,II3131,Interaksi Manusia Komputer,3,Mandatory
-2019,STI,6,Genap,II3220,Arsitektur Enterprise,3,Mandatory
-2019,STI,5,Ganjil,II3121,Analisis Kebutuhan Enterprise,3,Mandatory
-2019,STI,6,Genap,II3240,Rekayasa Sistem dan Teknologi Informasi,3,Mandatory
-2019,STI,5,Ganjil,IF3152,Rekayasa Perangkat Lunak STI,3,Mandatory
-2019,STI,7,Ganjil,II4090,Kerja Praktek,2,Mandatory
-2019,STI,8,Genap,II4092,Tugas Akhir 2,4,Mandatory
-2019,STI,7,Ganjil,II4091,Tugas Akhir 1 & Seminar,2,Mandatory
-2019,STI,8,Genap,II4472,Komunikasi Interpersonal,2,Mandatory
-2019,STI,7,Ganjil,II4370,Hukum & Etika Teknologi Informasi,2,Mandatory
-2019,STI,7,Ganjil,II4371,Kapita Selekta STI,2,Mandatory
-2019,IF,3,Ganjil,IF2121,Logika Komputasional,2,Mandatory
-2019,IF,4,Genap,IF2210,Pemrograman Berorientasi Objek,3,Mandatory
-2019,IF,3,Ganjil,IF2110,Algoritma & Struktur Data,4,Mandatory
-2019,IF,4,Genap,IF2211,Strategi Algoritma,3,Mandatory
-2019,IF,3,Ganjil,IF2120,Matematika Diskrit,3,Mandatory
-2019,IF,4,Genap,IF2220,Probabilitas dan Statistika,3,Mandatory
-2019,IF,3,Ganjil,IF2124,Teori Bahasa Formal dan Otomata,3,Mandatory
-2019,IF,4,Genap,IF2230,Sistem Operasi,3,Mandatory
-2019,IF,3,Ganjil,IF2123,Aljabar Linier dan Geometri,3,Mandatory
-2019,IF,4,Genap,IF2240,Basis Data,3,Mandatory
-2019,IF,3,Ganjil,IF2130,Organisasi dan Arsitektur Komputer,3,Mandatory
-2019,IF,4,Genap,IF2250,Rekayasa Perangkat Lunak,3,Mandatory
-2019,IF,5,Ganjil,IF3170,Inteligensi Buatan,3,Mandatory
-2019,IF,6,Genap,IF3210,Pengembangan Aplikasi pada Platform Khusus,3,Mandatory
-2019,IF,5,Ganjil,IF3110,Pengembangan Aplikasi Berbasis Web,2,Mandatory
-2019,IF,6,Genap,IF3270,Pembelajaran Mesin,2,Mandatory
-2019,IF,5,Ganjil,IF3130,Jaringan Komputer,3,Mandatory
-2019,IF,6,Genap,IF3230,Sistem Paralel dan Terdistribusi,3,Mandatory
-2019,IF,5,Ganjil,IF3141,Sistem Informasi,3,Mandatory
-2019,IF,6,Genap,IF3250,Proyek Perangkat Lunak,4,Mandatory
-2019,IF,5,Ganjil,IF3150,Manajemen Proyek Perangkat Lunak,2,Mandatory
-2019,IF,6,Genap,IF3260,Grafika Komputer,3,Mandatory
-2019,IF,5,Ganjil,IF3140,Manajemen Basis Data,2,Mandatory
-2019,IF,6,Genap,IF3280,Socio-informatika dan Profesionalisme,3,Mandatory
-2019,IF,5,Ganjil,IF3151,Interaksi Manusia Komputer,3,Mandatory
-2019,IF,7,Ganjil,IF4090,Kerja Praktek,2,Mandatory
-2019,IF,8,Genap,IF4092,Tugas Akhir 2,4,Mandatory
-2019,IF,7,Ganjil,IF4091,Tugas Akhir 1 dan Seminar,2,Mandatory
+curriculum_year,major,semester,semester_code,code,name,sks,type,dingdong_url
+2019,STI,3,Ganjil,II2130,Sistem dan Arsitektur Komputer,3,Mandatory,https://drive.google.com/drive/folders/1X6dUsS5ufgoMBnbTROi0TGMeXgaDspZu?usp=drive_link
+2019,STI,4,Genap,II2250,Manajemen Basis Data,2,Mandatory,https://drive.google.com/drive/folders/1F1tD854lAQU52PZ1PDhlLVCJiuz1TbVM?usp=drive_link
+2019,STI,3,Ganjil,II2110,Matematika STI,3,Mandatory,https://drive.google.com/drive/folders/1q7lfzSN--saoNGLmWB1ZMM0Ws77oQ6_I?usp=drive_link
+2019,STI,4,Genap,II2260,Sistem Embedded,3,Mandatory,https://drive.google.com/drive/folders/1wucdxPENEMRg11IQMlGbef797CHjLkFg?usp=drive_link
+2019,STI,3,Ganjil,II2111,Probabilitas dan Statistik,3,Mandatory,https://drive.google.com/drive/folders/1rA_nOnb07LkAvnMBXwucszhM6M8ae38J?usp=drive_link
+2019,STI,4,Genap,II2230,Jaringan Komputer,3,Mandatory,https://drive.google.com/drive/folders/1f9VqwVTOKp6MrWM45aZ6PmXaOM63Iivh?usp=drive_link
+2019,STI,3,Ganjil,TI3005,Organisasi & Manajemen Perusahaan Industri,2,Mandatory,https://drive.google.com/drive/folders/1IRQ93srJugJt3wOZEU4rq4p4ZzaVK3tf?usp=drive_link
+2019,STI,4,Genap,II2220,Manajemen Sumber Daya STI,3,Mandatory,https://drive.google.com/drive/folders/1iOJITqitNJ3rIu8xQ6CmEe5u3a2tKeJi?usp=drive_link
+2019,STI,3,Ganjil,IF2140,Pemodelan Basis Data,3,Mandatory,https://drive.google.com/drive/folders/1rarJIxFDhOi-deWo6dTkhpgW4_V0QZbM?usp=drive_link
+2019,STI,4,Genap,II2240,Analisis Kebutuhan Sistem,3,Mandatory,https://drive.google.com/drive/folders/1LCWPI29BayKR-AznR_gXDJ5fVjPHgJ8k?usp=drive_link
+2019,STI,3,Ganjil,IF2111,Algoritma dan Struktur Data STI,3,Mandatory,https://drive.google.com/drive/folders/1jziqg6Yv5X3q9aHO8PSD5qhkU7hxNWOP?usp=drive_link
+2019,STI,4,Genap,IF2212,Pemrograman Berorientasi Objek STI,3,Mandatory,https://drive.google.com/drive/folders/1lCgW5hk6oMVMMEPpa6HL6Or32rz0fQSU?usp=drive_link
+2019,STI,5,Ganjil,II3150,Sistem Multimedia,3,Mandatory,https://drive.google.com/drive/folders/1BSm-zf5ZPKafziKIxRMh9DOae1NYXZ97?usp=drive_link
+2019,STI,6,Genap,II3260,Platform dan Pengembangan Aplikasi Mobile,3,Mandatory,https://drive.google.com/drive/folders/1NMuGjBWvlRjyzz-zsypbMihQG_xSKxVr?usp=drive_link
+2019,STI,5,Ganjil,II3160,Teknologi Sistem Terintegrasi,3,Mandatory,https://drive.google.com/drive/folders/1roRAFgv-JjishodimmSdaApSPGlz2q-4?usp=drive_link
+2019,STI,6,Genap,II3230,Keamanan Informasi,3,Mandatory,https://drive.google.com/drive/folders/13UIdICQ0FIrvntmJP_JCAzGFwFzQsi42?usp=drive_link
+2019,STI,5,Ganjil,II3120,Layanan Sistem dan Teknologi Informasi,3,Mandatory,https://drive.google.com/drive/folders/15osA5WokJMwbIMfLhjJtQt0qpoEOQwzP?usp=drive_link
+2019,STI,6,Genap,II2221,Manajemen Proyek STI,3,Mandatory,https://drive.google.com/drive/folders/1wCQnMm-dtkdptlAYlHE-NH0yok5TAGfu?usp=drive_link
+2019,STI,5,Ganjil,II3131,Interaksi Manusia Komputer,3,Mandatory,https://drive.google.com/drive/folders/1Ruh2zsEeGNoSmr4YRKU1vCtaCQ8mthb6?usp=drive_link
+2019,STI,6,Genap,II3220,Arsitektur Enterprise,3,Mandatory,https://drive.google.com/drive/folders/1uDRdnCxCC9Sn6QZzxFcIKZYPjTtlFsYG?usp=drive_link
+2019,STI,5,Ganjil,II3121,Analisis Kebutuhan Enterprise,3,Mandatory,https://drive.google.com/drive/folders/1JfN9Fk7I875q3EuwCas68nZq5e6vD-et?usp=drive_link
+2019,STI,6,Genap,II3240,Rekayasa Sistem dan Teknologi Informasi,3,Mandatory,https://drive.google.com/drive/folders/1Y5Eg_v0HCONiHompHpUdX0uwAIhZVquQ?usp=drive_link
+2019,STI,5,Ganjil,IF3152,Rekayasa Perangkat Lunak STI,3,Mandatory,https://drive.google.com/drive/folders/1ttf2TfrWa8UaEwc79XdejU88pIEFL4xM?usp=drive_link
+2019,STI,7,Ganjil,II4090,Kerja Praktek,2,Mandatory,https://drive.google.com/drive/folders/1IYaWGNmWJwIsQAAUpGnB8Ehlym_2Nsb-?usp=drive_link
+2019,STI,8,Genap,II4092,Tugas Akhir 2,4,Mandatory,https://drive.google.com/drive/folders/1qZgYq8Lxa-jWOtnlyGF0fxHNREdciS46?usp=drive_link
+2019,STI,7,Ganjil,II4091,Tugas Akhir 1 & Seminar,2,Mandatory,https://drive.google.com/drive/folders/1qZgYq8Lxa-jWOtnlyGF0fxHNREdciS46?usp=drive_link
+2019,STI,8,Genap,II4472,Komunikasi Interpersonal,2,Mandatory,https://drive.google.com/drive/folders/1zOp1Y0Jzt99b1WVDLmK2wWeVohYLPd47?usp=drive_link
+2019,STI,7,Ganjil,II4370,Hukum & Etika Teknologi Informasi,2,Mandatory,https://drive.google.com/drive/folders/1gw6hT2RyPS0RwJ9at-YMmJRdR6x5Hk-P?usp=drive_link
+2019,STI,7,Ganjil,II4371,Kapita Selekta STI,2,Mandatory,https://drive.google.com/drive/folders/10eapxKPvRKmiWv0RMehHX3Ey3oY0p6_J?usp=drive_link
+2019,IF,3,Ganjil,IF2121,Logika Komputasional,2,Mandatory,https://drive.google.com/drive/folders/1zG7ZYF5kbBwZqIf-0pvvi-IJS12qEsc3?usp=drive_link
+2019,IF,4,Genap,IF2210,Pemrograman Berorientasi Objek,3,Mandatory,https://drive.google.com/drive/folders/1lneoej-8fha58859JnD9TBJtpnOEWoMC?usp=drive_link
+2019,IF,3,Ganjil,IF2110,Algoritma & Struktur Data,4,Mandatory,https://drive.google.com/drive/folders/1MAF_4ACP0rVG8y5DWQqCcisSeUberl4k?usp=drive_link
+2019,IF,4,Genap,IF2211,Strategi Algoritma,3,Mandatory,https://drive.google.com/drive/folders/18UYZhBQeMo4s9N66XWCgHZ7kuaS_VT-t?usp=drive_link
+2019,IF,3,Ganjil,IF2120,Matematika Diskrit,3,Mandatory,https://drive.google.com/drive/folders/1zTd3T_lNhoz6Lzo8hN2GEfv6E7eRul8b?usp=drive_link
+2019,IF,4,Genap,IF2220,Probabilitas dan Statistika,3,Mandatory,https://drive.google.com/drive/folders/1hZjBVu67jDn1Afp3cSXaN8KxE_CVAQGa?usp=drive_link
+2019,IF,3,Ganjil,IF2124,Teori Bahasa Formal dan Otomata,3,Mandatory,https://drive.google.com/drive/folders/1i2ZLZcWeRl1mDvCOSTfclU718Iw9nNUz?usp=drive_link
+2019,IF,4,Genap,IF2230,Sistem Operasi,3,Mandatory,https://drive.google.com/drive/folders/1f1Ya22BdcUfsS703svCe8ZRADZXoIev7?usp=drive_link
+2019,IF,3,Ganjil,IF2123,Aljabar Linier dan Geometri,3,Mandatory,https://drive.google.com/drive/folders/1hKHiHRPFs0tcFR2vaeqZn1N8mmyX-Yt0?usp=drive_link
+2019,IF,4,Genap,IF2240,Basis Data,3,Mandatory,https://drive.google.com/drive/folders/1rYtB99ARSfMCJmNO0-0ilRokBAsv5nPY?usp=drive_link
+2019,IF,3,Ganjil,IF2130,Organisasi dan Arsitektur Komputer,3,Mandatory,https://drive.google.com/drive/folders/1uEMVvnCH0Cr_JVa5tgDtLs2qv2wA6Zdz?usp=drive_link
+2019,IF,4,Genap,IF2250,Rekayasa Perangkat Lunak,3,Mandatory,https://drive.google.com/drive/folders/1vhi0tIs90D3sWQZNr18FfTgHc8t-wis-?usp=drive_link
+2019,IF,5,Ganjil,IF3170,Inteligensi Buatan,3,Mandatory,https://drive.google.com/drive/folders/1Zk8QmxKq8I6UNv-cesHjNhhJe7C6xkTP?usp=drive_link
+2019,IF,6,Genap,IF3210,Pengembangan Aplikasi pada Platform Khusus,3,Mandatory,https://drive.google.com/drive/folders/1VDq8bgyJRDNeyhza8Bb7xgWJdkn4HpNi?usp=drive_link
+2019,IF,5,Ganjil,IF3110,Pengembangan Aplikasi Berbasis Web,2,Mandatory,https://drive.google.com/drive/folders/1_Tc6R9a3GG_4NliM2My7Nx6_msSQkSp_?usp=drive_link
+2019,IF,6,Genap,IF3270,Pembelajaran Mesin,2,Mandatory,https://drive.google.com/drive/folders/1LjnCw71WPqyu74u826jhJkgawv2dgPEz?usp=drive_link
+2019,IF,5,Ganjil,IF3130,Jaringan Komputer,3,Mandatory,https://drive.google.com/drive/folders/1uHyH6-V650uSw4FBsrC5rq_yrQktxj7s?usp=drive_link
+2019,IF,6,Genap,IF3230,Sistem Paralel dan Terdistribusi,3,Mandatory,https://drive.google.com/drive/folders/1UwP_88jNH6fESsrhx5lqZpgPeu5wQfX7?usp=drive_link
+2019,IF,5,Ganjil,IF3141,Sistem Informasi,3,Mandatory,https://drive.google.com/drive/folders/1s4PLnekA2nP-9K8aggwIg_mapKsqjcsN?usp=drive_link
+2019,IF,6,Genap,IF3250,Proyek Perangkat Lunak,4,Mandatory,https://drive.google.com/drive/folders/1Hn1aOUZivDsMZR4CE65OJ6zcKdcJTYoI?usp=drive_link
+2019,IF,5,Ganjil,IF3150,Manajemen Proyek Perangkat Lunak,2,Mandatory,https://drive.google.com/drive/folders/1u7AzJl-sNaZ1vKlB_8qZOLEXXVqrBrMk?usp=drive_link
+2019,IF,6,Genap,IF3260,Grafika Komputer,3,Mandatory,https://drive.google.com/drive/folders/1S1gB1YoQhdodlQTX1Ggv5KySrYPDwPDX?usp=drive_link
+2019,IF,5,Ganjil,IF3140,Manajemen Basis Data,2,Mandatory,https://drive.google.com/drive/folders/16_Qg6vRZL81XMs-UnBPxduNmIrNilDgx?usp=drive_link
+2019,IF,6,Genap,IF3280,Socio-informatika dan Profesionalisme,3,Mandatory,https://drive.google.com/drive/folders/1N6lmHvCDu_i2O-lytag3tMToNY8cQyRf?usp=drive_link
+2019,IF,5,Ganjil,IF3151,Interaksi Manusia Komputer,3,Mandatory,https://drive.google.com/drive/folders/13h6tTTBxFJjPBF7PH72aeobdVP-f-r64?usp=drive_link
+2019,IF,7,Ganjil,IF4090,Kerja Praktek,2,Mandatory,https://drive.google.com/drive/folders/1o4po5BNBIqQaf6IB6Lyw69-lniH85_25?usp=drive_link
+2019,IF,8,Genap,IF4092,Tugas Akhir 2,4,Mandatory,https://drive.google.com/drive/folders/1fzOuTxqZubH72kEEv39lyDFhaARcZmTg?usp=drive_link
+2019,IF,7,Ganjil,IF4091,Tugas Akhir 1 dan Seminar,2,Mandatory,https://drive.google.com/drive/folders/1ajkUlczdbxuF8q2i_wEWiIGC22aPygs7?usp=drive_link
