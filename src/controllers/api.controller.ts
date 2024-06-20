@@ -11,6 +11,7 @@ import { reactionRouter } from './reaction.controller';
 import { userUnsubscribeRouter } from './user-unsubscribe.controller';
 import { calendarRouter } from './calendar.controller';
 import { testimoniRoute } from './testimoni.controller';
+import { userProfileRoute } from './user-profile.controller';
 
 const unprotectedApiRouter = new OpenAPIHono();
 unprotectedApiRouter.route('/', loginRouter);
@@ -29,6 +30,7 @@ protectedApiRouter.route('/', categoryRouter);
 protectedApiRouter.route('/', infoRouter);
 protectedApiRouter.route('/', calendarRouter);
 protectedApiRouter.route('/', testimoniRoute);
+protectedApiRouter.route('/', userProfileRoute);
 
 export const apiRouter = new OpenAPIHono();
 apiRouter.route('/', unprotectedApiRouter);
