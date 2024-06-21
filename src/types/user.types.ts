@@ -2,7 +2,9 @@ import { createSelectSchema } from 'drizzle-zod';
 import { users } from '~/db/schema';
 import { z } from 'zod';
 
-export const UserSchema = createSelectSchema(users);
+export const UserSchema = createSelectSchema(users, {
+    createdAt: z.union([z.string(), z.date()]),
+  }).openapi('User');
 
 export const UserAcademicSchema = z.object({
   semester: z.number().optional().openapi({

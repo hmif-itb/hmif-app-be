@@ -68,6 +68,7 @@ app.doc('/doc', {
     { name: 'unsubscribe', description: 'Unsubscribe API' },
     { name: 'calendar', description: 'Calendar API' },
     { name: 'testimoni', description: 'Testimoni API' },
+    { name: 'user_profile', description: 'User Profile API' },
   ],
 });
 app.get('/swagger', swaggerUI({ url: '/doc' }));

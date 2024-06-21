@@ -19,3 +19,9 @@ export async function getUserAcademic(db: Database, userId: string) {
   return {semester, semesterCodeTaken, semesterYearTaken}
 
 }
+
+export async function getUserProfile(db: Database, userId: string) {
+  return await db.query.users.findFirst({
+    where: eq(users.id, userId),
+  });
+}
