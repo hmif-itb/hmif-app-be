@@ -1,4 +1,7 @@
-import { UserAcademicSchema, UserSchema } from '~/types/user.types';
+import {
+  UserAcademicSchema,
+  UserProfileSchema,
+} from '~/types/user-profile.types';
 import { createRoute, z } from '@hono/zod-openapi';
 import { ValidationErrorSchema, ErrorSchema } from '~/types/responses.type';
 
@@ -39,7 +42,7 @@ export const getUserProfileRoute = createRoute({
       description: 'Get profile of user',
       content: {
         'application/json': {
-          schema: UserSchema,
+          schema: UserProfileSchema,
         },
       },
     },
