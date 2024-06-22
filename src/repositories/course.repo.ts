@@ -1,4 +1,4 @@
-import { and, eq, sql } from 'drizzle-orm';
+import { and, eq, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
@@ -140,9 +140,16 @@ export async function getListCourses(
     ? eq(courses.curriculumYear, q.curriculumYear)
     : undefined;
   const majorQ = q.major ? eq(courses.major, q.major) : undefined;
-  const semesterQ = q.semester ? eq(courses.semester, q.semester) : undefined;
+  const semesterQ =
+    q.semester !== undefined
+      ? q.semester > 0
+        ? eq(courses.semester, q.semester) // Kalo nilainya angka sem normal, ya query di semester itu aja
+        : isNull(courses.semester) // Kalo nilianya 0, berarti bisa diambil di semua semester
+      : undefined;
+  const typeQ = q.type ? eq(courses.type, q.type) : undefined;
+  const sksQ = q.credits ? eq(courses.credits, q.credits) : undefined;
 
-  const where = and(curriculumYearQ, majorQ, semesterQ);
+  const where = and(curriculumYearQ, majorQ, semesterQ, typeQ, sksQ);
   return await db.query.courses.findMany({
     where,
   });
