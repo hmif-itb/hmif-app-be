@@ -122,6 +122,9 @@ export const ListInfoParamsSchema = z.object({
   offset: z.coerce.number().int().nonnegative().optional().openapi({
     example: 10,
   }),
+  sort: z.enum(['oldest', 'newest']).default('newest').openapi({
+    example: 'newest',
+  }),
 });
 
 export const ListInfoSchema = z.object({

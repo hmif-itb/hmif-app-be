@@ -215,6 +215,17 @@ export async function getListInfos(
     }),
   );
 
+  // Sort based on 'sort' query params
+  if (q.sort) {
+    listInfo = listInfo.sort((a, b) => {
+      if (q.sort === 'oldest') {
+        return a.createdAt.getTime() - b.createdAt.getTime();
+      } else {
+        return b.createdAt.getTime() - a.createdAt.getTime();
+      }
+    });
+  }
+
   return listInfo;
 }
 
