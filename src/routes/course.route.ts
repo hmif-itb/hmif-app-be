@@ -11,6 +11,7 @@ import {
   ListUserCourseSchema,
   BatchCreateOrUpdateUserCourseSchema,
   BatchCreateOrUpdateUserCourseResponseSchema,
+  DeleteUserCourseSchema,
 } from '~/types/course.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
@@ -287,42 +288,6 @@ export const getCurrentUserCourseRoute = createRoute({
   },
 });
 
-export const deleteUserCourseRoute = createRoute({
-  operationId: 'deleteUserCourse',
-  tags: ['course'],
-  method: 'delete',
-  path: '/course/take/{courseId}',
-  request: {
-    params: CourseIdRequestBodySchema,
-  },
-  responses: {
-    200: {
-      description: 'Deleted user course',
-      content: {
-        'application/json': {
-          schema: UserCourseSchema,
-        },
-      },
-    },
-    400: {
-      description: 'Bad request',
-      content: {
-        'application/json': {
-          schema: z.union([ValidationErrorSchema, ErrorSchema]),
-        },
-      },
-    },
-    404: {
-      description: 'User course not found',
-      content: {
-        'application/json': {
-          schema: ErrorSchema,
-        },
-      },
-    },
-  },
-});
-
 export const createOrUpdateBatchUserCourseRoute = createRoute({
   operationId: 'createOrUpdateBatchUserCourse',
   tags: ['course'],
@@ -352,6 +317,48 @@ export const createOrUpdateBatchUserCourseRoute = createRoute({
       content: {
         'application/json': {
           schema: z.union([ValidationErrorSchema, ErrorSchema]),
+        },
+      },
+    },
+  },
+});
+
+export const deleteUserCourseRoute = createRoute({
+  operationId: 'deleteUserCourse',
+  tags: ['course'],
+  method: 'delete',
+  path: '/course/take/batch',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: DeleteUserCourseSchema,
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'Deleted user batch course',
+      content: {
+        'application/json': {
+          schema: ListUserCourseSchema,
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ValidationErrorSchema, ErrorSchema]),
+        },
+      },
+    },
+    404: {
+      description: 'User course not found',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
         },
       },
     },

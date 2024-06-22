@@ -53,6 +53,10 @@ export const CreateUserCourseSchema = createInsertSchema(userCourses).omit({
   userId: true,
 });
 
+export const DeleteUserCourseSchema = z.object({
+  courseIds: z.union([z.array(z.string()), z.string()]),
+});
+
 export const BatchCreateOrUpdateUserCourseSchema = z.array(
   CreateUserCourseSchema,
 );
