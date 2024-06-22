@@ -25,11 +25,18 @@ export const ListCourseParamsSchema = z.object({
   curriculumYear: z.coerce.number().int().optional().openapi({
     example: 2019,
   }),
-  major: z.enum(['IF', 'STI']).optional().openapi({
+  major: z.enum(['IF', 'STI', 'OTHER']).optional().openapi({
     example: 'STI',
   }),
   semester: z.coerce.number().int().optional().openapi({
+    description: 'Put 0 for courses that can be taken on any semester',
     example: 6,
+  }),
+  type: z.enum(['Mandatory', 'Elective']).optional().openapi({
+    example: 'Elective',
+  }),
+  credits: z.coerce.number().int().optional().openapi({
+    example: 3,
   }),
 });
 
