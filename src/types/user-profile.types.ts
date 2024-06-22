@@ -1,10 +1,7 @@
-import { createSelectSchema } from 'drizzle-zod';
-import { users } from '~/db/schema';
 import { z } from 'zod';
+import { JWTPayloadSchema } from './login.types';
 
-export const UserProfileSchema = createSelectSchema(users, {
-  createdAt: z.union([z.string(), z.date()]),
-}).openapi('User');
+export const UserProfileSchema = JWTPayloadSchema;
 
 export const UserAcademicSchema = z.object({
   semester: z.number().optional().openapi({

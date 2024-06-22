@@ -1,9 +1,6 @@
 import { db } from '~/db/drizzle';
 import { createAuthRouter } from './router-factory';
-import {
-  getUserAcademic,
-  getUserProfile,
-} from '~/repositories/user-profile.repo';
+import { getUserAcademic } from '~/repositories/user-profile.repo';
 import {
   getUserAcademicRoute,
   getUserProfileRoute,
@@ -12,20 +9,20 @@ import {
 export const userProfileRoute = createAuthRouter();
 
 userProfileRoute.openapi(getUserAcademicRoute, async (c) => {
+  const user = c.var.user;
   const { semester, semesterCodeTaken, semesterYearTaken } =
-    await getUserAcademic(db, c.var.user.id);
-  const resp = {
-    semester: semester,
-    semesterYear: semesterYearTaken,
-    semesterCode: semesterCodeTaken,
-  };
-  return c.json(resp, 200);
+    await getUserAcademic(db, user);
+  return c.json(
+    {
+      semester,
+      semesterYear: semesterYearTaken,
+      semesterCode: semesterCodeTaken,
+    },
+    200,
+  );
 });
 
 userProfileRoute.openapi(getUserProfileRoute, async (c) => {
-  const profile = await getUserProfile(db, c.var.user.id);
-  if (!profile) {
-    throw new Error('User not found');
-  }
-  return c.json(profile, 200);
+  const user = c.var.user;
+  return c.json(user, 200);
 });

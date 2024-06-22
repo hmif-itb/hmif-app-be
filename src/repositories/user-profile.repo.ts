@@ -1,25 +1,18 @@
-import { eq } from 'drizzle-orm';
+import { z } from 'zod';
 import { Database } from '~/db/drizzle';
-import { users } from '~/db/schema';
 import { getCurrentSemesterCodeAndYear } from './course.repo';
+import { JWTPayloadSchema } from '~/types/login.types';
 
-export async function getUserAcademic(db: Database, userId: string) {
-  var semester;
-  const user = await db.query.users.findFirst({
-    where: eq(users.id, userId),
-  });
+export async function getUserAcademic(
+  db: Database,
+  user: z.infer<typeof JWTPayloadSchema>,
+) {
   const { semesterCodeTaken, semesterYearTaken } =
     getCurrentSemesterCodeAndYear();
-  if (semesterCodeTaken === 'Genap') {
-    semester = 2 * (semesterYearTaken - user!.angkatan + 1);
-  } else {
-    semester = 2 * (semesterYearTaken - user!.angkatan) + 1;
-  }
-  return { semester, semesterCodeTaken, semesterYearTaken };
-}
+  const semester =
+    semesterCodeTaken === 'Genap'
+      ? 2 * (semesterYearTaken - user.angkatan + 1) // Kalo semester genap
+      : 2 * (semesterYearTaken - user.angkatan) + 1; // Kalo semester ganjil
 
-export async function getUserProfile(db: Database, userId: string) {
-  return await db.query.users.findFirst({
-    where: eq(users.id, userId),
-  });
+  return { semester, semesterCodeTaken, semesterYearTaken };
 }
