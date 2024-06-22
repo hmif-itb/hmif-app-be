@@ -83,8 +83,8 @@ export async function runCourses() {
       const course = dataSchema.parse({
         curriculumYear: +row[0],
         major: row[1],
-        semester: +row[2],
-        semesterCode: row[3],
+        semester: +row[2] || null,
+        semesterCode: row[3] || null,
         code: row[4],
         name: row[5],
         credits: +row[6],
