@@ -13,7 +13,7 @@ import {
 
 // User Course Repository
 
-function getCurrentSemesterCodeAndYear() {
+export function getCurrentSemesterCodeAndYear() {
   // Get current time to determine semester code and year
   const timeNow = new Date();
   const currentMonth = timeNow.getMonth();
