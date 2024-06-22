@@ -155,7 +155,11 @@ export async function createCourse(
       .insert(courses)
       .values({
         ...data,
-        semesterCode: data.semester % 2 === 0 ? 'Genap' : 'Ganjil',
+        semesterCode: data.semester
+          ? data.semester % 2 === 0
+            ? 'Genap'
+            : 'Ganjil'
+          : null,
       })
       .returning()
       .then(firstSure);

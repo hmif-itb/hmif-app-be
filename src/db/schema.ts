@@ -302,13 +302,14 @@ export const courses = pgTable(
     type: text('type', { enum: ['Mandatory', 'Elective'] })
       .default('Elective')
       .notNull(),
-    semester: integer('semester').notNull(),
+    semester: integer('semester'),
     semesterCode: text('semester_code', {
       enum: ['Ganjil', 'Genap'],
-    }).notNull(),
+    }),
     code: text('code').unique().notNull(),
     name: text('name').notNull(),
-    credits: integer('sks').notNull(),
+    credits: integer('sks'),
+    dingdongUrl: text('dingdong_url'),
   },
   (t) => ({
     codeIdx: index().on(t.code),
@@ -484,9 +485,17 @@ export const testimonies = pgTable(
         onDelete: 'cascade',
       }),
     userName: text('user_name'),
-    overview: text('overview').notNull(),
-    assignments: text('assignments').notNull(),
-    lecturer: text('lecturer').notNull(),
+    // STI Testimonies
+    impressions: text('impressions'),
+    challenges: text('challenges'),
+    advice: text('advice'),
+
+    // IF Testimonies
+    overview: text('overview'),
+    assignments: text('assignments'),
+    lecturer_review: text('lecturer_review'),
+
+    lecturer: text('lecturer'),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
