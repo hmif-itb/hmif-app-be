@@ -7,7 +7,7 @@ import { ValidationErrorSchema, ErrorSchema } from '~/types/responses.type';
 
 export const getUserAcademicRoute = createRoute({
   operationId: 'getUserAcademic',
-  tags: ['user_profile'],
+  tags: ['user-profile'],
   method: 'get',
   path: '/user/academic',
   request: {},
@@ -33,7 +33,7 @@ export const getUserAcademicRoute = createRoute({
 
 export const getUserProfileRoute = createRoute({
   operationId: 'getUserProfile',
-  tags: ['user_profile'],
+  tags: ['user-profile'],
   method: 'get',
   path: '/user',
   request: {},
