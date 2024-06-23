@@ -5,13 +5,13 @@ import { createInsertSchema } from 'drizzle-zod';
 import fs from 'fs';
 import postgres from 'postgres';
 import { z } from 'zod';
-import { angkatan, courses, users } from './schema';
+import { angkatan, courses, testimonies, users } from './schema';
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is required');
 }
 
-const client = postgres(process.env.DATABASE_URL, { max: 2 });
+const client = postgres(process.env.DATABASE_URL);
 const db = drizzle(client);
 
 export async function runUserSeed() {
@@ -57,7 +57,6 @@ export async function runUserSeed() {
         .values(data)
         .onConflictDoNothing()
         .then(async () => {
-          await client.end();
           console.log('✅ Inserted users into database!');
         })
         .catch((err) => {
@@ -89,7 +88,7 @@ export async function runCourses() {
         name: row[5],
         credits: +row[6],
         type: row[7],
-        dingdongUrl: row[8],
+        dingdongUrl: row[8] || null,
       });
       data.push(course);
     })
@@ -100,7 +99,6 @@ export async function runCourses() {
         .values(data)
         .onConflictDoNothing()
         .then(async () => {
-          await client.end();
           console.log('✅ Inserted courses into database!');
         })
         .catch((err) => {
@@ -136,7 +134,6 @@ export async function runAngkatanSeed() {
         .values(data)
         .onConflictDoNothing()
         .then(async () => {
-          await client.end();
           console.log('✅ Inserted angkatan into database!');
         })
         .catch((err) => {
@@ -150,8 +147,76 @@ export async function runAngkatanSeed() {
     });
 }
 
+export async function runIFTestimoniSeed() {
+  const filePath = 'src/db/seed/testimoni-if.csv';
+  const data: Array<typeof testimonies.$inferInsert> = [];
+  const coursesList = await db
+    .select({ id: courses.id, code: courses.code })
+    .from(courses);
+
+  // Map between course code and course id
+  const idCourseMap = new Map(
+    coursesList.map((course) => [course.code, course.id]),
+  );
+  const dataSchema = createInsertSchema(testimonies);
+
+  fs.createReadStream(filePath)
+    .pipe(parse({ delimiter: ',', from_line: 2 }))
+    .on('data', (row) => {
+      const currentCourseId = idCourseMap.get(row[1]);
+      const testimonies = dataSchema.parse({
+        userId: row[0] || null,
+        courseId: currentCourseId ?? null,
+        userName: row[2] || null,
+        // STI Testimonies
+        impressions: row[3] || null,
+        challenges: row[4] || null,
+        advice: row[5] || null,
+
+        // IF Testimonies
+        overview: row[6] || null,
+        assignments: row[7] || null,
+        lecturer_review: row[8] || null,
+
+        lecturer: row[9] || null,
+      });
+      data.push(testimonies);
+    })
+    .on('end', () => {
+      console.log('📖 Finished reading IF testimonies CSV file');
+      console.log('💾 Started inserting IF testimonies into database...');
+      db.insert(testimonies)
+        .values(data)
+        .onConflictDoNothing()
+        .then(async () => {
+          await client.end();
+          console.log('✅ Inserted IF testimonies into database!');
+        })
+        .catch((err) => {
+          console.log(
+            '❌ Something went wrong while inserting IF testimonies!',
+          );
+          console.log(err);
+        });
+    })
+    .on('error', (err) => {
+      console.log('❌ Something went wrong while inserting IF testimonies!');
+      console.log(err);
+    });
+}
+
+async function runAllSeeds() {
+  try {
+    await runAngkatanSeed();
+    await runUserSeed();
+    await runCourses();
+    await new Promise((resolve) => setTimeout(resolve, 6000));
+    await runIFTestimoniSeed();
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 if (require.main === module) {
-  void runAngkatanSeed();
-  void runUserSeed();
-  void runCourses();
+  void runAllSeeds();
 }
