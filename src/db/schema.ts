@@ -535,7 +535,7 @@ export const calendarEvent = pgTable(
     id: text('id').primaryKey().$defaultFn(createId),
     calendarGroupId: integer('calendar_group_id').notNull()
       .references(() => calendarGroup.id, { onDelete: 'cascade' }),
-    courseId: integer('courses_id'),
+    courseId: text('courses_id'),
     title: text('title').notNull(),
     description: text('description').notNull(),
     category: text('category').notNull(),
