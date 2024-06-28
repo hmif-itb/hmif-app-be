@@ -8,6 +8,13 @@
       "when": 1719583256211,
       "tag": "0000_equal_william_stryker",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1719586125533,
+      "tag": "0001_parched_ghost_rider",
+      "breakpoints": true
     }
   ]
 }
