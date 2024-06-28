@@ -322,6 +322,7 @@ export const coursesRelation = relations(courses, ({ many }) => ({
   infoCourses: many(infoCourses),
   userCourses: many(userCourses),
   testimonies: many(testimonies),
+  calendarEvent: many(calendarEvent),
 }));
 
 export const categories = pgTable('categories', {
@@ -510,6 +511,45 @@ export const testimoniesRelation = relations(testimonies, ({ one }) => ({
   user: one(users, { fields: [testimonies.userId], references: [users.id] }),
   course: one(courses, {
     fields: [testimonies.courseId],
+    references: [courses.id],
+  }),
+}));
+
+export const calendarGroup = pgTable('calendar_group', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  name: text('name').notNull(),
+  category: text('category', { enum: ['akademik', 'himpunan'] }).notNull(),
+  googleCalendarUrl: text('google_calendar_url'),
+});
+
+export const calendarGroupRelation = relations(calendarGroup, ({ many }) => ({
+  calendarEvent: many(calendarEvent),
+}));
+
+export const calendarEvent = pgTable('calendar_event', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  calendarGroupId: text('calendar_group_id')
+    .notNull()
+    .references(() => calendarGroup.id, { onDelete: 'cascade' }),
+  courseId: text('courses_id').references(() => courses.id, {
+    onDelete: 'cascade',
+  }),
+  title: text('title').notNull(),
+  description: text('description').notNull(),
+  category: text('category').notNull(),
+  academicYear: integer('academic_year'),
+  start: timestamp('start', { withTimezone: true }).notNull(),
+  end: timestamp('end', { withTimezone: true }).notNull(),
+  googleCalendarUrl: text('google_calendar_url').notNull(),
+});
+
+export const calendarEventRelations = relations(calendarEvent, ({ one }) => ({
+  calendarGroup: one(calendarGroup, {
+    fields: [calendarEvent.calendarGroupId],
+    references: [calendarGroup.id],
+  }),
+  course: one(courses, {
+    fields: [calendarEvent.courseId],
     references: [courses.id],
   }),
 }));
