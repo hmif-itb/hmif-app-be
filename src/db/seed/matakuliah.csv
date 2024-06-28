@@ -20,6 +20,8 @@ curriculum_year,major,semester,semester_code,code,name,sks,type,dingdong_url
 2019,IF,8,Genap,IF4072,Pemrosesan Bahasa Alami,2,Elective,https://drive.google.com/drive/folders/1LzmeyLzfnULISrjMhauoWIxVegiAOqXI?usp=drive_link
 2019,IF,7,Ganjil,IF4073,Interpretasi dan Pengolahan Citra,3,Elective,https://drive.google.com/drive/folders/1k7_Q3kL2XdgVjtzWUhjdJ3wMJy549zAU?usp=drive_link
 2019,IF,8,Genap,IF4074,Pembelajaran Mesin Lanjut,2,Elective,https://drive.google.com/drive/folders/14zjEKEA0FQ6qowqJtW1vJswbfUR9ZUJ5?usp=drive_link
+2019,IF,,,IF4080,Informatika di Industri,3,Elective,
+2019,IF,8,Genap,IF4081,Informatika untuk Komunitas,3,Elective,
 2019,IF,7,Ganjil,IF4082,Pengembangan Keprofesian/Komunitas Informatika A,2,Elective,
 2019,IF,7,Ganjil,IF4083,Pengembangan Keprofesian/Komunitas Informatika B,3,Elective,
 2019,IF,7,Ganjil,IF4084,Pengembangan Keprofesian/Komunitas Informatika C,4,Elective,
@@ -58,24 +60,45 @@ curriculum_year,major,semester,semester_code,code,name,sks,type,dingdong_url
 2019,IF,8,Genap,IF4092,Tugas Akhir 2,4,Mandatory,https://drive.google.com/drive/folders/1fzOuTxqZubH72kEEv39lyDFhaARcZmTg?usp=drive_link
 2019,OTHER,8,Genap,AS2005,Astronomi dan Lingkungan,2,Elective,https://drive.google.com/drive/folders/1JixlK89NCZURCSjOnAgrY9PafCoPglX8?usp=drive_link
 2019,OTHER,8,Genap,BI2001,Pengetahuan Lingkungan,2,Elective,https://drive.google.com/drive/folders/1xBLDK1NsF5t3ot0pnxdUENW8VvJyJwWS?usp=drive_link
+2019,OTHER,,Genap,MA2031,Matematika III,2,Elective,
+2019,OTHER,3,Ganjil,SR2003,Seni Lukis Pilihan,3,Elective,
 2019,OTHER,5,Ganjil,DK3014,Psikologi Persepsi,3,Elective,https://drive.google.com/drive/folders/1se9JeKonTahVUBLfHgcJIsDuuZpUakfS?usp=drive_link
 2019,OTHER,5,Ganjil,DK3016,Psikologi Sosial,3,Elective,https://drive.google.com/drive/folders/1oAoRUqQcWrpqpuqBNmRMRlqO1btDi0ND?usp=drive_link
+2019,OTHER,6,Genap,DK3210,Pemodelan dan Gerak Karakter (3D),3,Elective,
+2019,OTHER,8,Genap,DK4206,Desain Game,3,Elective,
 2019,OTHER,5,Ganjil,DP3011,Berpikir Desain,3,Elective,https://drive.google.com/drive/folders/1XONwXI-IKJO3MzV2fDRpEYtIJtMkwSH0?usp=drive_link
+2019,OTHER,6,Genap,KI3011,Manajemen Laboratorium Kimia,3,Elective,
+2019,OTHER,8,Genap,DP4203,Desain Berbasis Pengguna,3,Elective,
 2019,OTHER,,,KU2061,Agama dan Etika Islam,2,Elective,https://drive.google.com/drive/folders/1RHIEl59xE1e4eA7kmBATVc_R4ENUZiIe?usp=drive_link
 2019,OTHER,,,KU2062,Agama dan Etika Protestan,2,Elective,https://drive.google.com/drive/folders/1kiPX9GKQyNrtKCdsu4gafbmWoy-iUAZZ?usp=drive_link
+2019,OTHER,,,KU2063,Agama dan Etika Katolik,2,Elective,
+2019,OTHER,,,KU2065,Agama dan Etika Buddha,2,Elective,
 2019,OTHER,,,KU2064,Agama dan Etika Hindu,2,Elective,https://drive.google.com/drive/folders/1xRjXIiKysffHx0ncJFvG-G_ixpFw33GM?usp=drive_link
 2019,OTHER,,,KU2071,Pancasila dan Kewarganegaraan,2,Elective,https://drive.google.com/drive/folders/1dBESuZQFIkqxTsR0olq5PbhU8rkFvsMf?usp=drive_link
+2019,OTHER,,,KU4012,Komposisi,3,Elective,
 2019,OTHER,,,KU4070,Bahasa Perancis,2,Elective,https://drive.google.com/drive/folders/1h4w_4eajXy2b1E33Y-cT8hXG1h26IcbD?usp=drive_link
 2019,OTHER,,,KU4071,Bahasa Jerman,2,Elective,https://drive.google.com/drive/folders/19eIvSHDcvxpRVO7Bjcv_YtMXKFgorzD6?usp=drive_link
 2019,OTHER,,,KU4072,Bahasa Jepang,2,Elective,https://drive.google.com/drive/folders/14qxvznEN-qt9OVkHaVhi2uDfF-NF0-kR?usp=drive_link
+2019,OTHER,,,KU4074,Politik dan Tata Pemerintahan,2,Elective,
 2019,OTHER,,,KU4075,Hukum Lingkungan,2,Elective,https://drive.google.com/drive/folders/1BW5ghVs3w2iWhWoc7WDvXDyX_d9tL3LS?usp=drive_link
+2019,OTHER,,,KU4078,Studium Generale,2,Elective,
 2019,OTHER,,,KU4079,Pendidikan Anti Korupsi,2,Elective,https://drive.google.com/drive/folders/1xx6StFnB5X4r0BrGpsLi0MTW611X84pb?usp=drive_link
+2019,OTHER,,,KU4095,Kewirausahaan,2,Elective,
 2019,OTHER,,,KU4172,Hukum Perburuhan,2,Elective,https://drive.google.com/drive/folders/1rkq4uebQgForEying9qVVhpoV5EuTooc?usp=drive_link
+2019,OTHER,,,KU4182,Komunikasi Pembangunan,2,Elective,
+2019,OTHER,,,KU4183,Sosiologi Industri,2,Elective,
+2019,OTHER,,,KU4184,Antropologi,2,Elective,
 2019,OTHER,,,KU4225,Filsafat Ilmu,2,Elective,https://drive.google.com/drive/folders/1lcnItN106gBoeWmsYus4Hg6BlRqEg3Oh?usp=drive_link
 2019,OTHER,,,KU4273,Hukum Miliki Perindustrian,2,Elective,https://drive.google.com/drive/folders/1UbD9ZUVXlmuqJnmCfxYCyNLGyZSHcJ5R?usp=drive_link
-2019,OTHER,,,ME4034,Kebijakan Iklim,,Elective,https://drive.google.com/drive/folders/1g5eh-SiLjgn8Yb_bh_Fb8SXmfX_-pugD?usp=drive_link
+2019,OTHER,,,ME4034,Kebijakan Iklim,3,Elective,https://drive.google.com/drive/folders/1g5eh-SiLjgn8Yb_bh_Fb8SXmfX_-pugD?usp=drive_link
+2019,OTHER,,,ME4045,Perubahan Iklim B (Layanan),3,Elective,
 2019,OTHER,,,TL2105,Kesehatan Lingkungan,3,Elective,https://drive.google.com/drive/folders/1rSsQnEH0RA3WXTHXjgHRmIfPHCz1iaT5?usp=drive_link
 2019,OTHER,,,TL4002,Rekayasa Lingkungan,3,Elective,https://drive.google.com/drive/folders/1-F2EwS60bl6YlDU-vOu4ix1Hh0s6SQf6?usp=drive_link
+2019,OTHER,,,MB4044,Perencanaan Keuangan,3,Elective,
+2019,OTHER,,Ganjil,MA4072,Pembelajaran Mendalam,4,Elective,
+2019,OTHER,,Ganjil,EL4121,Perancangan Sistem Embedded,3,Elective,
+2019,OTHER,,,MBKM01,Diginove,,Elective,
+2019,OTHER,,,MBKM02,Bangkit Academy,20,Elective,
 2019,STI,7,Ganjil,EL4125,Pengolahan Citra Digital,3,Elective,https://drive.google.com/drive/folders/1HiY_Dh02DMoBAwgt6FZiOnetGMKuTWfF?usp=drive_link
 2019,STI,7,Ganjil,EL4126,Robotika,3,Elective,https://drive.google.com/drive/folders/1lkA72H1WY24zAqPTFxrsiH0Z5MdUj-2d?usp=drive_link
 2019,STI,,,EL4127,Arsitektur dan Komputasi Paralel,3,Elective,https://drive.google.com/drive/folders/1YT5YLoW-g-w_E1UfTXTKMDdgAvCbs076?usp=drive_link
