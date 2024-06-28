@@ -5,36 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1716205876620,
-      "tag": "0000_sleepy_hydra",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1716267280783,
-      "tag": "0001_good_patriot",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1716809543224,
-      "tag": "0002_even_meggan",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1718186321197,
-      "tag": "0003_familiar_doorman",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1719041448267,
-      "tag": "0004_crazy_machine_man",
+      "when": 1719583256211,
+      "tag": "0000_equal_william_stryker",
       "breakpoints": true
     }
   ]
