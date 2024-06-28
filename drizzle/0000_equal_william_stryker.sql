@@ -6,6 +6,26 @@ CREATE TABLE IF NOT EXISTS "angkatan" (
 	CONSTRAINT "angkatan_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "calendar_event" (
+	"id" text PRIMARY KEY NOT NULL,
+	"calendar_group_id" text NOT NULL,
+	"courses_id" text,
+	"title" text NOT NULL,
+	"description" text NOT NULL,
+	"category" text NOT NULL,
+	"academic_year" integer,
+	"start" timestamp with time zone NOT NULL,
+	"end" timestamp with time zone NOT NULL,
+	"google_calendar_url" text NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "calendar_group" (
+	"id" text PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"category" text NOT NULL,
+	"google_calendar_url" text
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "categories" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
@@ -25,11 +45,13 @@ CREATE TABLE IF NOT EXISTS "courses" (
 	"id" text PRIMARY KEY NOT NULL,
 	"curriculum_year" integer NOT NULL,
 	"jurusan" text NOT NULL,
-	"semester" integer NOT NULL,
-	"semester_code" text NOT NULL,
+	"type" text DEFAULT 'Elective' NOT NULL,
+	"semester" integer,
+	"semester_code" text,
 	"code" text NOT NULL,
 	"name" text NOT NULL,
-	"sks" integer NOT NULL,
+	"sks" integer,
+	"dingdong_url" text,
 	CONSTRAINT "courses_code_unique" UNIQUE("code")
 );
 --> statement-breakpoint
@@ -88,7 +110,7 @@ CREATE TABLE IF NOT EXISTS "medias" (
 CREATE TABLE IF NOT EXISTS "push_subscriptions" (
 	"endpoint" text PRIMARY KEY NOT NULL,
 	"user_id" text,
-	"keys" json,
+	"keys" json NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
@@ -100,6 +122,21 @@ CREATE TABLE IF NOT EXISTS "reactions" (
 	"reaction" text NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "reactions_creator_id_info_id_comment_id_unique" UNIQUE NULLS NOT DISTINCT("creator_id","info_id","comment_id")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "testimonies" (
+	"id" text PRIMARY KEY NOT NULL,
+	"user_id" text,
+	"course_id" text NOT NULL,
+	"user_name" text,
+	"impressions" text,
+	"challenges" text,
+	"advice" text,
+	"overview" text,
+	"assignments" text,
+	"lecturer_review" text,
+	"lecturer" text,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user_courses" (
@@ -130,6 +167,7 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"email" text NOT NULL,
 	"full_name" text NOT NULL,
 	"jurusan" text NOT NULL,
+	"picture" text,
 	"asal_kampus" text NOT NULL,
 	"angkatan" integer NOT NULL,
 	"jenis_kelamin" text NOT NULL,
@@ -138,6 +176,18 @@ CREATE TABLE IF NOT EXISTS "users" (
 	CONSTRAINT "users_nim_unique" UNIQUE("nim"),
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "calendar_event" ADD CONSTRAINT "calendar_event_calendar_group_id_calendar_group_id_fk" FOREIGN KEY ("calendar_group_id") REFERENCES "public"."calendar_group"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "calendar_event" ADD CONSTRAINT "calendar_event_courses_id_courses_id_fk" FOREIGN KEY ("courses_id") REFERENCES "public"."courses"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "comments" ADD CONSTRAINT "comments_replied_info_id_infos_id_fk" FOREIGN KEY ("replied_info_id") REFERENCES "public"."infos"("id") ON DELETE cascade ON UPDATE no action;
@@ -242,6 +292,18 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ ALTER TABLE "testimonies" ADD CONSTRAINT "testimonies_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "testimonies" ADD CONSTRAINT "testimonies_course_id_courses_id_fk" FOREIGN KEY ("course_id") REFERENCES "public"."courses"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  ALTER TABLE "user_courses" ADD CONSTRAINT "user_courses_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -289,5 +351,7 @@ CREATE INDEX IF NOT EXISTS "courses_code_index" ON "courses" ("code");--> statem
 CREATE INDEX IF NOT EXISTS "push_subscriptions_user_id_index" ON "push_subscriptions" ("user_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "reactions_info_id_index" ON "reactions" ("info_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "reactions_comment_id_index" ON "reactions" ("comment_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "testimonies_user_id_index" ON "testimonies" ("user_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "testimonies_course_id_index" ON "testimonies" ("course_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "users_nim_index" ON "users" ("nim");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "users_email_index" ON "users" ("email");

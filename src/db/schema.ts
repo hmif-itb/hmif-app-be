@@ -528,7 +528,7 @@ export const calendarGroupRelation = relations(calendarGroup, ({ many }) => ({
 
 export const calendarEvent = pgTable('calendar_event', {
   id: text('id').primaryKey().$defaultFn(createId),
-  calendarGroupId: integer('calendar_group_id')
+  calendarGroupId: text('calendar_group_id')
     .notNull()
     .references(() => calendarGroup.id, { onDelete: 'cascade' }),
   courseId: text('courses_id').references(() => courses.id, {
