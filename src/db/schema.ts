@@ -555,12 +555,16 @@ export const calendarEventRelations = relations(calendarEvent, ({ one }) => ({
   }),
 }));
 
-export const userRoles = pgTable('user_roles', {
-  userId: text('user_id')
-    .references(() => users.id, { onDelete: 'cascade' })
-    .notNull(),
-  role: text('role', { enum: ['Himpunan'] }).notNull(),
-});
+export const userRoles = pgTable(
+  'user_roles',
+  {
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    role: text('role', { enum: ['Himpunan'] }).notNull(),
+  },
+  (t) => ({ pk: primaryKey({ columns: [t.userId, t.role] }) }),
+);
 
 export const userRolesRelation = relations(userRoles, ({ one }) => ({
   user: one(users, { fields: [userRoles.userId], references: [users.id] }),

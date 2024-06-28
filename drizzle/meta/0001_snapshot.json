@@ -1,5 +1,5 @@
 {
-  "id": "06b167ca-e0f8-4c6e-a4bd-e15ea56d720b",
+  "id": "3c81954c-015d-4aca-8ed6-135b4dd2fba2",
   "prevId": "a1b0734b-79a7-44f2-a568-44a7eea73d77",
   "version": "6",
   "dialect": "postgresql",
@@ -1269,7 +1269,15 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "user_roles_user_id_role_pk": {
+          "name": "user_roles_user_id_role_pk",
+          "columns": [
+            "user_id",
+            "role"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "public.user_unsubscribe_categories": {

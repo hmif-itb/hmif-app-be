@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS "user_roles" (
 	"user_id" text NOT NULL,
-	"role" text NOT NULL
+	"role" text NOT NULL,
+	CONSTRAINT "user_roles_user_id_role_pk" PRIMARY KEY("user_id","role")
 );
 --> statement-breakpoint
 DO $$ BEGIN
