@@ -515,45 +515,41 @@ export const testimoniesRelation = relations(testimonies, ({ one }) => ({
   }),
 }));
 
-export const calendarGroup = pgTable(
-  'calendar_group',
-  {
-    id: text('id').primaryKey().$defaultFn(createId),
-    name: text('name').notNull(),
-    category: text('category', { enum: ['akademik', 'himpunan'] }).notNull(),
-    googleCalendarUrl: text('google_calendar_url'),
-  }
-);
+export const calendarGroup = pgTable('calendar_group', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  name: text('name').notNull(),
+  category: text('category', { enum: ['akademik', 'himpunan'] }).notNull(),
+  googleCalendarUrl: text('google_calendar_url'),
+});
 
-export const calendarGroupRelation = relations(calendarGroup, ({ many, one }) => ({,
-    calendarEvent: many(calendarEvent),
+export const calendarGroupRelation = relations(calendarGroup, ({ many }) => ({
+  calendarEvent: many(calendarEvent),
 }));
 
-export const calendarEvent = pgTable(
-  'calendar_event',
-  {
-    id: text('id').primaryKey().$defaultFn(createId),
-    calendarGroupId: integer('calendar_group_id').notNull()
-      .references(() => calendarGroup.id, { onDelete: 'cascade' }),
-    courseId: text('courses_id'),
-    title: text('title').notNull(),
-    description: text('description').notNull(),
-    category: text('category').notNull(),
-    academicYear: integer('academic_year'),
-    start: timestamp('start', { withTimezone: true }).notNull(),
-    end: timestamp('end', { withTimezone: true }).notNull(),
-    googleCalendarUrl: text('google_calendar_url').notNull(),
-  }
-);
+export const calendarEvent = pgTable('calendar_event', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  calendarGroupId: integer('calendar_group_id')
+    .notNull()
+    .references(() => calendarGroup.id, { onDelete: 'cascade' }),
+  courseId: text('courses_id').references(() => courses.id, {
+    onDelete: 'cascade',
+  }),
+  title: text('title').notNull(),
+  description: text('description').notNull(),
+  category: text('category').notNull(),
+  academicYear: integer('academic_year'),
+  start: timestamp('start', { withTimezone: true }).notNull(),
+  end: timestamp('end', { withTimezone: true }).notNull(),
+  googleCalendarUrl: text('google_calendar_url').notNull(),
+});
 
 export const calendarEventRelations = relations(calendarEvent, ({ one }) => ({
-  calendarGroup: one(calendarGroup, { 
-    fields: [calendarEvent.calendarGroupId], 
-    references: [calendarGroup.id] 
+  calendarGroup: one(calendarGroup, {
+    fields: [calendarEvent.calendarGroupId],
+    references: [calendarGroup.id],
   }),
   course: one(courses, {
     fields: [calendarEvent.courseId],
     references: [courses.id],
   }),
 }));
-
