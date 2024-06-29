@@ -1,4 +1,6 @@
 import { z } from '@hono/zod-openapi';
+import { createSelectSchema } from 'drizzle-zod';
+import { calendarEvent } from '~/db/schema';
 
 // Helpers
 const optionalDateCoerce = z.preprocess((arg) => {
@@ -28,7 +30,12 @@ const EventDate = z.object({
     .openapi({ example: 'Asia/Jakarta' }),
 });
 
-export const CalendarEvent = z
+export const CalendarEvent = createSelectSchema(calendarEvent, {
+  start: z.union([z.string(), z.date()]),
+  end: z.union([z.string(), z.date()]),
+}).openapi('CalendarEvent');
+
+export const CalendarEventGcal = z
   .object({
     id: z
       .string()
@@ -58,7 +65,7 @@ export const CalendarEvent = z
     start: EventDate.optional(),
     end: EventDate.optional(),
   })
-  .openapi('CalendarEvent');
+  .openapi('CalendarEventGcal');
 
 export const CalendarEventList = z.array(CalendarEvent);
 
