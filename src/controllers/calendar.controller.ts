@@ -10,6 +10,8 @@ import {
   updateCalendarEventRoute,
 } from '~/routes/calendar.route';
 import { createAuthRouter } from './router-factory';
+import { deleteCalendarEvent } from '~/repositories/calendar.repo';
+import { db } from '~/db/drizzle';
 
 export const calendarRouter = createAuthRouter();
 
@@ -150,6 +152,10 @@ calendarRouter.openapi(deleteCalendarEventRoute, async (c) => {
       calendarId: env.GOOGLE_CALENDAR_ID,
       eventId,
     });
+    const event = await deleteCalendarEvent(db, eventId);
+    if (!event) {
+      return c.json({ error: 'Event not found' }, 404);
+    }
     return c.body(null, 204);
   } catch (error) {
     if (error instanceof GaxiosError) {
