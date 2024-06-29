@@ -561,7 +561,7 @@ export const userRoles = pgTable(
     userId: text('user_id')
       .references(() => users.id, { onDelete: 'cascade' })
       .notNull(),
-    role: text('role', { enum: ['Himpunan'] }).notNull(),
+    role: text('role', { enum: ['akademik'] }).notNull(),
   },
   (t) => ({ pk: primaryKey({ columns: [t.userId, t.role] }) }),
 );
