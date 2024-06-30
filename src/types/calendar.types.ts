@@ -79,11 +79,11 @@ export const CreateCalendarEventBodySchema = z.object({
 });
 
 export const GetCalendarEventParamsSchema = z.object({
-  search: z.string().optional().openapi({ example: 'Meeting' }),
-  startTime: optionalDateCoerce.openapi({ example: new Date().toISOString() }),
-  endTime: optionalDateCoerce.openapi({
-    example: addHours(new Date(), 24).toISOString(),
-  }),
+  search: z.string().optional().openapi({ example: 'Judul event' }),
+  category: z.string().optional().openapi({ example: 'Category ABC' }),
+  courseCode: z.string().optional().openapi({ example: 'IF2212' }),
+  year: z.string().optional().openapi({ example: '2024' }),
+  major: z.enum(['IF', 'STI', 'OTHER']).optional().openapi({ example: 'IF' }),
 });
 
 export const CalendarEventIdParamsSchema = z.object({
