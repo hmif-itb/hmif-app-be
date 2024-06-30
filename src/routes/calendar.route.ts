@@ -54,10 +54,10 @@ export const getCalendarEventRoute = createRoute({
   },
   responses: {
     200: {
-      description: 'Get list of categories',
+      description: 'Get list of calendar events',
       content: {
         'application/json': {
-          schema: z.array(CalendarEventGcal),
+          schema: z.array(CalendarEvent),
         },
       },
     },
@@ -82,10 +82,10 @@ export const getCalendarEventByIdRoute = createRoute({
   },
   responses: {
     200: {
-      description: 'Get event by id',
+      description: 'Get calendar event by id',
       content: {
         'application/json': {
-          schema: CalendarEventGcal,
+          schema: CalendarEvent,
         },
       },
     },
@@ -94,6 +94,14 @@ export const getCalendarEventByIdRoute = createRoute({
       content: {
         'application/json': {
           schema: z.union([ErrorSchema, ValidationErrorSchema]),
+        },
+      },
+    },
+    404: {
+      description: "Event doesn't exist",
+      content: {
+        'application/json': {
+          schema: z.string(),
         },
       },
     },
