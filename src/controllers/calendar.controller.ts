@@ -12,9 +12,12 @@ import {
 import { createAuthRouter } from './router-factory';
 import {
   deleteCalendarEvent,
+  getCalendarEvent,
+  getCalendarEventById,
   updateCalendarEvent,
 } from '~/repositories/calendar.repo';
 import { db } from '~/db/drizzle';
+import { PostgresError } from 'postgres';
 
 export const calendarRouter = createAuthRouter();
 
@@ -54,24 +57,20 @@ calendarRouter.openapi(postCalendarEventRoute, async (c) => {
 });
 
 calendarRouter.openapi(getCalendarEventRoute, async (c) => {
-  const { search, startTime, endTime } = c.req.valid('query');
+  const { search, category, courseCode, year, major } = c.req.valid('query');
 
   try {
-    const response = await google.calendar('v3').events.list({
-      auth: googleAuth,
-      eventTypes: ['default'],
-      calendarId: env.GOOGLE_CALENDAR_ID,
-      maxResults: 2500,
-
-      q: search,
-      timeMax: endTime?.toISOString(),
-      timeMin: startTime?.toISOString() ?? START_OF_6_MONTHS_AGO.toISOString(),
+    const data = await getCalendarEvent(db, {
+      search,
+      category,
+      courseCode,
+      year,
+      major,
     });
 
-    console.log(response.data.items?.length);
-    return c.json(response.data.items?.reverse() ?? [], 200);
+    return c.json(data, 200);
   } catch (error) {
-    if (error instanceof GaxiosError) {
+    if (error instanceof PostgresError) {
       return c.json({ error: error.message }, 400);
     }
     throw error;
@@ -82,15 +81,12 @@ calendarRouter.openapi(getCalendarEventByIdRoute, async (c) => {
   const { eventId } = c.req.valid('param');
 
   try {
-    const response = await google.calendar('v3').events.get({
-      auth: googleAuth,
-      calendarId: env.GOOGLE_CALENDAR_ID,
-      eventId,
-    });
+    const data = await getCalendarEventById(db, { eventId });
 
-    return c.json(response.data, 200);
+    if (!data) return c.json("error: 'Event not found'", 404);
+    return c.json(data, 200);
   } catch (error) {
-    if (error instanceof GaxiosError && error.message === 'Not Found') {
+    if (error instanceof PostgresError) {
       return c.json({ error: error.message }, 400);
     }
     throw error;
