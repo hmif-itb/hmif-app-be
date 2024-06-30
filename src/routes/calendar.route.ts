@@ -6,6 +6,7 @@ import {
   UpdateCalendarEventBodySchema,
   CalendarEvent,
   CalendarEventList,
+  CalendarEventGcal,
 } from '~/types/calendar.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
@@ -28,7 +29,7 @@ export const postCalendarEventRoute = createRoute({
       description: 'Event succesfully created',
       content: {
         'application/json': {
-          schema: CalendarEvent,
+          schema: CalendarEventGcal,
         },
       },
     },
@@ -56,7 +57,7 @@ export const getCalendarEventRoute = createRoute({
       description: 'Get list of categories',
       content: {
         'application/json': {
-          schema: CalendarEventList,
+          schema: z.array(CalendarEventGcal),
         },
       },
     },
@@ -84,7 +85,7 @@ export const getCalendarEventByIdRoute = createRoute({
       description: 'Get event by id',
       content: {
         'application/json': {
-          schema: CalendarEvent,
+          schema: CalendarEventGcal,
         },
       },
     },

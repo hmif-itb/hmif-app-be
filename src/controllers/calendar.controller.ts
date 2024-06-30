@@ -10,6 +10,11 @@ import {
   updateCalendarEventRoute,
 } from '~/routes/calendar.route';
 import { createAuthRouter } from './router-factory';
+import {
+  deleteCalendarEvent,
+  updateCalendarEvent,
+} from '~/repositories/calendar.repo';
+import { db } from '~/db/drizzle';
 
 export const calendarRouter = createAuthRouter();
 
@@ -104,39 +109,24 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
       eventId,
     });
     fetchedData = response.data;
+
+    const event = await updateCalendarEvent(
+      db,
+      {
+        title,
+        description,
+        start,
+        end,
+      },
+      eventId,
+    );
+    if (!event) {
+      return c.json({ error: 'Event not found' }, 404);
+    }
+    return c.json(event, 200);
   } catch (error) {
     if (error instanceof GaxiosError && error.message === 'Not Found') {
       return c.json({ error: error.message }, 404);
-    }
-    throw error;
-  }
-
-  const event: calendar_v3.Schema$Event = {
-    summary: title ?? fetchedData.summary,
-    description: description ?? fetchedData.description,
-    start: {
-      dateTime: start?.toISOString() ?? fetchedData.start?.dateTime,
-      timeZone: 'Asia/Jakarta',
-    },
-    end: {
-      dateTime: end?.toISOString() ?? fetchedData.end?.dateTime,
-      timeZone: 'Asia/Jakarta',
-    },
-  };
-
-  try {
-    const response = await google.calendar('v3').events.update({
-      auth: googleAuth,
-      calendarId: env.GOOGLE_CALENDAR_ID,
-      eventId,
-      requestBody: event,
-    });
-
-    return c.json(response.data, 200);
-  } catch (error) {
-    console.error(error);
-    if (error instanceof GaxiosError) {
-      return c.json({ error: error.message }, 400);
     }
     throw error;
   }
@@ -150,6 +140,10 @@ calendarRouter.openapi(deleteCalendarEventRoute, async (c) => {
       calendarId: env.GOOGLE_CALENDAR_ID,
       eventId,
     });
+    const event = await deleteCalendarEvent(db, eventId);
+    if (!event) {
+      return c.json({ error: 'Event not found' }, 404);
+    }
     return c.body(null, 204);
   } catch (error) {
     if (error instanceof GaxiosError) {
