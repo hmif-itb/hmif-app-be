@@ -28,7 +28,7 @@ export const postCalendarEventRoute = createRoute({
       description: 'Event succesfully created',
       content: {
         'application/json': {
-          schema: CalendarEventGcal,
+          schema: CalendarEvent,
         },
       },
     },

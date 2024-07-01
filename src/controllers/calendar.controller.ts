@@ -11,11 +11,14 @@ import {
 } from '~/routes/calendar.route';
 import { createAuthRouter } from './router-factory';
 import {
+  createCalendarEvent,
   deleteCalendarEvent,
   getCalendarEventById,
+  getCalendarGroupById,
   updateCalendarEvent,
 } from '~/repositories/calendar.repo';
 import { db } from '~/db/drizzle';
+import { calendarEvent } from '~/db/schema';
 
 export const calendarRouter = createAuthRouter();
 
@@ -23,8 +26,24 @@ const START_OF_6_MONTHS_AGO = new Date();
 START_OF_6_MONTHS_AGO.setMonth(START_OF_6_MONTHS_AGO.getMonth() - 6);
 
 calendarRouter.openapi(postCalendarEventRoute, async (c) => {
-  const { title, description, start, end } = c.req.valid('json');
+  const {
+    title,
+    description,
+    start,
+    end,
+    calendarGroupId,
+    category,
+    courseId,
+    academicYear,
+  } = c.req.valid('json');
 
+  // 1. Check if calendar group exists
+  const calendarGroup = await getCalendarGroupById(db, calendarGroupId);
+  if (!calendarGroup?.googleCalendarUrl) {
+    return c.json({ error: 'Calendar group not found' }, 404);
+  }
+
+  // 2. Create event in GCal
   const event: calendar_v3.Schema$Event = {
     summary: title,
     description,
@@ -37,21 +56,41 @@ calendarRouter.openapi(postCalendarEventRoute, async (c) => {
       timeZone: 'Asia/Jakarta',
     },
   };
-
+  let eventGCal: calendar_v3.Schema$Event;
   try {
-    const response = await google.calendar('v3').events.insert({
-      auth: googleAuth,
-      calendarId: env.GOOGLE_CALENDAR_ID,
-      requestBody: event,
-    });
-
-    return c.json(response.data, 201);
+    eventGCal = (
+      await google.calendar('v3').events.insert({
+        auth: googleAuth,
+        calendarId: calendarGroup.googleCalendarUrl,
+        requestBody: event,
+      })
+    ).data;
   } catch (error) {
     if (error instanceof GaxiosError) {
       return c.json({ error: error.message }, 400);
     }
     throw error;
   }
+
+  if (!eventGCal.htmlLink || !eventGCal.id) {
+    return c.json({ error: 'Failed to create event' }, 400);
+  }
+
+  // 3. Insert event to DB
+  const insertData: typeof calendarEvent.$inferInsert = {
+    calendarGroupId,
+    courseId,
+    title,
+    description: description ?? '',
+    category: category ?? '',
+    academicYear,
+    start,
+    end,
+    googleCalendarUrl: eventGCal.htmlLink,
+    googleCalendarId: eventGCal.id,
+  };
+  const createdEvent = await createCalendarEvent(db, insertData);
+  return c.json(createdEvent, 201);
 });
 
 calendarRouter.openapi(getCalendarEventRoute, async (c) => {
