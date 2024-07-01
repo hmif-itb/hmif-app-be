@@ -91,15 +91,6 @@ export const CreateCalendarEventBodySchema = createInsertSchema(calendarEvent, {
   googleCalendarId: true,
 });
 
-// z.object({
-//   title: z.string().openapi({ example: 'Meeting' }),
-//   description: z.string().optional().openapi({ example: 'Meeting with team' }),
-//   start: z.coerce.date().openapi({ example: new Date().toISOString() }),
-//   end: z.coerce
-//     .date()
-//     .openapi({ example: addHours(new Date(), 2).toISOString() }),
-// });
-
 export const GetCalendarEventParamsSchema = z.object({
   search: z.string().optional().openapi({ example: 'Meeting' }),
   startTime: optionalDateCoerce.openapi({ example: new Date().toISOString() }),
@@ -125,4 +116,5 @@ export const UpdateCalendarEventBodySchema = createInsertSchema(calendarEvent, {
     id: true,
     googleCalendarUrl: true,
     calendarGroupId: true,
+    googleCalendarId: true,
   });

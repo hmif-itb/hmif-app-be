@@ -161,7 +161,7 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
     const response = await google.calendar('v3').events.get({
       auth: googleAuth,
       calendarId: eventDB.calendarGroup.googleCalendarUrl,
-      eventId,
+      eventId: eventDB.googleCalendarId,
     });
     fetchedData = response.data;
   } catch (error) {
@@ -185,14 +185,16 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
     },
   };
 
+  // console.log(event);
   try {
     await google.calendar('v3').events.update({
       auth: googleAuth,
       calendarId: env.GOOGLE_CALENDAR_ID,
-      eventId,
+      eventId: eventDB.googleCalendarId,
       requestBody: event,
     });
   } catch (error) {
+    // console.log(error);
     if (error instanceof GaxiosError) {
       return c.json({ error: error.message }, 400);
     }
@@ -211,10 +213,16 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
 calendarRouter.openapi(deleteCalendarEventRoute, async (c) => {
   try {
     const { eventId } = c.req.valid('param');
+
+    const eventDB = await getCalendarEventById(db, eventId);
+    if (!eventDB?.calendarGroup.googleCalendarUrl) {
+      return c.json({ error: 'Event not found' }, 404);
+    }
+
     await google.calendar('v3').events.delete({
       auth: googleAuth,
-      calendarId: env.GOOGLE_CALENDAR_ID,
-      eventId,
+      calendarId: eventDB?.calendarGroup.googleCalendarUrl,
+      eventId: eventDB?.googleCalendarId,
     });
     const event = await deleteCalendarEvent(db, eventId);
     if (!event) {
