@@ -542,6 +542,7 @@ export const calendarEvent = pgTable('calendar_event', {
   start: timestamp('start', { withTimezone: true }).notNull(),
   end: timestamp('end', { withTimezone: true }).notNull(),
   googleCalendarUrl: text('google_calendar_url').notNull(),
+  googleCalendarId: text('google_calendar_id').notNull(),
 });
 
 export const calendarEventRelations = relations(calendarEvent, ({ one }) => ({
