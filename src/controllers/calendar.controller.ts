@@ -97,35 +97,71 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
   const { eventId } = c.req.valid('param');
   const { title, description, start, end } = c.req.valid('json');
 
+  // 1. Fetch data from DB, if exists
+  const eventDB = await getCalendarEventById(db, eventId);
+  if (!eventDB) {
+    return c.json({ error: 'Event not found' }, 404);
+  }
+
+  if (eventDB.calendarGroup.googleCalendarUrl === null) {
+    // Buat type check aja kalo calendar group url exists
+    return c.json(
+      { error: "Event doesn't belong to any group, contact back-end!" },
+      404,
+    );
+  }
+
+  // 2. If exists, ambil id sama groupId dan get event from GCal
   let fetchedData: calendar_v3.Schema$Event;
   try {
     const response = await google.calendar('v3').events.get({
       auth: googleAuth,
-      calendarId: env.GOOGLE_CALENDAR_ID,
+      calendarId: eventDB.calendarGroup.googleCalendarUrl,
       eventId,
     });
     fetchedData = response.data;
-
-    const event = await updateCalendarEvent(
-      db,
-      {
-        title,
-        description,
-        start,
-        end,
-      },
-      eventId,
-    );
-    if (!event) {
-      return c.json({ error: 'Event not found' }, 404);
-    }
-    return c.json(event, 200);
   } catch (error) {
     if (error instanceof GaxiosError && error.message === 'Not Found') {
       return c.json({ error: error.message }, 404);
     }
     throw error;
   }
+
+  // 3. Update ke GCal dulu make data baru (logic samain kyk kemarin)
+  const event: calendar_v3.Schema$Event = {
+    summary: title ?? fetchedData.summary,
+    description: description ?? fetchedData.description,
+    start: {
+      dateTime: start?.toISOString() ?? fetchedData.start?.dateTime,
+      timeZone: 'Asia/Jakarta',
+    },
+    end: {
+      dateTime: end?.toISOString() ?? fetchedData.end?.dateTime,
+      timeZone: 'Asia/Jakarta',
+    },
+  };
+
+  try {
+    await google.calendar('v3').events.update({
+      auth: googleAuth,
+      calendarId: env.GOOGLE_CALENDAR_ID,
+      eventId,
+      requestBody: event,
+    });
+  } catch (error) {
+    if (error instanceof GaxiosError) {
+      return c.json({ error: error.message }, 400);
+    }
+    throw error;
+  }
+
+  // 4. Update ke DB
+  const updatedEvent = await updateCalendarEvent(
+    db,
+    c.req.valid('json'),
+    eventId,
+  );
+  return c.json(updatedEvent, 200);
 });
 
 calendarRouter.openapi(deleteCalendarEventRoute, async (c) => {

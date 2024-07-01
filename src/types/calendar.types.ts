@@ -1,5 +1,5 @@
 import { z } from '@hono/zod-openapi';
-import { createSelectSchema } from 'drizzle-zod';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { calendarEvent } from '~/db/schema';
 
 // Helpers
@@ -90,11 +90,17 @@ export const CalendarEventIdParamsSchema = z.object({
   eventId: z.string().openapi({ example: 'hlp70594b43hcn866d291i8jm0' }),
 });
 
-export const UpdateCalendarEventBodySchema = z.object({
+export const UpdateCalendarEventBodySchema = createInsertSchema(calendarEvent, {
   title: z.string().optional().openapi({ example: 'Meeting' }),
   description: z.string().optional().openapi({ example: 'Meeting with team' }),
   start: optionalDateCoerce.openapi({ example: new Date().toISOString() }),
   end: optionalDateCoerce.openapi({
     example: addHours(new Date(), 2).toISOString(),
   }),
-});
+})
+  .partial()
+  .omit({
+    id: true,
+    googleCalendarUrl: true,
+    calendarGroupId: true,
+  });

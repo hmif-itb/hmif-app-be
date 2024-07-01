@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { calendar } from 'googleapis/build/src/apis/calendar';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
-import { first } from '~/db/helper';
+import { first, firstSure } from '~/db/helper';
 import { calendarEvent, courses } from '~/db/schema';
 import {
   GetCalendarEventParamsSchema,
@@ -52,6 +52,9 @@ export async function getCalendarEventById(
 ) {
   return await db.query.calendarEvent.findFirst({
     where: eq(calendarEvent.id, eventId),
+    with: {
+      calendarGroup: true,
+    },
   });
 }
 
@@ -65,7 +68,7 @@ export async function updateCalendarEvent(
     .set(data)
     .where(eq(calendarEvent.id, eventId))
     .returning()
-    .then(first);
+    .then(firstSure);
   return calendarEventId;
 }
 
