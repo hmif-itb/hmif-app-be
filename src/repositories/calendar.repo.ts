@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
-import { first } from '~/db/helper';
+import { first, firstSure } from '~/db/helper';
 import { calendarEvent } from '~/db/schema';
 import { UpdateCalendarEventBodySchema } from '~/types/calendar.types';
 
@@ -15,7 +15,7 @@ export async function updateCalendarEvent(
     .set(data)
     .where(eq(calendarEvent.id, eventId))
     .returning()
-    .then(first);
+    .then(firstSure);
   return calendarEventId;
 }
 
@@ -25,5 +25,15 @@ export async function deleteCalendarEvent(db: Database, eventId: string) {
     .where(eq(calendarEvent.id, eventId))
     .returning()
     .then(first);
+  return calendarEventId;
+}
+
+export async function getCalendarEventById(db: Database, eventId: string) {
+  const calendarEventId = await db.query.calendarEvent.findFirst({
+    where: eq(calendarEvent.id, eventId),
+    with: {
+      calendarGroup: true,
+    },
+  });
   return calendarEventId;
 }

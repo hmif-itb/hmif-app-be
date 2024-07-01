@@ -5,7 +5,6 @@ import {
   GetCalendarEventParamsSchema,
   UpdateCalendarEventBodySchema,
   CalendarEvent,
-  CalendarEventList,
   CalendarEventGcal,
 } from '~/types/calendar.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
