@@ -1,5 +1,4 @@
 import { eq } from 'drizzle-orm';
-import { calendar } from 'googleapis/build/src/apis/calendar';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';

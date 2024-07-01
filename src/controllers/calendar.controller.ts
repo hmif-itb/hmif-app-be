@@ -98,7 +98,7 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
   const { title, description, start, end } = c.req.valid('json');
 
   // 1. Fetch data from DB, if exists
-  const eventDB = await getCalendarEventById(db, eventId);
+  const eventDB = await getCalendarEventById(db, { eventId });
   if (!eventDB) {
     return c.json({ error: 'Event not found' }, 404);
   }
