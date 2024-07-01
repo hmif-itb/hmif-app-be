@@ -156,3 +156,28 @@ export const deleteCalendarEventRoute = createRoute({
     },
   },
 });
+
+export const getCalendarGroupRoute = createRoute({
+  operationId: 'getCalendarGroup',
+  tags: ['calendar'],
+  method: 'get',
+  path: '/calendar-group',
+  responses: {
+    200: {
+      description: 'Get list of calendar groups',
+      content: {
+        'application/json': {
+          schema: z.array(CalendarEventGcal),
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
+        },
+      },
+    },
+  },
+});

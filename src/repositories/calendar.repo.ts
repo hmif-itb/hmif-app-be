@@ -59,3 +59,8 @@ export async function createCalendarEvent(
     .then(firstSure);
   return calendarEventId;
 }
+
+export async function getCalendarGroup(db: Database) {
+  const calendarGroup = await db.query.calendarGroup.findMany();
+  return calendarGroup;
+}

@@ -6,6 +6,7 @@ import {
   deleteCalendarEventRoute,
   getCalendarEventByIdRoute,
   getCalendarEventRoute,
+  getCalendarGroupRoute,
   postCalendarEventRoute,
   updateCalendarEventRoute,
 } from '~/routes/calendar.route';
@@ -14,6 +15,7 @@ import {
   createCalendarEvent,
   deleteCalendarEvent,
   getCalendarEventById,
+  getCalendarGroup,
   getCalendarGroupById,
   updateCalendarEvent,
 } from '~/repositories/calendar.repo';
@@ -235,4 +237,9 @@ calendarRouter.openapi(deleteCalendarEventRoute, async (c) => {
     }
     throw error;
   }
+});
+
+calendarRouter.openapi(getCalendarGroupRoute, async (c) => {
+  const calendarGroups = await getCalendarGroup(db);
+  return c.json(calendarGroups, 200);
 });

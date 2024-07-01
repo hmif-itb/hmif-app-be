@@ -1,6 +1,6 @@
 import { z } from '@hono/zod-openapi';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { calendarEvent } from '~/db/schema';
+import { calendarEvent, calendarGroup } from '~/db/schema';
 
 // Helpers
 const optionalDateCoerce = z.preprocess((arg) => {
@@ -118,3 +118,5 @@ export const UpdateCalendarEventBodySchema = createInsertSchema(calendarEvent, {
     calendarGroupId: true,
     googleCalendarId: true,
   });
+
+export const CalendarGroupSchema = createSelectSchema(calendarGroup);
