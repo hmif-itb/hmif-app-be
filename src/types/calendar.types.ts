@@ -1,4 +1,6 @@
 import { z } from '@hono/zod-openapi';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { calendarEvent } from '~/db/schema';
 
 // Helpers
 const optionalDateCoerce = z.preprocess((arg) => {
@@ -28,7 +30,12 @@ const EventDate = z.object({
     .openapi({ example: 'Asia/Jakarta' }),
 });
 
-export const CalendarEvent = z
+export const CalendarEvent = createSelectSchema(calendarEvent, {
+  start: z.union([z.string(), z.date()]),
+  end: z.union([z.string(), z.date()]),
+}).openapi('CalendarEvent');
+
+export const CalendarEventGcal = z
   .object({
     id: z
       .string()
@@ -58,7 +65,7 @@ export const CalendarEvent = z
     start: EventDate.optional(),
     end: EventDate.optional(),
   })
-  .openapi('CalendarEvent');
+  .openapi('CalendarEventGcal');
 
 export const CalendarEventList = z.array(CalendarEvent);
 
@@ -83,11 +90,17 @@ export const CalendarEventIdParamsSchema = z.object({
   eventId: z.string().openapi({ example: 'hlp70594b43hcn866d291i8jm0' }),
 });
 
-export const UpdateCalendarEventBodySchema = z.object({
+export const UpdateCalendarEventBodySchema = createInsertSchema(calendarEvent, {
   title: z.string().optional().openapi({ example: 'Meeting' }),
   description: z.string().optional().openapi({ example: 'Meeting with team' }),
   start: optionalDateCoerce.openapi({ example: new Date().toISOString() }),
   end: optionalDateCoerce.openapi({
     example: addHours(new Date(), 2).toISOString(),
   }),
-});
+})
+  .partial()
+  .omit({
+    id: true,
+    googleCalendarUrl: true,
+    calendarGroupId: true,
+  });

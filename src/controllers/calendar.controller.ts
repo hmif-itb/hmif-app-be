@@ -10,6 +10,12 @@ import {
   updateCalendarEventRoute,
 } from '~/routes/calendar.route';
 import { createAuthRouter } from './router-factory';
+import {
+  deleteCalendarEvent,
+  getCalendarEventById,
+  updateCalendarEvent,
+} from '~/repositories/calendar.repo';
+import { db } from '~/db/drizzle';
 
 export const calendarRouter = createAuthRouter();
 
@@ -96,11 +102,26 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
   const { eventId } = c.req.valid('param');
   const { title, description, start, end } = c.req.valid('json');
 
+  // 1. Fetch data from DB, if exists
+  const eventDB = await getCalendarEventById(db, eventId);
+  if (!eventDB) {
+    return c.json({ error: 'Event not found' }, 404);
+  }
+
+  if (eventDB.calendarGroup.googleCalendarUrl === null) {
+    // Buat type check aja kalo calendar group url exists
+    return c.json(
+      { error: "Event doesn't belong to any group, contact back-end!" },
+      404,
+    );
+  }
+
+  // 2. If exists, ambil id sama groupId dan get event from GCal
   let fetchedData: calendar_v3.Schema$Event;
   try {
     const response = await google.calendar('v3').events.get({
       auth: googleAuth,
-      calendarId: env.GOOGLE_CALENDAR_ID,
+      calendarId: eventDB.calendarGroup.googleCalendarUrl,
       eventId,
     });
     fetchedData = response.data;
@@ -111,6 +132,7 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
     throw error;
   }
 
+  // 3. Update ke GCal dulu make data baru (logic samain kyk kemarin)
   const event: calendar_v3.Schema$Event = {
     summary: title ?? fetchedData.summary,
     description: description ?? fetchedData.description,
@@ -125,21 +147,26 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
   };
 
   try {
-    const response = await google.calendar('v3').events.update({
+    await google.calendar('v3').events.update({
       auth: googleAuth,
       calendarId: env.GOOGLE_CALENDAR_ID,
       eventId,
       requestBody: event,
     });
-
-    return c.json(response.data, 200);
   } catch (error) {
-    console.error(error);
     if (error instanceof GaxiosError) {
       return c.json({ error: error.message }, 400);
     }
     throw error;
   }
+
+  // 4. Update ke DB
+  const updatedEvent = await updateCalendarEvent(
+    db,
+    c.req.valid('json'),
+    eventId,
+  );
+  return c.json(updatedEvent, 200);
 });
 
 calendarRouter.openapi(deleteCalendarEventRoute, async (c) => {
@@ -150,6 +177,10 @@ calendarRouter.openapi(deleteCalendarEventRoute, async (c) => {
       calendarId: env.GOOGLE_CALENDAR_ID,
       eventId,
     });
+    const event = await deleteCalendarEvent(db, eventId);
+    if (!event) {
+      return c.json({ error: 'Event not found' }, 404);
+    }
     return c.body(null, 204);
   } catch (error) {
     if (error instanceof GaxiosError) {
