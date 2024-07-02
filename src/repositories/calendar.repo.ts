@@ -5,6 +5,16 @@ import { first, firstSure } from '~/db/helper';
 import { calendarEvent } from '~/db/schema';
 import { UpdateCalendarEventBodySchema } from '~/types/calendar.types';
 
+export async function getCalendarGroupById(
+  db: Database,
+  calendarGroupId: string,
+) {
+  const calendarGroup = await db.query.calendarGroup.findFirst({
+    where: eq(calendarEvent.id, calendarGroupId),
+  });
+  return calendarGroup;
+}
+
 export async function updateCalendarEvent(
   db: Database,
   data: z.infer<typeof UpdateCalendarEventBodySchema>,
@@ -36,4 +46,21 @@ export async function getCalendarEventById(db: Database, eventId: string) {
     },
   });
   return calendarEventId;
+}
+
+export async function createCalendarEvent(
+  db: Database,
+  data: typeof calendarEvent.$inferInsert,
+) {
+  const calendarEventId = await db
+    .insert(calendarEvent)
+    .values(data)
+    .returning()
+    .then(firstSure);
+  return calendarEventId;
+}
+
+export async function getCalendarGroup(db: Database) {
+  const calendarGroup = await db.query.calendarGroup.findMany();
+  return calendarGroup;
 }
