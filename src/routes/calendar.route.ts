@@ -5,7 +5,7 @@ import {
   GetCalendarEventParamsSchema,
   UpdateCalendarEventBodySchema,
   CalendarEvent,
-  CalendarEventGcal,
+  CalendarGroupSchema,
 } from '~/types/calendar.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
@@ -175,7 +175,7 @@ export const getCalendarGroupRoute = createRoute({
       description: 'Get list of calendar groups',
       content: {
         'application/json': {
-          schema: z.array(CalendarEventGcal),
+          schema: z.array(CalendarGroupSchema),
         },
       },
     },
