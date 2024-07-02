@@ -57,6 +57,16 @@ export async function getCalendarEventById(
   });
 }
 
+export async function getCalendarGroupById(
+  db: Database,
+  calendarGroupId: string,
+) {
+  const calendarGroup = await db.query.calendarGroup.findFirst({
+    where: eq(calendarEvent.id, calendarGroupId),
+  });
+  return calendarGroup;
+}
+
 export async function updateCalendarEvent(
   db: Database,
   data: z.infer<typeof UpdateCalendarEventBodySchema>,
@@ -110,4 +120,21 @@ async function getCalendarEventWithCoursesJoin(
     finalResults.push(results[i].calendarEvent);
   }
   return finalResults;
+}
+
+export async function createCalendarEvent(
+  db: Database,
+  data: typeof calendarEvent.$inferInsert,
+) {
+  const calendarEventId = await db
+    .insert(calendarEvent)
+    .values(data)
+    .returning()
+    .then(firstSure);
+  return calendarEventId;
+}
+
+export async function getCalendarGroup(db: Database) {
+  const calendarGroup = await db.query.calendarGroup.findMany();
+  return calendarGroup;
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "calendar_event" ADD COLUMN "google_calendar_id" text NOT NULL;
