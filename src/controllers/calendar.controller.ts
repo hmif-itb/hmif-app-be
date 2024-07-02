@@ -14,6 +14,7 @@ import { createAuthRouter } from './router-factory';
 import {
   createCalendarEvent,
   deleteCalendarEvent,
+  getCalendarEvent,
   getCalendarEventById,
   getCalendarGroup,
   getCalendarGroupById,
@@ -21,6 +22,7 @@ import {
 } from '~/repositories/calendar.repo';
 import { db } from '~/db/drizzle';
 import { calendarEvent } from '~/db/schema';
+import { PostgresError } from 'postgres';
 
 export const calendarRouter = createAuthRouter();
 
@@ -96,24 +98,20 @@ calendarRouter.openapi(postCalendarEventRoute, async (c) => {
 });
 
 calendarRouter.openapi(getCalendarEventRoute, async (c) => {
-  const { search, startTime, endTime } = c.req.valid('query');
+  const { search, category, courseCode, year, major } = c.req.valid('query');
 
   try {
-    const response = await google.calendar('v3').events.list({
-      auth: googleAuth,
-      eventTypes: ['default'],
-      calendarId: env.GOOGLE_CALENDAR_ID,
-      maxResults: 2500,
-
-      q: search,
-      timeMax: endTime?.toISOString(),
-      timeMin: startTime?.toISOString() ?? START_OF_6_MONTHS_AGO.toISOString(),
+    const data = await getCalendarEvent(db, {
+      search,
+      category,
+      courseCode,
+      year,
+      major,
     });
 
-    console.log(response.data.items?.length);
-    return c.json(response.data.items?.reverse() ?? [], 200);
+    return c.json(data, 200);
   } catch (error) {
-    if (error instanceof GaxiosError) {
+    if (error instanceof PostgresError) {
       return c.json({ error: error.message }, 400);
     }
     throw error;
@@ -124,15 +122,12 @@ calendarRouter.openapi(getCalendarEventByIdRoute, async (c) => {
   const { eventId } = c.req.valid('param');
 
   try {
-    const response = await google.calendar('v3').events.get({
-      auth: googleAuth,
-      calendarId: env.GOOGLE_CALENDAR_ID,
-      eventId,
-    });
+    const data = await getCalendarEventById(db, { eventId });
 
-    return c.json(response.data, 200);
+    if (!data) return c.json("error: 'Event not found'", 404);
+    return c.json(data, 200);
   } catch (error) {
-    if (error instanceof GaxiosError && error.message === 'Not Found') {
+    if (error instanceof PostgresError) {
       return c.json({ error: error.message }, 400);
     }
     throw error;
@@ -144,7 +139,7 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
   const { title, description, start, end } = c.req.valid('json');
 
   // 1. Fetch data from DB, if exists
-  const eventDB = await getCalendarEventById(db, eventId);
+  const eventDB = await getCalendarEventById(db, { eventId });
   if (!eventDB) {
     return c.json({ error: 'Event not found' }, 404);
   }
@@ -216,7 +211,7 @@ calendarRouter.openapi(deleteCalendarEventRoute, async (c) => {
   try {
     const { eventId } = c.req.valid('param');
 
-    const eventDB = await getCalendarEventById(db, eventId);
+    const eventDB = await getCalendarEventById(db, { eventId });
     if (!eventDB?.calendarGroup.googleCalendarUrl) {
       return c.json({ error: 'Event not found' }, 404);
     }
