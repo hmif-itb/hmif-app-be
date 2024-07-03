@@ -12,6 +12,7 @@ import { userUnsubscribeRouter } from './user-unsubscribe.controller';
 import { calendarRouter } from './calendar.controller';
 import { testimoniRoute } from './testimoni.controller';
 import { userProfileRoute } from './user-profile.controller';
+import { userFinderRouter } from './user-finder.controller';
 
 const unprotectedApiRouter = new OpenAPIHono();
 unprotectedApiRouter.route('/', loginRouter);
@@ -31,6 +32,7 @@ protectedApiRouter.route('/', infoRouter);
 protectedApiRouter.route('/', calendarRouter);
 protectedApiRouter.route('/', testimoniRoute);
 protectedApiRouter.route('/', userProfileRoute);
+protectedApiRouter.route('/', userFinderRouter);
 
 export const apiRouter = new OpenAPIHono();
 apiRouter.route('/', unprotectedApiRouter);
