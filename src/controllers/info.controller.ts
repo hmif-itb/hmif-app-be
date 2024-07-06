@@ -6,6 +6,7 @@ import {
   deleteInfo,
   getInfoById,
   getListInfos,
+  notifyNewInfo,
 } from '~/repositories/info.repo';
 import {
   createInfoRoute,
@@ -22,19 +23,13 @@ infoRouter.openapi(postReadInfoRoute, async (c) => {
   const { id } = c.var.user;
   const { infoId } = c.req.valid('param');
 
-  try {
-    const data = {
-      userId: id,
-      infoId,
-    };
+  const data = {
+    userId: id,
+    infoId,
+  };
 
-    await createReadInfo(db, data);
-    return c.json({}, 201);
-  } catch (err) {
-    if (err instanceof PostgresError)
-      return c.json({ error: 'User have already read this info' }, 400);
-    throw err;
-  }
+  await createReadInfo(db, data);
+  return c.json({}, 201);
 });
 
 infoRouter.openapi(createInfoRoute, async (c) => {
@@ -46,6 +41,15 @@ infoRouter.openapi(createInfoRoute, async (c) => {
     const info = await createInfo(
       db,
       { ...data, creatorId: id },
+      mediaUrls,
+      forAngkatan,
+      forCategories,
+      forCourses,
+    );
+
+    void notifyNewInfo(
+      db,
+      info,
       mediaUrls,
       forAngkatan,
       forCategories,

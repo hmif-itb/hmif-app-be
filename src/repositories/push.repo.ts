@@ -1,4 +1,4 @@
-import { InferInsertModel, eq, inArray, isNotNull } from 'drizzle-orm';
+import { eq, inArray, InferInsertModel, isNotNull } from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
 import { pushSubscriptions } from '~/db/schema';
@@ -28,6 +28,19 @@ export async function getPushSubscriptionsByUser(db: Database, userId: string) {
   });
 }
 
+export async function getPushSubscriptionsByUserIds(
+  db: Database,
+  userIds: string[],
+) {
+  if (userIds.length === 0) {
+    return [];
+  }
+
+  return await db.query.pushSubscriptions.findMany({
+    where: inArray(pushSubscriptions.userId, userIds),
+  });
+}
+
 /**
  * Remove push subscriptions that failed to send notification with response status code of 410.
  * @param db
@@ -40,8 +53,12 @@ export async function removeFailedPushSubscriptions(
 ) {
   const failedSubscriptions: string[] = [];
   for (const result of results) {
-    if (!result.success && result.error.statusCode === 410) {
-      failedSubscriptions.push(result.endpoint);
+    if (
+      result.status === 'fulfilled' &&
+      !result.value.success &&
+      result.value.error.statusCode === 410
+    ) {
+      failedSubscriptions.push(result.value.endpoint);
     }
   }
 
@@ -64,7 +81,7 @@ export async function putLogoutPushSubscriptions(
   db: Database,
   data: { endpoint: string },
 ) {
-  const pushSubscription = await db
+  return await db
     .update(pushSubscriptions)
     .set({
       userId: null,
@@ -72,5 +89,4 @@ export async function putLogoutPushSubscriptions(
     .where(eq(pushSubscriptions.endpoint, data.endpoint))
     .returning()
     .then(first);
-  return pushSubscription;
 }

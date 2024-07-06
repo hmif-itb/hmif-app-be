@@ -20,7 +20,7 @@ export function getCurrentSemesterCodeAndYear() {
   const currentYear = timeNow.getFullYear();
 
   let semesterCodeTaken: 'Ganjil' | 'Genap', semesterYearTaken: number;
-  if (currentMonth <= 6) {
+  if (currentMonth <= 5) {
     // If January - June, it's Genap semester of last year
     semesterCodeTaken = 'Genap';
     semesterYearTaken = currentYear - 1;

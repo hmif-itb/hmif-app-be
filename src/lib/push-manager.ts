@@ -22,6 +22,7 @@ export interface PushData {
     image?: string;
     tag?: string;
     timestamp?: number;
+    url?: string;
   };
 }
 
@@ -72,7 +73,7 @@ export async function sendNotificationToAll(
     urgency?: webpush.Urgency;
   },
 ) {
-  return await Promise.all(
+  return await Promise.allSettled(
     pushSubscriptions.map(
       async (pushSubscription) =>
         await sendNotification(pushSubscription, data, options),
