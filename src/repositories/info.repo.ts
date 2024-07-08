@@ -360,8 +360,9 @@ export async function notifyNewInfo(
       title: info.title,
       options: {
         body: info.content,
-        actions: [{ action: 'open', title: 'Open' }],
-        url: `/info/${info.id}`,
+        data: {
+          url: `/timeline/${info.id}`,
+        },
       },
     },
     {
