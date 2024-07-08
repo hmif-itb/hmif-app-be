@@ -147,7 +147,7 @@ export async function runAngkatanSeed() {
     });
 }
 
-export async function runIFTestimoniSeed(file: string) {
+export async function runTestimoniSeed(file: string) {
   const filePath = 'src/db/seed/' + file;
   let major = '';
 
@@ -221,8 +221,8 @@ async function runAllSeeds() {
     await runUserSeed();
     await runCourses();
     await new Promise((resolve) => setTimeout(resolve, 6000));
-    await runIFTestimoniSeed('testimoni-if.csv');
-    await runIFTestimoniSeed('testimoni-sti.csv');
+    await runTestimoniSeed('testimoni-if.csv');
+    await runTestimoniSeed('testimoni-sti.csv');
   } catch (error) {
     console.log(error);
   }
