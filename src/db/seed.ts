@@ -147,8 +147,16 @@ export async function runAngkatanSeed() {
     });
 }
 
-export async function runIFTestimoniSeed() {
-  const filePath = 'src/db/seed/testimoni-if.csv';
+export async function runIFTestimoniSeed(file: string) {
+  const filePath = 'src/db/seed/' + file;
+  let major = '';
+
+  if (file === 'testimoni-if.csv') {
+    major = 'IF';
+  } else if (file === 'testimoni-sti.csv') {
+    major = 'STI';
+  }
+
   const data: Array<typeof testimonies.$inferInsert> = [];
   const coursesList = await db
     .select({ id: courses.id, code: courses.code })
@@ -183,24 +191,26 @@ export async function runIFTestimoniSeed() {
       data.push(testimonies);
     })
     .on('end', () => {
-      console.log('📖 Finished reading IF testimonies CSV file');
-      console.log('💾 Started inserting IF testimonies into database...');
+      console.log(`📖 Finished reading ${major} testimonies CSV file`);
+      console.log(`💾 Started inserting ${major} testimonies into database...`);
       db.insert(testimonies)
         .values(data)
         .onConflictDoNothing()
         .then(async () => {
           await client.end();
-          console.log('✅ Inserted IF testimonies into database!');
+          console.log(`✅ Inserted ${major} testimonies into database!`);
         })
         .catch((err) => {
           console.log(
-            '❌ Something went wrong while inserting IF testimonies!',
+            `❌ Something went wrong while inserting ${major} testimonies!`,
           );
           console.log(err);
         });
     })
     .on('error', (err) => {
-      console.log('❌ Something went wrong while inserting IF testimonies!');
+      console.log(
+        `❌ Something went wrong while inserting ${major} testimonies!`,
+      );
       console.log(err);
     });
 }
@@ -211,7 +221,8 @@ async function runAllSeeds() {
     await runUserSeed();
     await runCourses();
     await new Promise((resolve) => setTimeout(resolve, 6000));
-    await runIFTestimoniSeed();
+    await runIFTestimoniSeed('testimoni-if.csv');
+    await runIFTestimoniSeed('testimoni-sti.csv');
   } catch (error) {
     console.log(error);
   }
