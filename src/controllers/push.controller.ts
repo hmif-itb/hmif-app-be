@@ -3,18 +3,23 @@ import { sendNotificationToAll } from '~/lib/push-manager';
 import {
   createOrUpdatePushSubscription,
   getAllPushSubscriptions,
+  putLogoutPushSubscriptions,
   removeFailedPushSubscriptions,
 } from '~/repositories/push.repo';
-import { pushBroadcastRoute, registerPushRoute } from '~/routes/push.route';
-import { createAuthRouter } from './router-factory';
+import {
+  pushBroadcastRoute,
+  pushLogoutRoute,
+  registerPushRoute,
+} from '~/routes/push.route';
+import { createAuthRouter, createRouter } from './router-factory';
 
+export const pushPubRouter = createRouter();
 export const pushRouter = createAuthRouter();
 
 pushRouter.openapi(registerPushRoute, async (c) => {
-  // TODO: if user is set properly, use c.var.user
   await createOrUpdatePushSubscription(db, {
     ...c.req.valid('json'),
-    // userId: c.user.id,
+    userId: c.var.user.id,
   });
 
   return c.json({}, 201);
@@ -27,6 +32,14 @@ pushRouter.openapi(pushBroadcastRoute, async (c) => {
       await removeFailedPushSubscriptions(db, results);
     },
   );
+
+  return c.json({}, 200);
+});
+
+pushPubRouter.openapi(pushLogoutRoute, async (c) => {
+  await putLogoutPushSubscriptions(db, {
+    ...c.req.valid('json'),
+  });
 
   return c.json({}, 200);
 });

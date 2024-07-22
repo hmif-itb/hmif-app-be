@@ -1,2 +1,8 @@
 node_modules
 .env
+google_credentials.json
+
+# Ignore seed csv data
+src/db/seed/database.csv
+src/db/seed/database-all.csv
+src/db/seed/testimoni-if.csv

@@ -10,6 +10,15 @@ export const PushSubscriptionSchema = z
   })
   .openapi('PushSubscription');
 
+export const PushLogoutSchema = z.object({
+  endpoint: z.string().url(),
+});
+
 export const PushBroadcastSchema = z.object({
   title: z.string(),
+  options: z
+    .object({
+      body: z.string().optional(),
+    })
+    .optional(),
 });

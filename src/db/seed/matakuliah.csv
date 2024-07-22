@@ -1,0 +1,159 @@
+curriculum_year,major,semester,semester_code,code,name,sks,type,dingdong_url
+2019,IF,5,Ganjil,IF3159,Dasar Pembangunan Perangkat Lunak,1,Elective,
+2019,IF,7,Ganjil,IF4010,Pemrograman Unit Pemrosesan Grafis,3,Elective,
+2019,IF,7,Ganjil,IF4020,Kriptografi,3,Elective,https://drive.google.com/drive/folders/1fr5_-e8xiV064miQOAk26jJKJ9vJi7ra?usp=drive_link
+2019,IF,8,Genap,IF4021,Pemodelan dan Simulasi,2,Elective,https://drive.google.com/drive/folders/1bSgCsKfVgyQ3oQqCP2KfdYbniVZW36Qb?usp=drive_link
+2019,IF,8,Genap,IF4031,Pengembangan Aplikasi Terdistribusi,3,Elective,https://drive.google.com/drive/folders/1_WM2RXcVPAuSoQhRs_hSkDI6CS9wjXRc?usp=drive_link
+2019,IF,7,Ganjil,IF4033,Keamanan dan Penjaminan Informasi,3,Elective,https://drive.google.com/drive/folders/1vH2mte6EGYS7QPoi-Ooibhp6YKbihjoX?usp=drive_link
+2019,IF,7,Ganjil,IF4040,Pemodelan Data Lanjut,3,Elective,https://drive.google.com/drive/folders/1BHqyvc4Wsr_mUwU_Qm8Wb8D6Kd97Mk1R?usp=drive_link
+2019,IF,7,Ganjil,IF4041,Ilmu Data dan Penggalian Data,3,Elective,https://drive.google.com/drive/folders/1CbYcTHrtIPN0Szns0j5vYfLb-toH57GU?usp=drive_link
+2019,IF,8,Genap,IF4042,Sistem Temu Balik Informasi,3,Elective,https://drive.google.com/drive/folders/1fOsEdU4ih8b6wpPw-_ZfNnbt7azgjm0g?usp=drive_link
+2019,IF,8,Genap,IF4043,Sistem Informasi Lanjut,3,Elective,https://drive.google.com/drive/folders/1rNHe_2sZhxneWLq5IKAh7EubH5UQVo5I?usp=drive_link
+2019,IF,8,Genap,IF4044,Teknologi Big Data,2,Elective,https://drive.google.com/drive/folders/1fLOQOL4M5Wy3GhXq2ekaYnkZ9y4fpY8Z?usp=drive_link
+2019,IF,7,Ganjil,IF4050,Advances in Software Engineering,3,Elective,
+2019,IF,8,Genap,IF4051,Pengembangan Sistem IoT,2,Elective,
+2019,IF,7,Ganjil,IF4052,Komputasi Layanan,3,Elective,
+2019,IF,8,Genap,IF4060,Rekayasa Interaksi,3,Elective,
+2019,IF,7,Ganjil,IF4061,Visualisasi Data dan Informasi,3,Elective,https://drive.google.com/drive/folders/1JSNLobyVbVlAgUHJg-Sth86VXEw8l7uO?usp=drive_link
+2019,IF,8,Genap,IF4070,Representasi Pengetahuan dan Penalaran,3,Elective,https://drive.google.com/drive/folders/18S4LqoMD7es_lWyEYnRsoGLHNIPkzZik?usp=drive_link
+2019,IF,7,Ganjil,IF4071,Pemrosesan Ucapan,2,Elective,https://drive.google.com/drive/folders/1pXfRoNRIIQIjlLXguva0nwMLDQJDolki?usp=drive_link
+2019,IF,8,Genap,IF4072,Pemrosesan Bahasa Alami,2,Elective,https://drive.google.com/drive/folders/1LzmeyLzfnULISrjMhauoWIxVegiAOqXI?usp=drive_link
+2019,IF,7,Ganjil,IF4073,Interpretasi dan Pengolahan Citra,3,Elective,https://drive.google.com/drive/folders/1k7_Q3kL2XdgVjtzWUhjdJ3wMJy549zAU?usp=drive_link
+2019,IF,8,Genap,IF4074,Pembelajaran Mesin Lanjut,2,Elective,https://drive.google.com/drive/folders/14zjEKEA0FQ6qowqJtW1vJswbfUR9ZUJ5?usp=drive_link
+2019,IF,,,IF4080,Informatika di Industri,3,Elective,
+2019,IF,8,Genap,IF4081,Informatika untuk Komunitas,3,Elective,
+2019,IF,7,Ganjil,IF4082,Pengembangan Keprofesian/Komunitas Informatika A,2,Elective,
+2019,IF,7,Ganjil,IF4083,Pengembangan Keprofesian/Komunitas Informatika B,3,Elective,
+2019,IF,7,Ganjil,IF4084,Pengembangan Keprofesian/Komunitas Informatika C,4,Elective,
+2019,IF,7,Ganjil,IF4085,Topik Khusus Informatika A,2,Elective,
+2019,IF,7,Ganjil,IF4086,Topik Khusus Informatika B,3,Elective,
+2019,IF,7,Ganjil,IF4087,Topik Khusus Informatika C,4,Elective,
+2019,IF,7,Ganjil,IF4088,Pengembangan Kemampuan Interpersonal,2,Elective,
+2019,IF,7,Ganjil,IF4150,Rekayasa Perangkat Lunak Spesifik Domain,2,Elective,https://drive.google.com/drive/folders/1UES-DDO_BbIV6I7O1NRNzq6ehv6Qgjg-?usp=drive_link
+2019,IF,3,Ganjil,IF2110,Algoritma & Struktur Data,4,Mandatory,https://drive.google.com/drive/folders/1MAF_4ACP0rVG8y5DWQqCcisSeUberl4k?usp=drive_link
+2019,IF,3,Ganjil,IF2120,Matematika Diskrit,3,Mandatory,https://drive.google.com/drive/folders/1zTd3T_lNhoz6Lzo8hN2GEfv6E7eRul8b?usp=drive_link
+2019,IF,3,Ganjil,IF2121,Logika Komputasional,2,Mandatory,https://drive.google.com/drive/folders/1zG7ZYF5kbBwZqIf-0pvvi-IJS12qEsc3?usp=drive_link
+2019,IF,3,Ganjil,IF2123,Aljabar Linier dan Geometri,3,Mandatory,https://drive.google.com/drive/folders/1hKHiHRPFs0tcFR2vaeqZn1N8mmyX-Yt0?usp=drive_link
+2019,IF,3,Ganjil,IF2124,Teori Bahasa Formal dan Otomata,3,Mandatory,https://drive.google.com/drive/folders/1i2ZLZcWeRl1mDvCOSTfclU718Iw9nNUz?usp=drive_link
+2019,IF,3,Ganjil,IF2130,Organisasi dan Arsitektur Komputer,3,Mandatory,https://drive.google.com/drive/folders/1uEMVvnCH0Cr_JVa5tgDtLs2qv2wA6Zdz?usp=drive_link
+2019,IF,4,Genap,IF2210,Pemrograman Berorientasi Objek,3,Mandatory,https://drive.google.com/drive/folders/1lneoej-8fha58859JnD9TBJtpnOEWoMC?usp=drive_link
+2019,IF,4,Genap,IF2211,Strategi Algoritma,3,Mandatory,https://drive.google.com/drive/folders/18UYZhBQeMo4s9N66XWCgHZ7kuaS_VT-t?usp=drive_link
+2019,IF,4,Genap,IF2220,Probabilitas dan Statistika,3,Mandatory,https://drive.google.com/drive/folders/1hZjBVu67jDn1Afp3cSXaN8KxE_CVAQGa?usp=drive_link
+2019,IF,4,Genap,IF2230,Sistem Operasi,3,Mandatory,https://drive.google.com/drive/folders/1f1Ya22BdcUfsS703svCe8ZRADZXoIev7?usp=drive_link
+2019,IF,4,Genap,IF2240,Basis Data,3,Mandatory,https://drive.google.com/drive/folders/1rYtB99ARSfMCJmNO0-0ilRokBAsv5nPY?usp=drive_link
+2019,IF,4,Genap,IF2250,Rekayasa Perangkat Lunak,3,Mandatory,https://drive.google.com/drive/folders/1vhi0tIs90D3sWQZNr18FfTgHc8t-wis-?usp=drive_link
+2019,IF,5,Ganjil,IF3110,Pengembangan Aplikasi Berbasis Web,2,Mandatory,https://drive.google.com/drive/folders/1_Tc6R9a3GG_4NliM2My7Nx6_msSQkSp_?usp=drive_link
+2019,IF,5,Ganjil,IF3130,Jaringan Komputer,3,Mandatory,https://drive.google.com/drive/folders/1uHyH6-V650uSw4FBsrC5rq_yrQktxj7s?usp=drive_link
+2019,IF,5,Ganjil,IF3140,Manajemen Basis Data,2,Mandatory,https://drive.google.com/drive/folders/16_Qg6vRZL81XMs-UnBPxduNmIrNilDgx?usp=drive_link
+2019,IF,5,Ganjil,IF3141,Sistem Informasi,3,Mandatory,https://drive.google.com/drive/folders/1s4PLnekA2nP-9K8aggwIg_mapKsqjcsN?usp=drive_link
+2019,IF,5,Ganjil,IF3150,Manajemen Proyek Perangkat Lunak,2,Mandatory,https://drive.google.com/drive/folders/1u7AzJl-sNaZ1vKlB_8qZOLEXXVqrBrMk?usp=drive_link
+2019,IF,5,Ganjil,IF3151,Interaksi Manusia Komputer,3,Mandatory,https://drive.google.com/drive/folders/13h6tTTBxFJjPBF7PH72aeobdVP-f-r64?usp=drive_link
+2019,IF,5,Ganjil,IF3170,Inteligensi Buatan,3,Mandatory,https://drive.google.com/drive/folders/1Zk8QmxKq8I6UNv-cesHjNhhJe7C6xkTP?usp=drive_link
+2019,IF,6,Genap,IF3210,Pengembangan Aplikasi pada Platform Khusus,3,Mandatory,https://drive.google.com/drive/folders/1VDq8bgyJRDNeyhza8Bb7xgWJdkn4HpNi?usp=drive_link
+2019,IF,6,Genap,IF3230,Sistem Paralel dan Terdistribusi,3,Mandatory,https://drive.google.com/drive/folders/1UwP_88jNH6fESsrhx5lqZpgPeu5wQfX7?usp=drive_link
+2019,IF,6,Genap,IF3250,Proyek Perangkat Lunak,4,Mandatory,https://drive.google.com/drive/folders/1Hn1aOUZivDsMZR4CE65OJ6zcKdcJTYoI?usp=drive_link
+2019,IF,6,Genap,IF3260,Grafika Komputer,3,Mandatory,https://drive.google.com/drive/folders/1S1gB1YoQhdodlQTX1Ggv5KySrYPDwPDX?usp=drive_link
+2019,IF,6,Genap,IF3270,Pembelajaran Mesin,2,Mandatory,https://drive.google.com/drive/folders/1LjnCw71WPqyu74u826jhJkgawv2dgPEz?usp=drive_link
+2019,IF,6,Genap,IF3280,Socio-informatika dan Profesionalisme,3,Mandatory,https://drive.google.com/drive/folders/1N6lmHvCDu_i2O-lytag3tMToNY8cQyRf?usp=drive_link
+2019,IF,7,Ganjil,IF4090,Kerja Praktek,2,Mandatory,https://drive.google.com/drive/folders/1o4po5BNBIqQaf6IB6Lyw69-lniH85_25?usp=drive_link
+2019,IF,7,Ganjil,IF4091,Tugas Akhir 1 dan Seminar,2,Mandatory,https://drive.google.com/drive/folders/1ajkUlczdbxuF8q2i_wEWiIGC22aPygs7?usp=drive_link
+2019,IF,8,Genap,IF4092,Tugas Akhir 2,4,Mandatory,https://drive.google.com/drive/folders/1fzOuTxqZubH72kEEv39lyDFhaARcZmTg?usp=drive_link
+2019,OTHER,8,Genap,AS2005,Astronomi dan Lingkungan,2,Elective,https://drive.google.com/drive/folders/1JixlK89NCZURCSjOnAgrY9PafCoPglX8?usp=drive_link
+2019,OTHER,8,Genap,BI2001,Pengetahuan Lingkungan,2,Elective,https://drive.google.com/drive/folders/1xBLDK1NsF5t3ot0pnxdUENW8VvJyJwWS?usp=drive_link
+2019,OTHER,,Genap,MA2031,Matematika III,2,Elective,
+2019,OTHER,3,Ganjil,SR2003,Seni Lukis Pilihan,3,Elective,
+2019,OTHER,5,Ganjil,DK3014,Psikologi Persepsi,3,Elective,https://drive.google.com/drive/folders/1se9JeKonTahVUBLfHgcJIsDuuZpUakfS?usp=drive_link
+2019,OTHER,5,Ganjil,DK3016,Psikologi Sosial,3,Elective,https://drive.google.com/drive/folders/1oAoRUqQcWrpqpuqBNmRMRlqO1btDi0ND?usp=drive_link
+2019,OTHER,6,Genap,DK3210,Pemodelan dan Gerak Karakter (3D),3,Elective,
+2019,OTHER,8,Genap,DK4206,Desain Game,3,Elective,
+2019,OTHER,5,Ganjil,DP3011,Berpikir Desain,3,Elective,https://drive.google.com/drive/folders/1XONwXI-IKJO3MzV2fDRpEYtIJtMkwSH0?usp=drive_link
+2019,OTHER,6,Genap,KI3011,Manajemen Laboratorium Kimia,3,Elective,
+2019,OTHER,8,Genap,DP4203,Desain Berbasis Pengguna,3,Elective,
+2019,OTHER,,,KU2061,Agama dan Etika Islam,2,Elective,https://drive.google.com/drive/folders/1RHIEl59xE1e4eA7kmBATVc_R4ENUZiIe?usp=drive_link
+2019,OTHER,,,KU2062,Agama dan Etika Protestan,2,Elective,https://drive.google.com/drive/folders/1kiPX9GKQyNrtKCdsu4gafbmWoy-iUAZZ?usp=drive_link
+2019,OTHER,,,KU2063,Agama dan Etika Katolik,2,Elective,
+2019,OTHER,,,KU2065,Agama dan Etika Buddha,2,Elective,
+2019,OTHER,,,KU2064,Agama dan Etika Hindu,2,Elective,https://drive.google.com/drive/folders/1xRjXIiKysffHx0ncJFvG-G_ixpFw33GM?usp=drive_link
+2019,OTHER,,,KU2071,Pancasila dan Kewarganegaraan,2,Elective,https://drive.google.com/drive/folders/1dBESuZQFIkqxTsR0olq5PbhU8rkFvsMf?usp=drive_link
+2019,OTHER,,,KU4012,Komposisi,3,Elective,
+2019,OTHER,,,KU4070,Bahasa Perancis,2,Elective,https://drive.google.com/drive/folders/1h4w_4eajXy2b1E33Y-cT8hXG1h26IcbD?usp=drive_link
+2019,OTHER,,,KU4071,Bahasa Jerman,2,Elective,https://drive.google.com/drive/folders/19eIvSHDcvxpRVO7Bjcv_YtMXKFgorzD6?usp=drive_link
+2019,OTHER,,,KU4072,Bahasa Jepang,2,Elective,https://drive.google.com/drive/folders/14qxvznEN-qt9OVkHaVhi2uDfF-NF0-kR?usp=drive_link
+2019,OTHER,,,KU4074,Politik dan Tata Pemerintahan,2,Elective,
+2019,OTHER,,,KU4075,Hukum Lingkungan,2,Elective,https://drive.google.com/drive/folders/1BW5ghVs3w2iWhWoc7WDvXDyX_d9tL3LS?usp=drive_link
+2019,OTHER,,,KU4078,Studium Generale,2,Elective,
+2019,OTHER,,,KU4079,Pendidikan Anti Korupsi,2,Elective,https://drive.google.com/drive/folders/1xx6StFnB5X4r0BrGpsLi0MTW611X84pb?usp=drive_link
+2019,OTHER,,,KU4095,Kewirausahaan,2,Elective,
+2019,OTHER,,,KU4172,Hukum Perburuhan,2,Elective,https://drive.google.com/drive/folders/1rkq4uebQgForEying9qVVhpoV5EuTooc?usp=drive_link
+2019,OTHER,,,KU4182,Komunikasi Pembangunan,2,Elective,
+2019,OTHER,,,KU4183,Sosiologi Industri,2,Elective,
+2019,OTHER,,,KU4184,Antropologi,2,Elective,
+2019,OTHER,,,KU4225,Filsafat Ilmu,2,Elective,https://drive.google.com/drive/folders/1lcnItN106gBoeWmsYus4Hg6BlRqEg3Oh?usp=drive_link
+2019,OTHER,,,KU4273,Hukum Miliki Perindustrian,2,Elective,https://drive.google.com/drive/folders/1UbD9ZUVXlmuqJnmCfxYCyNLGyZSHcJ5R?usp=drive_link
+2019,OTHER,,,ME4034,Kebijakan Iklim,3,Elective,https://drive.google.com/drive/folders/1g5eh-SiLjgn8Yb_bh_Fb8SXmfX_-pugD?usp=drive_link
+2019,OTHER,,,ME4045,Perubahan Iklim B (Layanan),3,Elective,
+2019,OTHER,,,TL2105,Kesehatan Lingkungan,3,Elective,https://drive.google.com/drive/folders/1rSsQnEH0RA3WXTHXjgHRmIfPHCz1iaT5?usp=drive_link
+2019,OTHER,,,TL4002,Rekayasa Lingkungan,3,Elective,https://drive.google.com/drive/folders/1-F2EwS60bl6YlDU-vOu4ix1Hh0s6SQf6?usp=drive_link
+2019,OTHER,,,MB4044,Perencanaan Keuangan,3,Elective,
+2019,OTHER,,Ganjil,MA4072,Pembelajaran Mendalam,4,Elective,
+2019,OTHER,,Ganjil,EL4121,Perancangan Sistem Embedded,3,Elective,
+2019,OTHER,,,MBKM01,Diginove,,Elective,
+2019,OTHER,,,MBKM02,Bangkit Academy,20,Elective,
+2019,STI,7,Ganjil,EL4125,Pengolahan Citra Digital,3,Elective,https://drive.google.com/drive/folders/1HiY_Dh02DMoBAwgt6FZiOnetGMKuTWfF?usp=drive_link
+2019,STI,7,Ganjil,EL4126,Robotika,3,Elective,https://drive.google.com/drive/folders/1lkA72H1WY24zAqPTFxrsiH0Z5MdUj-2d?usp=drive_link
+2019,STI,,,EL4127,Arsitektur dan Komputasi Paralel,3,Elective,https://drive.google.com/drive/folders/1YT5YLoW-g-w_E1UfTXTKMDdgAvCbs076?usp=drive_link
+2019,STI,7,Ganjil,EP4072,SCADA dan Manajemen Energi,3,Elective,https://drive.google.com/drive/folders/1NifCGFhfz0aAI-G8zV3F-25QDtpP4T37?usp=drive_link
+2019,STI,,,II1101,Komputasi dan Masyarakat,2,Elective,
+2019,STI,7,Ganjil,II4021,Sistem Pendukung Pengambilan Keputusan,2,Elective,https://drive.google.com/drive/folders/1_cLV0TOuWRwacXAsaPDM_IpPzMPRBm1A?usp=drive_link
+2019,STI,7,Ganjil,II4022,Audit Teknologi Informasi,2,Elective,https://drive.google.com/drive/folders/12_Q5_72zd6IglnjRHOIif_PTDlAyq2E9?usp=drive_link
+2019,STI,7,Ganjil,II4031,Kriptografi dan Koding,2,Elective,https://drive.google.com/drive/folders/1kKoTlAvEz7mKp88ZItoIGZjriYHtqkGi?usp=drive_link
+2019,STI,7,Ganjil,II4032,Analisis & Perancangan Kinerja Sistem,2,Elective,https://drive.google.com/drive/folders/19t3tHZ0bfJvbiW5Th9sh83l2_QFW0Fq9?usp=drive_link
+2019,STI,7,Ganjil,II4033,Forensik Digital,2,Elective,https://drive.google.com/drive/folders/1il8VK1kvkPYM6SxONuhrRSheOK_x0M-8?usp=drive_link
+2019,STI,7,Ganjil,II4034,Pemrosesan Bahasa Alami dan Ucapan,2,Elective,https://drive.google.com/drive/folders/1eiU2-UjR1YmDEZ6ckknwN1Hym2FtOM_2?usp=drive_link
+2019,STI,7,Ganjil,II4035,Sistem Cerdas,2,Elective,https://drive.google.com/drive/folders/1Xmf9Au6WM0Yr_CsmXdzUznJYII4_6Z65?usp=drive_link
+2019,STI,7,Ganjil,II4037,Internet of Things,2,Elective,https://drive.google.com/drive/folders/1IYzFQtvn1Ai4ItUIdM_6kCKDXweFq47f?usp=drive_link
+2019,STI,7,Ganjil,II4038,Teknologi Komputasi Awan,2,Elective,https://drive.google.com/drive/folders/1mWgHRhFnbyHQdyYZr0_Txxiik1v9RTyx?usp=drive_link
+2019,STI,7,Ganjil,II4039,Manajemen Produk,2,Elective,
+2019,STI,7,Ganjil,II4041,Temu Balik Informasi Multimedia,3,Elective,
+2019,STI,7,Ganjil,II4042,Kecerdasan Buatan untuk Bisnis,2,Elective,https://drive.google.com/drive/folders/1cHT1PJaCHybEPgFr5sNDVbuujEMRqsja?usp=drive_link
+2019,STI,7,Ganjil,II4051,Rekayasa Sistem Multimedia,2,Elective,https://drive.google.com/drive/folders/1Mim5aUvuvKHZ16L3JkN9dIT8P8vj4HPn?usp=drive_link
+2019,STI,7,Ganjil,II4062,Data Warehouse & Business Intelligence,2,Elective,https://drive.google.com/drive/folders/1BZYFfRCgH5qvcRnGeDoM-0o_DtSJXlnp?usp=drive_link
+2019,STI,7,Ganjil,II4071,Keprofesian STI,2,Elective,https://drive.google.com/drive/folders/16nDJISUETrUkpoBG0QocbeFY3nf5Mm5z?usp=drive_link
+2019,STI,7,Ganjil,II4072,Pengembangan Keprofesian/Komunitas STI A,2,Elective,
+2019,STI,7,Ganjil,II4073,Pengembangan Keprofesian/Komunitas STI B,3,Elective,
+2019,STI,7,Ganjil,II4074,Pengembangan Keprofesian/Komunitas STI C,4,Elective,
+2019,STI,,,II4075,Pengembangan Soft Skill Terkait Bidang STI,2,Elective,
+2019,STI,,,II4076,Inovasi dan Studi Mandiri Bidang STI,3,Elective,
+2019,STI,,,II4077,Pengembangan Wirausaha Bidang STI,4,Elective,
+2019,STI,,,II4078,Penelitian Bidang STI,4,Elective,
+2019,STI,,,MR3002,Manajemen Teknologi,3,Elective,https://drive.google.com/drive/folders/1V8VxMpWc1q4XC4KuYnHwBPW0PWFzxOj0?usp=drive_link
+2019,STI,,,TI3004,Ekonomi Teknik,2,Elective,https://drive.google.com/drive/folders/1EpB6UmxMsCOL5H9RE7qq3WuAgYa8E30U?usp=drive_link
+2019,STI,3,Ganjil,IF2111,Algoritma dan Struktur Data STI,3,Mandatory,https://drive.google.com/drive/folders/1jziqg6Yv5X3q9aHO8PSD5qhkU7hxNWOP?usp=drive_link
+2019,STI,3,Ganjil,IF2140,Pemodelan Basis Data,3,Mandatory,https://drive.google.com/drive/folders/1rarJIxFDhOi-deWo6dTkhpgW4_V0QZbM?usp=drive_link
+2019,STI,4,Genap,IF2212,Pemrograman Berorientasi Objek STI,3,Mandatory,https://drive.google.com/drive/folders/1lCgW5hk6oMVMMEPpa6HL6Or32rz0fQSU?usp=drive_link
+2019,STI,5,Ganjil,IF3152,Rekayasa Perangkat Lunak STI,3,Mandatory,https://drive.google.com/drive/folders/1ttf2TfrWa8UaEwc79XdejU88pIEFL4xM?usp=drive_link
+2019,STI,3,Ganjil,II2110,Matematika STI,3,Mandatory,https://drive.google.com/drive/folders/1q7lfzSN--saoNGLmWB1ZMM0Ws77oQ6_I?usp=drive_link
+2019,STI,3,Ganjil,II2111,Probabilitas dan Statistik,3,Mandatory,https://drive.google.com/drive/folders/1rA_nOnb07LkAvnMBXwucszhM6M8ae38J?usp=drive_link
+2019,STI,3,Ganjil,II2130,Sistem dan Arsitektur Komputer,3,Mandatory,https://drive.google.com/drive/folders/1X6dUsS5ufgoMBnbTROi0TGMeXgaDspZu?usp=drive_link
+2019,STI,4,Genap,II2220,Manajemen Sumber Daya STI,3,Mandatory,https://drive.google.com/drive/folders/1iOJITqitNJ3rIu8xQ6CmEe5u3a2tKeJi?usp=drive_link
+2019,STI,6,Genap,II2221,Manajemen Proyek STI,3,Mandatory,https://drive.google.com/drive/folders/1wCQnMm-dtkdptlAYlHE-NH0yok5TAGfu?usp=drive_link
+2019,STI,4,Genap,II2230,Jaringan Komputer,3,Mandatory,https://drive.google.com/drive/folders/1f9VqwVTOKp6MrWM45aZ6PmXaOM63Iivh?usp=drive_link
+2019,STI,4,Genap,II2240,Analisis Kebutuhan Sistem,3,Mandatory,https://drive.google.com/drive/folders/1LCWPI29BayKR-AznR_gXDJ5fVjPHgJ8k?usp=drive_link
+2019,STI,4,Genap,II2250,Manajemen Basis Data,2,Mandatory,https://drive.google.com/drive/folders/1F1tD854lAQU52PZ1PDhlLVCJiuz1TbVM?usp=drive_link
+2019,STI,4,Genap,II2260,Sistem Embedded,3,Mandatory,https://drive.google.com/drive/folders/1wucdxPENEMRg11IQMlGbef797CHjLkFg?usp=drive_link
+2019,STI,5,Ganjil,II3120,Layanan Sistem dan Teknologi Informasi,3,Mandatory,https://drive.google.com/drive/folders/15osA5WokJMwbIMfLhjJtQt0qpoEOQwzP?usp=drive_link
+2019,STI,5,Ganjil,II3121,Analisis Kebutuhan Enterprise,3,Mandatory,https://drive.google.com/drive/folders/1JfN9Fk7I875q3EuwCas68nZq5e6vD-et?usp=drive_link
+2019,STI,5,Ganjil,II3131,Interaksi Manusia Komputer,3,Mandatory,https://drive.google.com/drive/folders/1Ruh2zsEeGNoSmr4YRKU1vCtaCQ8mthb6?usp=drive_link
+2019,STI,5,Ganjil,II3150,Sistem Multimedia,3,Mandatory,https://drive.google.com/drive/folders/1BSm-zf5ZPKafziKIxRMh9DOae1NYXZ97?usp=drive_link
+2019,STI,5,Ganjil,II3160,Teknologi Sistem Terintegrasi,3,Mandatory,https://drive.google.com/drive/folders/1roRAFgv-JjishodimmSdaApSPGlz2q-4?usp=drive_link
+2019,STI,6,Genap,II3220,Arsitektur Enterprise,3,Mandatory,https://drive.google.com/drive/folders/1uDRdnCxCC9Sn6QZzxFcIKZYPjTtlFsYG?usp=drive_link
+2019,STI,6,Genap,II3230,Keamanan Informasi,3,Mandatory,https://drive.google.com/drive/folders/13UIdICQ0FIrvntmJP_JCAzGFwFzQsi42?usp=drive_link
+2019,STI,6,Genap,II3240,Rekayasa Sistem dan Teknologi Informasi,3,Mandatory,https://drive.google.com/drive/folders/1Y5Eg_v0HCONiHompHpUdX0uwAIhZVquQ?usp=drive_link
+2019,STI,6,Genap,II3260,Platform dan Pengembangan Aplikasi Mobile,3,Mandatory,https://drive.google.com/drive/folders/1NMuGjBWvlRjyzz-zsypbMihQG_xSKxVr?usp=drive_link
+2019,STI,7,Ganjil,II4090,Kerja Praktek,2,Mandatory,https://drive.google.com/drive/folders/1IYaWGNmWJwIsQAAUpGnB8Ehlym_2Nsb-?usp=drive_link
+2019,STI,7,Ganjil,II4091,Tugas Akhir 1 & Seminar,2,Mandatory,https://drive.google.com/drive/folders/1qZgYq8Lxa-jWOtnlyGF0fxHNREdciS46?usp=drive_link
+2019,STI,8,Genap,II4092,Tugas Akhir 2,4,Mandatory,https://drive.google.com/drive/folders/1qZgYq8Lxa-jWOtnlyGF0fxHNREdciS46?usp=drive_link
+2019,STI,7,Ganjil,II4370,Hukum & Etika Teknologi Informasi,2,Mandatory,https://drive.google.com/drive/folders/1gw6hT2RyPS0RwJ9at-YMmJRdR6x5Hk-P?usp=drive_link
+2019,STI,7,Ganjil,II4371,Kapita Selekta STI,2,Mandatory,https://drive.google.com/drive/folders/10eapxKPvRKmiWv0RMehHX3Ey3oY0p6_J?usp=drive_link
+2019,STI,8,Genap,II4472,Komunikasi Interpersonal,2,Mandatory,https://drive.google.com/drive/folders/1zOp1Y0Jzt99b1WVDLmK2wWeVohYLPd47?usp=drive_link
+2019,STI,3,Ganjil,TI3005,Organisasi & Manajemen Perusahaan Industri,2,Mandatory,https://drive.google.com/drive/folders/1IRQ93srJugJt3wOZEU4rq4p4ZzaVK3tf?usp=drive_link

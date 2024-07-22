@@ -12,6 +12,21 @@ const EnvSchema = z.object({
   VAPID_PUBLIC_KEY: z.string().default('not-specified'),
   VAPID_PRIVATE_KEY: z.string().default('not-specified'),
   VAPID_MAILTO: z.string().email().optional(),
+  GOOGLE_CLIENT_ID: z.string(),
+  GOOGLE_CLIENT_SECRET: z.string(),
+  GOOGLE_CALLBACK_URL: z.string().url(),
+  JWT_SECRET: z.string(),
+  TOKEN_EXPIRATION: z.string(),
+  R2_ENDPOINT: z.string().url().default('not-specified'),
+  R2_ACCESS_KEY_ID: z.string().default('not-specified'),
+  R2_SECRET_ACCESS_KEY: z.string().default('not-specified'),
+  R2_PUBLIC_URL: z.string().url().default('not-specified'),
+  R2_BUCKET_NAME: z.string().default('hmifapp'),
+  LOGIN_BYPASS_KEY: z.string().default('default-bypass-key'),
+  GOOGLE_CALENDAR_SECRET_PATH: z.string().default('google_credentials.json'),
+  GOOGLE_CALENDAR_ID: z.string().default('primary'),
+  SENTRY_DSN: z.string().url().optional(),
+  SENTRY_ENVIRONMENT: z.string().default('staging'),
 });
 
 const result = EnvSchema.safeParse(process.env);
