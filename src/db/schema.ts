@@ -570,3 +570,30 @@ export const userRoles = pgTable(
 export const userRolesRelation = relations(userRoles, ({ one }) => ({
   user: one(users, { fields: [userRoles.userId], references: [users.id] }),
 }));
+
+export const competitions = pgTable('competitions', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  name: text('name').notNull(),
+  organizer: text('organizer').notNull(),
+  registrationStart: timestamp('registration_start_date', {
+    withTimezone: true,
+  }),
+  registrationDeadline: timestamp('registration_deadline_date', {
+    withTimezone: true,
+  }),
+  price: text('price'),
+  sourceUrl: text('source_url').notNull(),
+  registrationUrl: text('registration_url').notNull(),
+  type: text('category', {
+    enum: [
+      'Competitive Programming',
+      'Capture The Flag',
+      'Data Science / Data Analytics',
+      'UI/UX',
+      'Game Development',
+      'Business IT Case',
+      'Innovation',
+      'Web Development',
+    ],
+  }).notNull(),
+});
