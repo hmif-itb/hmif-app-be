@@ -13,6 +13,7 @@ import { calendarRouter } from './calendar.controller';
 import { testimoniRoute } from './testimoni.controller';
 import { userProfileRoute } from './user-profile.controller';
 import { userFinderRouter } from './user-finder.controller';
+import { competitionsRouter } from './competitions.controller';
 
 const unprotectedApiRouter = new OpenAPIHono();
 unprotectedApiRouter.route('/', loginRouter);
@@ -33,6 +34,7 @@ protectedApiRouter.route('/', calendarRouter);
 protectedApiRouter.route('/', testimoniRoute);
 protectedApiRouter.route('/', userProfileRoute);
 protectedApiRouter.route('/', userFinderRouter);
+protectedApiRouter.route('/', competitionsRouter)
 
 export const apiRouter = new OpenAPIHono();
 apiRouter.route('/', unprotectedApiRouter);

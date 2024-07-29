@@ -186,7 +186,6 @@ export async function getListInfos(
   }
 
   const where = and(searchQ, categoryQ, unreadQ);
-
   let listInfo = await db.query.infos.findMany({
     where,
     limit: INFOS_PER_PAGE,
