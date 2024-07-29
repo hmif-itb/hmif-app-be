@@ -13,7 +13,7 @@ export const postCalendarEventRoute = createRoute({
   operationId: 'postCalendarEvent',
   tags: ['calendar'],
   method: 'post',
-  path: '/calendar',
+  path: '/calendar/event',
   request: {
     body: {
       content: {
@@ -47,7 +47,7 @@ export const getCalendarEventRoute = createRoute({
   operationId: 'getCalendarEvent',
   tags: ['calendar'],
   method: 'get',
-  path: '/calendar',
+  path: '/calendar/event',
   request: {
     query: GetCalendarEventParamsSchema,
   },
@@ -75,7 +75,7 @@ export const getCalendarEventByIdRoute = createRoute({
   operationId: 'getCalendarEventById',
   tags: ['calendar'],
   method: 'get',
-  path: '/calendar/{eventId}',
+  path: '/calendar/event/{eventId}',
   request: {
     params: CalendarEventIdParamsSchema,
   },
@@ -111,7 +111,7 @@ export const updateCalendarEventRoute = createRoute({
   operationId: 'updateCalendarEvent',
   tags: ['calendar'],
   method: 'put',
-  path: '/calendar/{eventId}',
+  path: '/calendar/event/{eventId}',
   request: {
     params: CalendarEventIdParamsSchema,
     body: {
@@ -146,7 +146,7 @@ export const deleteCalendarEventRoute = createRoute({
   operationId: 'deleteCalendarEvent',
   tags: ['calendar'],
   method: 'delete',
-  path: '/calendar/{eventId}',
+  path: '/calendar/event/{eventId}',
   request: {
     params: CalendarEventIdParamsSchema,
   },
@@ -169,7 +169,7 @@ export const getCalendarGroupRoute = createRoute({
   operationId: 'getCalendarGroup',
   tags: ['calendar'],
   method: 'get',
-  path: '/calendar-group',
+  path: '/calendar/group',
   responses: {
     200: {
       description: 'Get list of calendar groups',
