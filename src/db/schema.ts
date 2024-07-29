@@ -596,4 +596,7 @@ export const competitions = pgTable('competitions', {
       'Web Development',
     ],
   }).notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });
