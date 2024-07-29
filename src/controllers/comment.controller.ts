@@ -55,7 +55,7 @@ commentRouter.openapi(deleteCommentRoute, async (c) => {
     }
     return c.json({ ...comment, creator: c.var.user }, 200);
   } catch (err) {
-    return c.json({error: err}, 500);
+    return c.json({ error: err }, 500);
   }
 });
 

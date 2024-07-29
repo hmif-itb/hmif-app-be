@@ -34,7 +34,7 @@ protectedApiRouter.route('/', calendarRouter);
 protectedApiRouter.route('/', testimoniRoute);
 protectedApiRouter.route('/', userProfileRoute);
 protectedApiRouter.route('/', userFinderRouter);
-protectedApiRouter.route('/', competitionsRouter)
+protectedApiRouter.route('/', competitionsRouter);
 
 export const apiRouter = new OpenAPIHono();
 apiRouter.route('/', unprotectedApiRouter);

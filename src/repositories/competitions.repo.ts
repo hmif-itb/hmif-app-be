@@ -1,4 +1,4 @@
-import { eq, and, sql, inArray, SQL} from 'drizzle-orm';
+import { eq, and, sql, inArray, SQL } from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
 import { first } from '~/db/helper';
 import { competitions } from '~/db/schema';
@@ -11,16 +11,16 @@ export async function getCompetitionsList(
   db: Database,
   q: z.infer<typeof CompetitionListQuerySchema>,
 ) {
-    let categoryQ: SQL<unknown> | undefined;
+  let categoryQ: SQL<unknown> | undefined;
 
-    if(q.category){
-        const getCompeitionsByCategory = db
-        .select({ competitionsId: competitions.id })
-        .from(competitions)
-        .where(eq(competitions.type, q.category));
-        categoryQ = inArray(competitions.id, getCompeitionsByCategory);
-    }
-  
+  if (q.category) {
+    const getCompeitionsByCategory = db
+      .select({ competitionsId: competitions.id })
+      .from(competitions)
+      .where(eq(competitions.type, q.category));
+    categoryQ = inArray(competitions.id, getCompeitionsByCategory);
+  }
+
   const activeQ = sql`${competitions.registrationDeadline} > now()`;
 
   const where = and(categoryQ, activeQ);
@@ -35,7 +35,9 @@ export async function getCompetitionsList(
       if (!a.registrationDeadline || !b.registrationDeadline) {
         return a.createdAt.getTime() - b.createdAt.getTime();
       } else {
-        return a.registrationDeadline.getTime() - b.registrationDeadline.getTime();
+        return (
+          a.registrationDeadline.getTime() - b.registrationDeadline.getTime()
+        );
       }
     } else {
       return a.createdAt.getTime() - b.createdAt.getTime();
@@ -45,11 +47,10 @@ export async function getCompetitionsList(
   return listCompetitions;
 }
 
-
 export async function deleteCompetition(db: Database, competitionId: string) {
-    return await db
-      .delete(competitions)
-      .where(eq(competitions.id, competitionId))
-      .returning()
-      .then(first);
-  }
+  return await db
+    .delete(competitions)
+    .where(eq(competitions.id, competitionId))
+    .returning()
+    .then(first);
+}
