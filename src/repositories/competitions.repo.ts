@@ -21,9 +21,7 @@ export async function getCompetitionsList(
         categoryQ = inArray(competitions.id, getCompeitionsByCategory);
     }
   
-  const activeQ = q.filter === 'active'
-    ? sql`${competitions.registrationDeadline} > now()`
-    : undefined;
+  const activeQ = sql`${competitions.registrationDeadline} > now()`;
 
   const where = and(categoryQ, activeQ);
   let listCompetitions = await db.query.competitions.findMany({
@@ -32,15 +30,17 @@ export async function getCompetitionsList(
     offset: q.offset,
   });
 
-    listCompetitions = listCompetitions.sort((a, b) => {
-      if (q.sort === 'deadline') {
-        if (a.registrationDeadline && b.registrationDeadline){
-            return a.registrationDeadline.getTime() - b.registrationDeadline.getTime();
-        }
+  listCompetitions = listCompetitions.sort((a, b) => {
+    if (q.sort === 'deadline') {
+      if (!a.registrationDeadline || !b.registrationDeadline) {
+        return a.createdAt.getTime() - b.createdAt.getTime();
+      } else {
+        return a.registrationDeadline.getTime() - b.registrationDeadline.getTime();
       }
-    });
-  }
-
+    } else {
+      return a.createdAt.getTime() - b.createdAt.getTime();
+    }
+  });
 
   return listCompetitions;
 }

@@ -2,7 +2,9 @@ import { z } from '@hono/zod-openapi';
 import { createSelectSchema } from 'drizzle-zod';
 import { competitions } from '~/db/schema';
 
-export const CompetitionsSchema = createSelectSchema(competitions);
+export const CompetitionsSchema = createSelectSchema(competitions, {
+  createdAt: z.union([z.string(), z.date()]),
+});
 
 export const ListCompetitionsSchema = z.object({
   competitions: z.array(CompetitionsSchema),
