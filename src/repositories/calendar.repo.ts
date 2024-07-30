@@ -153,8 +153,6 @@ export async function getPersonalCalendar(
     (c) => c.courseId,
   );
 
-  // TODO: Ini harusnya ada equal ke semester juga tapi di schema belom di implement
-  // TODO: Waktu post calendar juga harusnya by context aja assign year sama semesternya
   const academicEvents =
     userCourseIds.length > 0
       ? await db // Get academic events based on user context

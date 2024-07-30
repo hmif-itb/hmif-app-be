@@ -539,6 +539,9 @@ export const calendarEvent = pgTable('calendar_event', {
   description: text('description').notNull(),
   category: text('category').notNull(),
   academicYear: integer('academic_year'),
+  academicSemesterCode: text('academic_semester_code', {
+    enum: ['Ganjil', 'Genap'],
+  }),
   start: timestamp('start', { withTimezone: true }).notNull(),
   end: timestamp('end', { withTimezone: true }).notNull(),
   googleCalendarUrl: text('google_calendar_url').notNull(),
