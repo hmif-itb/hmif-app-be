@@ -6,6 +6,7 @@ import {
   UpdateCalendarEventBodySchema,
   CalendarEvent,
   CalendarGroupSchema,
+  PersonalCalendarParamSchema,
 } from '~/types/calendar.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
@@ -195,6 +196,9 @@ export const getPersonalCalendarRoute = createRoute({
   tags: ['calendar'],
   method: 'get',
   path: '/calendar/me',
+  request: {
+    query: PersonalCalendarParamSchema,
+  },
   responses: {
     200: {
       description: 'Get personal calendar',

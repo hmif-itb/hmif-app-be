@@ -8,6 +8,7 @@ import {
   UpdateCalendarEventBodySchema,
   CalendarEvent,
   CalendarEventIdParamsSchema,
+  PersonalCalendarParamSchema,
 } from '~/types/calendar.types';
 import { getUserAcademic } from './user-profile.repo';
 import { JWTPayloadSchema } from '~/types/login.types';
@@ -145,6 +146,7 @@ export async function getCalendarGroup(db: Database) {
 export async function getPersonalCalendar(
   db: Database,
   user: z.infer<typeof JWTPayloadSchema>,
+  query: z.infer<typeof PersonalCalendarParamSchema>,
 ) {
   const userAcademicContext = await getUserAcademic(db, user);
   const userCourseIds = (await getUserCourse(db, user.id, true)).map(
@@ -192,7 +194,12 @@ export async function getPersonalCalendar(
       ),
     );
 
-  console.log(himpunanEvents);
+  const result = [...academicEvents, ...himpunanEvents].filter((c) => {
+    const date = new Date(c.start);
+    return (
+      date.getMonth() + 1 === query.month && date.getFullYear() === query.year
+    );
+  });
 
-  return [...academicEvents, ...himpunanEvents];
+  return result;
 }

@@ -242,6 +242,10 @@ calendarRouter.openapi(getCalendarGroupRoute, async (c) => {
 });
 
 calendarRouter.openapi(getPersonalCalendarRoute, async (c) => {
-  const events = await getPersonalCalendar(db, c.var.user);
+  const events = await getPersonalCalendar(
+    db,
+    c.var.user,
+    c.req.valid('query'),
+  );
   return c.json(events, 200);
 });
