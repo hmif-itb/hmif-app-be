@@ -25,6 +25,7 @@ import {
 import { db } from '~/db/drizzle';
 import { calendarEvent } from '~/db/schema';
 import { PostgresError } from 'postgres';
+import { getCurrentSemesterCodeAndYear } from '~/repositories/course.repo';
 
 export const calendarRouter = createAuthRouter();
 
@@ -40,7 +41,6 @@ calendarRouter.openapi(postCalendarEventRoute, async (c) => {
     calendarGroupId,
     category,
     courseId,
-    academicYear,
   } = c.req.valid('json');
 
   // 1. Check if calendar group exists
@@ -83,13 +83,17 @@ calendarRouter.openapi(postCalendarEventRoute, async (c) => {
   }
 
   // 3. Insert event to DB
+  const nowAcademicContext = getCurrentSemesterCodeAndYear();
   const insertData: typeof calendarEvent.$inferInsert = {
     calendarGroupId,
     courseId,
     title,
     description: description ?? '',
     category: category ?? '',
-    academicYear,
+    academicYear: courseId ? nowAcademicContext.semesterYearTaken : null,
+    academicSemesterCode: courseId
+      ? nowAcademicContext.semesterCodeTaken
+      : null,
     start,
     end,
     googleCalendarUrl: eventGCal.htmlLink,
