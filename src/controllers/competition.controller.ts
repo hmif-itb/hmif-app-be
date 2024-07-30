@@ -29,15 +29,14 @@ competitionRouter.openapi(createCompetitionRoute, async (c) => {
 competitionRouter.openapi(updateCompetitionRoute, async (c) => {
   try {
     const { id } = c.req.valid('param');
-    if (!id) return c.json({ error: 'Invalid competition ID' }, 400);
 
     // Check if competition exists
-    const existingCompetition = await getCompetitionById(db, id);
+    const existingCompetition = await getCompetitionById(db, id ?? '');
     if (!existingCompetition)
       return c.json({ error: 'Competition not found' }, 404);
 
     const data = c.req.valid('json');
-    const competition = await updateCompetition(db, id, data);
+    const competition = await updateCompetition(db, id ?? '', data);
     return c.json(competition, 200);
   } catch (err) {
     if (err instanceof PostgresError) {
