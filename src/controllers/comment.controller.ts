@@ -55,7 +55,10 @@ commentRouter.openapi(deleteCommentRoute, async (c) => {
     }
     return c.json({ ...comment, creator: c.var.user }, 200);
   } catch (err) {
-    return c.json(err, 500);
+    if (err instanceof PostgresError) {
+      return c.json({ error: err.message }, 500);
+    }
+    throw err;
   }
 });
 
