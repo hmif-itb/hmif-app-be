@@ -84,11 +84,12 @@ export const CreateCalendarEventBodySchema = createInsertSchema(calendarEvent, {
     .string()
     .optional()
     .openapi({ example: 'hlp70594b43hcn866d291i8jm0' }),
-  academicYear: z.number().optional().openapi({ example: 2021 }),
 }).omit({
   id: true,
   googleCalendarUrl: true,
   googleCalendarId: true,
+  academicYear: true,
+  academicSemesterCode: true,
 });
 
 export const GetCalendarEventParamsSchema = z.object({
