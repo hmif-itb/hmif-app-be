@@ -1,14 +1,17 @@
-import { eq } from 'drizzle-orm';
+import { and, eq, or } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
-import { calendarEvent, courses } from '~/db/schema';
+import { calendarEvent, calendarGroup, courses } from '~/db/schema';
 import {
   GetCalendarEventParamsSchema,
   UpdateCalendarEventBodySchema,
   CalendarEvent,
   CalendarEventIdParamsSchema,
 } from '~/types/calendar.types';
+import { getUserAcademic } from './user-profile.repo';
+import { JWTPayloadSchema } from '~/types/login.types';
+import { getUserCourse } from './course.repo';
 
 export async function getCalendarEvent(
   db: Database,
@@ -137,4 +140,59 @@ export async function createCalendarEvent(
 export async function getCalendarGroup(db: Database) {
   const calendarGroup = await db.query.calendarGroup.findMany();
   return calendarGroup;
+}
+
+export async function getPersonalCalendar(
+  db: Database,
+  user: z.infer<typeof JWTPayloadSchema>,
+) {
+  const userAcademicContext = await getUserAcademic(db, user);
+  const userCourseIds = (await getUserCourse(db, user.id, true)).map(
+    (c) => c.courseId,
+  );
+
+  // TODO: Ini harusnya ada equal ke semester juga tapi di schema belom di implement
+  // TODO: Waktu post calendar juga harusnya by context aja assign year sama semesternya
+  const academicEvents =
+    userCourseIds.length > 0
+      ? await db // Get academic events based on user context
+          .select()
+          .from(calendarEvent)
+          .where(
+            and(
+              userCourseIds.length > 1
+                ? or(...userCourseIds.map((c) => eq(calendarEvent.courseId, c)))
+                : eq(calendarEvent.courseId, userCourseIds[0]),
+              eq(
+                calendarEvent.academicYear,
+                userAcademicContext.semesterYearTaken,
+              ),
+            ),
+          )
+      : [];
+
+  console.log(academicEvents);
+
+  const himpunanCalendarId = // Dynamic query to get himpunan calendar group id
+    (
+      await db
+        .select()
+        .from(calendarGroup)
+        .where(eq(calendarGroup.name, 'himpunan'))
+    ).map((c) => c.id);
+
+  const himpunanEvents = await db // Get himpunan events
+    .select()
+    .from(calendarEvent)
+    .where(
+      or(
+        ...himpunanCalendarId.map((id) =>
+          eq(calendarEvent.calendarGroupId, id),
+        ),
+      ),
+    );
+
+  console.log(himpunanEvents);
+
+  return [...academicEvents, ...himpunanEvents];
 }

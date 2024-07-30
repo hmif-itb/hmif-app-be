@@ -7,6 +7,7 @@ import {
   getCalendarEventByIdRoute,
   getCalendarEventRoute,
   getCalendarGroupRoute,
+  getPersonalCalendarRoute,
   postCalendarEventRoute,
   updateCalendarEventRoute,
 } from '~/routes/calendar.route';
@@ -18,6 +19,7 @@ import {
   getCalendarEventById,
   getCalendarGroup,
   getCalendarGroupById,
+  getPersonalCalendar,
   updateCalendarEvent,
 } from '~/repositories/calendar.repo';
 import { db } from '~/db/drizzle';
@@ -237,4 +239,9 @@ calendarRouter.openapi(deleteCalendarEventRoute, async (c) => {
 calendarRouter.openapi(getCalendarGroupRoute, async (c) => {
   const calendarGroups = await getCalendarGroup(db);
   return c.json(calendarGroups, 200);
+});
+
+calendarRouter.openapi(getPersonalCalendarRoute, async (c) => {
+  const events = await getPersonalCalendar(db, c.var.user);
+  return c.json(events, 200);
 });

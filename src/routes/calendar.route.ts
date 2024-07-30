@@ -189,3 +189,28 @@ export const getCalendarGroupRoute = createRoute({
     },
   },
 });
+
+export const getPersonalCalendarRoute = createRoute({
+  operationId: 'getPersonalCalendar',
+  tags: ['calendar'],
+  method: 'get',
+  path: '/calendar/me',
+  responses: {
+    200: {
+      description: 'Get personal calendar',
+      content: {
+        'application/json': {
+          schema: z.array(CalendarEvent),
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
+        },
+      },
+    },
+  },
+});
