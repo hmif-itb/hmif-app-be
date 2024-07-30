@@ -11,7 +11,7 @@ const optionalDateCoerce = z.preprocess((arg) => {
   return undefined;
 }, z.date().optional());
 
-const addHours = (date: Date, hours: number) => {
+export const addHours = (date: Date, hours: number) => {
   const newDate = new Date(date);
   newDate.setHours(newDate.getHours() + hours);
   return newDate;
