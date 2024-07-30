@@ -171,26 +171,33 @@ export async function getPersonalCalendar(
           )
       : [];
 
-  console.log(academicEvents);
-
   const himpunanCalendarId = // Dynamic query to get himpunan calendar group id
     (
       await db
         .select()
         .from(calendarGroup)
-        .where(eq(calendarGroup.name, 'himpunan'))
+        .where(eq(calendarGroup.category, 'himpunan'))
     ).map((c) => c.id);
 
-  const himpunanEvents = await db // Get himpunan events
-    .select()
-    .from(calendarEvent)
-    .where(
-      or(
-        ...himpunanCalendarId.map((id) =>
-          eq(calendarEvent.calendarGroupId, id),
-        ),
-      ),
-    );
+  const himpunanEvents =
+    himpunanCalendarId.length > 0
+      ? await db // Get himpunan events
+          .select()
+          .from(calendarEvent)
+          .where(
+            himpunanCalendarId.length > 0
+              ? or(
+                  ...himpunanCalendarId.map((id) =>
+                    eq(calendarEvent.calendarGroupId, id),
+                  ),
+                )
+              : eq(calendarEvent.calendarGroupId, himpunanCalendarId[0]),
+          )
+      : [];
+
+  // console.log(academicEvents);
+  // console.log(himpunanCalendarId);
+  // console.log(himpunanEvents);
 
   const result = [...academicEvents, ...himpunanEvents].filter((c) => {
     const date = new Date(c.start);
