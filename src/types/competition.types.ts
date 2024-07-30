@@ -2,6 +2,7 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { competitions } from '~/db/schema';
 import { addHours } from './calendar.types';
+import { uuid } from 'drizzle-orm/pg-core';
 
 export const CompetitionSchema = createSelectSchema(competitions, {
   registrationStart: z.union([z.string(), z.date()]),
@@ -46,8 +47,6 @@ export const UpdateCompetitionBodySchema = createInsertSchema(competitions, {
     createdAt: true,
   });
 
-export const UpdateCompetitionParamsSchema = createInsertSchema(
-  competitions,
-).pick({
-  id: true,
+export const UpdateCompetitionParamsSchema = z.object({
+  id: z.string().min(1, { message: 'Required ID' }),
 });
