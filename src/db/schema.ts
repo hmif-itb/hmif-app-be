@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2';
-import { InferSelectModel, relations } from 'drizzle-orm';
+import { InferSelectModel, relations, sql } from 'drizzle-orm';
 import {
   boolean,
   index,
@@ -314,6 +314,13 @@ export const courses = pgTable(
   },
   (t) => ({
     codeIdx: index().on(t.code),
+    searchIdx: index('search_idx').using(
+      'gin',
+      sql`(
+        setweight(to_tsvector('indonesian', ${t.name}), 'A') ||
+        setweight(to_tsvector('indonesian', ${t.code}), 'B')
+      )`,
+    ),
   }),
 );
 
