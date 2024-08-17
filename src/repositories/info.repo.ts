@@ -1,6 +1,7 @@
 import {
   and,
   asc,
+  count,
   desc,
   eq,
   ilike,
@@ -16,6 +17,7 @@ import { first, firstSure } from '~/db/helper';
 import {
   angkatan,
   categories,
+  comments,
   Info,
   infoAngkatan,
   infoCategories,
@@ -33,7 +35,11 @@ import {
   getPushSubscriptionsByUserIds,
   removeFailedPushSubscriptions,
 } from '~/repositories/push.repo';
-import { CreateInfoBodySchema, ListInfoParamsSchema } from '~/types/info.types';
+import {
+  CreateInfoBodySchema,
+  InfoSchema,
+  ListInfoParamsSchema,
+} from '~/types/info.types';
 import { createMediasFromUrl } from './media.repo';
 import { getReactions } from './reaction.repo';
 
@@ -164,7 +170,7 @@ export async function getListInfos(
   db: Database,
   q: z.infer<typeof ListInfoParamsSchema>,
   userId: string,
-) {
+): Promise<Array<z.infer<typeof InfoSchema>>> {
   const searchQ = q.search ? ilike(infos.content, `%${q.search}%`) : undefined;
   let unreadQ: SQL<unknown> | undefined;
   let categoryQ: SQL<unknown> | undefined;
@@ -189,7 +195,7 @@ export async function getListInfos(
 
   const where = and(searchQ, categoryQ, unreadQ);
 
-  let listInfo = await db.query.infos.findMany({
+  const listInfo = await db.query.infos.findMany({
     where,
     limit: INFOS_PER_PAGE,
     offset: q.offset,
@@ -219,25 +225,26 @@ export async function getListInfos(
     },
   });
 
-  listInfo = await Promise.all(
+  if (listInfo.length === 0) return [];
+
+  const infoIds = listInfo.map((info) => info.id);
+  const reactions = await getReactions(db, { infoIds }, userId);
+
+  const commentsCount = await db
+    .select({ count: count(comments.id), infoId: comments.repliedInfoId })
+    .from(comments)
+    .where(inArray(comments.repliedInfoId, infoIds))
+    .groupBy(comments.repliedInfoId);
+
+  return await Promise.all(
     listInfo.map(async (info) => {
-      const reactions = await getReactions(db, { infoId: info?.id }, userId);
-      return { ...info, reactions };
+      return {
+        ...info,
+        reactions: reactions[info.id],
+        comments: commentsCount.find((c) => c.infoId === info.id)?.count ?? 0,
+      };
     }),
   );
-
-  // Sort based on 'sort' query params
-  if (q.sort) {
-    listInfo = listInfo.sort((a, b) => {
-      if (q.sort === 'oldest') {
-        return a.createdAt.getTime() - b.createdAt.getTime();
-      } else {
-        return b.createdAt.getTime() - a.createdAt.getTime();
-      }
-    });
-  }
-
-  return listInfo;
 }
 
 export async function getInfoById(db: Database, id: string, userId: string) {
@@ -268,11 +275,21 @@ export async function getInfoById(db: Database, id: string, userId: string) {
     },
   });
 
+  const commentsCount = await db
+    .select({ count: count(comments.id) })
+    .from(comments)
+    .where(eq(comments.repliedInfoId, id))
+    .then(firstSure);
+
   if (!info) return info;
 
   // If user is found, then add reactions to the object
-  const reactions = await getReactions(db, { infoId: info?.id }, userId);
-  return { ...info, reactions };
+  const reactions = await getReactions(db, { infoIds: [info.id] }, userId);
+  return {
+    ...info,
+    reactions: reactions[info.id],
+    comments: commentsCount.count,
+  };
 }
 
 export async function notifyNewInfo(
