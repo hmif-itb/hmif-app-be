@@ -1,5 +1,7 @@
 import {
   and,
+  asc,
+  desc,
   eq,
   ilike,
   inArray,
@@ -25,15 +27,15 @@ import {
   users,
   userUnsubscribeCategories,
 } from '~/db/schema';
-import { CreateInfoBodySchema, ListInfoParamsSchema } from '~/types/info.types';
-import { createMediasFromUrl } from './media.repo';
-import { getReactions } from './reaction.repo';
+import { sendNotificationToAll } from '~/lib/push-manager';
 import { getCurrentSemesterCodeAndYear } from '~/repositories/course.repo';
 import {
   getPushSubscriptionsByUserIds,
   removeFailedPushSubscriptions,
 } from '~/repositories/push.repo';
-import { sendNotificationToAll } from '~/lib/push-manager';
+import { CreateInfoBodySchema, ListInfoParamsSchema } from '~/types/info.types';
+import { createMediasFromUrl } from './media.repo';
+import { getReactions } from './reaction.repo';
 
 const INFOS_PER_PAGE = 10;
 
@@ -191,6 +193,7 @@ export async function getListInfos(
     where,
     limit: INFOS_PER_PAGE,
     offset: q.offset,
+    orderBy: q.sort === 'oldest' ? asc(infos.createdAt) : desc(infos.createdAt),
     with: {
       infoMedias: {
         with: {
