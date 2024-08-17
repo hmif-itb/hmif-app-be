@@ -1,4 +1,5 @@
 import { z } from '@hono/zod-openapi';
+import { userRoles } from '~/db/schema';
 import { UserSchema } from './user.types';
 
 export const CallbackQueryParamsSchema = z.object({
@@ -34,6 +35,10 @@ export const GoogleUserSchema = z.object({
 export const JWTPayloadSchema = UserSchema.omit({
   createdAt: true,
 }).openapi('User');
+
+export const UserResponseSchema = JWTPayloadSchema.extend({
+  roles: z.array(z.enum(userRoles.role.enumValues)),
+}).openapi('UserWithRoles');
 
 export const LoginAccessTokenSchema = z.object({
   accessToken: z.string(),

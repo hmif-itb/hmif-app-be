@@ -565,10 +565,12 @@ export const userRoles = pgTable(
     userId: text('user_id')
       .references(() => users.id, { onDelete: 'cascade' })
       .notNull(),
-    role: text('role', { enum: ['akademik'] }).notNull(),
+    role: text('role', { enum: ['akademik', 'cnc', 'ring1'] }).notNull(),
   },
   (t) => ({ pk: primaryKey({ columns: [t.userId, t.role] }) }),
 );
+
+export type UserRolesEnum = InferSelectModel<typeof userRoles>['role'];
 
 export const userRolesRelation = relations(userRoles, ({ one }) => ({
   user: one(users, { fields: [userRoles.userId], references: [users.id] }),
