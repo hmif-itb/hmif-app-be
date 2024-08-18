@@ -69,6 +69,10 @@ export const CalendarEventGcal = z
 
 export const CalendarEventList = z.array(CalendarEvent);
 
+export const CalendarCategory = z
+  .enum(calendarGroup.category.enumValues)
+  .openapi('CalendarCategory', { example: 'himpunan' });
+
 export const CreateCalendarEventBodySchema = createInsertSchema(calendarEvent, {
   title: z.string().openapi({ example: 'Meeting' }),
   description: z.string().optional().openapi({ example: 'Meeting with team' }),
@@ -76,9 +80,7 @@ export const CreateCalendarEventBodySchema = createInsertSchema(calendarEvent, {
   end: z.coerce.date().openapi({
     example: addHours(new Date(), 2).toISOString(),
   }),
-  category: z
-    .enum(calendarGroup.category.enumValues)
-    .openapi({ example: 'himpunan' }),
+  category: CalendarCategory,
   courseId: z
     .string()
     .optional()
