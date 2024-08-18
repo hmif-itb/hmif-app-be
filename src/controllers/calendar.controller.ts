@@ -1,7 +1,22 @@
 import { GaxiosError } from 'gaxios';
 import { calendar_v3, google } from 'googleapis';
+import { PostgresError } from 'postgres';
 import { env } from '~/configs/env.config';
+import { db } from '~/db/drizzle';
+import { calendarEvent, CalendarGroup } from '~/db/schema';
 import { googleAuth } from '~/lib/googleapi';
+import {
+  createCalendarEvent,
+  deleteCalendarEvent,
+  getCalendarEvent,
+  getCalendarEventById,
+  getCalendarGroup,
+  getCalendarGroupByCategory,
+  getCalendarGroupByCourseId,
+  getPersonalCalendar,
+  updateCalendarEvent,
+} from '~/repositories/calendar.repo';
+import { getCurrentSemesterCodeAndYear } from '~/repositories/course.repo';
 import {
   deleteCalendarEventRoute,
   getCalendarEventByIdRoute,
@@ -12,20 +27,6 @@ import {
   updateCalendarEventRoute,
 } from '~/routes/calendar.route';
 import { createAuthRouter } from './router-factory';
-import {
-  createCalendarEvent,
-  deleteCalendarEvent,
-  getCalendarEvent,
-  getCalendarEventById,
-  getCalendarGroup,
-  getCalendarGroupById,
-  getPersonalCalendar,
-  updateCalendarEvent,
-} from '~/repositories/calendar.repo';
-import { db } from '~/db/drizzle';
-import { calendarEvent } from '~/db/schema';
-import { PostgresError } from 'postgres';
-import { getCurrentSemesterCodeAndYear } from '~/repositories/course.repo';
 
 export const calendarRouter = createAuthRouter();
 
@@ -33,18 +34,21 @@ const START_OF_6_MONTHS_AGO = new Date();
 START_OF_6_MONTHS_AGO.setMonth(START_OF_6_MONTHS_AGO.getMonth() - 6);
 
 calendarRouter.openapi(postCalendarEventRoute, async (c) => {
-  const {
-    title,
-    description,
-    start,
-    end,
-    calendarGroupId,
-    category,
-    courseId,
-  } = c.req.valid('json');
+  const { title, description, start, end, category, courseId } =
+    c.req.valid('json');
+
+  let calendarGroup: CalendarGroup | undefined;
+
+  if (category === 'akademik') {
+    if (!courseId) {
+      return c.json({ error: 'Course ID is required' }, 400);
+    }
+    calendarGroup = await getCalendarGroupByCourseId(db, courseId);
+  } else {
+    calendarGroup = await getCalendarGroupByCategory(db, category);
+  }
 
   // 1. Check if calendar group exists
-  const calendarGroup = await getCalendarGroupById(db, calendarGroupId);
   if (!calendarGroup?.googleCalendarUrl) {
     return c.json({ error: 'Calendar group not found' }, 404);
   }
@@ -85,7 +89,7 @@ calendarRouter.openapi(postCalendarEventRoute, async (c) => {
   // 3. Insert event to DB
   const nowAcademicContext = getCurrentSemesterCodeAndYear();
   const insertData: typeof calendarEvent.$inferInsert = {
-    calendarGroupId,
+    calendarGroupId: calendarGroup.id,
     courseId,
     title,
     description: description ?? '',

@@ -520,8 +520,11 @@ export const calendarGroup = pgTable('calendar_group', {
   id: text('id').primaryKey().$defaultFn(createId),
   name: text('name').notNull(),
   category: text('category', { enum: ['akademik', 'himpunan'] }).notNull(),
+  code: text('code'),
   googleCalendarUrl: text('google_calendar_url'),
 });
+
+export type CalendarGroup = InferSelectModel<typeof calendarGroup>;
 
 export const calendarGroupRelation = relations(calendarGroup, ({ many }) => ({
   calendarEvent: many(calendarEvent),

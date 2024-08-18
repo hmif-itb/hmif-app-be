@@ -76,10 +76,9 @@ export const CreateCalendarEventBodySchema = createInsertSchema(calendarEvent, {
   end: z.coerce.date().openapi({
     example: addHours(new Date(), 2).toISOString(),
   }),
-  category: z.string().optional().openapi({ example: 'himpunan' }),
-  calendarGroupId: z
-    .string()
-    .openapi({ example: 'hlp70594b43hcn866d291i8jm0' }),
+  category: z
+    .enum(calendarGroup.category.enumValues)
+    .openapi({ example: 'himpunan' }),
   courseId: z
     .string()
     .optional()
@@ -90,6 +89,7 @@ export const CreateCalendarEventBodySchema = createInsertSchema(calendarEvent, {
   googleCalendarId: true,
   academicYear: true,
   academicSemesterCode: true,
+  calendarGroupId: true,
 });
 
 export const GetCalendarEventParamsSchema = z.object({

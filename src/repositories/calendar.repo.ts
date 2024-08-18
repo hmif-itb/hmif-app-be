@@ -2,17 +2,26 @@ import { and, eq, or } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
-import { calendarEvent, calendarGroup, courses } from '~/db/schema';
 import {
-  GetCalendarEventParamsSchema,
-  UpdateCalendarEventBodySchema,
+  calendarEvent,
+  CalendarGroup,
+  calendarGroup,
+  courses,
+} from '~/db/schema';
+import {
   CalendarEvent,
   CalendarEventIdParamsSchema,
+  GetCalendarEventParamsSchema,
   PersonalCalendarParamSchema,
+  UpdateCalendarEventBodySchema,
 } from '~/types/calendar.types';
-import { getUserAcademic } from './user-profile.repo';
 import { JWTPayloadSchema } from '~/types/login.types';
-import { getUserCourse } from './course.repo';
+import {
+  getCourseById,
+  getCurrentSemesterCodeAndYear,
+  getUserCourse,
+} from './course.repo';
+import { getUserAcademic } from './user-profile.repo';
 
 export async function getCalendarEvent(
   db: Database,
@@ -69,6 +78,44 @@ export async function getCalendarGroupById(
     where: eq(calendarEvent.id, calendarGroupId),
   });
   return calendarGroup;
+}
+
+export function getCalendarGroupByCategory(
+  db: Database,
+  category: CalendarGroup['category'],
+  code?: string,
+) {
+  return db.query.calendarGroup.findFirst({
+    where: and(
+      eq(calendarGroup.category, category),
+      code ? eq(calendarGroup.code, code) : undefined,
+    ),
+  });
+}
+
+export async function getCalendarGroupByCourseId(
+  db: Database,
+  courseId: string,
+) {
+  const current = getCurrentSemesterCodeAndYear();
+  const course = await getCourseById(db, courseId);
+  if (!course) {
+    return;
+  }
+
+  // must be if2021 or sti2021 based code or ifelective or stielective
+  let code = course.major.toLowerCase();
+
+  if (course.type === 'Mandatory' && course.semester !== null) {
+    // 1-4
+    const courseYear = Math.floor((course.semester - 1) / 2);
+    const year = current.semesterYearTaken;
+    code += (year - courseYear).toString();
+  } else {
+    code += 'elective';
+  }
+
+  return await getCalendarGroupByCategory(db, 'akademik', code);
 }
 
 export async function updateCalendarEvent(
