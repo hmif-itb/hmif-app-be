@@ -166,8 +166,9 @@ export async function getListInfos(
 ) {
   const searchPhrase = q.search ? q.search.split(' ').join(' & ') : undefined;
   const searchQ = q.search
-    ? sql`to_tsvector('indonesian', ${infos.content}) @@ plainto_tsquery('indonesian', ${searchPhrase})`
+    ? sql`(setweight(to_tsvector('indonesian', ${infos.title}), 'A') || setweight(to_tsvector('indonesian', ${infos.content}), 'B')) @@ to_tsquery('indonesian', ${searchPhrase})`
     : undefined;
+  console.log(searchQ);
   let unreadQ: SQL<unknown> | undefined;
   let categoryQ: SQL<unknown> | undefined;
 
