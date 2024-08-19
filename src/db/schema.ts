@@ -129,7 +129,10 @@ export const infos = pgTable(
   (t) => ({
     contentSearchIdx: index('content_search_idx').using(
       'gin',
-      sql`to_tsvector('indonesian', ${t.content})`,
+      sql`(
+        setweight(to_tsvector('indonesian', ${t.title}), 'A') ||
+        setweight(to_tsvector('indonesian', ${t.content}), 'B')
+      )`,
     ),
   }),
 );
