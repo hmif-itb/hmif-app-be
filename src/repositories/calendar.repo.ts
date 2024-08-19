@@ -20,7 +20,12 @@ export async function getCalendarEvent(
 ) {
   const { search, category, courseCode, year, major } = q;
   const isCoursesRequired = courseCode !== undefined || major !== undefined;
-  const searchPhrase = search ? search.split(' ').join(' & ') : undefined;
+  const searchPhrase = search
+    ? search
+        .split(' ')
+        .map((term) => `${term}:*`)
+        .join(' & ')
+    : undefined;
   let calendarEvents = isCoursesRequired
     ? await getCalendarEventWithCoursesJoin(db, courseCode, major, searchPhrase)
     : await getCalendarEventOnly(db, searchPhrase);

@@ -164,10 +164,16 @@ export async function getListInfos(
   q: z.infer<typeof ListInfoParamsSchema>,
   userId: string,
 ) {
-  const searchPhrase = q.search ? q.search.split(' ').join(' & ') : undefined;
+  const searchPhrase = q.search
+    ? q.search
+        .split(' ')
+        .map((term) => `${term}:*`)
+        .join(' & ')
+    : undefined;
   const searchQ = q.search
     ? sql`(setweight(to_tsvector('indonesian', ${infos.title}), 'A') || setweight(to_tsvector('indonesian', ${infos.content}), 'B')) @@ to_tsquery('indonesian', ${searchPhrase})`
     : undefined;
+  console.log(searchPhrase);
   let unreadQ: SQL<unknown> | undefined;
   let categoryQ: SQL<unknown> | undefined;
 
