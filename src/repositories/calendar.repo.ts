@@ -95,7 +95,7 @@ async function getCalendarEventOnly(db: Database, search?: string) {
     .from(calendarEvent)
     .where(
       search
-        ? sql`to_tsvector('indonesian', ${calendarEvent.title}) @@ plainto_tsquery('indonesian', ${search})`
+        ? sql`(setweight(to_tsvector('indonesian', ${calendarEvent.title}), 'A') || setweight(to_tsvector('indonesian', ${calendarEvent.description}), 'B')) @@ to_tsquery('indonesian', ${search})`
         : sql``,
     );
 }
