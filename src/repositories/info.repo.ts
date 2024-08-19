@@ -6,6 +6,7 @@ import {
   InferInsertModel,
   notInArray,
   or,
+  sql,
   SQL,
 } from 'drizzle-orm';
 import { z } from 'zod';
@@ -163,7 +164,10 @@ export async function getListInfos(
   q: z.infer<typeof ListInfoParamsSchema>,
   userId: string,
 ) {
-  const searchQ = q.search ? ilike(infos.content, `%${q.search}%`) : undefined;
+  const searchPhrase = q.search ? q.search.split(' ').join(' & ') : undefined;
+  const searchQ = q.search
+    ? sql`to_tsvector('indonesian', ${infos.content}) @@ plainto_tsquery('indonesian', ${searchPhrase})`
+    : undefined;
   let unreadQ: SQL<unknown> | undefined;
   let categoryQ: SQL<unknown> | undefined;
 
