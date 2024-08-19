@@ -43,6 +43,13 @@
       "when": 1722326062812,
       "tag": "0005_eminent_nightmare",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1724040589606,
+      "tag": "0006_legal_hannibal_king",
+      "breakpoints": true
     }
   ]
 }
