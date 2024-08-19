@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2';
-import { InferSelectModel, relations } from 'drizzle-orm';
+import { InferSelectModel, relations, sql } from 'drizzle-orm';
 import {
   boolean,
   index,
@@ -113,17 +113,26 @@ export const googleSubscriptionsRelation = relations(
   }),
 );
 
-export const infos = pgTable('infos', {
-  id: text('id').primaryKey().$defaultFn(createId),
-  creatorId: text('creator_id')
-    .references(() => users.id, { onDelete: 'cascade' })
-    .notNull(),
-  title: text('title').notNull(),
-  content: text('content').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-});
+export const infos = pgTable(
+  'infos',
+  {
+    id: text('id').primaryKey().$defaultFn(createId),
+    creatorId: text('creator_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    title: text('title').notNull(),
+    content: text('content').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => ({
+    contentSearchIdx: index('content_search_idx').using(
+      'gin',
+      sql`to_tsvector('indonesian', ${t.content})`,
+    ),
+  }),
+);
 
 export type Info = InferSelectModel<typeof infos>;
 
@@ -527,26 +536,38 @@ export const calendarGroupRelation = relations(calendarGroup, ({ many }) => ({
   calendarEvent: many(calendarEvent),
 }));
 
-export const calendarEvent = pgTable('calendar_event', {
-  id: text('id').primaryKey().$defaultFn(createId),
-  calendarGroupId: text('calendar_group_id')
-    .notNull()
-    .references(() => calendarGroup.id, { onDelete: 'cascade' }),
-  courseId: text('courses_id').references(() => courses.id, {
-    onDelete: 'cascade',
+export const calendarEvent = pgTable(
+  'calendar_event',
+  {
+    id: text('id').primaryKey().$defaultFn(createId),
+    calendarGroupId: text('calendar_group_id')
+      .notNull()
+      .references(() => calendarGroup.id, { onDelete: 'cascade' }),
+    courseId: text('courses_id').references(() => courses.id, {
+      onDelete: 'cascade',
+    }),
+    title: text('title').notNull(),
+    description: text('description').notNull(),
+    category: text('category').notNull(),
+    academicYear: integer('academic_year'),
+    academicSemesterCode: text('academic_semester_code', {
+      enum: ['Ganjil', 'Genap'],
+    }),
+    start: timestamp('start', { withTimezone: true }).notNull(),
+    end: timestamp('end', { withTimezone: true }).notNull(),
+    googleCalendarUrl: text('google_calendar_url').notNull(),
+    googleCalendarId: text('google_calendar_id').notNull(),
+  },
+  (t) => ({
+    titleSearchIdx: index('title_search_idx').using(
+      'gin',
+      sql`(
+        setweight(to_tsvector('indonesian', ${t.title}), 'A') ||
+        setweight(to_tsvector('indonesian', ${t.description}), 'B')
+      )`,
+    ),
   }),
-  title: text('title').notNull(),
-  description: text('description').notNull(),
-  category: text('category').notNull(),
-  academicYear: integer('academic_year'),
-  academicSemesterCode: text('academic_semester_code', {
-    enum: ['Ganjil', 'Genap'],
-  }),
-  start: timestamp('start', { withTimezone: true }).notNull(),
-  end: timestamp('end', { withTimezone: true }).notNull(),
-  googleCalendarUrl: text('google_calendar_url').notNull(),
-  googleCalendarId: text('google_calendar_id').notNull(),
-});
+);
 
 export const calendarEventRelations = relations(calendarEvent, ({ one }) => ({
   calendarGroup: one(calendarGroup, {
