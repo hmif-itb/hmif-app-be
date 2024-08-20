@@ -4,6 +4,8 @@ import { competitions } from '~/db/schema';
 
 export const CompetitionsSchema = createSelectSchema(competitions, {
   createdAt: z.union([z.string(), z.date()]),
+  registrationStart: z.union([z.string(), z.null()]),
+  registrationDeadline: z.union([z.string(), z.null()]),
 });
 
 export const ListCompetitionsSchema = z.object({
@@ -33,16 +35,7 @@ export const CompetitionListQuerySchema = z.object({
       },
     }),
   category: z
-    .enum([
-      'Competitive Programming',
-      'Capture The Flag',
-      'Data Science / Data Analytics',
-      'UI/UX',
-      'Game Development',
-      'Business IT Case',
-      'Innovation',
-      'Web Development',
-    ])
+    .enum(competitions.type.enumValues)
     .optional()
     .openapi({
       param: {

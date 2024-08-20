@@ -31,6 +31,6 @@ competitionsRouter.openapi(deleteCompetitionRoute, async (c) => {
     }
     return c.json({ ...competition }, 200);
   } catch (err) {
-    return c.json({ error: err }, 500);
+    throw err;
   }
 });
