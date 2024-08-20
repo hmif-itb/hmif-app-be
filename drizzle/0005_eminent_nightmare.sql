@@ -1,0 +1,1 @@
+ALTER TABLE "calendar_event" ADD COLUMN "academic_semester_code" text;

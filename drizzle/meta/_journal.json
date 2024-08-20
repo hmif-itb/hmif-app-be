@@ -36,6 +36,20 @@
       "when": 1722236019253,
       "tag": "0004_lowly_vulture",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1722326062812,
+      "tag": "0005_eminent_nightmare",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1723973342984,
+      "tag": "0006_overconfident_wiccan",
+      "breakpoints": true
     }
   ]
 }

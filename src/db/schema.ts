@@ -520,8 +520,11 @@ export const calendarGroup = pgTable('calendar_group', {
   id: text('id').primaryKey().$defaultFn(createId),
   name: text('name').notNull(),
   category: text('category', { enum: ['akademik', 'himpunan'] }).notNull(),
+  code: text('code'),
   googleCalendarUrl: text('google_calendar_url'),
 });
+
+export type CalendarGroup = InferSelectModel<typeof calendarGroup>;
 
 export const calendarGroupRelation = relations(calendarGroup, ({ many }) => ({
   calendarEvent: many(calendarEvent),
@@ -539,6 +542,9 @@ export const calendarEvent = pgTable('calendar_event', {
   description: text('description').notNull(),
   category: text('category').notNull(),
   academicYear: integer('academic_year'),
+  academicSemesterCode: text('academic_semester_code', {
+    enum: ['Ganjil', 'Genap'],
+  }),
   start: timestamp('start', { withTimezone: true }).notNull(),
   end: timestamp('end', { withTimezone: true }).notNull(),
   googleCalendarUrl: text('google_calendar_url').notNull(),
@@ -562,10 +568,12 @@ export const userRoles = pgTable(
     userId: text('user_id')
       .references(() => users.id, { onDelete: 'cascade' })
       .notNull(),
-    role: text('role', { enum: ['akademik'] }).notNull(),
+    role: text('role', { enum: ['akademik', 'cnc', 'ring1'] }).notNull(),
   },
   (t) => ({ pk: primaryKey({ columns: [t.userId, t.role] }) }),
 );
+
+export type UserRolesEnum = InferSelectModel<typeof userRoles>['role'];
 
 export const userRolesRelation = relations(userRoles, ({ one }) => ({
   user: one(users, { fields: [userRoles.userId], references: [users.id] }),

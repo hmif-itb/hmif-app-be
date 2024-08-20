@@ -7,6 +7,7 @@ import {
   findUserByEmail,
   getUserAndUpdatePicture,
 } from '~/repositories/auth.repo';
+import { getUserRoles } from '~/repositories/user-role.repo';
 import {
   GoogleTokenDataSchema,
   GoogleUserSchema,
@@ -222,5 +223,6 @@ loginProtectedRouter.openapi(logoutRoute, async (c) => {
 
 loginProtectedRouter.openapi(selfRoute, async (c) => {
   const user = c.var.user;
-  return c.json(user, 200);
+  const roles = await getUserRoles(db, user.id);
+  return c.json({ ...user, roles }, 200);
 });

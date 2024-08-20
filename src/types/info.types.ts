@@ -38,7 +38,8 @@ export const InfoSchema = createSelectSchema(infos, {
     infoCategories: z.array(InfoCategorySchema).optional(),
     infoCourses: z.array(InfoCourseSchema).optional(),
     infoAngkatan: z.array(InfoAngkatanSchema).optional(),
-    reactions: ReactionResponseSchema.optional(),
+    comments: z.number(),
+    reactions: ReactionResponseSchema,
     creator: JWTPayloadSchema,
   })
   .openapi('Info');
