@@ -8,6 +8,7 @@ import {
   deleteCompetition,
 } from '~/repositories/competitions.repo';
 import { createAuthRouter } from './router-factory';
+import { PostgresError } from 'postgres';
 
 export const competitionsRouter = createAuthRouter();
 
@@ -31,6 +32,8 @@ competitionsRouter.openapi(deleteCompetitionRoute, async (c) => {
     }
     return c.json({ ...competition }, 200);
   } catch (err) {
+    if (err instanceof PostgresError)
+      return c.json({ error: err.message }, 400);
     throw err;
   }
 });
