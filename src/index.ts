@@ -71,6 +71,7 @@ app.doc('/doc', {
     { name: 'user-profile', description: 'User Profile API' },
     { name: 'user-finder', description: 'User Finder API' },
     { name: 'competitions', description: 'Competitions API' },
+
   ],
 });
 app.get('/swagger', swaggerUI({ url: '/doc' }));
