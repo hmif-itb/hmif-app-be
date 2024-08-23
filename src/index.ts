@@ -70,7 +70,8 @@ app.doc('/doc', {
     { name: 'testimoni', description: 'Testimoni API' },
     { name: 'user-profile', description: 'User Profile API' },
     { name: 'user-finder', description: 'User Finder API' },
-    { name: 'competition', description: 'Competition API' },
+    { name: 'competitions', description: 'Competitions API' },
+
   ],
 });
 app.get('/swagger', swaggerUI({ url: '/doc' }));
