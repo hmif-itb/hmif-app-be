@@ -120,6 +120,10 @@ export const UpdateCalendarEventBodySchema = createInsertSchema(calendarEvent, {
     googleCalendarUrl: true,
     calendarGroupId: true,
     googleCalendarId: true,
+    academicYear: true,
+    academicSemesterCode: true,
+    courseId: true,
+    category: true,
   });
 
 export const CalendarGroupSchema = createSelectSchema(calendarGroup);

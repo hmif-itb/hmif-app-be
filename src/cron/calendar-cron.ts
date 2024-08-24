@@ -17,14 +17,14 @@ type CourseCalendarEvent = Omit<CalendarEvent, 'courseId'> & {
 export const calendarCron = new CronJob('* * * * *', async () => {
   const date = new Date();
 
-  const yesterday = new Date(date);
-  yesterday.setDate(date.getDate() - 1);
+  const tomorrow = new Date(date);
+  tomorrow.setDate(date.getDate() + 1);
   console.log(
     'Running calendar cron for ',
     dayjs(date).format('DD MMMM YYYY HH:mm'),
   );
 
-  const events = await getCalendarEventsByTime(db, yesterday);
+  const events = await getCalendarEventsByTime(db, tomorrow);
 
   const academicEvents: CourseCalendarEvent[] = [];
   const himpunanEvents: CalendarEvent[] = [];
@@ -41,7 +41,7 @@ export const calendarCron = new CronJob('* * * * *', async () => {
   });
 
   himpunanEvents.forEach((event) => {
-    const dateStart = dayjs(event.start).tz('Asia/Jakarta');
+    const dateStart = dayjs(event.start);
     const start = dateStart.format('HH:mm');
     void sendNotificationToAll(allPushSubscriptions, {
       title: `The event "${event.title}" will occur at ${start} tomorrow, ${dateStart.format('DD MMMM YYYY')}`,
