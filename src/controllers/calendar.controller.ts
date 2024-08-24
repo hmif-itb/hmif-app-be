@@ -1,7 +1,6 @@
 import { GaxiosError } from 'gaxios';
 import { calendar_v3, google } from 'googleapis';
 import { PostgresError } from 'postgres';
-import { env } from '~/configs/env.config';
 import { db } from '~/db/drizzle';
 import { calendarEvent, CalendarGroup } from '~/db/schema';
 import { googleAuth } from '~/lib/googleapi';
@@ -196,7 +195,7 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
   try {
     await google.calendar('v3').events.update({
       auth: googleAuth,
-      calendarId: env.GOOGLE_CALENDAR_ID,
+      calendarId: eventDB.calendarGroup.googleCalendarUrl,
       eventId: eventDB.googleCalendarId,
       requestBody: event,
     });
