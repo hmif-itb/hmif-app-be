@@ -83,9 +83,10 @@ export async function createInfo(
 
       await createInfoMedia(
         tx,
-        newMedias.map((media) => ({
+        newMedias.map((media, idx) => ({
           infoId: newInfo.id,
           mediaId: media.id,
+          order: idx,
         })),
       );
     }
@@ -205,6 +206,7 @@ export async function getListInfos(
         with: {
           media: true,
         },
+        orderBy: asc(infoMedias.order),
       },
       infoCategories: {
         with: {
@@ -255,6 +257,7 @@ export async function getInfoById(db: Database, id: string, userId: string) {
         with: {
           media: true,
         },
+        orderBy: asc(infoMedias.order),
       },
       infoCategories: {
         with: {

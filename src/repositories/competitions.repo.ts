@@ -1,11 +1,96 @@
-import { eq, and, sql, inArray, SQL } from 'drizzle-orm';
-import { Database } from '~/db/drizzle';
-import { first } from '~/db/helper';
-import { competitions } from '~/db/schema';
-import { CompetitionListQuerySchema } from '~/types/competitions.types';
+import { and, asc, eq, inArray, sql, SQL } from 'drizzle-orm';
 import { z } from 'zod';
+import { Database } from '~/db/drizzle';
+import { first, firstSure } from '~/db/helper';
+import { competitionMedias, competitions } from '~/db/schema';
+import {
+  CompetitionListQuerySchema,
+  CreateCompetitionSchema,
+  UpdateCompetitionBodySchema,
+} from '~/types/competitions.types';
+import { createMediasFromUrl } from './media.repo';
 
 const COMPETITIONS_PER_PAGE = 10;
+
+export const createCompetition = async (
+  db: Database,
+  data: z.infer<typeof CreateCompetitionSchema>,
+  userId: string,
+) => {
+  return await db.transaction(async (trx) => {
+    const competition = await trx
+      .insert(competitions)
+      .values(data)
+      .returning()
+      .then(firstSure);
+
+    if (data.mediaUrls && data.mediaUrls.length > 0) {
+      const newMedias = await createMediasFromUrl(trx, data.mediaUrls, userId);
+      await trx.insert(competitionMedias).values(
+        newMedias.map((media, idx) => ({
+          competitionId: competition.id,
+          mediaId: media.id,
+          order: idx,
+        })),
+      );
+    }
+    return competition;
+  });
+};
+
+export const updateCompetition = async (
+  db: Database,
+  id: string,
+  data: z.infer<typeof UpdateCompetitionBodySchema>,
+  userId: string,
+) => {
+  return await db.transaction(async (trx) => {
+    const competition = await trx
+      .update(competitions)
+      .set(data)
+      .where(eq(competitions.id, id))
+      .returning()
+      .then(firstSure);
+
+    if (data.mediaUrls) {
+      await trx
+        .delete(competitionMedias)
+        .where(eq(competitionMedias.competitionId, id));
+      if (data.mediaUrls.length > 0) {
+        const newMedias = await createMediasFromUrl(
+          trx,
+          data.mediaUrls,
+          userId,
+        );
+        await trx.insert(competitionMedias).values(
+          newMedias.map((media, idx) => ({
+            competitionId: competition.id,
+            mediaId: media.id,
+            order: idx,
+          })),
+        );
+      }
+    }
+
+    return competition;
+  });
+};
+
+export const getCompetitionById = async (db: Database, id: string) => {
+  const competition = await db.query.competitions.findFirst({
+    where: eq(competitions.id, id),
+    with: {
+      medias: {
+        with: {
+          media: true,
+        },
+        orderBy: asc(competitionMedias.order),
+      },
+    },
+  });
+
+  return competition;
+};
 
 export async function getCompetitionsList(
   db: Database,
@@ -24,24 +109,22 @@ export async function getCompetitionsList(
   const activeQ = sql`${competitions.registrationDeadline} > now()`;
 
   const where = and(categoryQ, activeQ);
-  let listCompetitions = await db.query.competitions.findMany({
+  const listCompetitions = await db.query.competitions.findMany({
     where,
     limit: COMPETITIONS_PER_PAGE,
     offset: q.offset,
-  });
-
-  listCompetitions = listCompetitions.sort((a, b) => {
-    if (q.sort === 'deadline') {
-      if (!a.registrationDeadline || !b.registrationDeadline) {
-        return a.createdAt.getTime() - b.createdAt.getTime();
-      } else {
-        return (
-          a.registrationDeadline.getTime() - b.registrationDeadline.getTime()
-        );
-      }
-    } else {
-      return a.createdAt.getTime() - b.createdAt.getTime();
-    }
+    orderBy:
+      q.sort === 'deadline'
+        ? [asc(competitions.registrationDeadline), asc(competitions.createdAt)]
+        : asc(competitions.createdAt),
+    with: {
+      medias: {
+        with: {
+          media: true,
+        },
+        orderBy: asc(competitionMedias.order),
+      },
+    },
   });
 
   return listCompetitions;

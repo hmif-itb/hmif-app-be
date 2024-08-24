@@ -162,6 +162,7 @@ export const mediasRelation = relations(medias, ({ one, many }) => ({
     references: [users.id],
   }),
   infoMedias: many(infoMedias),
+  competitions: many(competitionMedias),
 }));
 
 export const userReadInfos = pgTable(
@@ -202,6 +203,7 @@ export const infoMedias = pgTable(
     mediaId: text('media_id')
       .references(() => medias.id, { onDelete: 'cascade' })
       .notNull(),
+    order: integer('order'),
   },
   (t) => ({ pk: primaryKey({ columns: [t.infoId, t.mediaId] }) }),
 );
@@ -608,3 +610,35 @@ export const competitions = pgTable('competitions', {
     .notNull()
     .defaultNow(),
 });
+
+export const competitionsRelation = relations(competitions, ({ many }) => ({
+  medias: many(competitionMedias),
+}));
+
+export const competitionMedias = pgTable(
+  'competition_medias',
+  {
+    competitionId: text('competition_id')
+      .references(() => competitions.id, { onDelete: 'cascade' })
+      .notNull(),
+    mediaId: text('media_id')
+      .references(() => medias.id, { onDelete: 'cascade' })
+      .notNull(),
+    order: integer('order').notNull(),
+  },
+  (t) => ({ pk: primaryKey({ columns: [t.competitionId, t.mediaId] }) }),
+);
+
+export const competitionMediasRelation = relations(
+  competitionMedias,
+  ({ one }) => ({
+    competition: one(competitions, {
+      fields: [competitionMedias.competitionId],
+      references: [competitions.id],
+    }),
+    media: one(medias, {
+      fields: [competitionMedias.mediaId],
+      references: [medias.id],
+    }),
+  }),
+);
