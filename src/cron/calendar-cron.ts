@@ -41,7 +41,7 @@ export const calendarCron = new CronJob('* * * * *', async () => {
   });
 
   himpunanEvents.forEach((event) => {
-    const dateStart = dayjs(event.start);
+    const dateStart = dayjs(event.start).tz('Asia/Jakarta');
     const start = dateStart.format('HH:mm');
     void sendNotificationToAll(allPushSubscriptions, {
       title: `The event "${event.title}" will occur at ${start} tomorrow, ${dateStart.format('DD MMMM YYYY')}`,

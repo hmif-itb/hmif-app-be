@@ -1,8 +1,15 @@
+/* eslint-disable import/first */
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault('Asia/Jakarta');
+
 import { serve } from '@hono/node-server';
 import { swaggerUI } from '@hono/swagger-ui';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import * as Sentry from '@sentry/node';
-import dayjs from 'dayjs';
 import fs from 'fs';
 import { cors } from 'hono/cors';
 import { HTTPException } from 'hono/http-exception';
@@ -11,14 +18,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { env } from './configs/env.config';
 import { apiRouter } from './controllers/api.controller';
-
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
 import { setupCron } from './cron/setup';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault('Asia/Jakarta');
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageJson = JSON.parse(
