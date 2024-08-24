@@ -1,7 +1,7 @@
 import { eq, inArray, InferInsertModel, isNotNull } from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
-import { pushSubscriptions } from '~/db/schema';
+import { PushSubscription, pushSubscriptions } from '~/db/schema';
 import { sendNotificationToAll } from '~/lib/push-manager';
 
 /**
@@ -75,6 +75,22 @@ export async function getAllPushSubscriptions(db: Database) {
   return await db.query.pushSubscriptions.findMany({
     where: isNotNull(pushSubscriptions.userId),
   });
+}
+
+export function toPushSubscriptionsHash(subscriptions: PushSubscription[]) {
+  const result: Record<string, PushSubscription[]> = {};
+
+  subscriptions.forEach((subscription) => {
+    if (subscription.userId) {
+      const array = result[subscription.userId] ?? [];
+
+      array.push(subscription);
+
+      result[subscription.userId] = array;
+    }
+  });
+
+  return result;
 }
 
 export async function putLogoutPushSubscriptions(

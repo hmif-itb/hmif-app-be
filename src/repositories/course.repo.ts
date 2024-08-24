@@ -1,4 +1,4 @@
-import { and, eq, isNull, sql } from 'drizzle-orm';
+import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
@@ -211,4 +211,20 @@ export async function deleteCourse(db: Database, courseId: string) {
     .returning()
     .then(first);
   return course;
+}
+
+export async function getCourseUsersByIds(db: Database, courseIds: string[]) {
+  const current = getCurrentSemesterCodeAndYear();
+  const courseUsers = await db.query.courses.findMany({
+    where: inArray(courses.id, courseIds),
+    with: {
+      userCourses: {
+        where: and(
+          eq(userCourses.semesterCodeTaken, current.semesterCodeTaken),
+          eq(userCourses.semesterYearTaken, current.semesterYearTaken),
+        ),
+      },
+    },
+  });
+  return courseUsers;
 }

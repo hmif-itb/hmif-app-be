@@ -553,6 +553,8 @@ export const calendarEvent = pgTable('calendar_event', {
   googleCalendarId: text('google_calendar_id').notNull(),
 });
 
+export type CalendarEvent = InferSelectModel<typeof calendarEvent>;
+
 export const calendarEventRelations = relations(calendarEvent, ({ one }) => ({
   calendarGroup: one(calendarGroup, {
     fields: [calendarEvent.calendarGroupId],

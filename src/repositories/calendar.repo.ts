@@ -255,3 +255,16 @@ export async function getPersonalCalendar(
 
   return result;
 }
+
+export async function getCalendarEventsByTime(db: Database, date: Date) {
+  const inMinute = new Date(date);
+  inMinute.setSeconds(0);
+  inMinute.setMilliseconds(0);
+
+  const events = await db
+    .select()
+    .from(calendarEvent)
+    .where(eq(calendarEvent.start, inMinute));
+
+  return events;
+}
