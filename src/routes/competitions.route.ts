@@ -17,9 +17,9 @@ import {
 
 export const createCompetitionRoute = createRoute({
   operationId: 'createCompetition',
-  tags: ['competition'],
+  tags: ['competitions'],
   method: 'post',
-  path: '/competition',
+  path: '/competitions',
   request: {
     body: {
       content: {
@@ -51,9 +51,9 @@ export const createCompetitionRoute = createRoute({
 
 export const updateCompetitionRoute = createRoute({
   operationId: 'updateCompetition',
-  tags: ['competition'],
+  tags: ['competitions'],
   method: 'put',
-  path: '/competition/{id}',
+  path: '/competitions/{id}',
   request: {
     body: {
       content: {
