@@ -203,7 +203,7 @@ export const infoMedias = pgTable(
     mediaId: text('media_id')
       .references(() => medias.id, { onDelete: 'cascade' })
       .notNull(),
-    order: integer('order'),
+    order: integer('order').notNull(),
   },
   (t) => ({ pk: primaryKey({ columns: [t.infoId, t.mediaId] }) }),
 );
