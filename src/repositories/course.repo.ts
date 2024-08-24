@@ -214,6 +214,9 @@ export async function deleteCourse(db: Database, courseId: string) {
 }
 
 export async function getCourseUsersByIds(db: Database, courseIds: string[]) {
+  if (!courseIds.length) {
+    return [];
+  }
   const current = getCurrentSemesterCodeAndYear();
   const courseUsers = await db.query.courses.findMany({
     where: inArray(courses.id, courseIds),
