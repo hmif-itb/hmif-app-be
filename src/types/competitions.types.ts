@@ -1,6 +1,10 @@
 import { z } from '@hono/zod-openapi';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { competitionMedias, competitions } from '~/db/schema';
+import {
+  competitionCategories,
+  competitionMedias,
+  competitions,
+} from '~/db/schema';
 import { addHours } from './calendar.types';
 import { MediaSchema } from './media.types';
 
@@ -14,9 +18,14 @@ export const CompetitionSchema = createSelectSchema(competitions, {
   registrationStart: z.union([z.string(), z.date()]),
   registrationDeadline: z.union([z.string(), z.date()]),
   createdAt: z.union([z.string(), z.date()]),
+  categories: z.array(z.enum(competitionCategories)),
 }).extend({
   medias: z.array(CompetitionMediaSchema).optional(),
 });
+
+export const CompetitionCategoriesSchema = z
+  .array(z.enum(competitionCategories))
+  .openapi('CompetitionCategories');
 
 export const CreateCompetitionSchema = createInsertSchema(competitions, {
   registrationStart: z.coerce
@@ -25,6 +34,7 @@ export const CreateCompetitionSchema = createInsertSchema(competitions, {
   registrationDeadline: z.coerce.date().openapi({
     example: addHours(new Date(), 2).toISOString(),
   }),
+  categories: CompetitionCategoriesSchema,
 })
   .extend({
     mediaUrls: z
@@ -60,6 +70,7 @@ export const UpdateCompetitionBodySchema = createInsertSchema(competitions, {
     example: 'https://example.com',
   }),
   price: z.string().min(3, { message: 'Price must be at least 3 characters' }),
+  categories: CompetitionCategoriesSchema,
 })
   .extend({
     mediaUrls: z
@@ -86,7 +97,10 @@ export const CompetitionsSchema = createSelectSchema(competitions, {
   createdAt: z.union([z.string(), z.date()]),
   registrationStart: z.union([z.string(), z.null()]),
   registrationDeadline: z.union([z.string(), z.null()]),
-});
+  categories: CompetitionCategoriesSchema,
+})
+  .extend({ medias: z.array(CompetitionMediaSchema).optional() })
+  .openapi('Competition');
 
 export const ListCompetitionsSchema = z.object({
   competitions: z.array(CompetitionsSchema),
@@ -115,7 +129,7 @@ export const CompetitionListQuerySchema = z.object({
       },
     }),
   category: z
-    .enum(competitions.type.enumValues)
+    .enum(competitionCategories)
     .optional()
     .openapi({
       param: {

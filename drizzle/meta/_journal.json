@@ -57,6 +57,13 @@
       "when": 1724497192193,
       "tag": "0007_material_stingray",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1724548915073,
+      "tag": "0008_rainy_thing",
+      "breakpoints": true
     }
   ]
 }

@@ -102,7 +102,7 @@ export async function getCompetitionsList(
     const getCompeitionsByCategory = db
       .select({ competitionsId: competitions.id })
       .from(competitions)
-      .where(eq(competitions.type, q.category));
+      .where(sql`${competitions.categories} @> ${q.category}`);
     categoryQ = inArray(competitions.id, getCompeitionsByCategory);
   }
 

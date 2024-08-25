@@ -583,6 +583,19 @@ export const userRolesRelation = relations(userRoles, ({ one }) => ({
   user: one(users, { fields: [userRoles.userId], references: [users.id] }),
 }));
 
+export const competitionCategories = [
+  'Competitive Programming',
+  'Capture The Flag',
+  'Data Science / Data Analytics',
+  'UI/UX',
+  'Game Development',
+  'Business IT Case',
+  'Innovation',
+  'Web Development',
+] as const;
+
+export type CompetitionCategory = (typeof competitionCategories)[number];
+
 export const competitions = pgTable('competitions', {
   id: text('id').primaryKey().$defaultFn(createId),
   name: text('name').notNull(),
@@ -596,18 +609,10 @@ export const competitions = pgTable('competitions', {
   price: text('price'),
   sourceUrl: text('source_url').notNull(),
   registrationUrl: text('registration_url').notNull(),
-  type: text('category', {
-    enum: [
-      'Competitive Programming',
-      'Capture The Flag',
-      'Data Science / Data Analytics',
-      'UI/UX',
-      'Game Development',
-      'Business IT Case',
-      'Innovation',
-      'Web Development',
-    ],
-  }).notNull(),
+  categories: json('categories')
+    .$type<CompetitionCategory[]>()
+    .default([])
+    .notNull(),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
