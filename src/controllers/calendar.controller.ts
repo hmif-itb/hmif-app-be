@@ -16,6 +16,7 @@ import {
   updateCalendarEvent,
 } from '~/repositories/calendar.repo';
 import { getCurrentSemesterCodeAndYear } from '~/repositories/course.repo';
+import { getUserRoles } from '~/repositories/user-role.repo';
 import {
   deleteCalendarEventRoute,
   getCalendarEventByIdRoute,
@@ -33,17 +34,27 @@ const START_OF_6_MONTHS_AGO = new Date();
 START_OF_6_MONTHS_AGO.setMonth(START_OF_6_MONTHS_AGO.getMonth() - 6);
 
 calendarRouter.openapi(postCalendarEventRoute, async (c) => {
+  const roles = await getUserRoles(db, c.var.user.id);
   const { title, description, start, end, category, courseId } =
     c.req.valid('json');
 
   let calendarGroup: CalendarGroup | undefined;
 
   if (category === 'akademik') {
+    if (!roles.includes('akademik')) {
+      return c.json(
+        { error: 'You are not authorized to create academic events' },
+        403,
+      );
+    }
     if (!courseId) {
       return c.json({ error: 'Course ID is required' }, 400);
     }
     calendarGroup = await getCalendarGroupByCourseId(db, courseId);
   } else {
+    if (!roles.includes('ring1')) {
+      return c.json({ error: 'You are not authorized to create events' }, 403);
+    }
     calendarGroup = await getCalendarGroupByCategory(db, category);
   }
 
@@ -153,6 +164,20 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
     return c.json({ error: 'Event not found' }, 404);
   }
 
+  const roles = await getUserRoles(db, c.var.user.id);
+  if (eventDB.category === 'akademik') {
+    if (!roles.includes('akademik')) {
+      return c.json(
+        { error: 'You are not authorized to update academic events' },
+        403,
+      );
+    }
+  } else {
+    if (!roles.includes('ring1')) {
+      return c.json({ error: 'You are not authorized to update events' }, 403);
+    }
+  }
+
   if (eventDB.calendarGroup.googleCalendarUrl === null) {
     // Buat type check aja kalo calendar group url exists
     return c.json(
@@ -223,6 +248,23 @@ calendarRouter.openapi(deleteCalendarEventRoute, async (c) => {
     const eventDB = await getCalendarEventById(db, { eventId });
     if (!eventDB?.calendarGroup.googleCalendarUrl) {
       return c.json({ error: 'Event not found' }, 404);
+    }
+
+    const roles = await getUserRoles(db, c.var.user.id);
+    if (eventDB.category === 'akademik') {
+      if (!roles.includes('akademik')) {
+        return c.json(
+          { error: 'You are not authorized to delete academic events' },
+          403,
+        );
+      }
+    } else {
+      if (!roles.includes('ring1')) {
+        return c.json(
+          { error: 'You are not authorized to delete events' },
+          403,
+        );
+      }
     }
 
     await google.calendar('v3').events.delete({

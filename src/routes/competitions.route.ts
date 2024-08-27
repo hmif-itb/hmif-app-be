@@ -1,5 +1,6 @@
 import { createRoute, z } from '@hono/zod-openapi';
 import {
+  CompetitionCategoriesSchema,
   CompetitionListQuerySchema,
   CompetitionSchema,
   CompetitionsIdParamSchema,
@@ -14,6 +15,23 @@ import {
   validationErrorResponse,
   ValidationErrorSchema,
 } from '~/types/responses.type';
+
+export const getCompetitionCategoriesRoute = createRoute({
+  operationId: 'getCompetitionCategories',
+  tags: ['competitions'],
+  method: 'get',
+  path: '/competitions/categories',
+  responses: {
+    200: {
+      description: 'Fetched competition categories',
+      content: {
+        'application/json': {
+          schema: CompetitionCategoriesSchema,
+        },
+      },
+    },
+  },
+});
 
 export const createCompetitionRoute = createRoute({
   operationId: 'createCompetition',
@@ -96,7 +114,7 @@ export const getCompetitionListRoute = createRoute({
   operationId: 'getCompetitionList',
   tags: ['competitions'],
   method: 'get',
-  path: '/competition',
+  path: '/competitions',
   request: {
     query: CompetitionListQuerySchema,
   },
@@ -117,7 +135,7 @@ export const deleteCompetitionRoute = createRoute({
   operationId: 'deleteCompetition',
   tags: ['competitions'],
   method: 'delete',
-  path: '/competition/{competitionId}',
+  path: '/competitions/{competitionId}',
   request: {
     params: CompetitionsIdParamSchema,
   },

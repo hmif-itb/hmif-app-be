@@ -1,5 +1,6 @@
 import { PostgresError } from 'postgres';
 import { db } from '~/db/drizzle';
+import { competitionCategories } from '~/db/schema';
 import { roleMiddleware } from '~/middlewares/role.middleware';
 import {
   createCompetition,
@@ -11,13 +12,21 @@ import {
 import {
   createCompetitionRoute,
   deleteCompetitionRoute,
+  getCompetitionCategoriesRoute,
   getCompetitionListRoute,
   updateCompetitionRoute,
 } from '~/routes/competitions.route';
 import { createAuthRouter } from './router-factory';
 
 export const competitionsRouter = createAuthRouter();
-competitionsRouter.use(
+
+competitionsRouter.openapi(getCompetitionCategoriesRoute, async (c) => {
+  c.header('Cache-Control', 'public, max-age=3600');
+
+  return c.json([...competitionCategories], 200);
+});
+
+competitionsRouter.post(
   createCompetitionRoute.getRoutingPath(),
   roleMiddleware(['cnc']),
 );
@@ -34,7 +43,7 @@ competitionsRouter.openapi(createCompetitionRoute, async (c) => {
   }
 });
 
-competitionsRouter.use(
+competitionsRouter.put(
   updateCompetitionRoute.getRoutingPath(),
   roleMiddleware(['cnc']),
 );
@@ -69,6 +78,10 @@ competitionsRouter.openapi(getCompetitionListRoute, async (c) => {
   );
 });
 
+competitionsRouter.delete(
+  deleteCompetitionRoute.getRoutingPath(),
+  roleMiddleware(['cnc']),
+);
 competitionsRouter.openapi(deleteCompetitionRoute, async (c) => {
   try {
     const { competitionId } = c.req.valid('param');
