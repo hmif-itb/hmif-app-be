@@ -41,6 +41,7 @@ export const InfoSchema = createSelectSchema(infos, {
     comments: z.number(),
     reactions: ReactionResponseSchema,
     creator: JWTPayloadSchema,
+    isRead: z.boolean().optional(),
   })
   .openapi('Info');
 

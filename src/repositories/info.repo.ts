@@ -224,6 +224,10 @@ export async function getListInfos(
         },
       },
       creator: true,
+      userReadInfos: {
+        where: eq(userReadInfos.userId, userId),
+        limit: 1,
+      },
     },
   });
 
@@ -244,6 +248,8 @@ export async function getListInfos(
         ...info,
         reactions: reactions[info.id],
         comments: commentsCount.find((c) => c.infoId === info.id)?.count ?? 0,
+        isRead: info.userReadInfos.length > 0,
+        userReadInfos: undefined,
       };
     }),
   );
@@ -275,6 +281,10 @@ export async function getInfoById(db: Database, id: string, userId: string) {
         },
       },
       creator: true,
+      userReadInfos: {
+        where: eq(userReadInfos.userId, userId),
+        limit: 1,
+      },
     },
   });
 
@@ -292,6 +302,8 @@ export async function getInfoById(db: Database, id: string, userId: string) {
     ...info,
     reactions: reactions[info.id],
     comments: commentsCount.count,
+    userReadInfos: undefined,
+    isRead: info.userReadInfos.length > 0,
   };
 }
 
