@@ -31,7 +31,8 @@ export async function getCalendarEvent(
   const isCoursesRequired = courseCode !== undefined || major !== undefined;
   const searchPhrase = search
     ? search
-        .split(' ')
+        .trim()
+        .split(/s+/)
         .map((term) => `${term}:*`)
         .join(' & ')
     : undefined;
@@ -157,7 +158,6 @@ async function getCalendarEventWithCoursesJoin(
   major: 'IF' | 'STI' | 'OTHER' | undefined,
   search?: string,
 ) {
-  search = search?.trim();
   let results = await db
     .select({
       calendarEvent,

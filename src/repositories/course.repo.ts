@@ -148,8 +148,19 @@ export async function getListCourses(
       : undefined;
   const typeQ = q.type ? eq(courses.type, q.type) : undefined;
   const sksQ = q.credits ? eq(courses.credits, q.credits) : undefined;
+  q.search = q.search?.trim();
+  const searchTerms = q.search
+    ? q.search
+        .split(/s+/)
+        .map((term) => `${term}:*`)
+        .join(' & ')
+    : '';
+  const searchQ = q.search
+    ? sql`(setweight(to_tsvector('indonesian', ${courses.name}), 'A') || setweight(to_tsvector('indonesian', ${courses.code}), 'B')) @@ to_tsquery('indonesian', ${searchTerms})`
+    : undefined;
+  console.log(searchQ);
 
-  const where = and(curriculumYearQ, majorQ, semesterQ, typeQ, sksQ);
+  const where = and(curriculumYearQ, majorQ, semesterQ, typeQ, sksQ, searchQ);
   return await db.query.courses.findMany({
     where,
   });

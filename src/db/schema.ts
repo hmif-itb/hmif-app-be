@@ -328,6 +328,13 @@ export const courses = pgTable(
   },
   (t) => ({
     codeIdx: index().on(t.code),
+    searchIdx: index('search_idx').using(
+      'gin',
+      sql`(
+        setweight(to_tsvector('indonesian', ${t.name}), 'A') ||
+        setweight(to_tsvector('indonesian', ${t.code}), 'B')
+      )`,
+    ),
   }),
 );
 
