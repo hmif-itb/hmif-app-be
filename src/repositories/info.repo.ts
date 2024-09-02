@@ -4,11 +4,11 @@ import {
   count,
   desc,
   eq,
-  ilike,
   inArray,
   InferInsertModel,
   notInArray,
   or,
+  sql,
   SQL,
 } from 'drizzle-orm';
 import { z } from 'zod';
@@ -172,7 +172,15 @@ export async function getListInfos(
   q: z.infer<typeof ListInfoParamsSchema>,
   userId: string,
 ): Promise<Array<z.infer<typeof InfoSchema>>> {
-  const searchQ = q.search ? ilike(infos.content, `%${q.search}%`) : undefined;
+  const searchPhrase = q.search
+    ? q.search
+        .split(' ')
+        .map((term) => `${term}:*`)
+        .join(' & ')
+    : undefined;
+  const searchQ = q.search
+    ? sql`(setweight(to_tsvector('indonesian', ${infos.title}), 'A') || setweight(to_tsvector('indonesian', ${infos.content}), 'B')) @@ to_tsquery('indonesian', ${searchPhrase})`
+    : undefined;
   let unreadQ: SQL<unknown> | undefined;
   let categoryQ: SQL<unknown> | undefined;
 

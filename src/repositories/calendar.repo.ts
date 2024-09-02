@@ -1,4 +1,4 @@
-import { and, eq, or } from 'drizzle-orm';
+import { and, eq, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
@@ -29,19 +29,19 @@ export async function getCalendarEvent(
 ) {
   const { search, category, courseCode, year, major } = q;
   const isCoursesRequired = courseCode !== undefined || major !== undefined;
+  const searchPhrase = search
+    ? search
+        .split(' ')
+        .map((term) => `${term}:*`)
+        .join(' & ')
+    : undefined;
   let calendarEvents = isCoursesRequired
-    ? await getCalendarEventWithCoursesJoin(db, courseCode, major)
-    : await getCalendarEventOnly(db);
+    ? await getCalendarEventWithCoursesJoin(db, courseCode, major, searchPhrase)
+    : await getCalendarEventOnly(db, searchPhrase);
 
   // courseCode and major filter are applied in the helper function
   // both helper functions return only list of CalendarEvents
   // see helper functions at the bottom of this code
-
-  if (search) {
-    calendarEvents = calendarEvents.filter((event) =>
-      event.title.toLowerCase().includes(search.toLowerCase()),
-    );
-  }
 
   if (category) {
     calendarEvents = calendarEvents.filter((event) =>
@@ -141,13 +141,21 @@ export async function deleteCalendarEvent(db: Database, eventId: string) {
   return calendarEventId;
 }
 
-async function getCalendarEventOnly(db: Database) {
-  return await db.select().from(calendarEvent);
+async function getCalendarEventOnly(db: Database, search?: string) {
+  return await db
+    .select()
+    .from(calendarEvent)
+    .where(
+      search
+        ? sql`(setweight(to_tsvector('indonesian', ${calendarEvent.title}), 'A') || setweight(to_tsvector('indonesian', ${calendarEvent.description}), 'B')) @@ to_tsquery('indonesian', ${search})`
+        : sql``,
+    );
 }
 async function getCalendarEventWithCoursesJoin(
   db: Database,
   courseCode: string | undefined,
   major: 'IF' | 'STI' | 'OTHER' | undefined,
+  search?: string,
 ) {
   let results = await db
     .select({
@@ -156,6 +164,11 @@ async function getCalendarEventWithCoursesJoin(
       courseMajor: courses.major,
     })
     .from(calendarEvent)
+    .where(
+      search
+        ? sql`(setweight(to_tsvector('indonesian', ${calendarEvent.title}), 'A') || setweight(to_tsvector('indonesian', ${calendarEvent.description}), 'B')) @@ to_tsquery('indonesian', ${search})`
+        : sql``,
+    )
     .innerJoin(courses, eq(calendarEvent.courseId, courses.id));
 
   if (courseCode) {
