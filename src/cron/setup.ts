@@ -1,5 +1,7 @@
 import { calendarCron } from './calendar-cron';
 
 export function setupCron() {
-  calendarCron.start();
+  if (process.env.NODE_ENV === 'production') {
+    calendarCron.start();
+  }
 }

@@ -166,15 +166,15 @@ export async function deleteInfo(db: Database, id: string) {
   return await db.delete(infos).where(eq(infos.id, id)).returning().then(first);
 }
 
-// TODO: get reaction counts
 export async function getListInfos(
   db: Database,
   q: z.infer<typeof ListInfoParamsSchema>,
   userId: string,
 ): Promise<Array<z.infer<typeof InfoSchema>>> {
+  q.search = q.search?.trim();
   const searchPhrase = q.search
     ? q.search
-        .split(' ')
+        .split(/\s+/)
         .map((term) => `${term}:*`)
         .join(' & ')
     : undefined;

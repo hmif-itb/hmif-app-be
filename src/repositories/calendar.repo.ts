@@ -157,6 +157,7 @@ async function getCalendarEventWithCoursesJoin(
   major: 'IF' | 'STI' | 'OTHER' | undefined,
   search?: string,
 ) {
+  search = search?.trim();
   let results = await db
     .select({
       calendarEvent,
