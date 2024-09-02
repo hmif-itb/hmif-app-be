@@ -4,6 +4,7 @@ import {
   JWTPayloadSchema,
   LoginAccessTokenSchema,
   LoginBypassParamSchema,
+  UserResponseSchema,
 } from '~/types/login.types';
 import {
   authorizaitonErrorResponse,
@@ -131,7 +132,7 @@ export const selfRoute = createRoute({
     200: {
       content: {
         'application/json': {
-          schema: JWTPayloadSchema,
+          schema: UserResponseSchema,
           example: {
             id: 'hijtlb2yuy8dsssyy6cgo1fv',
             nim: '18221000',
@@ -143,6 +144,7 @@ export const selfRoute = createRoute({
             jenis_kelamin: 'M',
             status_keanggotaan: 'Anggota Biasa',
             picture: 'https://example.com/picture.jpg',
+            roles: ['akademik'],
           },
         },
       },

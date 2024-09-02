@@ -1,11 +1,14 @@
 import {
   and,
+  asc,
+  count,
+  desc,
   eq,
-  ilike,
   inArray,
   InferInsertModel,
   notInArray,
   or,
+  sql,
   SQL,
 } from 'drizzle-orm';
 import { z } from 'zod';
@@ -14,6 +17,7 @@ import { first, firstSure } from '~/db/helper';
 import {
   angkatan,
   categories,
+  comments,
   Info,
   infoAngkatan,
   infoCategories,
@@ -25,15 +29,19 @@ import {
   users,
   userUnsubscribeCategories,
 } from '~/db/schema';
-import { CreateInfoBodySchema, ListInfoParamsSchema } from '~/types/info.types';
-import { createMediasFromUrl } from './media.repo';
-import { getReactions } from './reaction.repo';
+import { sendNotificationToAll } from '~/lib/push-manager';
 import { getCurrentSemesterCodeAndYear } from '~/repositories/course.repo';
 import {
   getPushSubscriptionsByUserIds,
   removeFailedPushSubscriptions,
 } from '~/repositories/push.repo';
-import { sendNotificationToAll } from '~/lib/push-manager';
+import {
+  CreateInfoBodySchema,
+  InfoSchema,
+  ListInfoParamsSchema,
+} from '~/types/info.types';
+import { createMediasFromUrl } from './media.repo';
+import { getReactions } from './reaction.repo';
 
 const INFOS_PER_PAGE = 10;
 
@@ -75,9 +83,10 @@ export async function createInfo(
 
       await createInfoMedia(
         tx,
-        newMedias.map((media) => ({
+        newMedias.map((media, idx) => ({
           infoId: newInfo.id,
           mediaId: media.id,
+          order: idx,
         })),
       );
     }
@@ -153,17 +162,41 @@ export async function createReadInfo(
     .then(firstSure);
 }
 
+export async function deleteReadInfo(
+  db: Database,
+  data: { userId: string; infoId: string },
+) {
+  return await db
+    .delete(userReadInfos)
+    .where(
+      and(
+        eq(userReadInfos.userId, data.userId),
+        eq(userReadInfos.infoId, data.infoId),
+      ),
+    )
+    .returning()
+    .then(first);
+}
+
 export async function deleteInfo(db: Database, id: string) {
   return await db.delete(infos).where(eq(infos.id, id)).returning().then(first);
 }
 
-// TODO: get reaction counts
 export async function getListInfos(
   db: Database,
   q: z.infer<typeof ListInfoParamsSchema>,
   userId: string,
-) {
-  const searchQ = q.search ? ilike(infos.content, `%${q.search}%`) : undefined;
+): Promise<Array<z.infer<typeof InfoSchema>>> {
+  q.search = q.search?.trim();
+  const searchPhrase = q.search
+    ? q.search
+        .split(/\s+/)
+        .map((term) => `${term}:*`)
+        .join(' & ')
+    : undefined;
+  const searchQ = q.search
+    ? sql`(setweight(to_tsvector('indonesian', ${infos.title}), 'A') || setweight(to_tsvector('indonesian', ${infos.content}), 'B')) @@ to_tsquery('indonesian', ${searchPhrase})`
+    : undefined;
   let unreadQ: SQL<unknown> | undefined;
   let categoryQ: SQL<unknown> | undefined;
 
@@ -187,15 +220,17 @@ export async function getListInfos(
 
   const where = and(searchQ, categoryQ, unreadQ);
 
-  let listInfo = await db.query.infos.findMany({
+  const listInfo = await db.query.infos.findMany({
     where,
     limit: INFOS_PER_PAGE,
     offset: q.offset,
+    orderBy: q.sort === 'oldest' ? asc(infos.createdAt) : desc(infos.createdAt),
     with: {
       infoMedias: {
         with: {
           media: true,
         },
+        orderBy: asc(infoMedias.order),
       },
       infoCategories: {
         with: {
@@ -213,28 +248,35 @@ export async function getListInfos(
         },
       },
       creator: true,
+      userReadInfos: {
+        where: eq(userReadInfos.userId, userId),
+        limit: 1,
+      },
     },
   });
 
-  listInfo = await Promise.all(
+  if (listInfo.length === 0) return [];
+
+  const infoIds = listInfo.map((info) => info.id);
+  const reactions = await getReactions(db, { infoIds }, userId);
+
+  const commentsCount = await db
+    .select({ count: count(comments.id), infoId: comments.repliedInfoId })
+    .from(comments)
+    .where(inArray(comments.repliedInfoId, infoIds))
+    .groupBy(comments.repliedInfoId);
+
+  return await Promise.all(
     listInfo.map(async (info) => {
-      const reactions = await getReactions(db, { infoId: info?.id }, userId);
-      return { ...info, reactions };
+      return {
+        ...info,
+        reactions: reactions[info.id],
+        comments: commentsCount.find((c) => c.infoId === info.id)?.count ?? 0,
+        isRead: info.userReadInfos.length > 0,
+        userReadInfos: undefined,
+      };
     }),
   );
-
-  // Sort based on 'sort' query params
-  if (q.sort) {
-    listInfo = listInfo.sort((a, b) => {
-      if (q.sort === 'oldest') {
-        return a.createdAt.getTime() - b.createdAt.getTime();
-      } else {
-        return b.createdAt.getTime() - a.createdAt.getTime();
-      }
-    });
-  }
-
-  return listInfo;
 }
 
 export async function getInfoById(db: Database, id: string, userId: string) {
@@ -245,6 +287,7 @@ export async function getInfoById(db: Database, id: string, userId: string) {
         with: {
           media: true,
         },
+        orderBy: asc(infoMedias.order),
       },
       infoCategories: {
         with: {
@@ -262,14 +305,30 @@ export async function getInfoById(db: Database, id: string, userId: string) {
         },
       },
       creator: true,
+      userReadInfos: {
+        where: eq(userReadInfos.userId, userId),
+        limit: 1,
+      },
     },
   });
+
+  const commentsCount = await db
+    .select({ count: count(comments.id) })
+    .from(comments)
+    .where(eq(comments.repliedInfoId, id))
+    .then(firstSure);
 
   if (!info) return info;
 
   // If user is found, then add reactions to the object
-  const reactions = await getReactions(db, { infoId: info?.id }, userId);
-  return { ...info, reactions };
+  const reactions = await getReactions(db, { infoIds: [info.id] }, userId);
+  return {
+    ...info,
+    reactions: reactions[info.id],
+    comments: commentsCount.count,
+    userReadInfos: undefined,
+    isRead: info.userReadInfos.length > 0,
+  };
 }
 
 export async function notifyNewInfo(

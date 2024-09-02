@@ -4,6 +4,7 @@ import {
   createInfo,
   createReadInfo,
   deleteInfo,
+  deleteReadInfo,
   getInfoById,
   getListInfos,
   notifyNewInfo,
@@ -22,14 +23,19 @@ export const infoRouter = createAuthRouter();
 infoRouter.openapi(postReadInfoRoute, async (c) => {
   const { id } = c.var.user;
   const { infoId } = c.req.valid('param');
+  const { unread } = c.req.valid('json');
 
   const data = {
     userId: id,
     infoId,
   };
 
-  await createReadInfo(db, data);
-  return c.json({}, 201);
+  if (unread) {
+    await deleteReadInfo(db, data);
+  } else {
+    await createReadInfo(db, data);
+  }
+  return c.json({}, 200);
 });
 
 infoRouter.openapi(createInfoRoute, async (c) => {

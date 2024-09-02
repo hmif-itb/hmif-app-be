@@ -5,42 +5,90 @@ import { first, firstSure } from '~/db/helper';
 import { reactions } from '~/db/schema';
 import {
   CreateOrUpdateReactionSchema,
-  ReactionQuerySchema,
   ReactionResponseSchema,
 } from '~/types/reaction.types';
 
 export async function getReactions(
   db: Database,
-  q: z.infer<typeof ReactionQuerySchema>,
+  {
+    commentIds,
+    infoIds,
+  }:
+    | { commentIds?: undefined; infoIds: string[] }
+    | { commentIds: string[]; infoIds?: undefined },
   userId: string,
 ) {
-  const where = q.infoId
-    ? eq(reactions.infoId, q.infoId)
-    : q.commentId
-      ? eq(reactions.commentId, q.commentId)
-      : eq(reactions.id, '-1'); // Handle invalid query
+  if (
+    (!commentIds || commentIds.length === 0) &&
+    (!infoIds || infoIds.length === 0)
+  ) {
+    return {};
+  }
+  const where = commentIds
+    ? inArray(reactions.commentId, commentIds)
+    : inArray(reactions.infoId, infoIds);
 
   const reactionCount = await db
     .select({
       reaction: reactions.reaction,
       count: count(reactions.reaction),
+      infoId: reactions.infoId,
+      commentId: reactions.commentId,
     })
     .from(reactions)
     .where(where)
-    .groupBy(reactions.reaction);
+    .groupBy(reactions.reaction, reactions.infoId, reactions.commentId);
+
   const userReaction = await db
     .select({
       reaction: reactions.reaction,
+      infoId: reactions.infoId,
+      commentId: reactions.commentId,
     })
     .from(reactions)
-    .where(and(eq(reactions.creatorId, userId), where))
-    .then(first);
+    .where(and(eq(reactions.creatorId, userId), where));
 
-  const result: z.infer<typeof ReactionResponseSchema> = {
-    totalReactions: reactionCount.reduce((acc, r) => acc + r.count, 0),
-    reactionsCount: reactionCount,
-    userReaction: userReaction?.reaction,
-  };
+  const result: Record<string, z.infer<typeof ReactionResponseSchema>> = {};
+
+  const isComment = !!commentIds;
+
+  infoIds?.forEach((id) => {
+    result[id] = {
+      totalReactions: 0,
+      reactionsCount: [],
+      userReaction: userReaction.find((ur) => ur.infoId === id)?.reaction,
+    };
+  });
+
+  commentIds?.forEach((id) => {
+    result[id] = {
+      totalReactions: 0,
+      reactionsCount: [],
+      userReaction: userReaction.find((ur) => ur.commentId === id)?.reaction,
+    };
+  });
+
+  reactionCount.forEach((r) => {
+    if (!r.infoId && !r.commentId) {
+      return;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const id = isComment ? r.commentId! : r.infoId!;
+    if (!result[id]) {
+      result[id] = {
+        totalReactions: 0,
+        reactionsCount: [],
+        userReaction: userReaction.find(
+          (ur) => (isComment ? ur.commentId : ur.infoId) === id,
+        )?.reaction,
+      };
+    }
+    result[id].totalReactions += r.count;
+    result[id].reactionsCount.push({
+      reaction: r.reaction,
+      count: r.count,
+    });
+  });
 
   return result;
 }

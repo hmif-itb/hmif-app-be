@@ -91,6 +91,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "academic_semester_code": {
+          "name": "academic_semester_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "start": {
           "name": "start",
           "type": "timestamp with time zone",
@@ -105,6 +111,12 @@
         },
         "google_calendar_url": {
           "name": "google_calendar_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "google_calendar_id": {
+          "name": "google_calendar_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -163,6 +175,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "google_calendar_url": {
           "name": "google_calendar_url",
@@ -308,6 +326,141 @@
           "onDelete": "cascade"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.competition_medias": {
+      "name": "competition_medias",
+      "schema": "",
+      "columns": {
+        "competition_id": {
+          "name": "competition_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "media_id": {
+          "name": "media_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "competition_medias_competition_id_competitions_id_fk": {
+          "name": "competition_medias_competition_id_competitions_id_fk",
+          "tableFrom": "competition_medias",
+          "columnsFrom": [
+            "competition_id"
+          ],
+          "tableTo": "competitions",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        },
+        "competition_medias_media_id_medias_id_fk": {
+          "name": "competition_medias_media_id_medias_id_fk",
+          "tableFrom": "competition_medias",
+          "columnsFrom": [
+            "media_id"
+          ],
+          "tableTo": "medias",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "competition_medias_competition_id_media_id_pk": {
+          "name": "competition_medias_competition_id_media_id_pk",
+          "columns": [
+            "competition_id",
+            "media_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.competitions": {
+      "name": "competitions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organizer": {
+          "name": "organizer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "registration_start_date": {
+          "name": "registration_start_date",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "registration_deadline_date": {
+          "name": "registration_deadline_date",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "price": {
+          "name": "price",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_url": {
+          "name": "source_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "registration_url": {
+          "name": "registration_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "categories": {
+          "name": "categories",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::json"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -657,6 +810,12 @@
         "media_id": {
           "name": "media_id",
           "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         }
@@ -1298,6 +1457,50 @@
       },
       "uniqueConstraints": {}
     },
+    "public.user_roles": {
+      "name": "user_roles",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_roles_user_id_users_id_fk": {
+          "name": "user_roles_user_id_users_id_fk",
+          "tableFrom": "user_roles",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "tableTo": "users",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "user_roles_user_id_role_pk": {
+          "name": "user_roles_user_id_role_pk",
+          "columns": [
+            "user_id",
+            "role"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "public.user_unsubscribe_categories": {
       "name": "user_unsubscribe_categories",
       "schema": "",
@@ -1500,7 +1703,7 @@
     "tables": {},
     "columns": {}
   },
-  "id": "a1b0734b-79a7-44f2-a568-44a7eea73d77",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "1d9b6489-b5b2-4418-b0dd-f5b620752ba0",
+  "prevId": "d7917152-0bd1-4306-bb84-a3988b7fdcca",
   "sequences": {}
 }
