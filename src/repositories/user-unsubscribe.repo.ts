@@ -1,13 +1,13 @@
-import { Database } from '~/db/drizzle';
 import { InferInsertModel, and, eq } from 'drizzle-orm';
 import { z } from 'zod';
+import { Database } from '~/db/drizzle';
+import { firstSure } from '~/db/helper';
+import { categories, userUnsubscribeCategories } from '~/db/schema';
 import {
   DeleteUserUnsubscribeCategorySchema,
   GetUserUnsubscribeCategorySchema,
   PostUserUnsubscribeCategorySchema,
 } from '~/types/user-unsubscribe.types';
-import { userUnsubscribeCategories } from '~/db/schema';
-import { firstSure } from '~/db/helper';
 
 /**
  * Check if a user is unsubscribed to a category with the given categoryId
@@ -104,4 +104,23 @@ export async function deleteUserUnsubscribeCategory(
     )
     .returning()
     .then(firstSure);
+}
+
+export async function getUnsubsByCategoryName(
+  db: Database,
+  categoryName: string,
+): Promise<Set<string>> {
+  const category = await db.query.categories.findFirst({
+    where: eq(categories.name, categoryName),
+  });
+
+  if (!category) {
+    return new Set();
+  }
+
+  const unsubs = await db.query.userUnsubscribeCategories.findMany({
+    where: eq(userUnsubscribeCategories.categoryId, category.id),
+  });
+
+  return new Set(unsubs.map((unsub) => unsub.userId));
 }

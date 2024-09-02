@@ -80,7 +80,12 @@ infoRouter.openapi(deleteInfoRoute, async (c) => {
 });
 
 infoRouter.openapi(getListInfoRoute, async (c) => {
-  const infos = await getListInfos(db, c.req.valid('query'), c.var.user.id);
+  const infos = await getListInfos(
+    db,
+    c.req.valid('query'),
+    c.var.user.id,
+    c.var.user.angkatan,
+  );
   return c.json(
     {
       infos,

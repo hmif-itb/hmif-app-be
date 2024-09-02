@@ -33,6 +33,9 @@ export const InfoCourseSchema = createSelectSchema(infoCourses).extend({
 export const InfoSchema = createSelectSchema(infos, {
   createdAt: z.union([z.string(), z.date()]),
 })
+  .omit({
+    isForAngkatan: true,
+  })
   .extend({
     infoMedias: z.array(InfoMediaSchema).optional(),
     infoCategories: z.array(InfoCategorySchema).optional(),
@@ -55,6 +58,7 @@ export const CreateInfoBodySchema = createInsertSchema(infos)
     id: true,
     creatorId: true,
     createdAt: true,
+    isForAngkatan: true,
   })
   .extend({
     mediaUrls: z

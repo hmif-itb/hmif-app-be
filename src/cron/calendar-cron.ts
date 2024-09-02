@@ -9,6 +9,7 @@ import {
   getAllPushSubscriptions,
   toPushSubscriptionsHash,
 } from '~/repositories/push.repo';
+import { getUnsubsByCategoryName } from '~/repositories/user-unsubscribe.repo';
 
 type CourseCalendarEvent = Omit<CalendarEvent, 'courseId'> & {
   courseId: string;
@@ -58,6 +59,8 @@ export const calendarCron = new CronJob('* * * * *', async () => {
 
   const coursesHash: Record<string, (typeof courses)[number]> = {};
 
+  const academicUnsubs = await getUnsubsByCategoryName(db, 'Akademik');
+
   courses.forEach((course) => {
     coursesHash[course.id] = course;
   });
@@ -68,9 +71,9 @@ export const calendarCron = new CronJob('* * * * *', async () => {
       return;
     }
     const start = dayjs(event.start).format('HH:mm');
-    const subscriptions = course.userCourses.flatMap(
-      (userCourse) => pushSubscriptionsHash[userCourse.userId],
-    );
+    const subscriptions = course.userCourses
+      .flatMap((userCourse) => pushSubscriptionsHash[userCourse.userId])
+      .filter((subscription) => !academicUnsubs.has(subscription.userId ?? ''));
     void sendNotificationToAll(subscriptions, {
       title: `Tomorrow you will have "${event.title}" at ${start} for ${course.code} ${course.name}`,
       options: {

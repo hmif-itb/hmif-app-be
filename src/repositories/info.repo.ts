@@ -4,6 +4,7 @@ import {
   count,
   desc,
   eq,
+  exists,
   inArray,
   InferInsertModel,
   notInArray,
@@ -50,7 +51,7 @@ const INFOS_PER_PAGE = 10;
  */
 export async function createInfo(
   db: Database,
-  data: Omit<InferInsertModel<typeof infos>, 'createdAt'>,
+  data: Omit<InferInsertModel<typeof infos>, 'createdAt' | 'isForAngkatan'>,
   mediaUrls: z.infer<typeof CreateInfoBodySchema.shape.mediaUrls>,
   forAngkatan: z.infer<typeof CreateInfoBodySchema.shape.forAngkatan>,
   forCategories: z.infer<typeof CreateInfoBodySchema.shape.forCategories>,
@@ -60,7 +61,10 @@ export async function createInfo(
   return await db.transaction(async (tx) => {
     const newInfo = await tx
       .insert(infos)
-      .values(data)
+      .values({
+        ...data,
+        isForAngkatan: forAngkatan !== undefined && forAngkatan.length > 0,
+      })
       .returning()
       .then(firstSure);
 
@@ -186,6 +190,7 @@ export async function getListInfos(
   db: Database,
   q: z.infer<typeof ListInfoParamsSchema>,
   userId: string,
+  angkatanYear?: number,
 ): Promise<Array<z.infer<typeof InfoSchema>>> {
   q.search = q.search?.trim();
   const searchPhrase = q.search
@@ -199,6 +204,7 @@ export async function getListInfos(
     : undefined;
   let unreadQ: SQL<unknown> | undefined;
   let categoryQ: SQL<unknown> | undefined;
+  let angkatanQ: SQL<unknown> | undefined;
 
   if (q.unread === 'true') {
     const getReadInfosByUser = db
@@ -218,7 +224,31 @@ export async function getListInfos(
     categoryQ = inArray(infos.id, getInfosByCategory);
   }
 
-  const where = and(searchQ, categoryQ, unreadQ);
+  if (angkatanYear !== undefined) {
+    const angkatanId = await db
+      .select({ id: angkatan.id })
+      .from(angkatan)
+      .where(eq(angkatan.year, angkatanYear))
+      .then(firstSure)
+      .then((angkatan) => angkatan.id);
+
+    angkatanQ = or(
+      eq(infos.isForAngkatan, false),
+      exists(
+        db
+          .select({ infoId: infoAngkatan.infoId })
+          .from(infoAngkatan)
+          .where(
+            and(
+              eq(infoAngkatan.angkatanId, angkatanId),
+              eq(infoAngkatan.infoId, infos.id),
+            ),
+          ),
+      ),
+    );
+  }
+
+  const where = and(searchQ, categoryQ, unreadQ, angkatanQ);
 
   const listInfo = await db.query.infos.findMany({
     where,

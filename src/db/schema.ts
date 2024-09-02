@@ -125,6 +125,7 @@ export const infos = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
+    isForAngkatan: boolean('is_for_angkatan').notNull(),
   },
   (t) => ({
     contentSearchIdx: index('content_search_idx').using(
