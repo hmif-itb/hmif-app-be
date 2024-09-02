@@ -1,4 +1,4 @@
-import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
+import { and, eq, ilike, inArray, isNull, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
@@ -149,16 +149,18 @@ export async function getListCourses(
   const typeQ = q.type ? eq(courses.type, q.type) : undefined;
   const sksQ = q.credits ? eq(courses.credits, q.credits) : undefined;
   q.search = q.search?.trim();
-  const searchTerms = q.search
-    ? q.search
-        .split(/s+/)
-        .map((term) => `${term}:*`)
-        .join(' & ')
-    : '';
   const searchQ = q.search
-    ? sql`(setweight(to_tsvector('indonesian', ${courses.name}), 'A') || setweight(to_tsvector('indonesian', ${courses.code}), 'B')) @@ to_tsquery('indonesian', ${searchTerms})`
+    ? or(
+        ilike(
+          courses.name,
+          `%${q.search}%`.replaceAll('%', '\\%').replaceAll('_', '\\_'),
+        ),
+        ilike(
+          courses.code,
+          `%${q.search}%`.replaceAll('%', '\\%').replaceAll('_', '\\_'),
+        ),
+      )
     : undefined;
-  console.log(searchQ);
 
   const where = and(curriculumYearQ, majorQ, semesterQ, typeQ, sksQ, searchQ);
   return await db.query.courses.findMany({
