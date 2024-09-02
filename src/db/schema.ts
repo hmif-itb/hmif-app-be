@@ -174,6 +174,7 @@ export const mediasRelation = relations(medias, ({ one, many }) => ({
     references: [users.id],
   }),
   infoMedias: many(infoMedias),
+  competitions: many(competitionMedias),
 }));
 
 export const userReadInfos = pgTable(
@@ -214,6 +215,7 @@ export const infoMedias = pgTable(
     mediaId: text('media_id')
       .references(() => medias.id, { onDelete: 'cascade' })
       .notNull(),
+    order: integer('order').notNull(),
   },
   (t) => ({ pk: primaryKey({ columns: [t.infoId, t.mediaId] }) }),
 );
@@ -532,8 +534,11 @@ export const calendarGroup = pgTable('calendar_group', {
   id: text('id').primaryKey().$defaultFn(createId),
   name: text('name').notNull(),
   category: text('category', { enum: ['akademik', 'himpunan'] }).notNull(),
+  code: text('code'),
   googleCalendarUrl: text('google_calendar_url'),
 });
+
+export type CalendarGroup = InferSelectModel<typeof calendarGroup>;
 
 export const calendarGroupRelation = relations(calendarGroup, ({ many }) => ({
   calendarEvent: many(calendarEvent),
@@ -572,6 +577,8 @@ export const calendarEvent = pgTable(
   }),
 );
 
+export type CalendarEvent = InferSelectModel<typeof calendarEvent>;
+
 export const calendarEventRelations = relations(calendarEvent, ({ one }) => ({
   calendarGroup: one(calendarGroup, {
     fields: [calendarEvent.calendarGroupId],
@@ -589,14 +596,29 @@ export const userRoles = pgTable(
     userId: text('user_id')
       .references(() => users.id, { onDelete: 'cascade' })
       .notNull(),
-    role: text('role', { enum: ['akademik'] }).notNull(),
+    role: text('role', { enum: ['akademik', 'cnc', 'ring1'] }).notNull(),
   },
   (t) => ({ pk: primaryKey({ columns: [t.userId, t.role] }) }),
 );
 
+export type UserRolesEnum = InferSelectModel<typeof userRoles>['role'];
+
 export const userRolesRelation = relations(userRoles, ({ one }) => ({
   user: one(users, { fields: [userRoles.userId], references: [users.id] }),
 }));
+
+export const competitionCategories = [
+  'Competitive Programming',
+  'Capture The Flag',
+  'Data Science / Data Analytics',
+  'UI/UX',
+  'Game Development',
+  'Business IT Case',
+  'Innovation',
+  'Web Development',
+] as const;
+
+export type CompetitionCategory = (typeof competitionCategories)[number];
 
 export const competitions = pgTable('competitions', {
   id: text('id').primaryKey().$defaultFn(createId),
@@ -611,19 +633,43 @@ export const competitions = pgTable('competitions', {
   price: text('price'),
   sourceUrl: text('source_url').notNull(),
   registrationUrl: text('registration_url').notNull(),
-  type: text('category', {
-    enum: [
-      'Competitive Programming',
-      'Capture The Flag',
-      'Data Science / Data Analytics',
-      'UI/UX',
-      'Game Development',
-      'Business IT Case',
-      'Innovation',
-      'Web Development',
-    ],
-  }).notNull(),
+  categories: json('categories')
+    .$type<CompetitionCategory[]>()
+    .default([])
+    .notNull(),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
 });
+
+export const competitionsRelation = relations(competitions, ({ many }) => ({
+  medias: many(competitionMedias),
+}));
+
+export const competitionMedias = pgTable(
+  'competition_medias',
+  {
+    competitionId: text('competition_id')
+      .references(() => competitions.id, { onDelete: 'cascade' })
+      .notNull(),
+    mediaId: text('media_id')
+      .references(() => medias.id, { onDelete: 'cascade' })
+      .notNull(),
+    order: integer('order').notNull(),
+  },
+  (t) => ({ pk: primaryKey({ columns: [t.competitionId, t.mediaId] }) }),
+);
+
+export const competitionMediasRelation = relations(
+  competitionMedias,
+  ({ one }) => ({
+    competition: one(competitions, {
+      fields: [competitionMedias.competitionId],
+      references: [competitions.id],
+    }),
+    media: one(medias, {
+      fields: [competitionMedias.mediaId],
+      references: [medias.id],
+    }),
+  }),
+);

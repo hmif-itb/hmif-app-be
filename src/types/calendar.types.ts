@@ -11,7 +11,7 @@ const optionalDateCoerce = z.preprocess((arg) => {
   return undefined;
 }, z.date().optional());
 
-const addHours = (date: Date, hours: number) => {
+export const addHours = (date: Date, hours: number) => {
   const newDate = new Date(date);
   newDate.setHours(newDate.getHours() + hours);
   return newDate;
@@ -69,6 +69,10 @@ export const CalendarEventGcal = z
 
 export const CalendarEventList = z.array(CalendarEvent);
 
+export const CalendarCategory = z
+  .enum(calendarGroup.category.enumValues)
+  .openapi('CalendarCategory', { example: 'himpunan' });
+
 export const CreateCalendarEventBodySchema = createInsertSchema(calendarEvent, {
   title: z.string().openapi({ example: 'Meeting' }),
   description: z.string().optional().openapi({ example: 'Meeting with team' }),
@@ -76,10 +80,7 @@ export const CreateCalendarEventBodySchema = createInsertSchema(calendarEvent, {
   end: z.coerce.date().openapi({
     example: addHours(new Date(), 2).toISOString(),
   }),
-  category: z.string().optional().openapi({ example: 'himpunan' }),
-  calendarGroupId: z
-    .string()
-    .openapi({ example: 'hlp70594b43hcn866d291i8jm0' }),
+  category: CalendarCategory,
   courseId: z
     .string()
     .optional()
@@ -90,6 +91,7 @@ export const CreateCalendarEventBodySchema = createInsertSchema(calendarEvent, {
   googleCalendarId: true,
   academicYear: true,
   academicSemesterCode: true,
+  calendarGroupId: true,
 });
 
 export const GetCalendarEventParamsSchema = z.object({
@@ -118,6 +120,10 @@ export const UpdateCalendarEventBodySchema = createInsertSchema(calendarEvent, {
     googleCalendarUrl: true,
     calendarGroupId: true,
     googleCalendarId: true,
+    academicYear: true,
+    academicSemesterCode: true,
+    courseId: true,
+    category: true,
   });
 
 export const CalendarGroupSchema = createSelectSchema(calendarGroup);

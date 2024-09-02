@@ -1,0 +1,1 @@
+ALTER TABLE "calendar_group" ADD COLUMN "code" text;

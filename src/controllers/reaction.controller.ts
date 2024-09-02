@@ -15,9 +15,22 @@ import { createAuthRouter } from './router-factory';
 export const reactionRouter = createAuthRouter();
 
 reactionRouter.openapi(getReactionsRoute, async (c) => {
-  const reactions = await getReactions(db, c.req.valid('query'), c.var.user.id);
-  if (!reactions) return c.json({ error: 'No reactions found' }, 404);
-  return c.json(reactions, 200);
+  const q = c.req.valid('query');
+  if (!q.commentId && !q.infoId) {
+    return c.json({ error: 'commentId or infoId is required' }, 400);
+  }
+  const id = q.commentId ? q.commentId : q.infoId;
+  const reactions = await getReactions(
+    db,
+    q.commentId
+      ? { commentIds: [q.commentId] }
+      : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        { infoIds: [q.infoId!] },
+    c.var.user.id,
+  );
+  if (!id || !reactions[id])
+    return c.json({ error: 'No reactions found' }, 404);
+  return c.json(reactions[id], 200);
 });
 
 reactionRouter.openapi(CreateOrUpdateReactionRoute, async (c) => {

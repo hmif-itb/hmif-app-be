@@ -329,6 +329,69 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "public.competition_medias": {
+      "name": "competition_medias",
+      "schema": "",
+      "columns": {
+        "competition_id": {
+          "name": "competition_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "media_id": {
+          "name": "media_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "competition_medias_competition_id_competitions_id_fk": {
+          "name": "competition_medias_competition_id_competitions_id_fk",
+          "tableFrom": "competition_medias",
+          "columnsFrom": [
+            "competition_id"
+          ],
+          "tableTo": "competitions",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        },
+        "competition_medias_media_id_medias_id_fk": {
+          "name": "competition_medias_media_id_medias_id_fk",
+          "tableFrom": "competition_medias",
+          "columnsFrom": [
+            "media_id"
+          ],
+          "tableTo": "medias",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "competition_medias_competition_id_media_id_pk": {
+          "name": "competition_medias_competition_id_media_id_pk",
+          "columns": [
+            "competition_id",
+            "media_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "public.competitions": {
       "name": "competitions",
       "schema": "",
@@ -746,6 +809,12 @@
         "media_id": {
           "name": "media_id",
           "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         }
@@ -1633,7 +1702,7 @@
     "tables": {},
     "columns": {}
   },
-  "id": "eb6c9697-d903-4b77-8d8b-95f4d7a57177",
-  "prevId": "c25b194f-80d8-4a33-8275-cabe3c3b8933",
+  "id": "d7917152-0bd1-4306-bb84-a3988b7fdcca",
+  "prevId": "eb6c9697-d903-4b77-8d8b-95f4d7a57177",
   "sequences": {}
 }

@@ -1,4 +1,6 @@
 {
+  "id": "61efe164-fb2c-4f7c-a314-2afc62337021",
+  "prevId": "1d9b6489-b5b2-4418-b0dd-f5b620752ba0",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -31,17 +33,17 @@
       "uniqueConstraints": {
         "angkatan_year_unique": {
           "name": "angkatan_year_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "year"
-          ],
-          "nullsNotDistinct": false
+          ]
         },
         "angkatan_name_unique": {
           "name": "angkatan_name_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "name"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -122,33 +124,49 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "title_search_idx": {
+          "name": "title_search_idx",
+          "columns": [
+            {
+              "expression": "(\n        setweight(to_tsvector('indonesian', \"title\"), 'A') ||\n        setweight(to_tsvector('indonesian', \"description\"), 'B')\n      )",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "calendar_event_calendar_group_id_calendar_group_id_fk": {
           "name": "calendar_event_calendar_group_id_calendar_group_id_fk",
           "tableFrom": "calendar_event",
+          "tableTo": "calendar_group",
           "columnsFrom": [
             "calendar_group_id"
           ],
-          "tableTo": "calendar_group",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         },
         "calendar_event_courses_id_courses_id_fk": {
           "name": "calendar_event_courses_id_courses_id_fk",
           "tableFrom": "calendar_event",
+          "tableTo": "courses",
           "columnsFrom": [
             "courses_id"
           ],
-          "tableTo": "courses",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -223,10 +241,10 @@
       "uniqueConstraints": {
         "categories_name_unique": {
           "name": "categories_name_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "name"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -268,6 +286,7 @@
       },
       "indexes": {
         "comments_replied_info_id_index": {
+          "name": "comments_replied_info_id_index",
           "columns": [
             {
               "expression": "replied_info_id",
@@ -276,13 +295,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "comments_replied_info_id_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "comments_creator_id_index": {
+          "name": "comments_creator_id_index",
           "columns": [
             {
               "expression": "creator_id",
@@ -291,42 +310,104 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "comments_creator_id_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {
         "comments_replied_info_id_infos_id_fk": {
           "name": "comments_replied_info_id_infos_id_fk",
           "tableFrom": "comments",
+          "tableTo": "infos",
           "columnsFrom": [
             "replied_info_id"
           ],
-          "tableTo": "infos",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         },
         "comments_creator_id_users_id_fk": {
           "name": "comments_creator_id_users_id_fk",
           "tableFrom": "comments",
+          "tableTo": "users",
           "columnsFrom": [
             "creator_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.competition_medias": {
+      "name": "competition_medias",
+      "schema": "",
+      "columns": {
+        "competition_id": {
+          "name": "competition_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "media_id": {
+          "name": "media_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "competition_medias_competition_id_competitions_id_fk": {
+          "name": "competition_medias_competition_id_competitions_id_fk",
+          "tableFrom": "competition_medias",
+          "tableTo": "competitions",
+          "columnsFrom": [
+            "competition_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "competition_medias_media_id_medias_id_fk": {
+          "name": "competition_medias_media_id_medias_id_fk",
+          "tableFrom": "competition_medias",
+          "tableTo": "medias",
+          "columnsFrom": [
+            "media_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "competition_medias_competition_id_media_id_pk": {
+          "name": "competition_medias_competition_id_media_id_pk",
+          "columns": [
+            "competition_id",
+            "media_id"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "public.competitions": {
@@ -381,11 +462,12 @@
           "primaryKey": false,
           "notNull": true
         },
-        "category": {
-          "name": "category",
-          "type": "text",
+        "categories": {
+          "name": "categories",
+          "type": "json",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "'[]'::json"
         },
         "created_at": {
           "name": "created_at",
@@ -468,6 +550,7 @@
       },
       "indexes": {
         "courses_code_index": {
+          "name": "courses_code_index",
           "columns": [
             {
               "expression": "code",
@@ -476,11 +559,10 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "courses_code_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {},
@@ -488,10 +570,10 @@
       "uniqueConstraints": {
         "courses_code_unique": {
           "name": "courses_code_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "code"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -542,15 +624,15 @@
         "google_subscriptions_user_id_users_id_fk": {
           "name": "google_subscriptions_user_id_users_id_fk",
           "tableFrom": "google_subscriptions",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -578,28 +660,28 @@
         "info_angkatan_info_id_infos_id_fk": {
           "name": "info_angkatan_info_id_infos_id_fk",
           "tableFrom": "info_angkatan",
+          "tableTo": "infos",
           "columnsFrom": [
             "info_id"
           ],
-          "tableTo": "infos",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         },
         "info_angkatan_angkatan_id_angkatan_id_fk": {
           "name": "info_angkatan_angkatan_id_angkatan_id_fk",
           "tableFrom": "info_angkatan",
+          "tableTo": "angkatan",
           "columnsFrom": [
             "angkatan_id"
           ],
-          "tableTo": "angkatan",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -635,28 +717,28 @@
         "info_categories_info_id_infos_id_fk": {
           "name": "info_categories_info_id_infos_id_fk",
           "tableFrom": "info_categories",
+          "tableTo": "infos",
           "columnsFrom": [
             "info_id"
           ],
-          "tableTo": "infos",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         },
         "info_categories_category_id_categories_id_fk": {
           "name": "info_categories_category_id_categories_id_fk",
           "tableFrom": "info_categories",
+          "tableTo": "categories",
           "columnsFrom": [
             "category_id"
           ],
-          "tableTo": "categories",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -698,28 +780,28 @@
         "info_courses_info_id_infos_id_fk": {
           "name": "info_courses_info_id_infos_id_fk",
           "tableFrom": "info_courses",
+          "tableTo": "infos",
           "columnsFrom": [
             "info_id"
           ],
-          "tableTo": "infos",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         },
         "info_courses_course_id_courses_id_fk": {
           "name": "info_courses_course_id_courses_id_fk",
           "tableFrom": "info_courses",
+          "tableTo": "courses",
           "columnsFrom": [
             "course_id"
           ],
-          "tableTo": "courses",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -748,6 +830,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -755,28 +843,28 @@
         "info_medias_info_id_infos_id_fk": {
           "name": "info_medias_info_id_infos_id_fk",
           "tableFrom": "info_medias",
+          "tableTo": "infos",
           "columnsFrom": [
             "info_id"
           ],
-          "tableTo": "infos",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         },
         "info_medias_media_id_medias_id_fk": {
           "name": "info_medias_media_id_medias_id_fk",
           "tableFrom": "info_medias",
+          "tableTo": "medias",
           "columnsFrom": [
             "media_id"
           ],
-          "tableTo": "medias",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -826,20 +914,36 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "content_search_idx": {
+          "name": "content_search_idx",
+          "columns": [
+            {
+              "expression": "(\n        setweight(to_tsvector('indonesian', \"title\"), 'A') ||\n        setweight(to_tsvector('indonesian', \"content\"), 'B')\n      )",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "infos_creator_id_users_id_fk": {
           "name": "infos_creator_id_users_id_fk",
           "tableFrom": "infos",
+          "tableTo": "users",
           "columnsFrom": [
             "creator_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -892,25 +996,25 @@
         "medias_creator_id_users_id_fk": {
           "name": "medias_creator_id_users_id_fk",
           "tableFrom": "medias",
+          "tableTo": "users",
           "columnsFrom": [
             "creator_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "medias_name_unique": {
           "name": "medias_name_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "name"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -946,6 +1050,7 @@
       },
       "indexes": {
         "push_subscriptions_user_id_index": {
+          "name": "push_subscriptions_user_id_index",
           "columns": [
             {
               "expression": "user_id",
@@ -954,26 +1059,25 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "push_subscriptions_user_id_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {
         "push_subscriptions_user_id_users_id_fk": {
           "name": "push_subscriptions_user_id_users_id_fk",
           "tableFrom": "push_subscriptions",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "set null"
+          "onDelete": "set null",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -1023,6 +1127,7 @@
       },
       "indexes": {
         "reactions_info_id_index": {
+          "name": "reactions_info_id_index",
           "columns": [
             {
               "expression": "info_id",
@@ -1031,13 +1136,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "reactions_info_id_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "reactions_comment_id_index": {
+          "name": "reactions_comment_id_index",
           "columns": [
             {
               "expression": "comment_id",
@@ -1046,64 +1151,63 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "reactions_comment_id_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {
         "reactions_creator_id_users_id_fk": {
           "name": "reactions_creator_id_users_id_fk",
           "tableFrom": "reactions",
+          "tableTo": "users",
           "columnsFrom": [
             "creator_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         },
         "reactions_info_id_infos_id_fk": {
           "name": "reactions_info_id_infos_id_fk",
           "tableFrom": "reactions",
+          "tableTo": "infos",
           "columnsFrom": [
             "info_id"
           ],
-          "tableTo": "infos",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         },
         "reactions_comment_id_comments_id_fk": {
           "name": "reactions_comment_id_comments_id_fk",
           "tableFrom": "reactions",
+          "tableTo": "comments",
           "columnsFrom": [
             "comment_id"
           ],
-          "tableTo": "comments",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "reactions_creator_id_info_id_comment_id_unique": {
           "name": "reactions_creator_id_info_id_comment_id_unique",
+          "nullsNotDistinct": true,
           "columns": [
             "creator_id",
             "info_id",
             "comment_id"
-          ],
-          "nullsNotDistinct": true
+          ]
         }
       }
     },
@@ -1187,6 +1291,7 @@
       },
       "indexes": {
         "testimonies_user_id_index": {
+          "name": "testimonies_user_id_index",
           "columns": [
             {
               "expression": "user_id",
@@ -1195,13 +1300,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "testimonies_user_id_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "testimonies_course_id_index": {
+          "name": "testimonies_course_id_index",
           "columns": [
             {
               "expression": "course_id",
@@ -1210,39 +1315,38 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "testimonies_course_id_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {
         "testimonies_user_id_users_id_fk": {
           "name": "testimonies_user_id_users_id_fk",
           "tableFrom": "testimonies",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "set null"
+          "onDelete": "set null",
+          "onUpdate": "no action"
         },
         "testimonies_course_id_courses_id_fk": {
           "name": "testimonies_course_id_courses_id_fk",
           "tableFrom": "testimonies",
+          "tableTo": "courses",
           "columnsFrom": [
             "course_id"
           ],
-          "tableTo": "courses",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -1288,28 +1392,28 @@
         "user_courses_user_id_users_id_fk": {
           "name": "user_courses_user_id_users_id_fk",
           "tableFrom": "user_courses",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         },
         "user_courses_course_id_courses_id_fk": {
           "name": "user_courses_course_id_courses_id_fk",
           "tableFrom": "user_courses",
+          "tableTo": "courses",
           "columnsFrom": [
             "course_id"
           ],
-          "tableTo": "courses",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -1352,28 +1456,28 @@
         "user_read_infos_user_id_users_id_fk": {
           "name": "user_read_infos_user_id_users_id_fk",
           "tableFrom": "user_read_infos",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         },
         "user_read_infos_info_id_infos_id_fk": {
           "name": "user_read_infos_info_id_infos_id_fk",
           "tableFrom": "user_read_infos",
+          "tableTo": "infos",
           "columnsFrom": [
             "info_id"
           ],
-          "tableTo": "infos",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -1409,15 +1513,15 @@
         "user_roles_user_id_users_id_fk": {
           "name": "user_roles_user_id_users_id_fk",
           "tableFrom": "user_roles",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -1453,28 +1557,28 @@
         "user_unsubscribe_categories_user_id_users_id_fk": {
           "name": "user_unsubscribe_categories_user_id_users_id_fk",
           "tableFrom": "user_unsubscribe_categories",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         },
         "user_unsubscribe_categories_category_id_categories_id_fk": {
           "name": "user_unsubscribe_categories_category_id_categories_id_fk",
           "tableFrom": "user_unsubscribe_categories",
+          "tableTo": "categories",
           "columnsFrom": [
             "category_id"
           ],
-          "tableTo": "categories",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -1562,6 +1666,7 @@
       },
       "indexes": {
         "users_nim_index": {
+          "name": "users_nim_index",
           "columns": [
             {
               "expression": "nim",
@@ -1570,13 +1675,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "users_nim_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "users_email_index": {
+          "name": "users_email_index",
           "columns": [
             {
               "expression": "email",
@@ -1585,55 +1690,52 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "users_email_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {
         "users_angkatan_angkatan_year_fk": {
           "name": "users_angkatan_angkatan_year_fk",
           "tableFrom": "users",
+          "tableTo": "angkatan",
           "columnsFrom": [
             "angkatan"
           ],
-          "tableTo": "angkatan",
           "columnsTo": [
             "year"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "users_nim_unique": {
           "name": "users_nim_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "nim"
-          ],
-          "nullsNotDistinct": false
+          ]
         },
         "users_email_unique": {
           "name": "users_email_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "email"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     }
   },
   "enums": {},
   "schemas": {},
+  "sequences": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "eb6c9697-d903-4b77-8d8b-95f4d7a57177",
-  "prevId": "c25b194f-80d8-4a33-8275-cabe3c3b8933",
-  "sequences": {}
+    "tables": {}
+  }
 }
