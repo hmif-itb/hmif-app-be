@@ -162,6 +162,22 @@ export async function createReadInfo(
     .then(firstSure);
 }
 
+export async function deleteReadInfo(
+  db: Database,
+  data: { userId: string; infoId: string },
+) {
+  return await db
+    .delete(userReadInfos)
+    .where(
+      and(
+        eq(userReadInfos.userId, data.userId),
+        eq(userReadInfos.infoId, data.infoId),
+      ),
+    )
+    .returning()
+    .then(first);
+}
+
 export async function deleteInfo(db: Database, id: string) {
   return await db.delete(infos).where(eq(infos.id, id)).returning().then(first);
 }

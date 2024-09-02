@@ -18,7 +18,7 @@ export const postReadInfoRoute = createRoute({
     params: CreateReadRequestBodySchema,
   },
   responses: {
-    201: {
+    200: {
       description: 'Created user read info',
     },
     400: {

@@ -96,6 +96,7 @@ export const CreateInfoBodySchema = createInsertSchema(infos)
 
 export const CreateReadRequestBodySchema = z.object({
   infoId: z.string(),
+  unread: z.boolean().optional(),
 });
 
 export const InfoIdParamsSchema = z.object({
