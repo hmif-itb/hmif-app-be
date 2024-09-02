@@ -72,7 +72,7 @@ export const getListAngkatanRoute = createRoute({
   operationId: 'getListAngkatan',
   tags: ['category'],
   method: 'get',
-  path: '/category/angkatan',
+  path: '/angkatan',
   responses: {
     200: {
       content: {
