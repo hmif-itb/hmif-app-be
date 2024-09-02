@@ -1,4 +1,4 @@
-import { and, eq, or, sql } from 'drizzle-orm';
+import { and, asc, eq, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
@@ -150,7 +150,8 @@ async function getCalendarEventOnly(db: Database, search?: string) {
       search
         ? sql`(setweight(to_tsvector('indonesian', ${calendarEvent.title}), 'A') || setweight(to_tsvector('indonesian', ${calendarEvent.description}), 'B')) @@ to_tsquery('indonesian', ${search})`
         : sql``,
-    );
+    )
+    .orderBy(asc(calendarEvent.start));
 }
 async function getCalendarEventWithCoursesJoin(
   db: Database,
@@ -168,9 +169,10 @@ async function getCalendarEventWithCoursesJoin(
     .where(
       search
         ? sql`(setweight(to_tsvector('indonesian', ${calendarEvent.title}), 'A') || setweight(to_tsvector('indonesian', ${calendarEvent.description}), 'B')) @@ to_tsquery('indonesian', ${search})`
-        : sql``,
+        : undefined,
     )
-    .innerJoin(courses, eq(calendarEvent.courseId, courses.id));
+    .innerJoin(courses, eq(calendarEvent.courseId, courses.id))
+    .orderBy(asc(calendarEvent.start));
 
   if (courseCode) {
     results = results.filter((r) => r.courseCode === courseCode);
@@ -260,12 +262,14 @@ export async function getPersonalCalendar(
   // console.log(himpunanCalendarId);
   // console.log(himpunanEvents);
 
-  const result = [...academicEvents, ...himpunanEvents].filter((c) => {
-    const date = new Date(c.start);
-    return (
-      date.getMonth() + 1 === query.month && date.getFullYear() === query.year
-    );
-  });
+  const result = [...academicEvents, ...himpunanEvents]
+    .filter((c) => {
+      const date = new Date(c.start);
+      return (
+        date.getMonth() + 1 === query.month && date.getFullYear() === query.year
+      );
+    })
+    .sort((a, b) => a.start.getTime() - b.start.getTime());
 
   return result;
 }
