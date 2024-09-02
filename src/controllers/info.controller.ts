@@ -22,7 +22,8 @@ export const infoRouter = createAuthRouter();
 
 infoRouter.openapi(postReadInfoRoute, async (c) => {
   const { id } = c.var.user;
-  const { infoId, unread } = c.req.valid('param');
+  const { infoId } = c.req.valid('param');
+  const { unread } = c.req.valid('json');
 
   const data = {
     userId: id,

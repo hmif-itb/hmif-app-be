@@ -15,7 +15,10 @@ export const postReadInfoRoute = createRoute({
   method: 'post',
   path: '/info/{infoId}/read',
   request: {
-    params: CreateReadRequestBodySchema,
+    params: InfoIdParamsSchema,
+    body: {
+      content: { 'application/json': { schema: CreateReadRequestBodySchema } },
+    },
   },
   responses: {
     200: {
