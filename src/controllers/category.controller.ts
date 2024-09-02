@@ -1,7 +1,12 @@
 import { db } from '~/db/drizzle';
-import { getCategoryById, getCategoryList } from '~/repositories/category.repo';
+import {
+  getCategoryById,
+  getCategoryList,
+  getListAngkatan,
+} from '~/repositories/category.repo';
 import {
   getCategoryByIdRoute,
+  getListAngkatanRoute,
   getListCategoryRoute,
 } from '~/routes/category.route';
 import { createAuthRouter } from './router-factory';
@@ -18,4 +23,9 @@ categoryRouter.openapi(getCategoryByIdRoute, async (c) => {
   const category = await getCategoryById(db, categoryId);
   if (!category) return c.json({ error: 'Category not found' }, 404);
   return c.json(category, 200);
+});
+
+categoryRouter.openapi(getListAngkatanRoute, async (c) => {
+  const angkatan = await getListAngkatan(db);
+  return c.json(angkatan, 200);
 });

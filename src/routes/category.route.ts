@@ -1,4 +1,5 @@
 import { createRoute, z } from '@hono/zod-openapi';
+import { ListAngkatanSchema } from '~/types/angkatan.types';
 import {
   CategoryParamSchema,
   CategorySchema,
@@ -63,6 +64,23 @@ export const getCategoryByIdRoute = createRoute({
           schema: ErrorSchema,
         },
       },
+    },
+  },
+});
+
+export const getListAngkatanRoute = createRoute({
+  operationId: 'getListAngkatan',
+  tags: ['category'],
+  method: 'get',
+  path: '/category/angkatan',
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: ListAngkatanSchema,
+        },
+      },
+      description: 'Get list of angkatan',
     },
   },
 });

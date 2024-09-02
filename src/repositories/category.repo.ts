@@ -1,6 +1,6 @@
+import { asc, eq } from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
-import { eq } from 'drizzle-orm';
-import { categories } from '~/db/schema';
+import { angkatan, categories } from '~/db/schema';
 
 /**
  * Check if a category with the given categoryId exists
@@ -51,4 +51,8 @@ export async function getCategoryById(db: Database, id: string) {
   return await db.query.categories.findFirst({
     where: eq(categories.id, id),
   });
+}
+
+export async function getListAngkatan(db: Database) {
+  return await db.select().from(angkatan).orderBy(asc(angkatan.year));
 }
