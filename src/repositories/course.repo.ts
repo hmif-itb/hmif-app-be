@@ -153,11 +153,11 @@ export async function getListCourses(
     ? or(
         ilike(
           courses.name,
-          `%${q.search}%`.replaceAll('%', '\\%').replaceAll('_', '\\_'),
+          `%${q.search.replaceAll('%', '\\%').replaceAll('_', '\\_')}%`,
         ),
         ilike(
           courses.code,
-          `%${q.search}%`.replaceAll('%', '\\%').replaceAll('_', '\\_'),
+          `%${q.search.replaceAll('%', '\\%').replaceAll('_', '\\_')}%`,
         ),
       )
     : undefined;
