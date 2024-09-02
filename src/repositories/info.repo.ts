@@ -436,6 +436,8 @@ export async function notifyNewInfo(
       .then((res) => res.map((r) => r.userId));
   }
 
+  receivers = receivers.filter((receiver) => receiver !== info.creatorId);
+
   const subscriptions = await getPushSubscriptionsByUserIds(db, receivers);
 
   if (subscriptions.length === 0) {
