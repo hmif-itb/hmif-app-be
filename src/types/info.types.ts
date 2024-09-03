@@ -33,13 +33,18 @@ export const InfoCourseSchema = createSelectSchema(infoCourses).extend({
 export const InfoSchema = createSelectSchema(infos, {
   createdAt: z.union([z.string(), z.date()]),
 })
+  .omit({
+    isForAngkatan: true,
+  })
   .extend({
     infoMedias: z.array(InfoMediaSchema).optional(),
     infoCategories: z.array(InfoCategorySchema).optional(),
     infoCourses: z.array(InfoCourseSchema).optional(),
     infoAngkatan: z.array(InfoAngkatanSchema).optional(),
-    reactions: ReactionResponseSchema.optional(),
+    comments: z.number(),
+    reactions: ReactionResponseSchema,
     creator: JWTPayloadSchema,
+    isRead: z.boolean().optional(),
   })
   .openapi('Info');
 
@@ -53,6 +58,7 @@ export const CreateInfoBodySchema = createInsertSchema(infos)
     id: true,
     creatorId: true,
     createdAt: true,
+    isForAngkatan: true,
   })
   .extend({
     mediaUrls: z
@@ -93,7 +99,7 @@ export const CreateInfoBodySchema = createInsertSchema(infos)
   });
 
 export const CreateReadRequestBodySchema = z.object({
-  infoId: z.string(),
+  unread: z.boolean().optional(),
 });
 
 export const InfoIdParamsSchema = z.object({

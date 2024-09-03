@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2';
-import { InferSelectModel, relations } from 'drizzle-orm';
+import { InferSelectModel, relations, sql } from 'drizzle-orm';
 import {
   boolean,
   index,
@@ -113,17 +113,30 @@ export const googleSubscriptionsRelation = relations(
   }),
 );
 
-export const infos = pgTable('infos', {
-  id: text('id').primaryKey().$defaultFn(createId),
-  creatorId: text('creator_id')
-    .references(() => users.id, { onDelete: 'cascade' })
-    .notNull(),
-  title: text('title').notNull(),
-  content: text('content').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-});
+export const infos = pgTable(
+  'infos',
+  {
+    id: text('id').primaryKey().$defaultFn(createId),
+    creatorId: text('creator_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    title: text('title').notNull(),
+    content: text('content').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    isForAngkatan: boolean('is_for_angkatan').notNull(),
+  },
+  (t) => ({
+    contentSearchIdx: index('content_search_idx').using(
+      'gin',
+      sql`(
+        setweight(to_tsvector('indonesian', ${t.title}), 'A') ||
+        setweight(to_tsvector('indonesian', ${t.content}), 'B')
+      )`,
+    ),
+  }),
+);
 
 export type Info = InferSelectModel<typeof infos>;
 
@@ -162,6 +175,7 @@ export const mediasRelation = relations(medias, ({ one, many }) => ({
     references: [users.id],
   }),
   infoMedias: many(infoMedias),
+  competitions: many(competitionMedias),
 }));
 
 export const userReadInfos = pgTable(
@@ -202,6 +216,7 @@ export const infoMedias = pgTable(
     mediaId: text('media_id')
       .references(() => medias.id, { onDelete: 'cascade' })
       .notNull(),
+    order: integer('order').notNull(),
   },
   (t) => ({ pk: primaryKey({ columns: [t.infoId, t.mediaId] }) }),
 );
@@ -311,9 +326,17 @@ export const courses = pgTable(
     name: text('name').notNull(),
     credits: integer('sks'),
     dingdongUrl: text('dingdong_url'),
+    isActive: boolean('is_active').notNull().default(true),
   },
   (t) => ({
     codeIdx: index().on(t.code),
+    searchIdx: index('search_idx').using(
+      'gin',
+      sql`(
+        setweight(to_tsvector('indonesian', ${t.name}), 'A') ||
+        setweight(to_tsvector('indonesian', ${t.code}), 'B')
+      )`,
+    ),
   }),
 );
 
@@ -520,30 +543,50 @@ export const calendarGroup = pgTable('calendar_group', {
   id: text('id').primaryKey().$defaultFn(createId),
   name: text('name').notNull(),
   category: text('category', { enum: ['akademik', 'himpunan'] }).notNull(),
+  code: text('code'),
   googleCalendarUrl: text('google_calendar_url'),
 });
+
+export type CalendarGroup = InferSelectModel<typeof calendarGroup>;
 
 export const calendarGroupRelation = relations(calendarGroup, ({ many }) => ({
   calendarEvent: many(calendarEvent),
 }));
 
-export const calendarEvent = pgTable('calendar_event', {
-  id: text('id').primaryKey().$defaultFn(createId),
-  calendarGroupId: text('calendar_group_id')
-    .notNull()
-    .references(() => calendarGroup.id, { onDelete: 'cascade' }),
-  courseId: text('courses_id').references(() => courses.id, {
-    onDelete: 'cascade',
+export const calendarEvent = pgTable(
+  'calendar_event',
+  {
+    id: text('id').primaryKey().$defaultFn(createId),
+    calendarGroupId: text('calendar_group_id')
+      .notNull()
+      .references(() => calendarGroup.id, { onDelete: 'cascade' }),
+    courseId: text('courses_id').references(() => courses.id, {
+      onDelete: 'cascade',
+    }),
+    title: text('title').notNull(),
+    description: text('description').notNull(),
+    category: text('category').notNull(),
+    academicYear: integer('academic_year'),
+    academicSemesterCode: text('academic_semester_code', {
+      enum: ['Ganjil', 'Genap'],
+    }),
+    start: timestamp('start', { withTimezone: true }).notNull(),
+    end: timestamp('end', { withTimezone: true }).notNull(),
+    googleCalendarUrl: text('google_calendar_url').notNull(),
+    googleCalendarId: text('google_calendar_id').notNull(),
+  },
+  (t) => ({
+    titleSearchIdx: index('title_search_idx').using(
+      'gin',
+      sql`(
+        setweight(to_tsvector('indonesian', ${t.title}), 'A') ||
+        setweight(to_tsvector('indonesian', ${t.description}), 'B')
+      )`,
+    ),
   }),
-  title: text('title').notNull(),
-  description: text('description').notNull(),
-  category: text('category').notNull(),
-  academicYear: integer('academic_year'),
-  start: timestamp('start', { withTimezone: true }).notNull(),
-  end: timestamp('end', { withTimezone: true }).notNull(),
-  googleCalendarUrl: text('google_calendar_url').notNull(),
-  googleCalendarId: text('google_calendar_id').notNull(),
-});
+);
+
+export type CalendarEvent = InferSelectModel<typeof calendarEvent>;
 
 export const calendarEventRelations = relations(calendarEvent, ({ one }) => ({
   calendarGroup: one(calendarGroup, {
@@ -562,11 +605,80 @@ export const userRoles = pgTable(
     userId: text('user_id')
       .references(() => users.id, { onDelete: 'cascade' })
       .notNull(),
-    role: text('role', { enum: ['akademik'] }).notNull(),
+    role: text('role', { enum: ['akademik', 'cnc', 'ring1'] }).notNull(),
   },
   (t) => ({ pk: primaryKey({ columns: [t.userId, t.role] }) }),
 );
 
+export type UserRolesEnum = InferSelectModel<typeof userRoles>['role'];
+
 export const userRolesRelation = relations(userRoles, ({ one }) => ({
   user: one(users, { fields: [userRoles.userId], references: [users.id] }),
 }));
+
+export const competitionCategories = [
+  'Competitive Programming',
+  'Capture The Flag',
+  'Data Science / Data Analytics',
+  'UI/UX',
+  'Game Development',
+  'Business IT Case',
+  'Innovation',
+  'Web Development',
+] as const;
+
+export type CompetitionCategory = (typeof competitionCategories)[number];
+
+export const competitions = pgTable('competitions', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  name: text('name').notNull(),
+  organizer: text('organizer').notNull(),
+  registrationStart: timestamp('registration_start_date', {
+    withTimezone: true,
+  }),
+  registrationDeadline: timestamp('registration_deadline_date', {
+    withTimezone: true,
+  }),
+  price: text('price'),
+  sourceUrl: text('source_url').notNull(),
+  registrationUrl: text('registration_url').notNull(),
+  categories: json('categories')
+    .$type<CompetitionCategory[]>()
+    .default([])
+    .notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export const competitionsRelation = relations(competitions, ({ many }) => ({
+  medias: many(competitionMedias),
+}));
+
+export const competitionMedias = pgTable(
+  'competition_medias',
+  {
+    competitionId: text('competition_id')
+      .references(() => competitions.id, { onDelete: 'cascade' })
+      .notNull(),
+    mediaId: text('media_id')
+      .references(() => medias.id, { onDelete: 'cascade' })
+      .notNull(),
+    order: integer('order').notNull(),
+  },
+  (t) => ({ pk: primaryKey({ columns: [t.competitionId, t.mediaId] }) }),
+);
+
+export const competitionMediasRelation = relations(
+  competitionMedias,
+  ({ one }) => ({
+    competition: one(competitions, {
+      fields: [competitionMedias.competitionId],
+      references: [competitions.id],
+    }),
+    media: one(medias, {
+      fields: [competitionMedias.mediaId],
+      references: [medias.id],
+    }),
+  }),
+);

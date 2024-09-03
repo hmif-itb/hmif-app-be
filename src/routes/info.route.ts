@@ -15,10 +15,13 @@ export const postReadInfoRoute = createRoute({
   method: 'post',
   path: '/info/{infoId}/read',
   request: {
-    params: CreateReadRequestBodySchema,
+    params: InfoIdParamsSchema,
+    body: {
+      content: { 'application/json': { schema: CreateReadRequestBodySchema } },
+    },
   },
   responses: {
-    201: {
+    200: {
       description: 'Created user read info',
     },
     400: {
@@ -53,7 +56,11 @@ export const createInfoRoute = createRoute({
       description: 'Info created',
       content: {
         'application/json': {
-          schema: InfoSchema.omit({ creator: true }),
+          schema: InfoSchema.omit({
+            creator: true,
+            comments: true,
+            reactions: true,
+          }),
         },
       },
     },

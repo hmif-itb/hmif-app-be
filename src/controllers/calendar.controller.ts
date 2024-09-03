@@ -1,28 +1,32 @@
 import { GaxiosError } from 'gaxios';
 import { calendar_v3, google } from 'googleapis';
-import { env } from '~/configs/env.config';
+import { PostgresError } from 'postgres';
+import { db } from '~/db/drizzle';
+import { calendarEvent, CalendarGroup } from '~/db/schema';
 import { googleAuth } from '~/lib/googleapi';
-import {
-  deleteCalendarEventRoute,
-  getCalendarEventByIdRoute,
-  getCalendarEventRoute,
-  getCalendarGroupRoute,
-  postCalendarEventRoute,
-  updateCalendarEventRoute,
-} from '~/routes/calendar.route';
-import { createAuthRouter } from './router-factory';
 import {
   createCalendarEvent,
   deleteCalendarEvent,
   getCalendarEvent,
   getCalendarEventById,
   getCalendarGroup,
-  getCalendarGroupById,
+  getCalendarGroupByCategory,
+  getCalendarGroupByCourseId,
+  getPersonalCalendar,
   updateCalendarEvent,
 } from '~/repositories/calendar.repo';
-import { db } from '~/db/drizzle';
-import { calendarEvent } from '~/db/schema';
-import { PostgresError } from 'postgres';
+import { getCurrentSemesterCodeAndYear } from '~/repositories/course.repo';
+import { getUserRoles } from '~/repositories/user-role.repo';
+import {
+  deleteCalendarEventRoute,
+  getCalendarEventByIdRoute,
+  getCalendarEventRoute,
+  getCalendarGroupRoute,
+  getPersonalCalendarRoute,
+  postCalendarEventRoute,
+  updateCalendarEventRoute,
+} from '~/routes/calendar.route';
+import { createAuthRouter } from './router-factory';
 
 export const calendarRouter = createAuthRouter();
 
@@ -30,19 +34,31 @@ const START_OF_6_MONTHS_AGO = new Date();
 START_OF_6_MONTHS_AGO.setMonth(START_OF_6_MONTHS_AGO.getMonth() - 6);
 
 calendarRouter.openapi(postCalendarEventRoute, async (c) => {
-  const {
-    title,
-    description,
-    start,
-    end,
-    calendarGroupId,
-    category,
-    courseId,
-    academicYear,
-  } = c.req.valid('json');
+  const roles = await getUserRoles(db, c.var.user.id);
+  const { title, description, start, end, category, courseId } =
+    c.req.valid('json');
+
+  let calendarGroup: CalendarGroup | undefined;
+
+  if (category === 'akademik') {
+    if (!roles.includes('akademik')) {
+      return c.json(
+        { error: 'You are not authorized to create academic events' },
+        403,
+      );
+    }
+    if (!courseId) {
+      return c.json({ error: 'Course ID is required' }, 400);
+    }
+    calendarGroup = await getCalendarGroupByCourseId(db, courseId);
+  } else {
+    if (!roles.includes('ring1')) {
+      return c.json({ error: 'You are not authorized to create events' }, 403);
+    }
+    calendarGroup = await getCalendarGroupByCategory(db, category);
+  }
 
   // 1. Check if calendar group exists
-  const calendarGroup = await getCalendarGroupById(db, calendarGroupId);
   if (!calendarGroup?.googleCalendarUrl) {
     return c.json({ error: 'Calendar group not found' }, 404);
   }
@@ -81,13 +97,17 @@ calendarRouter.openapi(postCalendarEventRoute, async (c) => {
   }
 
   // 3. Insert event to DB
+  const nowAcademicContext = getCurrentSemesterCodeAndYear();
   const insertData: typeof calendarEvent.$inferInsert = {
-    calendarGroupId,
+    calendarGroupId: calendarGroup.id,
     courseId,
     title,
     description: description ?? '',
     category: category ?? '',
-    academicYear,
+    academicYear: courseId ? nowAcademicContext.semesterYearTaken : null,
+    academicSemesterCode: courseId
+      ? nowAcademicContext.semesterCodeTaken
+      : null,
     start,
     end,
     googleCalendarUrl: eventGCal.htmlLink,
@@ -144,6 +164,20 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
     return c.json({ error: 'Event not found' }, 404);
   }
 
+  const roles = await getUserRoles(db, c.var.user.id);
+  if (eventDB.category === 'akademik') {
+    if (!roles.includes('akademik')) {
+      return c.json(
+        { error: 'You are not authorized to update academic events' },
+        403,
+      );
+    }
+  } else {
+    if (!roles.includes('ring1')) {
+      return c.json({ error: 'You are not authorized to update events' }, 403);
+    }
+  }
+
   if (eventDB.calendarGroup.googleCalendarUrl === null) {
     // Buat type check aja kalo calendar group url exists
     return c.json(
@@ -186,7 +220,7 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
   try {
     await google.calendar('v3').events.update({
       auth: googleAuth,
-      calendarId: env.GOOGLE_CALENDAR_ID,
+      calendarId: eventDB.calendarGroup.googleCalendarUrl,
       eventId: eventDB.googleCalendarId,
       requestBody: event,
     });
@@ -216,6 +250,23 @@ calendarRouter.openapi(deleteCalendarEventRoute, async (c) => {
       return c.json({ error: 'Event not found' }, 404);
     }
 
+    const roles = await getUserRoles(db, c.var.user.id);
+    if (eventDB.category === 'akademik') {
+      if (!roles.includes('akademik')) {
+        return c.json(
+          { error: 'You are not authorized to delete academic events' },
+          403,
+        );
+      }
+    } else {
+      if (!roles.includes('ring1')) {
+        return c.json(
+          { error: 'You are not authorized to delete events' },
+          403,
+        );
+      }
+    }
+
     await google.calendar('v3').events.delete({
       auth: googleAuth,
       calendarId: eventDB?.calendarGroup.googleCalendarUrl,
@@ -237,4 +288,13 @@ calendarRouter.openapi(deleteCalendarEventRoute, async (c) => {
 calendarRouter.openapi(getCalendarGroupRoute, async (c) => {
   const calendarGroups = await getCalendarGroup(db);
   return c.json(calendarGroups, 200);
+});
+
+calendarRouter.openapi(getPersonalCalendarRoute, async (c) => {
+  const events = await getPersonalCalendar(
+    db,
+    c.var.user,
+    c.req.valid('query'),
+  );
+  return c.json(events, 200);
 });

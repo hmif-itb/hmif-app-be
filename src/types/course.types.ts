@@ -38,6 +38,9 @@ export const ListCourseParamsSchema = z.object({
   credits: z.coerce.number().int().optional().openapi({
     example: 3,
   }),
+  search: z.string().optional().openapi({
+    example: 'statistik',
+  }),
 });
 
 export const CourseIdRequestBodySchema = z.object({

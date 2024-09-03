@@ -1,14 +1,27 @@
-import { eq } from 'drizzle-orm';
+import { and, asc, eq, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
-import { calendarEvent, courses } from '~/db/schema';
 import {
-  GetCalendarEventParamsSchema,
-  UpdateCalendarEventBodySchema,
+  calendarEvent,
+  CalendarGroup,
+  calendarGroup,
+  courses,
+} from '~/db/schema';
+import {
   CalendarEvent,
   CalendarEventIdParamsSchema,
+  GetCalendarEventParamsSchema,
+  PersonalCalendarParamSchema,
+  UpdateCalendarEventBodySchema,
 } from '~/types/calendar.types';
+import { JWTPayloadSchema } from '~/types/login.types';
+import {
+  getCourseById,
+  getCurrentSemesterCodeAndYear,
+  getUserCourse,
+} from './course.repo';
+import { getUserAcademic } from './user-profile.repo';
 
 export async function getCalendarEvent(
   db: Database,
@@ -16,19 +29,20 @@ export async function getCalendarEvent(
 ) {
   const { search, category, courseCode, year, major } = q;
   const isCoursesRequired = courseCode !== undefined || major !== undefined;
+  const searchPhrase = search
+    ? search
+        .trim()
+        .split(/s+/)
+        .map((term) => `${term}:*`)
+        .join(' & ')
+    : undefined;
   let calendarEvents = isCoursesRequired
-    ? await getCalendarEventWithCoursesJoin(db, courseCode, major)
-    : await getCalendarEventOnly(db);
+    ? await getCalendarEventWithCoursesJoin(db, courseCode, major, searchPhrase)
+    : await getCalendarEventOnly(db, searchPhrase);
 
   // courseCode and major filter are applied in the helper function
   // both helper functions return only list of CalendarEvents
   // see helper functions at the bottom of this code
-
-  if (search) {
-    calendarEvents = calendarEvents.filter((event) =>
-      event.title.toLowerCase().includes(search.toLowerCase()),
-    );
-  }
 
   if (category) {
     calendarEvents = calendarEvents.filter((event) =>
@@ -67,6 +81,44 @@ export async function getCalendarGroupById(
   return calendarGroup;
 }
 
+export function getCalendarGroupByCategory(
+  db: Database,
+  category: CalendarGroup['category'],
+  code?: string,
+) {
+  return db.query.calendarGroup.findFirst({
+    where: and(
+      eq(calendarGroup.category, category),
+      code ? eq(calendarGroup.code, code) : undefined,
+    ),
+  });
+}
+
+export async function getCalendarGroupByCourseId(
+  db: Database,
+  courseId: string,
+) {
+  const current = getCurrentSemesterCodeAndYear();
+  const course = await getCourseById(db, courseId);
+  if (!course) {
+    return;
+  }
+
+  // must be if2021 or sti2021 based code or ifelective or stielective
+  let code = course.major.toLowerCase();
+
+  if (course.type === 'Mandatory' && course.semester !== null) {
+    // 1-4
+    const courseYear = Math.floor((course.semester - 1) / 2);
+    const year = current.semesterYearTaken;
+    code += (year - courseYear).toString();
+  } else {
+    code += 'elective';
+  }
+
+  return await getCalendarGroupByCategory(db, 'akademik', code);
+}
+
 export async function updateCalendarEvent(
   db: Database,
   data: z.infer<typeof UpdateCalendarEventBodySchema>,
@@ -90,13 +142,22 @@ export async function deleteCalendarEvent(db: Database, eventId: string) {
   return calendarEventId;
 }
 
-async function getCalendarEventOnly(db: Database) {
-  return await db.select().from(calendarEvent);
+async function getCalendarEventOnly(db: Database, search?: string) {
+  return await db
+    .select()
+    .from(calendarEvent)
+    .where(
+      search
+        ? sql`(setweight(to_tsvector('indonesian', ${calendarEvent.title}), 'A') || setweight(to_tsvector('indonesian', ${calendarEvent.description}), 'B')) @@ to_tsquery('indonesian', ${search})`
+        : sql``,
+    )
+    .orderBy(asc(calendarEvent.start));
 }
 async function getCalendarEventWithCoursesJoin(
   db: Database,
   courseCode: string | undefined,
   major: 'IF' | 'STI' | 'OTHER' | undefined,
+  search?: string,
 ) {
   let results = await db
     .select({
@@ -105,7 +166,13 @@ async function getCalendarEventWithCoursesJoin(
       courseMajor: courses.major,
     })
     .from(calendarEvent)
-    .innerJoin(courses, eq(calendarEvent.courseId, courses.id));
+    .where(
+      search
+        ? sql`(setweight(to_tsvector('indonesian', ${calendarEvent.title}), 'A') || setweight(to_tsvector('indonesian', ${calendarEvent.description}), 'B')) @@ to_tsquery('indonesian', ${search})`
+        : undefined,
+    )
+    .innerJoin(courses, eq(calendarEvent.courseId, courses.id))
+    .orderBy(asc(calendarEvent.start));
 
   if (courseCode) {
     results = results.filter((r) => r.courseCode === courseCode);
@@ -137,4 +204,85 @@ export async function createCalendarEvent(
 export async function getCalendarGroup(db: Database) {
   const calendarGroup = await db.query.calendarGroup.findMany();
   return calendarGroup;
+}
+
+export async function getPersonalCalendar(
+  db: Database,
+  user: z.infer<typeof JWTPayloadSchema>,
+  query: z.infer<typeof PersonalCalendarParamSchema>,
+) {
+  const userAcademicContext = await getUserAcademic(db, user);
+  const userCourseIds = (await getUserCourse(db, user.id, true)).map(
+    (c) => c.courseId,
+  );
+
+  const academicEvents =
+    userCourseIds.length > 0
+      ? await db // Get academic events based on user context
+          .select()
+          .from(calendarEvent)
+          .where(
+            and(
+              userCourseIds.length > 1
+                ? or(...userCourseIds.map((c) => eq(calendarEvent.courseId, c)))
+                : eq(calendarEvent.courseId, userCourseIds[0]),
+              eq(
+                calendarEvent.academicYear,
+                userAcademicContext.semesterYearTaken,
+              ),
+            ),
+          )
+      : [];
+
+  const himpunanCalendarId = // Dynamic query to get himpunan calendar group id
+    (
+      await db
+        .select()
+        .from(calendarGroup)
+        .where(eq(calendarGroup.category, 'himpunan'))
+    ).map((c) => c.id);
+
+  const himpunanEvents =
+    himpunanCalendarId.length > 0
+      ? await db // Get himpunan events
+          .select()
+          .from(calendarEvent)
+          .where(
+            himpunanCalendarId.length > 0
+              ? or(
+                  ...himpunanCalendarId.map((id) =>
+                    eq(calendarEvent.calendarGroupId, id),
+                  ),
+                )
+              : eq(calendarEvent.calendarGroupId, himpunanCalendarId[0]),
+          )
+      : [];
+
+  // console.log(academicEvents);
+  // console.log(himpunanCalendarId);
+  // console.log(himpunanEvents);
+
+  const result = [...academicEvents, ...himpunanEvents]
+    .filter((c) => {
+      const date = new Date(c.start);
+      return (
+        date.getMonth() + 1 === query.month && date.getFullYear() === query.year
+      );
+    })
+    .sort((a, b) => a.start.getTime() - b.start.getTime());
+
+  return result;
+}
+
+export async function getCalendarEventsByTime(db: Database, date: Date) {
+  const inMinute = new Date(date);
+  inMinute.setSeconds(0);
+  inMinute.setMilliseconds(0);
+
+  const events = await db
+    .select()
+    .from(calendarEvent)
+    .where(eq(calendarEvent.start, inMinute));
+
+  return events;
 }

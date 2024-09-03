@@ -1,5 +1,6 @@
 import { db } from '~/db/drizzle';
 import { sendNotificationToAll } from '~/lib/push-manager';
+import { roleMiddleware } from '~/middlewares/role.middleware';
 import {
   createOrUpdatePushSubscription,
   getAllPushSubscriptions,
@@ -25,6 +26,7 @@ pushRouter.openapi(registerPushRoute, async (c) => {
   return c.json({}, 201);
 });
 
+pushRouter.post(pushBroadcastRoute.getRoutingPath(), roleMiddleware(['ring1']));
 pushRouter.openapi(pushBroadcastRoute, async (c) => {
   const subscriptions = await getAllPushSubscriptions(db);
   void sendNotificationToAll(subscriptions, c.req.valid('json')).then(

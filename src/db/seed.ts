@@ -5,7 +5,7 @@ import { createInsertSchema } from 'drizzle-zod';
 import fs from 'fs';
 import postgres from 'postgres';
 import { z } from 'zod';
-import { angkatan, courses, testimonies, users } from './schema';
+import { angkatan, calendarGroup, courses, testimonies, users } from './schema';
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is required');
@@ -147,8 +147,16 @@ export async function runAngkatanSeed() {
     });
 }
 
-export async function runIFTestimoniSeed() {
-  const filePath = 'src/db/seed/testimoni-if.csv';
+export async function runTestimoniSeed(file: string) {
+  const filePath = 'src/db/seed/' + file;
+  let major = '';
+
+  if (file === 'testimoni-if.csv') {
+    major = 'IF';
+  } else if (file === 'testimoni-sti.csv') {
+    major = 'STI';
+  }
+
   const data: Array<typeof testimonies.$inferInsert> = [];
   const coursesList = await db
     .select({ id: courses.id, code: courses.code })
@@ -164,6 +172,10 @@ export async function runIFTestimoniSeed() {
     .pipe(parse({ delimiter: ',', from_line: 2 }))
     .on('data', (row) => {
       const currentCourseId = idCourseMap.get(row[1]);
+      if (!currentCourseId) {
+        console.log('Course not found', row[1]);
+        return;
+      }
       const testimonies = dataSchema.parse({
         userId: row[0] || null,
         courseId: currentCourseId ?? null,
@@ -183,25 +195,60 @@ export async function runIFTestimoniSeed() {
       data.push(testimonies);
     })
     .on('end', () => {
-      console.log('📖 Finished reading IF testimonies CSV file');
-      console.log('💾 Started inserting IF testimonies into database...');
+      console.log(`📖 Finished reading ${major} testimonies CSV file`);
+      console.log(`💾 Started inserting ${major} testimonies into database...`);
       db.insert(testimonies)
         .values(data)
         .onConflictDoNothing()
         .then(async () => {
           await client.end();
-          console.log('✅ Inserted IF testimonies into database!');
+          console.log(`✅ Inserted ${major} testimonies into database!`);
         })
         .catch((err) => {
           console.log(
-            '❌ Something went wrong while inserting IF testimonies!',
+            `❌ Something went wrong while inserting ${major} testimonies!`,
           );
           console.log(err);
         });
     })
     .on('error', (err) => {
-      console.log('❌ Something went wrong while inserting IF testimonies!');
+      console.log(
+        `❌ Something went wrong while inserting ${major} testimonies!`,
+      );
       console.log(err);
+    });
+}
+
+export async function runCalendarSeed() {
+  const filePath = 'src/db/seed/calendar.csv';
+  const data: Array<typeof calendarGroup.$inferInsert> = [];
+
+  const dataSchema = createInsertSchema(calendarGroup);
+
+  fs.createReadStream(filePath)
+    .pipe(parse({ delimiter: ',', from_line: 2 }))
+    .on('data', (row) => {
+      const calendarGroup = dataSchema.parse({
+        name: row[0],
+        category: row[1],
+        googleCalendarUrl: row[2],
+        code: row[3],
+      });
+      data.push(calendarGroup);
+    })
+    .on('end', () => {
+      console.log('📖 Finished reading calendar CSV file');
+      console.log('💾 Started inserting calendar into database...');
+      db.insert(calendarGroup)
+        .values(data)
+        .onConflictDoNothing()
+        .then(async () => {
+          console.log('✅ Inserted calendar into database!');
+        })
+        .catch((err) => {
+          console.log('❌ Something went wrong while inserting calendar!');
+          console.log(err);
+        });
     });
 }
 
@@ -211,9 +258,13 @@ async function runAllSeeds() {
     await runUserSeed();
     await runCourses();
     await new Promise((resolve) => setTimeout(resolve, 6000));
-    await runIFTestimoniSeed();
+    await runTestimoniSeed('testimoni-if.csv');
+    await runTestimoniSeed('testimoni-sti.csv');
+    await runCalendarSeed();
   } catch (error) {
     console.log(error);
+  } finally {
+    await client.end();
   }
 }
 
