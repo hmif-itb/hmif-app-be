@@ -326,6 +326,7 @@ export const courses = pgTable(
     name: text('name').notNull(),
     credits: integer('sks'),
     dingdongUrl: text('dingdong_url'),
+    isActive: boolean('is_active').notNull().default(true),
   },
   (t) => ({
     codeIdx: index().on(t.code),
