@@ -162,7 +162,17 @@ export async function getListCourses(
       )
     : undefined;
 
-  const where = and(curriculumYearQ, majorQ, semesterQ, typeQ, sksQ, searchQ);
+  const onlyActive = eq(courses.isActive, true); // Only fetch active courses, disallow fetch for unavailable (kur2019)
+
+  const where = and(
+    curriculumYearQ,
+    majorQ,
+    semesterQ,
+    typeQ,
+    sksQ,
+    searchQ,
+    onlyActive,
+  );
   return await db.query.courses.findMany({
     where,
   });
