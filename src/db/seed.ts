@@ -5,7 +5,7 @@ import { createInsertSchema } from 'drizzle-zod';
 import fs from 'fs';
 import postgres from 'postgres';
 import { z } from 'zod';
-import { angkatan, courses, testimonies, users } from './schema';
+import { angkatan, calendarGroup, courses, testimonies, users } from './schema';
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is required');
@@ -172,6 +172,10 @@ export async function runTestimoniSeed(file: string) {
     .pipe(parse({ delimiter: ',', from_line: 2 }))
     .on('data', (row) => {
       const currentCourseId = idCourseMap.get(row[1]);
+      if (!currentCourseId) {
+        console.log('Course not found', row[1]);
+        return;
+      }
       const testimonies = dataSchema.parse({
         userId: row[0] || null,
         courseId: currentCourseId ?? null,
@@ -215,6 +219,39 @@ export async function runTestimoniSeed(file: string) {
     });
 }
 
+export async function runCalendarSeed() {
+  const filePath = 'src/db/seed/calendar.csv';
+  const data: Array<typeof calendarGroup.$inferInsert> = [];
+
+  const dataSchema = createInsertSchema(calendarGroup);
+
+  fs.createReadStream(filePath)
+    .pipe(parse({ delimiter: ',', from_line: 2 }))
+    .on('data', (row) => {
+      const calendarGroup = dataSchema.parse({
+        name: row[0],
+        category: row[1],
+        googleCalendarUrl: row[2],
+        code: row[3],
+      });
+      data.push(calendarGroup);
+    })
+    .on('end', () => {
+      console.log('📖 Finished reading calendar CSV file');
+      console.log('💾 Started inserting calendar into database...');
+      db.insert(calendarGroup)
+        .values(data)
+        .onConflictDoNothing()
+        .then(async () => {
+          console.log('✅ Inserted calendar into database!');
+        })
+        .catch((err) => {
+          console.log('❌ Something went wrong while inserting calendar!');
+          console.log(err);
+        });
+    });
+}
+
 async function runAllSeeds() {
   try {
     await runAngkatanSeed();
@@ -223,8 +260,11 @@ async function runAllSeeds() {
     await new Promise((resolve) => setTimeout(resolve, 6000));
     await runTestimoniSeed('testimoni-if.csv');
     await runTestimoniSeed('testimoni-sti.csv');
+    await runCalendarSeed();
   } catch (error) {
     console.log(error);
+  } finally {
+    await client.end();
   }
 }
 

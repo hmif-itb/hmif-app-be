@@ -7,3 +7,4 @@ src/db/seed/database.csv
 src/db/seed/database-all.csv
 src/db/seed/testimoni-if.csv
 src/db/seed/testimoni-sti.csv
+src/db/seed/calendar.csv
