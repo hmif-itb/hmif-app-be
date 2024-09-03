@@ -63,10 +63,10 @@ export const UpdateCompetitionBodySchema = createInsertSchema(competitions, {
   organizer: z
     .string()
     .min(3, { message: 'Organizer must be at least 3 characters' }),
-  sourceUrl: z.string().url({ message: 'Invalid URL' }).openapi({
+  sourceUrl: z.string().openapi({
     example: 'https://example.com',
   }),
-  registrationUrl: z.string().url({ message: 'Invalid URL' }).openapi({
+  registrationUrl: z.string().openapi({
     example: 'https://example.com',
   }),
   price: z.string().min(3, { message: 'Price must be at least 3 characters' }),
