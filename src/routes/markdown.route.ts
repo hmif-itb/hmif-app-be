@@ -9,7 +9,14 @@ export const creditsMarkdownRoute = createRoute({
   responses: {
     200: {
       description: 'Credits markdown',
-      schema: MarkdownSchema,
+      content: {
+        'application/json': {
+          schema: MarkdownSchema,
+        },
+      },
+    },
+    404: {
+      description: 'Not found',
     },
   },
 });
