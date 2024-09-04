@@ -1,4 +1,4 @@
-import { and, eq, ilike, inArray, isNull, or, sql } from 'drizzle-orm';
+import { and, asc, eq, ilike, inArray, isNull, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
@@ -97,13 +97,22 @@ export async function getUserCourse(
     current ? eq(userCourses.semesterYearTaken, semesterYearTaken) : undefined,
   );
 
-  const userCourse = await db.query.userCourses.findMany({
-    where,
-    with: {
-      course: true,
+  const userCourse = await db
+    .select()
+    .from(userCourses)
+    .innerJoin(courses, eq(userCourses.courseId, courses.id))
+    .where(where)
+    .orderBy(
+      asc(userCourses.semesterYearTaken),
+      asc(userCourses.semesterCodeTaken),
+      asc(courses.code),
+    );
+  return userCourse.map((uc) => ({
+    ...uc.user_courses,
+    course: {
+      ...uc.courses,
     },
-  });
-  return userCourse;
+  }));
 }
 
 export async function deleteUserCourse(
@@ -175,6 +184,7 @@ export async function getListCourses(
   );
   return await db.query.courses.findMany({
     where,
+    orderBy: (c, { asc }) => [asc(c.code)],
   });
 }
 

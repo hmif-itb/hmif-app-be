@@ -263,8 +263,6 @@ async function runAllSeeds() {
     await runCalendarSeed();
   } catch (error) {
     console.log(error);
-  } finally {
-    await client.end();
   }
 }
 

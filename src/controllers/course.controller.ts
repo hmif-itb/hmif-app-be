@@ -1,18 +1,7 @@
-import {
-  createCourseRoute,
-  deleteCourseRoute,
-  listCourseRoute,
-  getCourseByIdRoute,
-  updateCourseRoute,
-  createUserCourseRoute,
-  getUserCourseRoute,
-  getCurrentUserCourseRoute,
-  deleteUserCourseRoute,
-  createOrUpdateBatchUserCourseRoute,
-} from '~/routes/course.route';
 import { PostgresError } from 'postgres';
 import { db } from '~/db/drizzle';
 import {
+  batchCreateOrUpdateUserCourse,
   createCourse,
   createUserCourse,
   deleteCourse,
@@ -20,9 +9,20 @@ import {
   getCourseById,
   getListCourses,
   getUserCourse,
-  batchCreateOrUpdateUserCourse,
   updateCourse,
 } from '~/repositories/course.repo';
+import {
+  createCourseRoute,
+  createOrUpdateBatchUserCourseRoute,
+  createUserCourseRoute,
+  deleteCourseRoute,
+  deleteUserCourseRoute,
+  getCourseByIdRoute,
+  getCurrentUserCourseRoute,
+  getUserCourseRoute,
+  listCourseRoute,
+  updateCourseRoute,
+} from '~/routes/course.route';
 import { CourseSchema } from '~/types/course.types';
 import { createAuthRouter } from './router-factory';
 
@@ -54,8 +54,15 @@ courseRouter.openapi(getUserCourseRoute, async (c) => {
 
 courseRouter.openapi(getCurrentUserCourseRoute, async (c) => {
   const userId = c.var.user.id;
-  const userCourses = await getUserCourse(db, userId, true);
-  return c.json(userCourses, 200);
+  try {
+    const userCourses = await getUserCourse(db, userId, true);
+    return c.json(userCourses, 200);
+  } catch (err) {
+    if (err instanceof Error) {
+      return c.json({ error: err.message }, 400);
+    }
+    return c.json({ error: 'Something went wrong' }, 500);
+  }
 });
 
 courseRouter.openapi(deleteUserCourseRoute, async (c) => {
