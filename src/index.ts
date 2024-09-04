@@ -64,7 +64,6 @@ app.doc('/doc', {
     title: packageJson.displayName,
   },
   tags: [
-    { name: 'hello', description: 'Hello API' },
     { name: 'push', description: 'Push event API' },
     { name: 'auth', description: 'Auth API' },
     { name: 'media', description: 'Media API' },
@@ -80,6 +79,7 @@ app.doc('/doc', {
     { name: 'user-profile', description: 'User Profile API' },
     { name: 'user-finder', description: 'User Finder API' },
     { name: 'competitions', description: 'Competitions API' },
+    { name: 'markdown', description: 'Markdown API' },
   ],
 });
 app.get('/swagger', swaggerUI({ url: '/doc' }));
