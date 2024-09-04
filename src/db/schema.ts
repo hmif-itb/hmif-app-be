@@ -682,3 +682,14 @@ export const competitionMediasRelation = relations(
     }),
   }),
 );
+
+export const markdowns = pgTable('markdowns', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  content: text('content').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .$onUpdate(() => new Date()),
+});
