@@ -33,6 +33,7 @@ export const users = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
+    lastLoginAt: timestamp('last_login_at', { withTimezone: true }),
   },
   (t) => ({
     nimIdx: index().on(t.nim),

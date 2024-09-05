@@ -6,6 +6,7 @@ import { db } from '~/db/drizzle';
 import {
   findUserByEmail,
   getUserAndUpdatePicture,
+  updateUserLastLogin,
 } from '~/repositories/auth.repo';
 import { getUserRoles } from '~/repositories/user-role.repo';
 import {
@@ -84,6 +85,8 @@ loginRouter.openapi(loginAccessTokenRoute, async (c) => {
     const tokenPayload = JWTPayloadSchema.parse(user);
     const token = await generateJWT(tokenPayload);
 
+    void updateUserLastLogin(db, user.id);
+
     setCookie(c, 'hmif-app.access-cookie', token, {
       path: '/',
       secure: true,
@@ -156,6 +159,8 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
       );
     }
 
+    void updateUserLastLogin(db, user.id);
+
     // Create cookie
     const tokenPayload = JWTPayloadSchema.parse({ ...user, picture });
     const token = await generateJWT(tokenPayload);
@@ -223,6 +228,7 @@ loginProtectedRouter.openapi(logoutRoute, async (c) => {
 
 loginProtectedRouter.openapi(selfRoute, async (c) => {
   const user = c.var.user;
+  void updateUserLastLogin(db, user.id);
   const roles = await getUserRoles(db, user.id);
   return c.json({ ...user, roles }, 200);
 });

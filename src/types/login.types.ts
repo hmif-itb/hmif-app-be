@@ -34,6 +34,7 @@ export const GoogleUserSchema = z.object({
 
 export const JWTPayloadSchema = UserSchema.omit({
   createdAt: true,
+  lastLoginAt: true,
 }).openapi('User');
 
 export const UserResponseSchema = JWTPayloadSchema.extend({
