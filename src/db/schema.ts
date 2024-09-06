@@ -12,6 +12,7 @@ import {
   unique,
 } from 'drizzle-orm/pg-core';
 import webpush from 'web-push';
+import { rolesEnums } from './roles-group';
 
 export const users = pgTable(
   'users',
@@ -126,7 +127,8 @@ export const infos = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
-    isForAngkatan: boolean('is_for_angkatan').notNull(),
+    isForAngkatan: boolean('is_for_angkatan').notNull(), // redundancy for angkatan relation
+    isForGroups: boolean('is_for_groups').notNull(), // redundancy for group relation
   },
   (t) => ({
     contentSearchIdx: index('content_search_idx').using(
@@ -153,6 +155,27 @@ export const infosRelation = relations(infos, ({ one, many }) => ({
   infoCategories: many(infoCategories),
   infoCourses: many(infoCourses),
   infoAngkatan: many(infoAngkatan),
+  infoGroups: many(infoGroups),
+}));
+
+export const infoGroups = pgTable(
+  'info_groups',
+  {
+    infoId: text('info_id')
+      .references(() => infos.id, { onDelete: 'cascade' })
+      .notNull(),
+    role: text('role').$type<UserRolesEnum>().notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.infoId, t.role] }),
+  }),
+);
+
+export const infoGroupsRelation = relations(infoGroups, ({ one }) => ({
+  info: one(infos, {
+    fields: [infoGroups.infoId],
+    references: [infos.id],
+  }),
 }));
 
 export const medias = pgTable('medias', {
@@ -353,7 +376,9 @@ export const coursesRelation = relations(courses, ({ many }) => ({
 export const categories = pgTable('categories', {
   id: text('id').primaryKey().$defaultFn(createId),
   name: text('name').unique().notNull(),
+  rolesAllowed: json('roles_allowed').$type<UserRolesEnum[]>(),
   requiredPush: boolean('required_push').notNull(),
+  isForInfo: boolean('is_for_info').notNull(),
 });
 
 export type Category = InferSelectModel<typeof categories>;
@@ -606,12 +631,12 @@ export const userRoles = pgTable(
     userId: text('user_id')
       .references(() => users.id, { onDelete: 'cascade' })
       .notNull(),
-    role: text('role', { enum: ['akademik', 'cnc', 'ring1'] }).notNull(),
+    role: text('role', { enum: rolesEnums }).notNull(),
   },
   (t) => ({ pk: primaryKey({ columns: [t.userId, t.role] }) }),
 );
 
-export type UserRolesEnum = InferSelectModel<typeof userRoles>['role'];
+export type UserRolesEnum = (typeof rolesEnums)[number];
 
 export const userRolesRelation = relations(userRoles, ({ one }) => ({
   user: one(users, { fields: [userRoles.userId], references: [users.id] }),

@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { UserSchema } from './user.types';
+import { JWTPayloadSchema } from './login.types';
 
-export const ListUserSchema = z.array(UserSchema);
+export const ListUserSchema = z.array(JWTPayloadSchema);
 
 export const NimFinderQuerySchema = z.object({
   search: z.string().min(3),

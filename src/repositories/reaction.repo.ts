@@ -1,4 +1,4 @@
-import { and, count, eq, inArray } from 'drizzle-orm';
+import { and, count, desc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
@@ -37,7 +37,8 @@ export async function getReactions(
     })
     .from(reactions)
     .where(where)
-    .groupBy(reactions.reaction, reactions.infoId, reactions.commentId);
+    .groupBy(reactions.reaction, reactions.infoId, reactions.commentId)
+    .orderBy(desc(count(reactions.reaction)));
 
   const userReaction = await db
     .select({

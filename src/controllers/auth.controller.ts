@@ -6,6 +6,7 @@ import { db } from '~/db/drizzle';
 import {
   findUserByEmail,
   getUserAndUpdatePicture,
+  getUserGroups,
   updateUserLastLogin,
 } from '~/repositories/auth.repo';
 import { getUserRoles } from '~/repositories/user-role.repo';
@@ -16,6 +17,7 @@ import {
 } from '~/types/login.types';
 import {
   authCallbackRoute,
+  getUserGroupsRoute,
   loginAccessTokenRoute,
   loginBypassRoute,
   loginRoute,
@@ -231,4 +233,10 @@ loginProtectedRouter.openapi(selfRoute, async (c) => {
   void updateUserLastLogin(db, user.id);
   const roles = await getUserRoles(db, user.id);
   return c.json({ ...user, roles }, 200);
+});
+
+loginProtectedRouter.openapi(getUserGroupsRoute, async (c) => {
+  const user = c.var.user;
+  const groups = await getUserGroups(db, user.id);
+  return c.json(groups, 200);
 });
