@@ -60,7 +60,10 @@ export async function getInfoCategoryList(
         userRoles.length === 0
           ? undefined
           : exists(
-              sql`SELECT 1 FROM jsonb_array_elements(${userRoles}) AS role WHERE role = ANY(${categories.rolesAllowed})`,
+              sql`(SELECT 1 FROM json_array_elements_text(${categories.rolesAllowed}) AS role WHERE role IN (${sql.join(
+                userRoles.map((role) => sql`${role}`),
+                sql.raw(','),
+              )}))`,
             ),
       ),
     )

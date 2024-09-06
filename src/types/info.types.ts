@@ -36,7 +36,7 @@ export const InfoSchema = createSelectSchema(infos, {
 })
   .omit({
     isForAngkatan: true,
-    isForGroup: true,
+    isForGroups: true,
   })
   .extend({
     infoMedias: z.array(InfoMediaSchema).optional(),
