@@ -15,6 +15,7 @@ import {
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
+import { rolesEnums, rolesGroup } from '~/db/roles-group';
 import {
   angkatan,
   categories,
@@ -23,10 +24,13 @@ import {
   infoAngkatan,
   infoCategories,
   infoCourses,
+  infoGroups,
   infoMedias,
   infos,
   userCourses,
   userReadInfos,
+  userRoles,
+  UserRolesEnum,
   users,
   userUnsubscribeCategories,
 } from '~/db/schema';
@@ -41,8 +45,10 @@ import {
   InfoSchema,
   ListInfoParamsSchema,
 } from '~/types/info.types';
+import { getInfoCategoryList } from './category.repo';
 import { createMediasFromUrl } from './media.repo';
 import { getReactions } from './reaction.repo';
+import { getUserRoles } from './user-role.repo';
 
 const INFOS_PER_PAGE = 10;
 
@@ -51,19 +57,41 @@ const INFOS_PER_PAGE = 10;
  */
 export async function createInfo(
   db: Database,
-  data: Omit<InferInsertModel<typeof infos>, 'createdAt' | 'isForAngkatan'>,
+  data: Omit<
+    InferInsertModel<typeof infos>,
+    'createdAt' | 'isForAngkatan' | 'isForGroups'
+  >,
   mediaUrls: z.infer<typeof CreateInfoBodySchema.shape.mediaUrls>,
   forAngkatan: z.infer<typeof CreateInfoBodySchema.shape.forAngkatan>,
   forCategories: z.infer<typeof CreateInfoBodySchema.shape.forCategories>,
   forCourses: z.infer<typeof CreateInfoBodySchema.shape.forCourses>,
+  forGroups: z.infer<typeof CreateInfoBodySchema.shape.forGroups>,
 ) {
+  const creatorId = data.creatorId;
+  const userRoles = await getUserRoles(db, creatorId);
+  const categoriesAllowed = await getInfoCategoryList(db, userRoles);
+
+  if (
+    forCategories.some(
+      (category) => !categoriesAllowed.some((c) => c.id === category),
+    )
+  ) {
+    throw new Error('Invalid category');
+  }
+
   // transaction drizzle auto rollback kalo error
   return await db.transaction(async (tx) => {
+    const isForAngkatan = forAngkatan !== undefined && forAngkatan.length > 0;
+    const isForCourses =
+      !isForAngkatan && forCourses !== undefined && forCourses.length > 0;
+    const isForGroups =
+      !isForCourses && forGroups !== undefined && forGroups.length > 0;
     const newInfo = await tx
       .insert(infos)
       .values({
         ...data,
-        isForAngkatan: forAngkatan !== undefined && forAngkatan.length > 0,
+        isForAngkatan,
+        isForGroups,
       })
       .returning()
       .then(firstSure);
@@ -104,16 +132,30 @@ export async function createInfo(
           angkatanId,
         })),
       );
-    }
-
-    // If forCourses is supplied, then attach courses to the info with InfoCourses
-    if (forCourses && forCourses.length > 0) {
+    } else if (forCourses && forCourses.length > 0) {
+      // If forCourses is supplied, then attach courses to the info with InfoCourses
       await createInfoCourses(
         tx,
         forCourses.map((course) => ({
           infoId: newInfo.id,
           courseId: course.courseId,
           class: course.class,
+        })),
+      );
+    } else if (forGroups && forGroups.length > 0) {
+      // can only either one of forCourses or forGroups
+
+      // check if roles is valid
+      if (
+        forGroups.some((role) => !rolesEnums.includes(role as UserRolesEnum))
+      ) {
+        throw new Error('Invalid role');
+      }
+      await createInfoGroups(
+        tx,
+        forGroups.map((role) => ({
+          infoId: newInfo.id,
+          role: role as UserRolesEnum,
         })),
       );
     }
@@ -137,21 +179,28 @@ export const createInfoMedia = async (
   db: Database,
   data: Array<Omit<InferInsertModel<typeof infoMedias>, 'createdAt'>>,
 ) => {
-  return await db.insert(infoMedias).values(data).returning().then(firstSure);
+  return await db.insert(infoMedias).values(data).returning();
 };
 
 export const createInfoAngkatan = async (
   db: Database,
   data: Array<InferInsertModel<typeof infoAngkatan>>,
 ) => {
-  return await db.insert(infoAngkatan).values(data).returning().then(firstSure);
+  return await db.insert(infoAngkatan).values(data).returning();
 };
 
 export const createInfoCourses = async (
   db: Database,
   data: Array<InferInsertModel<typeof infoCourses>>,
 ) => {
-  return await db.insert(infoCourses).values(data).returning().then(firstSure);
+  return await db.insert(infoCourses).values(data).returning();
+};
+
+export const createInfoGroups = async (
+  db: Database,
+  data: Array<InferInsertModel<typeof infoGroups>>,
+) => {
+  return await db.insert(infoGroups).values(data).returning();
 };
 
 export async function createReadInfo(
@@ -248,7 +297,15 @@ export async function getListInfos(
     );
   }
 
-  const where = and(searchQ, categoryQ, unreadQ, angkatanQ);
+  const userRoles = await getUserRoles(db, userId);
+
+  const where = and(
+    searchQ,
+    categoryQ,
+    unreadQ,
+    angkatanQ,
+    getInfoGroupQuery(db, userRoles),
+  );
 
   const listInfo = await db.query.infos.findMany({
     where,
@@ -275,6 +332,11 @@ export async function getListInfos(
       infoAngkatan: {
         with: {
           angkatan: true,
+        },
+      },
+      infoGroups: {
+        columns: {
+          role: true,
         },
       },
       creator: true,
@@ -304,14 +366,23 @@ export async function getListInfos(
         comments: commentsCount.find((c) => c.infoId === info.id)?.count ?? 0,
         isRead: info.userReadInfos.length > 0,
         userReadInfos: undefined,
+        infoGroups: info.infoGroups.map((group) => ({
+          role: group.role,
+          group: rolesGroup[group.role],
+        })),
       };
     }),
   );
 }
 
 export async function getInfoById(db: Database, id: string, userId: string) {
+  const userRoles = await getUserRoles(db, userId);
   const info = await db.query.infos.findFirst({
-    where: eq(infos.id, id),
+    where: and(
+      eq(infos.id, id),
+      // check for groups
+      getInfoGroupQuery(db, userRoles),
+    ),
     with: {
       infoMedias: {
         with: {
@@ -332,6 +403,11 @@ export async function getInfoById(db: Database, id: string, userId: string) {
       infoAngkatan: {
         with: {
           angkatan: true,
+        },
+      },
+      infoGroups: {
+        columns: {
+          role: true,
         },
       },
       creator: true,
@@ -358,6 +434,10 @@ export async function getInfoById(db: Database, id: string, userId: string) {
     comments: commentsCount.count,
     userReadInfos: undefined,
     isRead: info.userReadInfos.length > 0,
+    infoGroups: info.infoGroups.map((group) => ({
+      role: group.role,
+      group: rolesGroup[group.role],
+    })),
   };
 }
 
@@ -368,6 +448,7 @@ export async function notifyNewInfo(
   forAngkatan: z.infer<typeof CreateInfoBodySchema.shape.forAngkatan>,
   forCategories: z.infer<typeof CreateInfoBodySchema.shape.forCategories>,
   forCourses: z.infer<typeof CreateInfoBodySchema.shape.forCourses>,
+  forGroups: z.infer<typeof CreateInfoBodySchema.shape.forGroups>,
 ) {
   let receivers: string[] = [];
 
@@ -384,6 +465,8 @@ export async function notifyNewInfo(
       .where(inArray(userUnsubscribeCategories.categoryId, forCategories))
       .then((res) => res.map((r) => r.userId));
   }
+
+  const unsubsQ = unsubs.length ? notInArray(users.id, unsubs) : undefined;
 
   if (forCourses && forCourses.length > 0) {
     const { semesterCodeTaken, semesterYearTaken } =
@@ -412,7 +495,7 @@ export async function notifyNewInfo(
           ),
           eq(userCourses.semesterCodeTaken, semesterCodeTaken),
           eq(userCourses.semesterYearTaken, semesterYearTaken),
-          unsubs.length ? notInArray(userCourses.userId, unsubs) : undefined,
+          unsubsQ,
         ),
       )
       .then((res) => res.map((r) => r.userId));
@@ -421,18 +504,15 @@ export async function notifyNewInfo(
       .selectDistinct({ userId: users.id })
       .from(users)
       .innerJoin(angkatan, eq(users.angkatan, angkatan.year))
-      .where(
-        and(
-          inArray(angkatan.id, forAngkatan),
-          unsubs.length ? notInArray(users.id, unsubs) : undefined,
-        ),
-      )
+      .where(and(inArray(angkatan.id, forAngkatan), unsubsQ))
       .then((res) => res.map((r) => r.userId));
-  } else {
+  } else if (forGroups && forGroups.length > 0) {
     receivers = await db
-      .selectDistinct({ userId: users.id })
-      .from(users)
-      .where(unsubs.length ? notInArray(users.id, unsubs) : undefined)
+      .selectDistinct({ userId: userRoles.userId })
+      .from(userRoles)
+      .where(
+        and(inArray(userRoles.role, forGroups as UserRolesEnum[]), unsubsQ),
+      )
       .then((res) => res.map((r) => r.userId));
   }
 
@@ -462,4 +542,23 @@ export async function notifyNewInfo(
   ).then(async (results) => {
     await removeFailedPushSubscriptions(db, results);
   });
+}
+
+function getInfoGroupQuery(db: Database, userRoles: UserRolesEnum[]) {
+  return or(
+    eq(infos.isForGroups, false),
+    userRoles.length === 0
+      ? undefined
+      : exists(
+          db
+            .select({ infoId: infoGroups.infoId })
+            .from(infoGroups)
+            .where(
+              and(
+                eq(infoGroups.infoId, infos.id),
+                inArray(infoGroups.role, userRoles),
+              ),
+            ),
+        ),
+  );
 }

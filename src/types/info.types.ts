@@ -13,6 +13,7 @@ import { CourseSchema } from './course.types';
 import { JWTPayloadSchema } from './login.types';
 import { MediaSchema } from './media.types';
 import { ReactionResponseSchema } from './reaction.types';
+import { UserGroupSchema } from './user.types';
 
 export const InfoCategorySchema = createSelectSchema(infoCategories).extend({
   category: CategorySchema,
@@ -35,12 +36,14 @@ export const InfoSchema = createSelectSchema(infos, {
 })
   .omit({
     isForAngkatan: true,
+    isForGroup: true,
   })
   .extend({
     infoMedias: z.array(InfoMediaSchema).optional(),
     infoCategories: z.array(InfoCategorySchema).optional(),
     infoCourses: z.array(InfoCourseSchema).optional(),
     infoAngkatan: z.array(InfoAngkatanSchema).optional(),
+    infoGroups: z.array(UserGroupSchema).optional(),
     comments: z.number(),
     reactions: ReactionResponseSchema,
     creator: JWTPayloadSchema,
@@ -59,6 +62,7 @@ export const CreateInfoBodySchema = createInsertSchema(infos)
     creatorId: true,
     createdAt: true,
     isForAngkatan: true,
+    isForGroups: true,
   })
   .extend({
     mediaUrls: z
@@ -95,6 +99,12 @@ export const CreateInfoBodySchema = createInsertSchema(infos)
             courseId: 'deleteClassFieldIfWantToAllClass',
           },
         ],
+      }),
+    forGroups: z
+      .array(z.string())
+      .optional()
+      .openapi({
+        example: ['role1', 'role2'],
       }),
   });
 

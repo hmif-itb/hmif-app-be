@@ -1,6 +1,6 @@
-import { asc, eq } from 'drizzle-orm';
+import { asc, eq, exists, isNull, or, sql } from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
-import { angkatan, categories } from '~/db/schema';
+import { angkatan, categories, UserRolesEnum } from '~/db/schema';
 
 /**
  * Check if a category with the given categoryId exists
@@ -44,13 +44,27 @@ export async function checkRequired(db: Database, categoryId: string) {
 }
 
 export async function getCategoryList(db: Database) {
-  return await db.select().from(categories);
+  return await db.select().from(categories).orderBy(asc(categories.name));
 }
 
-export async function getCategoryById(db: Database, id: string) {
-  return await db.query.categories.findFirst({
-    where: eq(categories.id, id),
-  });
+export async function getInfoCategoryList(
+  db: Database,
+  userRoles: UserRolesEnum[],
+) {
+  return await db
+    .select()
+    .from(categories)
+    .where(
+      or(
+        isNull(categories.rolesAllowed),
+        userRoles.length === 0
+          ? undefined
+          : exists(
+              sql`SELECT 1 FROM jsonb_array_elements(${userRoles}) AS role WHERE role = ANY(${categories.rolesAllowed})`,
+            ),
+      ),
+    )
+    .orderBy(asc(categories.name));
 }
 
 export async function getListAngkatan(db: Database) {
