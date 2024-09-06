@@ -21,4 +21,7 @@ export const CategoryNotFoundSchema = createSelectSchema(categories, {
   id: z.string(),
   name: z.null(),
   requiredPush: z.null(),
+}).omit({
+  rolesAllowed: true,
+  isForInfo: true,
 });

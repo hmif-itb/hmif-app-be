@@ -1,4 +1,4 @@
-import { ilike, like, or } from 'drizzle-orm';
+import { desc, ilike, like, or } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { users } from '~/db/schema';
@@ -11,5 +11,9 @@ export async function getUserByNimOrName(
   const { search } = q;
   const whereName = ilike(users.fullName, `%${search}%`);
   const whereNim = like(users.nim, `%${search}%`);
-  return await db.select().from(users).where(or(whereNim, whereName));
+  return await db
+    .select()
+    .from(users)
+    .where(or(whereNim, whereName))
+    .orderBy(desc(users.fullName));
 }
