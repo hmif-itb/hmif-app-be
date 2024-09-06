@@ -39,8 +39,14 @@ infoRouter.openapi(postReadInfoRoute, async (c) => {
 });
 
 infoRouter.openapi(createInfoRoute, async (c) => {
-  const { mediaUrls, forAngkatan, forCategories, forCourses, ...data } =
-    c.req.valid('json');
+  const {
+    mediaUrls,
+    forAngkatan,
+    forCategories,
+    forCourses,
+    forGroups,
+    ...data
+  } = c.req.valid('json');
   const { id } = c.var.user;
 
   try {
@@ -51,6 +57,7 @@ infoRouter.openapi(createInfoRoute, async (c) => {
       forAngkatan,
       forCategories,
       forCourses,
+      forGroups,
     );
 
     void notifyNewInfo(
@@ -60,6 +67,7 @@ infoRouter.openapi(createInfoRoute, async (c) => {
       forAngkatan,
       forCategories,
       forCourses,
+      forGroups,
     );
 
     return c.json(info, 201);

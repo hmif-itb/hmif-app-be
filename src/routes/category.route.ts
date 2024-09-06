@@ -1,10 +1,6 @@
 import { createRoute, z } from '@hono/zod-openapi';
 import { ListAngkatanSchema } from '~/types/angkatan.types';
-import {
-  CategoryParamSchema,
-  CategorySchema,
-  ListCategorySchema,
-} from '~/types/category.types';
+import { ListCategorySchema } from '~/types/category.types';
 import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
 export const getListCategoryRoute = createRoute({
@@ -32,38 +28,19 @@ export const getListCategoryRoute = createRoute({
   },
 });
 
-export const getCategoryByIdRoute = createRoute({
-  operationId: 'getCategoryById',
+export const getInfoListCategoryRoute = createRoute({
+  operationId: 'getInfoListCategory',
   tags: ['category'],
   method: 'get',
-  path: '/category/{categoryId}',
-  request: {
-    params: CategoryParamSchema,
-  },
+  path: '/category/info',
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: CategorySchema,
+          schema: ListCategorySchema,
         },
       },
-      description: 'Get category by id',
-    },
-    400: {
-      description: 'Bad request',
-      content: {
-        'application/json': {
-          schema: z.union([ErrorSchema, ValidationErrorSchema]),
-        },
-      },
-    },
-    404: {
-      description: 'Category not found',
-      content: {
-        'application/json': {
-          schema: ErrorSchema,
-        },
-      },
+      description: 'Get list of categories',
     },
   },
 });

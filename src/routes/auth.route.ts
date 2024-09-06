@@ -11,6 +11,7 @@ import {
   errorResponse,
   validationErrorResponse,
 } from '~/types/responses.type';
+import { UserGroupsSchema } from '~/types/user.types';
 
 export const loginRoute = createRoute({
   operationId: 'loginWeb',
@@ -173,5 +174,22 @@ export const loginBypassRoute = createRoute({
       },
     },
     400: errorResponse,
+  },
+});
+
+export const getUserGroupsRoute = createRoute({
+  operationId: 'getUserGroups',
+  tags: ['auth'],
+  method: 'get',
+  path: '/auth/groups',
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: UserGroupsSchema,
+        },
+      },
+      description: 'Get user groups',
+    },
   },
 });

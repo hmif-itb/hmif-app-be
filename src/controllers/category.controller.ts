@@ -1,11 +1,12 @@
 import { db } from '~/db/drizzle';
 import {
-  getCategoryById,
   getCategoryList,
+  getInfoCategoryList,
   getListAngkatan,
 } from '~/repositories/category.repo';
+import { getUserRoles } from '~/repositories/user-role.repo';
 import {
-  getCategoryByIdRoute,
+  getInfoListCategoryRoute,
   getListAngkatanRoute,
   getListCategoryRoute,
 } from '~/routes/category.route';
@@ -18,14 +19,13 @@ categoryRouter.openapi(getListCategoryRoute, async (c) => {
   return c.json({ categories }, 200);
 });
 
-categoryRouter.openapi(getCategoryByIdRoute, async (c) => {
-  const { categoryId } = c.req.valid('param');
-  const category = await getCategoryById(db, categoryId);
-  if (!category) return c.json({ error: 'Category not found' }, 404);
-  return c.json(category, 200);
-});
-
 categoryRouter.openapi(getListAngkatanRoute, async (c) => {
   const angkatan = await getListAngkatan(db);
   return c.json(angkatan, 200);
+});
+
+categoryRouter.openapi(getInfoListCategoryRoute, async (c) => {
+  const userRoles = await getUserRoles(db, c.var.user.id);
+  const categories = await getInfoCategoryList(db, userRoles);
+  return c.json({ categories }, 200);
 });
