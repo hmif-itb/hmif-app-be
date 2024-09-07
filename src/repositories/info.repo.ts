@@ -469,7 +469,7 @@ export async function notifyNewInfo(
     .then((res) => res.map((r) => r.userId));
 
   // add self
-  unsubs.push(info.creatorId);
+  // unsubs.push(info.creatorId);
 
   if (forCourses && forCourses.length > 0) {
     const { semesterCodeTaken, semesterYearTaken } =
