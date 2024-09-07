@@ -456,13 +456,20 @@ export async function notifyNewInfo(
     return;
   }
 
-  const unsubsQ = notInArray(
-    users.id,
-    db
-      .selectDistinct({ userId: userUnsubscribeCategories.userId })
-      .from(userUnsubscribeCategories)
-      .where(inArray(userUnsubscribeCategories.categoryId, forCategories)),
-  );
+  const unsubs = await db
+    .select({
+      userId: userUnsubscribeCategories.userId,
+    })
+    .from(userUnsubscribeCategories)
+    .where(inArray(userUnsubscribeCategories.categoryId, forCategories))
+    .groupBy(userUnsubscribeCategories.userId)
+    .having(
+      eq(count(userUnsubscribeCategories.categoryId), forCategories.length),
+    )
+    .then((res) => res.map((r) => r.userId));
+
+  // add self
+  unsubs.push(info.creatorId);
 
   if (forCourses && forCourses.length > 0) {
     const { semesterCodeTaken, semesterYearTaken } =
@@ -491,7 +498,6 @@ export async function notifyNewInfo(
           ),
           eq(userCourses.semesterCodeTaken, semesterCodeTaken),
           eq(userCourses.semesterYearTaken, semesterYearTaken),
-          unsubsQ,
         ),
       )
       .then((res) => res.map((r) => r.userId));
@@ -500,27 +506,29 @@ export async function notifyNewInfo(
       .selectDistinct({ userId: users.id })
       .from(users)
       .innerJoin(angkatan, eq(users.angkatan, angkatan.year))
-      .where(and(inArray(angkatan.id, forAngkatan), unsubsQ))
+      .where(inArray(angkatan.id, forAngkatan))
       .then((res) => res.map((r) => r.userId));
   } else if (forGroups && forGroups.length > 0) {
     receivers = await db
       .selectDistinct({ userId: userRoles.userId })
       .from(userRoles)
-      .where(
-        and(inArray(userRoles.role, forGroups as UserRolesEnum[]), unsubsQ),
-      )
+      .where(inArray(userRoles.role, forGroups as UserRolesEnum[]))
       .then((res) => res.map((r) => r.userId));
   } else {
     receivers = await db
       .selectDistinct({ userId: users.id })
       .from(users)
-      .where(unsubsQ)
       .then((res) => res.map((r) => r.userId));
   }
 
-  receivers = receivers.filter((receiver) => receiver !== info.creatorId);
+  const receiversSet = new Set(receivers);
 
-  const subscriptions = await getPushSubscriptionsByUserIds(db, receivers);
+  unsubs.forEach((userId) => receiversSet.delete(userId));
+
+  const subscriptions = await getPushSubscriptionsByUserIds(
+    db,
+    Array.from(receiversSet),
+  );
 
   if (subscriptions.length === 0) {
     return;
