@@ -1,11 +1,20 @@
 import { parse } from 'csv-parse';
 import 'dotenv/config';
+import { inArray } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { createInsertSchema } from 'drizzle-zod';
 import fs from 'fs';
 import postgres from 'postgres';
 import { z } from 'zod';
-import { angkatan, calendarGroup, courses, testimonies, users } from './schema';
+import { rolesGroup } from './roles-group';
+import {
+  angkatan,
+  calendarGroup,
+  courses,
+  testimonies,
+  userRoles,
+  users,
+} from './schema';
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is required');
@@ -252,6 +261,101 @@ export async function runCalendarSeed() {
     });
 }
 
+function reverseObject<T extends Record<string, string | number>>(
+  obj: T,
+): Record<string, keyof T> {
+  const reversedObj: Record<string, keyof T> = {};
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      const value = obj[key];
+      reversedObj[value as string] = key;
+    }
+  }
+  return reversedObj;
+}
+
+export async function runRolesGroupSeed() {
+  const data: Array<typeof userRoles.$inferInsert> = [];
+
+  const reversedRolesGroup = reverseObject(rolesGroup);
+
+  const filePath = 'src/db/seed/roles-group.csv';
+  const columns: Array<{
+    nim: string;
+    department: string;
+    division: string;
+  }> = [];
+
+  await new Promise((resolve) => {
+    fs.createReadStream(filePath)
+      .pipe(parse({ delimiter: ',', from_line: 2 }))
+      .on('data', (row) => {
+        columns.push({
+          department: row[0],
+          division: row[1],
+          nim: row[2],
+        });
+      })
+      .on('end', () => {
+        resolve(null);
+      });
+  });
+
+  if (columns.length === 0) {
+    console.log('No data to insert');
+    return;
+  }
+
+  const usersList = await db
+    .select({ id: users.id, nim: users.nim })
+    .from(users)
+    .where(
+      inArray(
+        users.nim,
+        columns.map((column) => column.nim),
+      ),
+    );
+
+  const idUserMap = new Map(usersList.map((user) => [user.nim, user.id]));
+
+  for (const column of columns) {
+    const userId = idUserMap.get(column.nim);
+    if (!userId) {
+      console.log('User not found', column.nim);
+      continue;
+    }
+
+    if (
+      !data.some(
+        (item) =>
+          item.userId === userId &&
+          item.role === reversedRolesGroup[column.department],
+      )
+    ) {
+      data.push({
+        userId,
+        role: reversedRolesGroup[column.department],
+      });
+    }
+
+    if (
+      column.division &&
+      !data.some(
+        (item) =>
+          item.userId === userId &&
+          item.role === reversedRolesGroup[column.division],
+      )
+    ) {
+      data.push({
+        userId,
+        role: reversedRolesGroup[column.division],
+      });
+    }
+  }
+
+  await db.insert(userRoles).values(data).onConflictDoNothing();
+}
+
 async function runAllSeeds() {
   try {
     await runAngkatanSeed();
@@ -261,6 +365,7 @@ async function runAllSeeds() {
     await runTestimoniSeed('testimoni-if.csv');
     await runTestimoniSeed('testimoni-sti.csv');
     await runCalendarSeed();
+    await runRolesGroupSeed();
   } catch (error) {
     console.log(error);
   }
