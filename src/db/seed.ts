@@ -353,18 +353,26 @@ export async function runRolesGroupSeed() {
     }
   }
 
+  usersList.forEach((user) => {
+    data.push({
+      userId: user.id,
+      role: 'de',
+    });
+  });
+
   await db.insert(userRoles).values(data).onConflictDoNothing();
+  console.log('✅ Inserted roles group into database!');
 }
 
 async function runAllSeeds() {
   try {
-    await runAngkatanSeed();
-    await runUserSeed();
-    await runCourses();
-    await new Promise((resolve) => setTimeout(resolve, 6000));
-    await runTestimoniSeed('testimoni-if.csv');
-    await runTestimoniSeed('testimoni-sti.csv');
-    await runCalendarSeed();
+    // await runAngkatanSeed();
+    // await runUserSeed();
+    // await runCourses();
+    // await new Promise((resolve) => setTimeout(resolve, 6000));
+    // await runTestimoniSeed('testimoni-if.csv');
+    // await runTestimoniSeed('testimoni-sti.csv');
+    // await runCalendarSeed();
     await runRolesGroupSeed();
   } catch (error) {
     console.log(error);
