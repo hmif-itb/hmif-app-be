@@ -23,7 +23,7 @@ export async function updateUserLastLogin(db: Database, id: string) {
 export async function getUserAndUpdatePicture(
   db: Database,
   email: string,
-  picture: string,
+  picture?: string,
 ) {
   return await db
     .update(users)

@@ -23,9 +23,9 @@ export const GoogleTokenDataSchema = z.object({
 export const GoogleUserSchema = z.object({
   id: z.string(),
   name: z.string(),
-  given_name: z.string(),
-  family_name: z.string(),
-  picture: z.string(),
+  given_name: z.string().optional(),
+  family_name: z.string().optional(),
+  picture: z.string().optional(),
   email: z.string(),
   email_verified: z.string().optional(),
   locale: z.string().optional(),
