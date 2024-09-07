@@ -475,7 +475,7 @@ export async function notifyNewInfo(
     const { semesterCodeTaken, semesterYearTaken } =
       getCurrentSemesterCodeAndYear();
     receivers = await db
-      .selectDistinct({ userId: userCourses.userId })
+      .select({ userId: userCourses.userId })
       .from(userCourses)
       .where(
         and(
@@ -503,14 +503,14 @@ export async function notifyNewInfo(
       .then((res) => res.map((r) => r.userId));
   } else if (forAngkatan && forAngkatan.length > 0) {
     receivers = await db
-      .selectDistinct({ userId: users.id })
+      .select({ userId: users.id })
       .from(users)
       .innerJoin(angkatan, eq(users.angkatan, angkatan.year))
       .where(inArray(angkatan.id, forAngkatan))
       .then((res) => res.map((r) => r.userId));
   } else if (forGroups && forGroups.length > 0) {
     receivers = await db
-      .selectDistinct({ userId: userRoles.userId })
+      .select({ userId: userRoles.userId })
       .from(userRoles)
       .where(inArray(userRoles.role, forGroups as UserRolesEnum[]))
       .then((res) => res.map((r) => r.userId));
