@@ -3,7 +3,7 @@ import {
   CallbackQueryParamsSchema,
   JWTPayloadSchema,
   LoginAccessTokenSchema,
-  LoginBypassParamSchema,
+  LoginBypassQuerySchema,
   UserResponseSchema,
 } from '~/types/login.types';
 import {
@@ -160,9 +160,9 @@ export const loginBypassRoute = createRoute({
   operationId: 'loginBypass',
   tags: ['auth'],
   method: 'get',
-  path: '/auth/login/bypass/{token}',
+  path: '/auth/login/bypass',
   request: {
-    params: LoginBypassParamSchema,
+    query: LoginBypassQuerySchema,
   },
   responses: {
     200: {

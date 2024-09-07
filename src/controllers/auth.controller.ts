@@ -186,7 +186,7 @@ loginRouter.openapi(authCallbackRoute, async (c) => {
 });
 
 loginRouter.openapi(loginBypassRoute, async (c) => {
-  const { token } = c.req.valid('param');
+  const { token, nim } = c.req.valid('query');
 
   if (token !== env.LOGIN_BYPASS_KEY) {
     return c.json(
@@ -197,7 +197,7 @@ loginRouter.openapi(loginBypassRoute, async (c) => {
     );
   }
 
-  const user = await findUserByEmail(db, '18221000@std.stei.itb.ac.id');
+  const user = await findUserByEmail(db, `${nim}@std.stei.itb.ac.id`);
   if (!user) {
     return c.json(
       {
@@ -207,11 +207,7 @@ loginRouter.openapi(loginBypassRoute, async (c) => {
       401,
     );
   }
-  const tokenPayload = JWTPayloadSchema.parse({
-    ...user,
-    picture:
-      'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/r176r3qcuqs3hg8o3dm93n35-asrielblunt.jpg',
-  });
+  const tokenPayload = JWTPayloadSchema.parse(user);
   const jwtToken = await generateJWT(tokenPayload);
   setCookie(c, 'hmif-app.access-cookie', jwtToken, {
     path: '/',

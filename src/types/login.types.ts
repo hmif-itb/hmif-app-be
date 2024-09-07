@@ -45,6 +45,7 @@ export const LoginAccessTokenSchema = z.object({
   accessToken: z.string(),
 });
 
-export const LoginBypassParamSchema = z.object({
+export const LoginBypassQuerySchema = z.object({
   token: z.string(),
+  nim: z.string(),
 });
