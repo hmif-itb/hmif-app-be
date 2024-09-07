@@ -456,17 +456,13 @@ export async function notifyNewInfo(
     return;
   }
 
-  let unsubs: string[] = [];
-
-  if (forCategories.length > 0) {
-    unsubs = await db
+  const unsubsQ = notInArray(
+    users.id,
+    db
       .selectDistinct({ userId: userUnsubscribeCategories.userId })
       .from(userUnsubscribeCategories)
-      .where(inArray(userUnsubscribeCategories.categoryId, forCategories))
-      .then((res) => res.map((r) => r.userId));
-  }
-
-  const unsubsQ = unsubs.length ? notInArray(users.id, unsubs) : undefined;
+      .where(inArray(userUnsubscribeCategories.categoryId, forCategories)),
+  );
 
   if (forCourses && forCourses.length > 0) {
     const { semesterCodeTaken, semesterYearTaken } =
@@ -513,6 +509,12 @@ export async function notifyNewInfo(
       .where(
         and(inArray(userRoles.role, forGroups as UserRolesEnum[]), unsubsQ),
       )
+      .then((res) => res.map((r) => r.userId));
+  } else {
+    receivers = await db
+      .selectDistinct({ userId: users.id })
+      .from(users)
+      .where(unsubsQ)
       .then((res) => res.map((r) => r.userId));
   }
 
