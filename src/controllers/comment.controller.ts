@@ -47,19 +47,12 @@ commentRouter.openapi(postCommentRoute, async (c) => {
 });
 
 commentRouter.openapi(deleteCommentRoute, async (c) => {
-  try {
-    const { commentId } = c.req.valid('param');
-    const comment = await deleteComment(db, commentId);
-    if (!comment) {
-      return c.json({ error: 'Comment not found' }, 404);
-    }
-    return c.json({ ...comment, creator: c.var.user }, 200);
-  } catch (err) {
-    if (err instanceof PostgresError) {
-      return c.json({ error: err.message }, 500);
-    }
-    throw err;
+  const { commentId } = c.req.valid('param');
+  const comment = await deleteComment(db, commentId);
+  if (!comment) {
+    return c.json({ error: 'Comment not found' }, 404);
   }
+  return c.json({ ...comment, creator: c.var.user }, 200);
 });
 
 commentRouter.openapi(updateCommentContentRoute, async (c) => {

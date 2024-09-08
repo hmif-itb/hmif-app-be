@@ -49,7 +49,7 @@ export const errorResponse = {
       schema: ErrorSchema,
     },
   },
-  description: 'Bad request',
+  description: 'Error',
 } as const satisfies ResponseItem;
 
 export const ServerErrorSchema = z

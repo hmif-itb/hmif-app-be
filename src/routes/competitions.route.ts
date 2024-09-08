@@ -11,6 +11,7 @@ import {
   UpdateCompetitionParamsSchema,
 } from '~/types/competitions.types';
 import {
+  errorResponse,
   ErrorSchema,
   validationErrorResponse,
   ValidationErrorSchema,
@@ -156,6 +157,7 @@ export const deleteCompetitionRoute = createRoute({
         },
       },
     },
+    404: errorResponse,
     500: {
       description: 'Internal server error',
       content: {

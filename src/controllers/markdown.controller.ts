@@ -13,5 +13,5 @@ markdownRouter.openapi(creditsMarkdownRoute, async (c) => {
   if (!markdown) {
     return c.json({ error: 'Markdown not found' }, 404);
   }
-  return c.json(markdown);
+  return c.json(markdown, 200);
 });

@@ -72,6 +72,7 @@ export const loginAccessTokenRoute = createRoute({
     },
     400: validationErrorResponse,
     401: authorizaitonErrorResponse,
+    500: errorResponse,
   },
 });
 
@@ -174,6 +175,7 @@ export const loginBypassRoute = createRoute({
       },
     },
     400: errorResponse,
+    401: errorResponse,
   },
 });
 

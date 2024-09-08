@@ -83,16 +83,10 @@ competitionsRouter.delete(
   roleMiddleware(['cnc']),
 );
 competitionsRouter.openapi(deleteCompetitionRoute, async (c) => {
-  try {
-    const { competitionId } = c.req.valid('param');
-    const competition = await deleteCompetition(db, competitionId);
-    if (!competition) {
-      return c.json({ error: 'Competition not found' }, 404);
-    }
-    return c.json({ ...competition }, 200);
-  } catch (err) {
-    if (err instanceof PostgresError)
-      return c.json({ error: err.message }, 400);
-    throw err;
+  const { competitionId } = c.req.valid('param');
+  const competition = await deleteCompetition(db, competitionId);
+  if (!competition) {
+    return c.json({ error: 'Competition not found' }, 404);
   }
+  return c.json({ ...competition }, 200);
 });

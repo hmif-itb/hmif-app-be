@@ -8,7 +8,11 @@ import {
   ReactionResponseSchema,
   ReactionSchema,
 } from '~/types/reaction.types';
-import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
+import {
+  errorResponse,
+  ErrorSchema,
+  ValidationErrorSchema,
+} from '~/types/responses.type';
 
 export const getReactionsRoute = createRoute({
   operationId: 'getReactions',
@@ -77,6 +81,7 @@ export const CreateOrUpdateReactionRoute = createRoute({
         },
       },
     },
+    404: errorResponse,
   },
 });
 

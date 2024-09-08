@@ -1,14 +1,18 @@
 import { createRoute, z } from '@hono/zod-openapi';
 import {
-  CreateCalendarEventBodySchema,
-  CalendarEventIdParamsSchema,
-  GetCalendarEventParamsSchema,
-  UpdateCalendarEventBodySchema,
   CalendarEvent,
+  CalendarEventIdParamsSchema,
   CalendarGroupSchema,
+  CreateCalendarEventBodySchema,
+  GetCalendarEventParamsSchema,
   PersonalCalendarParamSchema,
+  UpdateCalendarEventBodySchema,
 } from '~/types/calendar.types';
-import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
+import {
+  errorResponse,
+  ErrorSchema,
+  ValidationErrorSchema,
+} from '~/types/responses.type';
 
 export const postCalendarEventRoute = createRoute({
   operationId: 'postCalendarEvent',
@@ -41,6 +45,8 @@ export const postCalendarEventRoute = createRoute({
         },
       },
     },
+    403: errorResponse,
+    404: errorResponse,
   },
 });
 
@@ -140,6 +146,8 @@ export const updateCalendarEventRoute = createRoute({
         },
       },
     },
+    403: errorResponse,
+    404: errorResponse,
   },
 });
 

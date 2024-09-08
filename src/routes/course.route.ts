@@ -1,19 +1,23 @@
 import { createRoute, z } from '@hono/zod-openapi';
 import {
-  ListCourseParamsSchema,
-  ListCourseSchema,
+  BatchCreateOrUpdateUserCourseResponseSchema,
+  BatchCreateOrUpdateUserCourseSchema,
   CourseIdRequestBodySchema,
   CourseSchema,
   CreateCourseSchema,
-  UpdateCourseSchema,
   CreateUserCourseSchema,
-  UserCourseSchema,
-  ListUserCourseSchema,
-  BatchCreateOrUpdateUserCourseSchema,
-  BatchCreateOrUpdateUserCourseResponseSchema,
   DeleteUserCourseSchema,
+  ListCourseParamsSchema,
+  ListCourseSchema,
+  ListUserCourseSchema,
+  UpdateCourseSchema,
+  UserCourseSchema,
 } from '~/types/course.types';
-import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
+import {
+  errorResponse,
+  ErrorSchema,
+  ValidationErrorSchema,
+} from '~/types/responses.type';
 
 export const listCourseRoute = createRoute({
   operationId: 'getlistCourses',
@@ -320,6 +324,7 @@ export const createOrUpdateBatchUserCourseRoute = createRoute({
         },
       },
     },
+    404: errorResponse,
   },
 });
 

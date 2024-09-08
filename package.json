@@ -16,9 +16,10 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.556.0",
     "@aws-sdk/s3-request-presigner": "^3.563.0",
-    "@hono/node-server": "^1.8.2",
-    "@hono/swagger-ui": "^0.2.1",
-    "@hono/zod-openapi": "^0.9.9",
+    "@axiomhq/winston": "^1.1.1",
+    "@hono/node-server": "^1.12.2",
+    "@hono/swagger-ui": "^0.4.1",
+    "@hono/zod-openapi": "^0.16.0",
     "@paralleldrive/cuid2": "^2.2.2",
     "@sentry/node": "^8.28.0",
     "@sentry/profiling-node": "^8.28.0",
@@ -35,12 +36,13 @@
     "eslint-config-love": "^43.1.0",
     "gaxios": "^6.6.0",
     "googleapis": "^140.0.0",
-    "hono": "^4.2.9",
+    "hono": "^4.5.11",
     "install": "^0.13.0",
     "open-graph-scraper": "^6.5.1",
     "pg": "^8.11.3",
     "postgres": "^3.4.4",
     "web-push": "^3.6.7",
+    "winston": "^3.14.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {

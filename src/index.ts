@@ -2,6 +2,7 @@
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import { performance } from 'perf_hooks';
 import './instrument';
 
 dayjs.extend(utc);
@@ -16,24 +17,29 @@ import * as Sentry from '@sentry/node';
 import fs from 'fs';
 import { cors } from 'hono/cors';
 import { HTTPException } from 'hono/http-exception';
-import { logger } from 'hono/logger';
+import { requestId, RequestIdVariables } from 'hono/request-id';
+import { getPath, getQueryParam } from 'hono/utils/url';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { env } from './configs/env.config';
 import { apiRouter } from './controllers/api.controller';
 import { setupCron } from './cron/setup';
+import { logger } from './logger';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageJson = JSON.parse(
   fs.readFileSync(path.join(dirname, '../package.json'), 'utf-8'),
 );
-const app = new OpenAPIHono({
+const app = new OpenAPIHono<{
+  Variables: RequestIdVariables;
+}>({
   defaultHook: (result, c) => {
     if (!result.success) {
       return c.json({ errors: result.error.flatten() }, 400);
     }
   },
 });
+app.use('*', requestId());
 
 app.onError((err, c) => {
   if (err instanceof HTTPException) {
@@ -45,7 +51,32 @@ app.onError((err, c) => {
   return c.json({ error: 'Something went wrong' }, 500);
 });
 
-app.use(logger());
+app.use(async (c, next) => {
+  const { method } = c.req;
+  const path = getPath(c.req.raw);
+  const params = getQueryParam(c.req.url);
+
+  logger.info({
+    requestId: c.var.requestId,
+    path,
+    params,
+    method,
+    type: 'request',
+  });
+  const start = performance.now();
+  await next();
+  const end = performance.now();
+  logger.info({
+    requestId: c.var.requestId,
+    path,
+    params,
+    method,
+    type: 'response',
+    duration: end - start,
+    userId: c.get('user' as any)?.id,
+  });
+});
+
 app.use(
   '/api/*',
   cors({

@@ -1,5 +1,6 @@
 import { Hook, OpenAPIHono, z } from '@hono/zod-openapi';
 import { jwt } from 'hono/jwt';
+import type { RequestIdVariables } from 'hono/request-id';
 import { env } from '~/configs/env.config';
 import { JWTPayloadSchema } from '~/types/login.types';
 
@@ -14,7 +15,9 @@ const defaultHook: Hook<any, any, any, any> = (result, c) => {
  * @returns basic router with no middleware
  */
 export function createRouter() {
-  return new OpenAPIHono({ defaultHook });
+  return new OpenAPIHono<{
+    Variables: RequestIdVariables;
+  }>({ defaultHook });
 }
 
 /**
@@ -25,7 +28,7 @@ export function createAuthRouter() {
   const authRouter = new OpenAPIHono<{
     Variables: {
       user: z.infer<typeof JWTPayloadSchema>;
-    };
+    } & RequestIdVariables;
   }>({ defaultHook });
 
   // JWT Hono Middleware

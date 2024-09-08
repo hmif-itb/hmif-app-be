@@ -1,5 +1,6 @@
 import { createRoute } from '@hono/zod-openapi';
 import { MarkdownSchema } from '~/types/markdown.types';
+import { errorResponse } from '~/types/responses.type';
 
 export const creditsMarkdownRoute = createRoute({
   operationId: 'getCredits',
@@ -15,8 +16,6 @@ export const creditsMarkdownRoute = createRoute({
         },
       },
     },
-    404: {
-      description: 'Not found',
-    },
+    404: errorResponse,
   },
 });

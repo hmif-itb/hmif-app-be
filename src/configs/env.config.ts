@@ -26,6 +26,8 @@ const EnvSchema = z.object({
   GOOGLE_CALENDAR_SECRET_PATH: z.string().default('google_credentials.json'),
   GOOGLE_CALENDAR_ID: z.string().default('primary'),
   SENTRY_DSN: z.string().url().optional(),
+  AXIOM_DATASET: z.string().optional(),
+  AXIOM_TOKEN: z.string().optional(),
 });
 
 const result = EnvSchema.safeParse(process.env);

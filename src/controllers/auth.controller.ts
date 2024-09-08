@@ -110,79 +110,67 @@ loginRouter.openapi(loginAccessTokenRoute, async (c) => {
 loginRouter.openapi(authCallbackRoute, async (c) => {
   const { code } = c.req.valid('query');
 
-  try {
-    const tokenEndpoint = new URL('https://accounts.google.com/o/oauth2/token');
-    tokenEndpoint.searchParams.set('code', code);
-    tokenEndpoint.searchParams.set('grant_type', 'authorization_code');
+  const tokenEndpoint = new URL('https://accounts.google.com/o/oauth2/token');
+  tokenEndpoint.searchParams.set('code', code);
+  tokenEndpoint.searchParams.set('grant_type', 'authorization_code');
 
-    // Make sure you define all of the google env in your .env file
-    tokenEndpoint.searchParams.set('client_id', env.GOOGLE_CLIENT_ID || '');
-    tokenEndpoint.searchParams.set(
-      'client_secret',
-      env.GOOGLE_CLIENT_SECRET || '',
-    );
-    tokenEndpoint.searchParams.set(
-      'redirect_uri',
-      env.GOOGLE_CALLBACK_URL || '',
-    );
+  // Make sure you define all of the google env in your .env file
+  tokenEndpoint.searchParams.set('client_id', env.GOOGLE_CLIENT_ID || '');
+  tokenEndpoint.searchParams.set(
+    'client_secret',
+    env.GOOGLE_CLIENT_SECRET || '',
+  );
+  tokenEndpoint.searchParams.set('redirect_uri', env.GOOGLE_CALLBACK_URL || '');
 
-    // Fetch Token from Google Token endpoint and parse it into GoogleTokenDataSchema
-    const tokenResponse = await fetch(
-      tokenEndpoint.origin + tokenEndpoint.pathname,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: tokenEndpoint.searchParams.toString(),
+  // Fetch Token from Google Token endpoint and parse it into GoogleTokenDataSchema
+  const tokenResponse = await fetch(
+    tokenEndpoint.origin + tokenEndpoint.pathname,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-    );
-    const tokenData = GoogleTokenDataSchema.parse(await tokenResponse.json());
+      body: tokenEndpoint.searchParams.toString(),
+    },
+  );
+  const tokenData = GoogleTokenDataSchema.parse(await tokenResponse.json());
 
-    // Fetch User Info from Google User Info endpoint and parse it into GoogleUserSchema
-    const userInfoResponse = await fetch(
-      'https://www.googleapis.com/oauth2/v2/userinfo',
-      {
-        headers: {
-          Authorization: `Bearer ${tokenData.access_token}`,
-        },
+  // Fetch User Info from Google User Info endpoint and parse it into GoogleUserSchema
+  const userInfoResponse = await fetch(
+    'https://www.googleapis.com/oauth2/v2/userinfo',
+    {
+      headers: {
+        Authorization: `Bearer ${tokenData.access_token}`,
       },
-    );
-    const userInfo = GoogleUserSchema.parse(await userInfoResponse.json());
-    // Find user in db, if not found return forbidden
-    const { email, picture } = userInfo;
-    const user = await findUserByEmail(db, email);
-    if (!user) {
-      return c.json(
-        {
-          error: 'User not found in database',
-        },
-        401,
-      );
-    }
-
-    void updateUserLastLogin(db, user.id);
-
-    // Create cookie
-    const tokenPayload = JWTPayloadSchema.parse({ ...user, picture });
-    const token = await generateJWT(tokenPayload);
-
-    setCookie(c, 'hmif-app.access-cookie', token, {
-      path: '/',
-      secure: true,
-      httpOnly: true,
-      maxAge: parseInt(env.TOKEN_EXPIRATION),
-      sameSite: 'None',
-    });
-    return c.json(tokenPayload, 200);
-  } catch (error) {
+    },
+  );
+  const userInfo = GoogleUserSchema.parse(await userInfoResponse.json());
+  // Find user in db, if not found return forbidden
+  const { email, picture } = userInfo;
+  const user = await findUserByEmail(db, email);
+  if (!user) {
     return c.json(
       {
-        error,
+        error: 'User not found in database',
       },
-      500,
+      401,
     );
   }
+
+  void updateUserLastLogin(db, user.id);
+
+  // Create cookie
+  const tokenPayload = JWTPayloadSchema.parse({ ...user, picture });
+  const token = await generateJWT(tokenPayload);
+
+  setCookie(c, 'hmif-app.access-cookie', token, {
+    path: '/',
+    secure: true,
+    httpOnly: true,
+    maxAge: parseInt(env.TOKEN_EXPIRATION),
+    sameSite: 'None',
+  });
+  return c.json(tokenPayload, 200);
 });
 
 loginRouter.openapi(loginBypassRoute, async (c) => {

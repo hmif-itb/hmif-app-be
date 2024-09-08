@@ -1,9 +1,9 @@
-import { z } from 'zod';
 import { createRoute } from '@hono/zod-openapi';
+import { z } from 'zod';
 import {
-  ValidationErrorSchema,
   ErrorSchema,
   ServerErrorSchema,
+  ValidationErrorSchema,
 } from '~/types/responses.type';
 import {
   DeleteListUserUnsubscribeCategoryParamsSchema,
@@ -106,12 +106,12 @@ export const postUserUnsubscribeCategoryRoute = createRoute({
           schema: PostUserUnsubscribeCategorySchema,
         },
       },
-      400: {
-        description: 'Bad request',
-        content: {
-          'application/json': {
-            schema: z.union([ErrorSchema, ValidationErrorSchema]),
-          },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
         },
       },
     },
@@ -150,12 +150,12 @@ export const postListUserUnsubscribeCategoryRoute = createRoute({
           schema: PostListUserUnsubscribeCategoryResponseSchema,
         },
       },
-      400: {
-        description: 'Bad request',
-        content: {
-          'application/json': {
-            schema: z.union([ErrorSchema, ValidationErrorSchema]),
-          },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
         },
       },
     },

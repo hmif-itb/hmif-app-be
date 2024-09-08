@@ -10,6 +10,7 @@ import {
 import {
   ErrorSchema,
   ValidationErrorSchema,
+  errorResponse,
   validationErrorResponse,
 } from '~/types/responses.type';
 
@@ -132,7 +133,7 @@ export const postCommentRoute = createRoute({
         },
       },
     },
-    400: validationErrorResponse,
+    400: errorResponse,
     500: {
       description: 'Internal server error',
       content: {
@@ -169,13 +170,6 @@ export const deleteCommentRoute = createRoute({
         },
       },
     },
-    500: {
-      description: 'Internal server error',
-      content: {
-        'application/json': {
-          schema: ErrorSchema,
-        },
-      },
-    },
+    404: errorResponse,
   },
 });

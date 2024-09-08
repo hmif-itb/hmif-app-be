@@ -54,32 +54,18 @@ courseRouter.openapi(getUserCourseRoute, async (c) => {
 
 courseRouter.openapi(getCurrentUserCourseRoute, async (c) => {
   const userId = c.var.user.id;
-  try {
-    const userCourses = await getUserCourse(db, userId, true);
-    return c.json(userCourses, 200);
-  } catch (err) {
-    if (err instanceof Error) {
-      return c.json({ error: err.message }, 400);
-    }
-    return c.json({ error: 'Something went wrong' }, 500);
-  }
+  const userCourses = await getUserCourse(db, userId, true);
+  return c.json(userCourses, 200);
 });
 
 courseRouter.openapi(deleteUserCourseRoute, async (c) => {
-  try {
-    const userId = c.var.user.id;
-    const { courseIds } = c.req.valid('json');
-    const userCourse = await deleteUserCourse(db, userId, courseIds);
+  const userId = c.var.user.id;
+  const { courseIds } = c.req.valid('json');
+  const userCourse = await deleteUserCourse(db, userId, courseIds);
 
-    if (userCourse.length === 0)
-      return c.json({ error: 'Course not found' }, 404);
-    return c.json(userCourse, 200);
-  } catch (err) {
-    if (err instanceof Error) {
-      return c.json({ error: err.message }, 400);
-    }
-    return c.json({ error: 'Something went wrong' }, 500);
-  }
+  if (userCourse.length === 0)
+    return c.json({ error: 'Course not found' }, 404);
+  return c.json(userCourse, 200);
 });
 
 // Course Controller
