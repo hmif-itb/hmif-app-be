@@ -2,6 +2,8 @@
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import './instrument';
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault('Asia/Jakarta');
@@ -9,6 +11,7 @@ dayjs.tz.setDefault('Asia/Jakarta');
 import { serve } from '@hono/node-server';
 import { swaggerUI } from '@hono/swagger-ui';
 import { OpenAPIHono } from '@hono/zod-openapi';
+
 import * as Sentry from '@sentry/node';
 import fs from 'fs';
 import { cors } from 'hono/cors';
@@ -30,11 +33,6 @@ const app = new OpenAPIHono({
       return c.json({ errors: result.error.flatten() }, 400);
     }
   },
-});
-
-Sentry.init({
-  dsn: env.SENTRY_DSN,
-  environment: env.SENTRY_ENVIRONMENT,
 });
 
 app.onError((err, c) => {
