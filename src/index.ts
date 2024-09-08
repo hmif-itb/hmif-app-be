@@ -56,13 +56,6 @@ app.use(async (c, next) => {
   const path = getPath(c.req.raw);
   const params = getQueryStrings(c.req.url);
 
-  logger.info({
-    requestId: c.var.requestId,
-    path,
-    params,
-    method,
-    type: 'request',
-  });
   const start = performance.now();
   await next();
   const end = performance.now();
@@ -71,7 +64,7 @@ app.use(async (c, next) => {
     path,
     params,
     method,
-    type: 'response',
+    type: 'request',
     duration: end - start,
     userId: c.get('user' as any)?.id,
   });
