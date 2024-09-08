@@ -60,6 +60,9 @@ export async function batchCreateOrUpdateUserCourse(
   data: z.infer<typeof BatchCreateOrUpdateUserCourseSchema>,
   userId: string,
 ) {
+  if (!data.length) {
+    return [];
+  }
   const { semesterCodeTaken, semesterYearTaken } =
     getCurrentSemesterCodeAndYear();
 
