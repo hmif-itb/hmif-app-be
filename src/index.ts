@@ -18,7 +18,7 @@ import fs from 'fs';
 import { cors } from 'hono/cors';
 import { HTTPException } from 'hono/http-exception';
 import { requestId, RequestIdVariables } from 'hono/request-id';
-import { getPath, getQueryParam } from 'hono/utils/url';
+import { getPath, getQueryStrings } from 'hono/utils/url';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { env } from './configs/env.config';
@@ -54,7 +54,7 @@ app.onError((err, c) => {
 app.use(async (c, next) => {
   const { method } = c.req;
   const path = getPath(c.req.raw);
-  const params = getQueryParam(c.req.url);
+  const params = getQueryStrings(c.req.url);
 
   logger.info({
     requestId: c.var.requestId,
