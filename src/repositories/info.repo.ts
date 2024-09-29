@@ -283,6 +283,7 @@ export async function getListInfos(
 
     angkatanQ = or(
       eq(infos.isForAngkatan, false),
+      eq(infos.creatorId, userId),
       exists(
         db
           .select({ infoId: infoAngkatan.infoId })
