@@ -1,8 +1,8 @@
 import { createPresignedUrl } from '~/routes/media.route';
 import { createAuthRouter } from './router-factory';
 import { createPutObjectPresignedUrl } from '~/lib/r2-bucket';
-import { createId } from '@paralleldrive/cuid2';
 import { env } from '~/configs/env.config';
+import { createId } from '~/db/schema';
 
 export const mediaRouter = createAuthRouter();
 

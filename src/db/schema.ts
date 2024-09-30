@@ -1,4 +1,4 @@
-import { createId } from '@paralleldrive/cuid2';
+import { init } from '@paralleldrive/cuid2';
 import { InferSelectModel, relations, sql } from 'drizzle-orm';
 import {
   boolean,
@@ -13,6 +13,10 @@ import {
 } from 'drizzle-orm/pg-core';
 import webpush from 'web-push';
 import { rolesEnums } from './roles-group';
+
+export const createId = init({
+  length: 8,
+});
 
 export const users = pgTable(
   'users',
