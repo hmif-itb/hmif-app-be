@@ -41,10 +41,10 @@ export const TwitterPlayerObjectSchema = z.object({
 });
 
 export const ImageObjectSchema = z.object({
-  height: z.number().optional(),
+  height: z.union([z.string(), z.number()]).optional(),
   type: z.string().optional(),
   url: z.string(),
-  width: z.number().optional(),
+  width: z.union([z.string(), z.number()]).optional(),
   alt: z.string().optional(),
 });
 
