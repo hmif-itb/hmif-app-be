@@ -126,9 +126,12 @@ export const ListInfoParamsSchema = z.object({
   search: z.string().optional().openapi({
     example: 'content',
   }),
-  category: z.string().optional().openapi({
-    example: 'cat',
-  }),
+  excludeCategory: z
+    .array(z.string())
+    .optional()
+    .openapi({
+      example: ['cat1', 'cat2'],
+    }),
   unread: z.enum(['true', 'false']).default('false').openapi({
     example: 'true',
   }),
