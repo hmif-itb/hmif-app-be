@@ -133,6 +133,12 @@ export const infos = pgTable(
       .defaultNow(),
     isForAngkatan: boolean('is_for_angkatan').notNull(), // redundancy for angkatan relation
     isForGroups: boolean('is_for_groups').notNull(), // redundancy for group relation
+    lastNotifiedAt: timestamp('last_notified_at', {
+      withTimezone: true,
+      mode: 'date',
+    })
+      .notNull()
+      .defaultNow(),
   },
   (t) => ({
     contentSearchIdx: index('content_search_idx').using(

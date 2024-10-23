@@ -49,8 +49,11 @@ import { getInfoCategoryList } from './category.repo';
 import { createMediasFromUrl } from './media.repo';
 import { getReactions } from './reaction.repo';
 import { getUserRoles } from './user-role.repo';
+import dayjs from 'dayjs';
+import { env } from '~/configs/env.config';
 
 const INFOS_PER_PAGE = 10;
+const DEFAULT_RENOTIFY_DIFF_HOURS = 3;
 
 /**
  * Create an info.
@@ -371,6 +374,7 @@ export async function getListInfos(
           role: group.role,
           group: rolesGroup[group.role],
         })),
+        canNotify: canNotify(info),
       };
     }),
   );
@@ -439,6 +443,7 @@ export async function getInfoById(db: Database, id: string, userId: string) {
       role: group.role,
       group: rolesGroup[group.role],
     })),
+    canNotify: canNotify(info),
   };
 }
 
@@ -555,6 +560,39 @@ export async function notifyNewInfo(
   });
 }
 
+/**
+ * Renotifies info to subscribed user. No validation whether the info is already notified or not.
+ *
+ * @param db Database
+ * @param info Info to be renotified
+ */
+export async function renotifyInfo(
+  db: Database,
+  info: z.infer<typeof InfoSchema>,
+) {
+  await notifyNewInfo(
+    db,
+    info as Info,
+    info.infoMedias?.map((m) => m.media.url),
+    info.infoAngkatan?.map((a) => a.angkatan.id),
+    info.infoCategories?.map((c) => c.category.id) ?? [],
+    info.infoCourses?.map((c) => ({
+      courseId: c.course.id,
+      class: c.class ?? undefined,
+    })),
+    info.infoGroups?.map((g) => g.role),
+  );
+
+  await db.transaction(async (tx) => {
+    await tx
+      .update(infos)
+      .set({
+        lastNotifiedAt: dayjs().toDate(),
+      })
+      .where(eq(infos.id, info.id));
+  });
+}
+
 function getInfoGroupQuery(db: Database, userRoles: UserRolesEnum[]) {
   return or(
     eq(infos.isForGroups, false),
@@ -572,4 +610,15 @@ function getInfoGroupQuery(db: Database, userRoles: UserRolesEnum[]) {
             ),
         ),
   );
+}
+
+/**
+ * Checks whether the info can be renotified or not based on minimum difference threshold in hour.
+ *
+ * @param info Info to be checked
+ * @returns True if the info can be renotified, false otherwise
+ */
+function canNotify(info: Info): boolean {
+  const diffHours = env.RENOTIFY_DIFF_HOURS ?? DEFAULT_RENOTIFY_DIFF_HOURS;
+  return dayjs().diff(dayjs(info.lastNotifiedAt), 'hour') > diffHours;
 }

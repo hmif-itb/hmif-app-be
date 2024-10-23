@@ -28,6 +28,7 @@ const EnvSchema = z.object({
   SENTRY_DSN: z.string().url().optional(),
   AXIOM_DATASET: z.string().optional(),
   AXIOM_TOKEN: z.string().optional(),
+  RENOTIFY_DIFF_HOURS: z.coerce.number().optional(),
 });
 
 const result = EnvSchema.safeParse(process.env);
