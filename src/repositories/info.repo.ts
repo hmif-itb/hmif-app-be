@@ -255,7 +255,7 @@ export async function getListInfos(
     ? sql`(setweight(to_tsvector('indonesian', ${infos.title}), 'A') || setweight(to_tsvector('indonesian', ${infos.content}), 'B')) @@ to_tsquery('indonesian', ${searchPhrase})`
     : undefined;
   let unreadQ: SQL<unknown> | undefined;
-  let categoryQ: SQL<unknown> | undefined;
+  let excludeCategoryQ: SQL<unknown> | undefined;
   let angkatanQ: SQL<unknown> | undefined;
 
   if (q.unread === 'true') {
@@ -266,14 +266,14 @@ export async function getListInfos(
     unreadQ = notInArray(infos.id, getReadInfosByUser);
   }
 
-  if (q.category) {
-    const getInfosByCategory = db
+  if (q.excludeCategory && q.excludeCategory.length > 0) {
+    const getInfosToExclude = db
       .select({ infoId: infoCategories.infoId })
       .from(infos)
       .innerJoin(infoCategories, eq(infoCategories.infoId, infos.id))
       .innerJoin(categories, eq(infoCategories.categoryId, categories.id))
-      .where(eq(categories.name, q.category));
-    categoryQ = inArray(infos.id, getInfosByCategory);
+      .where(inArray(categories.name, q.excludeCategory));
+    excludeCategoryQ = notInArray(infos.id, getInfosToExclude);
   }
 
   if (angkatanYear !== undefined) {
@@ -305,7 +305,7 @@ export async function getListInfos(
 
   const where = and(
     searchQ,
-    categoryQ,
+    excludeCategoryQ,
     unreadQ,
     angkatanQ,
     getInfoGroupQuery(db, userRoles),
