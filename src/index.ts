@@ -19,6 +19,8 @@ import { cors } from 'hono/cors';
 import { HTTPException } from 'hono/http-exception';
 import { requestId, RequestIdVariables } from 'hono/request-id';
 import { getPath, getQueryStrings } from 'hono/utils/url';
+import { Server } from 'socket.io';
+import { createServer } from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { env } from './configs/env.config';
@@ -110,7 +112,26 @@ console.log(`Server is running on port ${env.PORT}`);
 
 setupCron();
 
-serve({
+const httpServer = serve({
   fetch: app.fetch,
   port: env.PORT,
+});
+
+// Websocket server
+const io = new Server(httpServer, {
+  cors: {
+    origin: env.ALLOWED_ORIGINS,
+  },
+});
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+  socket.on('disconnect', () => {
+    console.log('a user disconnected');
+  });
+
+  socket.on('message', async (msg: string) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    io.emit('reply', msg + msg + msg);
+  });
 });
