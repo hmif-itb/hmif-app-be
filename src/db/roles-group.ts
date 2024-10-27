@@ -42,6 +42,7 @@ export const rolesEnums = [
   // de, dpp
   'de',
   'dpp',
+  'curhatadmin',
 ] as const;
 
 export const rolesGroup: Record<(typeof rolesEnums)[number], string> = {
@@ -79,4 +80,5 @@ export const rolesGroup: Record<(typeof rolesEnums)[number], string> = {
   iittech: 'IIT Technology',
   de: 'DE',
   dpp: 'DPP',
+  curhatadmin: 'Curhat Admin',
 };

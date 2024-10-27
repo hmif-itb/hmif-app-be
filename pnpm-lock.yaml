@@ -92,6 +92,9 @@ importers:
       socket.io:
         specifier: ^4.8.0
         version: 4.8.0
+      unique-names-generator:
+        specifier: ^4.7.1
+        version: 4.7.1
       web-push:
         specifier: ^3.6.7
         version: 3.6.7
@@ -2747,6 +2750,10 @@ packages:
   undici@6.14.1:
     resolution: {integrity: sha512-mAel3i4BsYhkeVPXeIPXVGPJKeBzqCieZYoFsbWfUzd68JmHByhc1Plit5WlylxXFaGpgkZB8mExlxnt+Q1p7A==}
     engines: {node: '>=18.17'}
+
+  unique-names-generator@4.7.1:
+    resolution: {integrity: sha512-lMx9dX+KRmG8sq6gulYYpKWZc9RlGsgBR6aoO8Qsm3qvkSJ+3rAymr+TnV8EDMrIrwuFJ4kruzMWM/OpYzPoow==}
+    engines: {node: '>=8'}
 
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
@@ -6105,6 +6112,8 @@ snapshots:
   undici-types@5.26.5: {}
 
   undici@6.14.1: {}
+
+  unique-names-generator@4.7.1: {}
 
   uri-js@4.4.1:
     dependencies:

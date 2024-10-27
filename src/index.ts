@@ -19,14 +19,13 @@ import { cors } from 'hono/cors';
 import { HTTPException } from 'hono/http-exception';
 import { requestId, RequestIdVariables } from 'hono/request-id';
 import { getPath, getQueryStrings } from 'hono/utils/url';
-import { Server } from 'socket.io';
-import { createServer } from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { env } from './configs/env.config';
 import { apiRouter } from './controllers/api.controller';
 import { setupCron } from './cron/setup';
 import { logger } from './logger';
+import setupWebsocket from './websocket/setup';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageJson = JSON.parse(
@@ -104,6 +103,7 @@ app.doc('/doc', {
     { name: 'user-finder', description: 'User Finder API' },
     { name: 'competitions', description: 'Competitions API' },
     { name: 'markdown', description: 'Markdown API' },
+    { name: 'curhat', description: 'Curhat API' },
   ],
 });
 app.get('/swagger', swaggerUI({ url: '/doc' }));
@@ -117,21 +117,4 @@ const httpServer = serve({
   port: env.PORT,
 });
 
-// Websocket server
-const io = new Server(httpServer, {
-  cors: {
-    origin: env.ALLOWED_ORIGINS,
-  },
-});
-
-io.on('connection', (socket) => {
-  console.log('a user connected');
-  socket.on('disconnect', () => {
-    console.log('a user disconnected');
-  });
-
-  socket.on('message', async (msg: string) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    io.emit('reply', msg + msg + msg);
-  });
-});
+setupWebsocket(httpServer);

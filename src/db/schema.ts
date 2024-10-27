@@ -1,6 +1,7 @@
 import { init } from '@paralleldrive/cuid2';
 import { InferSelectModel, relations, sql } from 'drizzle-orm';
 import {
+  AnyPgColumn,
   boolean,
   index,
   integer,
@@ -63,6 +64,10 @@ export const usersRelation = relations(users, ({ many, one }) => ({
   userUnsubscribeCategories: many(userUnsubscribeCategories),
   testimonies: many(testimonies),
   userRoles: many(userRoles),
+  chatrooms: many(chatrooms),
+  chatroomMessages: many(chatroomMessages),
+  pinnedChatrooms: many(userPinnedChatrooms),
+  chatroomMessageReads: many(chatroomMessageReads),
 }));
 
 export const pushSubscriptions = pgTable(
@@ -729,3 +734,150 @@ export const markdowns = pgTable('markdowns', {
     .notNull()
     .$onUpdate(() => new Date()),
 });
+
+export const chatrooms = pgTable('chatrooms', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  title: text('title'),
+  userId: text('user_id').references(() => users.id, { onDelete: 'cascade' }),
+});
+
+export type Chatroom = InferSelectModel<typeof chatrooms>;
+
+export const chatroomsRelation = relations(chatrooms, ({ many, one }) => ({
+  user: one(users, {
+    fields: [chatrooms.userId],
+    references: [users.id],
+  }),
+  messages: many(chatroomMessages),
+  pinnedBy: many(userPinnedChatrooms),
+  labels: many(chatroomLabelsManyToMany),
+}));
+
+export const chatroomMessages = pgTable('chatroom_messages', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  chatroomId: text('chatroom_id')
+    .references(() => chatrooms.id, { onDelete: 'cascade' })
+    .notNull(),
+  userId: text('user_id')
+    .references(() => users.id, { onDelete: 'cascade' })
+    .notNull(),
+  replyId: text('reply_id').references((): AnyPgColumn => chatroomMessages.id, {
+    onDelete: 'cascade',
+  }),
+  content: text('content').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' })
+    .notNull()
+    .defaultNow(),
+});
+
+export type ChatroomMessage = InferSelectModel<typeof chatroomMessages>;
+
+export const chatroomMessagesRelation = relations(
+  chatroomMessages,
+  ({ one, many }) => ({
+    reply: one(chatroomMessages, {
+      fields: [chatroomMessages.replyId],
+      references: [chatroomMessages.id],
+    }),
+    chatroom: one(chatrooms, {
+      fields: [chatroomMessages.chatroomId],
+      references: [chatrooms.id],
+    }),
+    sender: one(users, {
+      fields: [chatroomMessages.userId],
+      references: [users.id],
+    }),
+    chatroomMessageReads: many(chatroomMessageReads),
+  }),
+);
+
+export const userPinnedChatrooms = pgTable(
+  'user_pinned_chatrooms',
+  {
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    chatroomId: text('chatroom_id')
+      .references(() => chatrooms.id, { onDelete: 'cascade' })
+      .notNull(),
+  },
+  (t) => ({ pk: primaryKey({ columns: [t.userId, t.chatroomId] }) }),
+);
+
+export const userPinnedChatroomsRelation = relations(
+  userPinnedChatrooms,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [userPinnedChatrooms.userId],
+      references: [users.id],
+    }),
+    chatroom: one(chatrooms, {
+      fields: [userPinnedChatrooms.chatroomId],
+      references: [chatrooms.id],
+    }),
+  }),
+);
+
+export const chatroomLabels = pgTable('chatroom_labels', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  title: text('name').notNull(),
+});
+
+export const chatroomLabelsRelation = relations(chatroomLabels, ({ many }) => ({
+  chatrooms: many(chatroomLabelsManyToMany),
+}));
+
+export const chatroomLabelsManyToMany = pgTable(
+  'chatroom_labels_many_to_many',
+  {
+    chatroomId: text('chatroom_id')
+      .references(() => chatrooms.id, { onDelete: 'cascade' })
+      .notNull(),
+    labelId: text('label_id')
+      .references(() => chatroomLabels.id, { onDelete: 'cascade' })
+      .notNull(),
+  },
+  (t) => ({ pk: primaryKey({ columns: [t.chatroomId, t.labelId] }) }),
+);
+
+export const chatroomLabelsManyToManyRelation = relations(
+  chatroomLabelsManyToMany,
+  ({ one }) => ({
+    chatroom: one(chatrooms, {
+      fields: [chatroomLabelsManyToMany.chatroomId],
+      references: [chatrooms.id],
+    }),
+    label: one(chatroomLabels, {
+      fields: [chatroomLabelsManyToMany.labelId],
+      references: [chatroomLabels.id],
+    }),
+  }),
+);
+
+export const chatroomMessageReads = pgTable(
+  'chatroom_message_reads',
+  {
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    chatroomMessageId: text('chatroom_message_id')
+      .references(() => chatroomMessages.id, { onDelete: 'cascade' })
+      .notNull(),
+    readAt: timestamp('read_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({ pk: primaryKey({ columns: [t.userId, t.chatroomMessageId] }) }),
+);
+
+export const chatroomMessageReadsRelation = relations(
+  chatroomMessageReads,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [chatroomMessageReads.userId],
+      references: [users.id],
+    }),
+    message: one(chatroomMessages, {
+      fields: [chatroomMessageReads.chatroomMessageId],
+      references: [chatroomMessages.id],
+    }),
+  }),
+);
