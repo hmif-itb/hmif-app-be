@@ -130,7 +130,7 @@ export const ListInfoParamsSchema = z.object({
     example: 'content',
   }),
   excludeCategory: z
-    .array(z.string())
+    .union([z.array(z.string()), z.string()])
     .optional()
     .openapi({
       example: ['cat1', 'cat2'],

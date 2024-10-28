@@ -267,12 +267,22 @@ export async function getListInfos(
   }
 
   if (q.excludeCategory && q.excludeCategory.length > 0) {
-    const getInfosToExclude = db
+    let getInfosToExclude: any = db
       .select({ infoId: infoCategories.infoId })
       .from(infos)
       .innerJoin(infoCategories, eq(infoCategories.infoId, infos.id))
-      .innerJoin(categories, eq(infoCategories.categoryId, categories.id))
-      .where(inArray(categories.name, q.excludeCategory));
+      .innerJoin(categories, eq(infoCategories.categoryId, categories.id));
+
+    if (typeof q.excludeCategory === 'string') {
+      getInfosToExclude = getInfosToExclude.where(
+        eq(categories.name, q.excludeCategory),
+      );
+    } else {
+      getInfosToExclude = getInfosToExclude.where(
+        inArray(categories.name, q.excludeCategory),
+      );
+    }
+
     excludeCategoryQ = notInArray(infos.id, getInfosToExclude);
   }
 
