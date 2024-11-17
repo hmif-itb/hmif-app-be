@@ -63,6 +63,7 @@ export const usersRelation = relations(users, ({ many, one }) => ({
   userUnsubscribeCategories: many(userUnsubscribeCategories),
   testimonies: many(testimonies),
   userRoles: many(userRoles),
+  voucherRecommendations: many(voucherRecommendations),
 }));
 
 export const pushSubscriptions = pgTable(
@@ -723,3 +724,26 @@ export const markdowns = pgTable('markdowns', {
     .notNull()
     .$onUpdate(() => new Date()),
 });
+
+export const voucherRecommendations = pgTable('voucher_recommendations', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  title: text('title').notNull(),
+  imageURL: text('image_url').notNull(),
+  link: text('link'),
+  startPeriod: timestamp('start_period', { withTimezone: true }),
+  endPeriod: timestamp('end_period', { withTimezone: true }),
+  description: text('description'),
+  creatorId: text('creator_id')
+    .references(() => users.id, { onDelete: 'cascade' })
+    .notNull(),
+});
+
+export const voucherRecommendationsRelation = relations(
+  voucherRecommendations,
+  ({ one }) => ({
+    creator: one(users, {
+      fields: [voucherRecommendations.creatorId],
+      references: [users.id],
+    }),
+  }),
+);

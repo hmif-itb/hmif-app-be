@@ -120,6 +120,13 @@
       "when": 1725639609234,
       "tag": "0016_steady_scarecrow",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1731833595183,
+      "tag": "0017_nostalgic_blazing_skull",
+      "breakpoints": true
     }
   ]
 }
