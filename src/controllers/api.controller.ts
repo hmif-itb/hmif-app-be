@@ -15,6 +15,7 @@ import { testimoniRoute } from './testimoni.controller';
 import { userFinderRouter } from './user-finder.controller';
 import { userProfileRoute } from './user-profile.controller';
 import { userUnsubscribeRouter } from './user-unsubscribe.controller';
+import { recommendationRoute } from './recommendation.controller';
 
 const unprotectedApiRouter = new OpenAPIHono();
 unprotectedApiRouter.route('/', loginRouter);
@@ -37,7 +38,7 @@ protectedApiRouter.route('/', userProfileRoute);
 protectedApiRouter.route('/', userFinderRouter);
 protectedApiRouter.route('/', competitionsRouter);
 protectedApiRouter.route('/', markdownRouter);
-
+protectedApiRouter.route('/', recommendationRoute);
 export const apiRouter = new OpenAPIHono();
 apiRouter.route('/', unprotectedApiRouter);
 apiRouter.route('/', protectedApiRouter);
