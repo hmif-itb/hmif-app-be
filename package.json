@@ -41,6 +41,8 @@
     "open-graph-scraper": "^6.5.1",
     "pg": "^8.11.3",
     "postgres": "^3.4.4",
+    "socket.io": "^4.8.0",
+    "unique-names-generator": "^4.7.1",
     "web-push": "^3.6.7",
     "winston": "^3.14.2",
     "zod": "^3.22.4"

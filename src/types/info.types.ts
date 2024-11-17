@@ -48,6 +48,9 @@ export const InfoSchema = createSelectSchema(infos, {
     reactions: ReactionResponseSchema,
     creator: JWTPayloadSchema,
     isRead: z.boolean().optional(),
+    canNotify: z.boolean().optional(),
+    isForAngkatan: z.boolean().optional(),
+    isForGroups: z.boolean().optional(),
   })
   .openapi('Info');
 
@@ -126,9 +129,12 @@ export const ListInfoParamsSchema = z.object({
   search: z.string().optional().openapi({
     example: 'content',
   }),
-  category: z.string().optional().openapi({
-    example: 'cat',
-  }),
+  excludeCategory: z
+    .union([z.array(z.string()), z.string()])
+    .optional()
+    .openapi({
+      example: ['cat1', 'cat2'],
+    }),
   unread: z.enum(['true', 'false']).default('false').openapi({
     example: 'true',
   }),

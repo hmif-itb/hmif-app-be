@@ -169,3 +169,26 @@ export const deleteInfoRoute = createRoute({
     },
   },
 });
+
+export const postRenotifyInfoRoute = createRoute({
+  operationId: 'renotifyInfo',
+  tags: ['info'],
+  method: 'post',
+  path: '/info/{infoId}/renotify',
+  request: {
+    params: InfoIdParamsSchema,
+  },
+  responses: {
+    200: {
+      description: 'Info renotified',
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ValidationErrorSchema, ErrorSchema]),
+        },
+      },
+    },
+  },
+});

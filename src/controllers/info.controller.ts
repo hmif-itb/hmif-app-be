@@ -8,6 +8,7 @@ import {
   getInfoById,
   getListInfos,
   notifyNewInfo,
+  renotifyInfo,
 } from '~/repositories/info.repo';
 import {
   createInfoRoute,
@@ -15,6 +16,7 @@ import {
   getInfoByIdRoute,
   getListInfoRoute,
   postReadInfoRoute,
+  postRenotifyInfoRoute,
 } from '~/routes/info.route';
 import { createAuthRouter } from './router-factory';
 
@@ -109,4 +111,22 @@ infoRouter.openapi(getInfoByIdRoute, async (c) => {
     return c.json({ error: 'Info not found' }, 404);
   }
   return c.json(info, 200);
+});
+
+infoRouter.openapi(postRenotifyInfoRoute, async (c) => {
+  const { id: userId } = c.var.user;
+  const { infoId } = c.req.valid('param');
+
+  const info = await getInfoById(db, infoId, userId);
+  if (info?.creatorId !== userId) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
+  if (!info.canNotify) {
+    return c.json({ error: 'Info cannot be notified' }, 400);
+  }
+
+  await renotifyInfo(db, info);
+
+  return c.json({}, 200);
 });

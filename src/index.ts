@@ -17,7 +17,7 @@ import * as Sentry from '@sentry/node';
 import fs from 'fs';
 import { cors } from 'hono/cors';
 import { HTTPException } from 'hono/http-exception';
-import { requestId, RequestIdVariables } from 'hono/request-id';
+import { requestId, type RequestIdVariables } from 'hono/request-id';
 import { getPath, getQueryStrings } from 'hono/utils/url';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -25,6 +25,7 @@ import { env } from './configs/env.config';
 import { apiRouter } from './controllers/api.controller';
 import { setupCron } from './cron/setup';
 import { logger } from './logger';
+import setupWebsocket from './websocket/setup';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageJson = JSON.parse(
@@ -103,6 +104,7 @@ app.doc('/doc', {
     { name: 'competitions', description: 'Competitions API' },
     { name: 'markdown', description: 'Markdown API' },
     { name: 'recommendation', description: 'Recommendations API' },
+    { name: 'curhat', description: 'Curhat API' },
   ],
 });
 app.get('/swagger', swaggerUI({ url: '/doc' }));
@@ -111,7 +113,9 @@ console.log(`Server is running on port ${env.PORT}`);
 
 setupCron();
 
-serve({
+const httpServer = serve({
   fetch: app.fetch,
   port: env.PORT,
 });
+
+setupWebsocket(httpServer);
