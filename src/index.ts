@@ -17,7 +17,7 @@ import * as Sentry from '@sentry/node';
 import fs from 'fs';
 import { cors } from 'hono/cors';
 import { HTTPException } from 'hono/http-exception';
-import { requestId, RequestIdVariables } from 'hono/request-id';
+import { requestId, type RequestIdVariables } from 'hono/request-id';
 import { getPath, getQueryStrings } from 'hono/utils/url';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -103,6 +103,7 @@ app.doc('/doc', {
     { name: 'user-finder', description: 'User Finder API' },
     { name: 'competitions', description: 'Competitions API' },
     { name: 'markdown', description: 'Markdown API' },
+    { name: 'recommendation', description: 'Recommendations API' },
     { name: 'curhat', description: 'Curhat API' },
   ],
 });

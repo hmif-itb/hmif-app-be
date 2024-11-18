@@ -134,6 +134,13 @@
       "when": 1730001945200,
       "tag": "0018_confused_jack_flag",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1731835859589,
+      "tag": "0019_glossy_big_bertha",
+      "breakpoints": true
     }
   ]
 }

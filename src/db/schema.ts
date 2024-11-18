@@ -1,7 +1,7 @@
 import { init } from '@paralleldrive/cuid2';
-import { InferSelectModel, relations, sql } from 'drizzle-orm';
+import { type InferSelectModel, relations, sql } from 'drizzle-orm';
 import {
-  AnyPgColumn,
+  type AnyPgColumn,
   boolean,
   index,
   integer,
@@ -12,7 +12,7 @@ import {
   timestamp,
   unique,
 } from 'drizzle-orm/pg-core';
-import webpush from 'web-push';
+import type webpush from 'web-push';
 import { rolesEnums } from './roles-group';
 
 export const createId = init({
@@ -64,6 +64,7 @@ export const usersRelation = relations(users, ({ many, one }) => ({
   userUnsubscribeCategories: many(userUnsubscribeCategories),
   testimonies: many(testimonies),
   userRoles: many(userRoles),
+  voucherRecommendations: many(voucherRecommendations),
   chatrooms: many(chatrooms),
   chatroomMessages: many(chatroomMessages),
   pinnedChatrooms: many(userPinnedChatrooms),
@@ -878,6 +879,29 @@ export const chatroomMessageReadsRelation = relations(
     message: one(chatroomMessages, {
       fields: [chatroomMessageReads.chatroomMessageId],
       references: [chatroomMessages.id],
+    }),
+  }),
+);
+
+export const voucherRecommendations = pgTable('voucher_recommendations', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  title: text('title').notNull(),
+  imageURL: text('image_url').notNull(),
+  link: text('link'),
+  startPeriod: timestamp('start_period', { withTimezone: true }),
+  endPeriod: timestamp('end_period', { withTimezone: true }),
+  description: text('description'),
+  creatorId: text('creator_id')
+    .references(() => users.id, { onDelete: 'cascade' })
+    .notNull(),
+});
+
+export const voucherRecommendationsRelation = relations(
+  voucherRecommendations,
+  ({ one }) => ({
+    creator: one(users, {
+      fields: [voucherRecommendations.creatorId],
+      references: [users.id],
     }),
   }),
 );
