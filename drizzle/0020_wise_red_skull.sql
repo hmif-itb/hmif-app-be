@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS "co_working_space_recommendations" (
 	"id" text PRIMARY KEY NOT NULL,
 	"title" text NOT NULL,
 	"image_url" text NOT NULL,
-	"location" text,
+	"location" text NOT NULL,
 	"address" text NOT NULL,
 	"maps_url" text NOT NULL,
 	"description" text,

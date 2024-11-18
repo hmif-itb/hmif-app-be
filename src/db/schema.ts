@@ -913,7 +913,7 @@ export const coWorkingSpaceRecommendations = pgTable(
     id: text('id').primaryKey().$defaultFn(createId),
     title: text('title').notNull(),
     imageURL: text('image_url').notNull(),
-    location: text('location', { enum: ['Ganesha', 'Jatinangor'] }),
+    location: text('location', { enum: ['Ganesha', 'Jatinangor'] }).notNull(),
     address: text('address').notNull(),
     mapsURL: text('maps_url').notNull(),
     description: text('description'),

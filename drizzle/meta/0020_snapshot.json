@@ -1,5 +1,5 @@
 {
-  "id": "bc6281aa-c869-46db-bfd1-83a869e3889f",
+  "id": "1a6f2efb-9665-46e4-a321-e2e28ebc940c",
   "prevId": "a8d2a694-7cc7-4c52-a3a2-0f5473eaa2f2",
   "version": "7",
   "dialect": "postgresql",
@@ -558,7 +558,7 @@
           "name": "location",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "address": {
           "name": "address",
