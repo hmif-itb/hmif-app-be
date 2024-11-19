@@ -141,6 +141,13 @@
       "when": 1731835859589,
       "tag": "0019_glossy_big_bertha",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1731917458503,
+      "tag": "0020_wise_red_skull",
+      "breakpoints": true
     }
   ]
 }

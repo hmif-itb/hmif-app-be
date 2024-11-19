@@ -69,6 +69,7 @@ export const usersRelation = relations(users, ({ many, one }) => ({
   chatroomMessages: many(chatroomMessages),
   pinnedChatrooms: many(userPinnedChatrooms),
   chatroomMessageReads: many(chatroomMessageReads),
+  coWorkingSpaceRecommendations: many(coWorkingSpaceRecommendations),
 }));
 
 export const pushSubscriptions = pgTable(
@@ -901,6 +902,32 @@ export const voucherRecommendationsRelation = relations(
   ({ one }) => ({
     creator: one(users, {
       fields: [voucherRecommendations.creatorId],
+      references: [users.id],
+    }),
+  }),
+);
+
+export const coWorkingSpaceRecommendations = pgTable(
+  'co_working_space_recommendations',
+  {
+    id: text('id').primaryKey().$defaultFn(createId),
+    title: text('title').notNull(),
+    imageURL: text('image_url').notNull(),
+    location: text('location', { enum: ['Ganesha', 'Jatinangor'] }).notNull(),
+    address: text('address').notNull(),
+    mapsURL: text('maps_url').notNull(),
+    description: text('description'),
+    creatorId: text('creator_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+  },
+);
+
+export const coWorkingSpaceRecommendationsRelation = relations(
+  coWorkingSpaceRecommendations,
+  ({ one }) => ({
+    creator: one(users, {
+      fields: [coWorkingSpaceRecommendations.creatorId],
       references: [users.id],
     }),
   }),
