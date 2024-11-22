@@ -1,7 +1,7 @@
 import type { z } from 'zod';
 import type { Database } from '~/db/drizzle';
 import { firstSure } from '~/db/helper';
-import { InferInsertModel, InferSelectModel, and, eq } from 'drizzle-orm';
+import { InferInsertModel, and, eq } from 'drizzle-orm';
 import {
   coWorkingSpaceRecommendations,
   voucherRecommendations,
