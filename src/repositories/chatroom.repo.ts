@@ -45,6 +45,7 @@ export async function saveMessage(
   userId: string,
   chatroomId: string,
   message: string,
+  replyId: string,
 ) {
   return await db.transaction(async (tx) => {
     return await tx
@@ -53,6 +54,7 @@ export async function saveMessage(
         chatroomId,
         userId,
         content: message,
+        replyId,
       })
       .returning();
   });
