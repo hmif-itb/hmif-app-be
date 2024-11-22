@@ -50,9 +50,9 @@ recommendationRoute.openapi(postVoucherReviewRoute, async (c) => {
 
   const voucher = await postVoucherReview(db, {
     userId: id,
-    voucherId: voucherId,
-    rating: rating,
-    review: review,
+    voucherId,
+    rating,
+    review,
   });
 
   return c.json(voucher, 201);
@@ -65,15 +65,15 @@ recommendationRoute.openapi(postCoWorkingSpaceReviewRoute, async (c) => {
 
   const voucher = await postCoWorkingSpaceReview(db, {
     userId: id,
-    coWorkingSpaceId: coWorkingSpaceId,
-    rating: rating,
-    review: review,
+    coWorkingSpaceId,
+    rating,
+    review,
   });
 
   return c.json(voucher, 201);
 });
 
-recommendationRoute.openapi(deleteVoucherReviewRoute, async(c) => {
+recommendationRoute.openapi(deleteVoucherReviewRoute, async (c) => {
   const { id } = c.var.user;
   const { userId, voucherId } = c.req.valid('param');
 
@@ -94,7 +94,7 @@ recommendationRoute.openapi(deleteVoucherReviewRoute, async(c) => {
   }
 });
 
-recommendationRoute.openapi(deleteCoWorkingSpaceReviewRoute, async(c) => {
+recommendationRoute.openapi(deleteCoWorkingSpaceReviewRoute, async (c) => {
   const { id } = c.var.user;
   const { coWorkingSpaceId, userId } = c.req.valid('param');
 
