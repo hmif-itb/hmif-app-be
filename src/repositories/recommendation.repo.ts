@@ -1,9 +1,12 @@
 import type { z } from 'zod';
 import type { Database } from '~/db/drizzle';
 import { firstSure } from '~/db/helper';
+import { InferInsertModel, InferSelectModel, and, eq } from 'drizzle-orm';
 import {
   coWorkingSpaceRecommendations,
   voucherRecommendations,
+  voucherReviews,
+  coWorkingSpaceReviews,
 } from '~/db/schema';
 import type { JWTPayloadSchema } from '~/types/login.types';
 import type {
@@ -46,3 +49,87 @@ export const createCoWorkingSpaceRecommendation = async (
 
   return recommendation;
 };
+
+/**
+ * Insert a new voucher review
+ * @param db Database instance
+ * @param review Review object to insert
+ * @returns Inserted review or undefined if insertion fails
+ */
+export async function postVoucherReview(
+  db: Database,
+  review: InferInsertModel<typeof voucherReviews>,
+) {
+  return await db
+    .insert(voucherReviews)
+    .values(review)
+    .onConflictDoNothing()
+    .returning()
+    .then(firstSure);
+}
+
+/**
+ * Insert a new coworking space review
+ * @param db Database instance
+ * @param review Review object to insert
+ * @returns Inserted review or undefined if insertion fails
+ */
+export async function postCoWorkingSpaceReview(
+  db: Database,
+  review: InferInsertModel<typeof coWorkingSpaceReviews>,
+) {
+  return await db
+    .insert(coWorkingSpaceReviews)
+    .values(review)
+    .onConflictDoNothing()
+    .returning()
+    .then(firstSure);
+}
+
+/**
+ * Delete a voucher review
+ * @param db Database instance
+ * @param voucherId ID of the voucher recommendation
+ * @param userId ID of the user who made the review
+ * @returns Deleted review or undefined if no review was deleted
+ */
+export async function deleteVoucherReview(
+  db: Database,
+  voucherId: string,
+  userId: string,
+) {
+  return await db
+    .delete(voucherReviews)
+    .where(
+      and(
+        eq(voucherReviews.voucherId, voucherId),
+        eq(voucherReviews.userId, userId),
+      ),
+    )
+    .returning()
+    .then(firstSure);
+}
+
+/**
+ * Delete a coworking space review
+ * @param db Database instance
+ * @param coWorkingSpaceId ID of the coworking space recommendation
+ * @param userId ID of the user who made the review
+ * @returns Deleted review or undefined if no review was deleted
+ */
+export async function deleteCoWorkingSpaceReview(
+  db: Database,
+  coWorkingSpaceId: string,
+  userId: string,
+) {
+  return await db
+    .delete(coWorkingSpaceReviews)
+    .where(
+      and(
+        eq(coWorkingSpaceReviews.coWorkingSpaceId, coWorkingSpaceId),
+        eq(coWorkingSpaceReviews.userId, userId),
+      ),
+    )
+    .returning()
+    .then(firstSure);
+}
