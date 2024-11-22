@@ -46,7 +46,7 @@ export const CoWorkingSpaceRecommendationResponseSchema =
   });
 
 export const PostVoucherReviewParamsSchema = z.object({
-  voucherId: z.string().uuid().openapi({
+  voucherId: z.string().openapi({
     example: 'voucher-id',
     description: 'UUID of the voucher recommendation',
   }),

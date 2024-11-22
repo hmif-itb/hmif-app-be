@@ -16,7 +16,6 @@ import {
   deleteVoucherReviewRoute,
   deleteCoWorkingSpaceReviewRoute,
 } from '~/routes/recommendation.route';
-
 export const recommendationRoute = createAuthRouter();
 
 recommendationRoute.openapi(postRecommendationVoucherRoute, async (c) => {
@@ -74,24 +73,44 @@ recommendationRoute.openapi(postCoWorkingSpaceReviewRoute, async (c) => {
   return c.json(voucher, 201);
 });
 
-recommendationRoute.openapi(deleteVoucherReviewRoute, async (c) => {
+recommendationRoute.openapi(deleteVoucherReviewRoute, async(c) => {
   const { id } = c.var.user;
-  const { voucherId, userId } = c.req.valid('param');
+  const { userId, voucherId } = c.req.valid('param');
 
-  if (id !== userId) {
-    return c.json({ success: false }, 201);
+  if (id === userId) {
+    await deleteVoucherReview(db, voucherId, userId);
+
+    const response = {
+      success: true,
+    };
+
+    return c.json(response, 201);
+  } else {
+    const errorResponse = {
+      error: 'Unauthorized',
+    };
+
+    return c.json(errorResponse, 404);
   }
-  await deleteVoucherReview(db, voucherId, userId);
-  return c.json({ success: true }, 201);
 });
 
-recommendationRoute.openapi(deleteCoWorkingSpaceReviewRoute, async (c) => {
+recommendationRoute.openapi(deleteCoWorkingSpaceReviewRoute, async(c) => {
   const { id } = c.var.user;
   const { coWorkingSpaceId, userId } = c.req.valid('param');
 
-  if (id !== userId) {
-    return c.json({ success: false }, 201);
+  if (id === userId) {
+    await deleteCoWorkingSpaceReview(db, coWorkingSpaceId, userId);
+
+    const response = {
+      success: true,
+    };
+
+    return c.json(response, 201);
+  } else {
+    const errorResponse = {
+      error: 'Unauthorized',
+    };
+
+    return c.json(errorResponse, 404);
   }
-  await deleteCoWorkingSpaceReview(db, coWorkingSpaceId, userId);
-  return c.json({ success: true }, 201);
 });
