@@ -53,7 +53,7 @@ curhatRouter.openapi(getUserChatroomsRoute, async (c) => {
     }
   >;
   if (roles.includes('curhatadmin')) {
-    chatrooms = await getWelfareChatrooms(db);
+    chatrooms = await getWelfareChatrooms(db, userId);
   } else {
     chatrooms = await getUserChatrooms(db, userId);
   }
