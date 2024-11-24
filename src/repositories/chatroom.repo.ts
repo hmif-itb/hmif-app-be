@@ -1,6 +1,6 @@
-import { eq, InferInsertModel } from 'drizzle-orm';
+import { and, eq, InferInsertModel } from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
-import { chatroomMessages, chatrooms } from '~/db/schema';
+import { chatroomMessages, chatrooms, userPinnedChatrooms } from '~/db/schema';
 
 export async function getUserChatrooms(db: Database, userId: string) {
   const crms = await db.query.chatrooms.findMany({
@@ -70,5 +70,29 @@ export async function getChatroomById(db: Database, chatroomId: string) {
 export async function deleteChatroom(db: Database, chatroomId: string) {
   return await db.transaction(async (tx) => {
     return await tx.delete(chatrooms).where(eq(chatrooms.id, chatroomId));
+  });
+}
+
+export async function pinChatroom(
+  db: Database,
+  chatroomId: string,
+  userId: string,
+  isPinned: boolean,
+) {
+  await db.transaction(async (tx) => {
+    if (isPinned) {
+      return await tx
+        .insert(userPinnedChatrooms)
+        .values({ userId, chatroomId });
+    } else {
+      return await tx
+        .delete(userPinnedChatrooms)
+        .where(
+          and(
+            eq(userPinnedChatrooms.chatroomId, chatroomId),
+            eq(userPinnedChatrooms.userId, userId),
+          ),
+        );
+    }
   });
 }
