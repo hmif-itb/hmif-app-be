@@ -16,6 +16,7 @@ import {
   deleteVoucherReviewRoute,
   deleteCoWorkingSpaceReviewRoute,
 } from '~/routes/recommendation.route';
+import { PostVoucherReviewParamsSchema } from '~/types/recommendations.types';
 export const recommendationRoute = createAuthRouter();
 
 recommendationRoute.openapi(postRecommendationVoucherRoute, async (c) => {
@@ -48,12 +49,17 @@ recommendationRoute.openapi(postVoucherReviewRoute, async (c) => {
   const { voucherId } = c.req.valid('param');
   const { rating, review } = c.req.valid('json');
 
-  const voucher = await postVoucherReview(db, {
+  const data = {
     userId: id,
     voucherId,
     rating,
     review,
-  });
+  };
+  console.log('Created data:', data);
+
+  const voucher = await postVoucherReview(db, data);
+
+  console.log('Created voucher review:', voucher);
 
   return c.json(voucher, 201);
 });
@@ -63,12 +69,17 @@ recommendationRoute.openapi(postCoWorkingSpaceReviewRoute, async (c) => {
   const { coWorkingSpaceId } = c.req.valid('param');
   const { rating, review } = c.req.valid('json');
 
-  const voucher = await postCoWorkingSpaceReview(db, {
-    userId: id,
+  const data = {
     coWorkingSpaceId,
+    userId: id,
     rating,
     review,
-  });
+  };
+  console.log('Created data:', data);
+
+  const voucher = await postCoWorkingSpaceReview(db, data);
+
+  console.log('Created voucher review:', voucher);
 
   return c.json(voucher, 201);
 });

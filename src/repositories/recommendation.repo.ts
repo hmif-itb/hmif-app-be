@@ -12,6 +12,7 @@ import type { JWTPayloadSchema } from '~/types/login.types';
 import type {
   CoWorkingSpaceRecommendationSchema,
   VoucherRecommendationSchema,
+  VoucherReviewSchema,
 } from '~/types/recommendations.types';
 
 export const createVoucherRecommendation = async (
@@ -50,23 +51,20 @@ export const createCoWorkingSpaceRecommendation = async (
   return recommendation;
 };
 
-/**
- * Insert a new voucher review
- * @param db Database instance
- * @param review Review object to insert
- * @returns Inserted review or undefined if insertion fails
- */
-export async function postVoucherReview(
+export const postVoucherReview = async (
   db: Database,
-  review: InferInsertModel<typeof voucherReviews>,
-) {
-  return await db
+  data: z.infer<typeof VoucherReviewSchema>,
+) => {
+  const review = await db
     .insert(voucherReviews)
-    .values(review)
-    .onConflictDoNothing()
+    .values({
+      ...data,
+    })
     .returning()
     .then(firstSure);
-}
+
+  return review;
+};
 
 /**
  * Insert a new coworking space review
@@ -76,11 +74,11 @@ export async function postVoucherReview(
  */
 export async function postCoWorkingSpaceReview(
   db: Database,
-  review: InferInsertModel<typeof coWorkingSpaceReviews>,
+  data: InferInsertModel<typeof coWorkingSpaceReviews>,
 ) {
   return await db
     .insert(coWorkingSpaceReviews)
-    .values(review)
+    .values(data)
     .onConflictDoNothing()
     .returning()
     .then(firstSure);

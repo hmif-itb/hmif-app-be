@@ -6,6 +6,7 @@ import {
   VoucherRecommendationSchema,
   PostVoucherReviewParamsSchema,
   PostVoucherReviewResponseSchema,
+  PostVoucherReviewBodySchema,
   PostCoWorkingSpaceReviewParamsSchema,
   PostCoWorkingSpaceReviewResponseSchema,
   DeleteVoucherReviewResponseSchema,
@@ -91,16 +92,7 @@ export const postVoucherReviewRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: z.object({
-            rating: z.number().int().min(1).max(5).openapi({
-              example: 4,
-              description: 'Rating for the voucher (1-5)',
-            }),
-            review: z.string().openapi({
-              example: 'Good value for money!',
-              description: 'Detailed review about the voucher',
-            }),
-          }),
+          schema: PostVoucherReviewBodySchema,
         },
       },
     },

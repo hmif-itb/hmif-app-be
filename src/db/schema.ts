@@ -936,11 +936,11 @@ export const coWorkingSpaceRecommendationsRelation = relations(
 export const voucherReviews = pgTable(
   'voucher_reviews',
   {
-    voucherId: text('recommendation_id')
-      .references(() => voucherRecommendations.id, { onDelete: 'cascade' })
-      .notNull(),
     userId: text('user_id')
       .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    voucherId: text('voucher_id')
+      .references(() => voucherRecommendations.id, { onDelete: 'cascade' })
       .notNull(),
     rating: integer('rating').notNull(),
     review: text('review').notNull(),
@@ -951,7 +951,7 @@ export const voucherReviews = pgTable(
 export const coWorkingSpaceReviews = pgTable(
   'co_working_space_reviews',
   {
-    coWorkingSpaceId: text('recommendation_id')
+    coWorkingSpaceId: text('coWorkingSpace_id')
       .references(() => coWorkingSpaceRecommendations.id, {
         onDelete: 'cascade',
       })
