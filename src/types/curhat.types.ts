@@ -13,7 +13,11 @@ export const ChatroomMessageSchema = createSelectSchema(chatroomMessages)
   })
   .extend({
     isSender: z.boolean().optional(),
-    reply: createSelectSchema(chatroomMessages).optional(),
+    reply: createSelectSchema(chatroomMessages)
+      .omit({
+        userId: true,
+      })
+      .optional(),
   })
   .openapi('ChatroomMessage');
 

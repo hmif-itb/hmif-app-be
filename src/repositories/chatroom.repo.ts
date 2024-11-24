@@ -9,12 +9,31 @@ export async function getUserChatrooms(db: Database, userId: string) {
       messages: true,
     },
   });
-  return crms.map((chatroom) => ({
-    ...chatroom,
-    messages: chatroom.messages.sort(
-      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
-    ),
-  }));
+  return crms.map((chatroom) => {
+    const messageMap = new Map(chatroom.messages.map((msg) => [msg.id, msg]));
+
+    return {
+      ...chatroom,
+      messages: chatroom.messages
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+        .map((message) => {
+          const reply = message.replyId
+            ? messageMap.get(message.replyId) ?? null
+            : null;
+          if (reply) {
+            const { userId, ...replyWithoutUserId } = reply;
+            return {
+              ...message,
+              reply: replyWithoutUserId,
+            };
+          }
+          return {
+            ...message,
+            reply: null,
+          };
+        }),
+    };
+  });
 }
 
 export async function getWelfareChatrooms(db: Database) {
