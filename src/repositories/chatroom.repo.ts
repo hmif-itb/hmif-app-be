@@ -1,20 +1,23 @@
 import { eq, InferInsertModel } from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
-import { chatroomMessages, chatrooms } from '~/db/schema';
+import {
+  chatroomMessages,
+  chatrooms,
+  Chatroom,
+  ChatroomMessage,
+} from '~/db/schema';
 
-export async function getUserChatrooms(db: Database, userId: string) {
-  const crms = await db.query.chatrooms.findMany({
-    where: eq(chatrooms.userId, userId),
-    with: {
-      messages: true,
-    },
-  });
+type ChatroomWithMessages = Chatroom & {
+  messages: ChatroomMessage[];
+};
+function processChatrooms(crms: ChatroomWithMessages[]) {
   return crms.map((chatroom) => {
-    const messageMap = new Map(chatroom.messages.map((msg) => [msg.id, msg]));
+    const messages = chatroom.messages ?? [];
+    const messageMap = new Map(messages.map((msg) => [msg.id, msg]));
 
     return {
       ...chatroom,
-      messages: chatroom.messages
+      messages: messages
         .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
         .map((message) => {
           const reply = message.replyId
@@ -36,18 +39,23 @@ export async function getUserChatrooms(db: Database, userId: string) {
   });
 }
 
+export async function getUserChatrooms(db: Database, userId: string) {
+  const crms = await db.query.chatrooms.findMany({
+    where: eq(chatrooms.userId, userId),
+    with: {
+      messages: true,
+    },
+  });
+  return processChatrooms(crms as ChatroomWithMessages[]);
+}
+
 export async function getWelfareChatrooms(db: Database) {
   const crms = await db.query.chatrooms.findMany({
     with: {
       messages: true,
     },
   });
-  return crms.map((chatroom) => ({
-    ...chatroom,
-    messages: chatroom.messages.sort(
-      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
-    ),
-  }));
+  return processChatrooms(crms as ChatroomWithMessages[]);
 }
 
 export async function createChatroom(
