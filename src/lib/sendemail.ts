@@ -45,7 +45,7 @@ export async function sendEmail(emailOptions: EmailOptions): Promise<void> {
 
     console.log(`Email berhasil dikirim: ${info.messageId}`);
   } catch (error) {
-    console.error(`Gagal mengirim email: ${error}`);
+    console.error(`Gagal mengirim email: ${String(error)}`);
     throw error;
   }
 }
