@@ -1,8 +1,9 @@
-import { eq, InferInsertModel } from 'drizzle-orm';
+import { and, eq, InferInsertModel } from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
 import {
   chatroomMessages,
   chatrooms,
+  userPinnedChatrooms,
   Chatroom,
   ChatroomMessage,
 } from '~/db/schema';
@@ -46,16 +47,34 @@ export async function getUserChatrooms(db: Database, userId: string) {
       messages: true,
     },
   });
-  return processChatrooms(crms as ChatroomWithMessages[]);
+  return crms.map((chatroom) => ({
+    ...chatroom,
+    messages: chatroom.messages.sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+    ),
+    isPinned: false,
+  }));
 }
 
-export async function getWelfareChatrooms(db: Database) {
-  const crms = await db.query.chatrooms.findMany({
-    with: {
-      messages: true,
-    },
-  });
-  return processChatrooms(crms as ChatroomWithMessages[]);
+export async function getWelfareChatrooms(db: Database, userId: string) {
+  const [crms, pinned] = await Promise.all([
+    db.query.chatrooms.findMany({
+      with: {
+        messages: true,
+      },
+    }),
+    db.query.userPinnedChatrooms.findMany({
+      where: eq(userPinnedChatrooms.userId, userId),
+    }),
+  ]);
+
+  return crms.map((chatroom) => ({
+    ...chatroom,
+    messages: chatroom.messages.sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+    ),
+    isPinned: pinned.some((p) => p.chatroomId === chatroom.id),
+  }));
 }
 
 export async function createChatroom(
@@ -99,5 +118,29 @@ export async function getChatroomById(db: Database, chatroomId: string) {
 export async function deleteChatroom(db: Database, chatroomId: string) {
   return await db.transaction(async (tx) => {
     return await tx.delete(chatrooms).where(eq(chatrooms.id, chatroomId));
+  });
+}
+
+export async function pinChatroom(
+  db: Database,
+  chatroomId: string,
+  userId: string,
+  isPinned: boolean,
+) {
+  await db.transaction(async (tx) => {
+    if (isPinned) {
+      return await tx
+        .insert(userPinnedChatrooms)
+        .values({ userId, chatroomId });
+    } else {
+      return await tx
+        .delete(userPinnedChatrooms)
+        .where(
+          and(
+            eq(userPinnedChatrooms.chatroomId, chatroomId),
+            eq(userPinnedChatrooms.userId, userId),
+          ),
+        );
+    }
   });
 }
