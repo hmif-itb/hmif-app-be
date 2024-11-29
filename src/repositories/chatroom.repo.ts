@@ -6,12 +6,16 @@ import {
   userPinnedChatrooms,
   Chatroom,
   ChatroomMessage,
+  UserPinnedChatrooms,
 } from '~/db/schema';
 
 type ChatroomWithMessages = Chatroom & {
   messages: ChatroomMessage[];
 };
-function processChatrooms(crms: ChatroomWithMessages[]) {
+function processChatrooms(
+  crms: ChatroomWithMessages[],
+  pinned: UserPinnedChatrooms[],
+) {
   return crms.map((chatroom) => {
     const messages = chatroom.messages ?? [];
     const messageMap = new Map(messages.map((msg) => [msg.id, msg]));
@@ -36,6 +40,7 @@ function processChatrooms(crms: ChatroomWithMessages[]) {
             reply: null,
           };
         }),
+      isPinned: pinned.some((p) => p.chatroomId === chatroom.id),
     };
   });
 }
@@ -47,13 +52,7 @@ export async function getUserChatrooms(db: Database, userId: string) {
       messages: true,
     },
   });
-  return crms.map((chatroom) => ({
-    ...chatroom,
-    messages: chatroom.messages.sort(
-      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
-    ),
-    isPinned: false,
-  }));
+  return processChatrooms(crms, []);
 }
 
 export async function getWelfareChatrooms(db: Database, userId: string) {
@@ -68,13 +67,7 @@ export async function getWelfareChatrooms(db: Database, userId: string) {
     }),
   ]);
 
-  return crms.map((chatroom) => ({
-    ...chatroom,
-    messages: chatroom.messages.sort(
-      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
-    ),
-    isPinned: pinned.some((p) => p.chatroomId === chatroom.id),
-  }));
+  return processChatrooms(crms, pinned);
 }
 
 export async function createChatroom(

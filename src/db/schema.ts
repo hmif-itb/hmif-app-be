@@ -806,6 +806,8 @@ export const userPinnedChatrooms = pgTable(
   (t) => ({ pk: primaryKey({ columns: [t.userId, t.chatroomId] }) }),
 );
 
+export type UserPinnedChatrooms = InferSelectModel<typeof userPinnedChatrooms>;
+
 export const userPinnedChatroomsRelation = relations(
   userPinnedChatrooms,
   ({ one }) => ({
