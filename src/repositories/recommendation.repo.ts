@@ -13,7 +13,6 @@ import type {
   CoWorkingSpaceRecommendationSchema,
   VoucherRecommendationSchema,
   VoucherReviewSchema,
-  GetVoucherReviewParamsSchema
 } from '~/types/recommendations.types';
 
 export const createVoucherRecommendation = async (
@@ -53,8 +52,8 @@ export const createCoWorkingSpaceRecommendation = async (
 };
 
 export const getVoucherReviewById = async (
-  db: Database, 
-  q: { userId: string, voucherId: string },
+  db: Database,
+  q: { userId: string; voucherId: string },
 ) => {
   const { userId, voucherId } = q;
   return await db.query.voucherReviews.findFirst({
@@ -63,7 +62,7 @@ export const getVoucherReviewById = async (
       eq(voucherReviews.userId, userId),
     ),
   });
-}
+};
 
 export const postVoucherReview = async (
   db: Database,
@@ -81,9 +80,9 @@ export const postVoucherReview = async (
 };
 
 export const getCoWorkingSpaceReviewById = async (
-  db: Database, 
-  q: { userId: string, coWorkingSpaceId: string },
-) => { 
+  db: Database,
+  q: { userId: string; coWorkingSpaceId: string },
+) => {
   const { userId, coWorkingSpaceId } = q;
   return await db.query.coWorkingSpaceReviews.findFirst({
     where: and(
@@ -91,7 +90,7 @@ export const getCoWorkingSpaceReviewById = async (
       eq(coWorkingSpaceReviews.userId, userId),
     ),
   });
-}
+};
 
 /**
  * Insert a new coworking space review
