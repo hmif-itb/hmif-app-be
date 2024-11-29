@@ -148,6 +148,13 @@
       "when": 1731917458503,
       "tag": "0020_wise_red_skull",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1732838399487,
+      "tag": "0021_salty_cammi",
+      "breakpoints": true
     }
   ]
 }

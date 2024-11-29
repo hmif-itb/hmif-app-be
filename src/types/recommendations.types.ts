@@ -65,9 +65,9 @@ export const VoucherReviewSchema = z.object({
 });
 
 export const PostVoucherReviewParamsSchema = z.object({
-  voucherId: z.string().uuid().openapi({
-    example: '123e4567-e89b-12d3-a456-426614174000',
-    description: 'UUID of the voucher recommendation',
+  voucherId: z.string().openapi({
+    example: 'example-voucher-id',
+    description: 'CUID2 of the voucher recommendation',
   }),
 });
 
@@ -94,7 +94,7 @@ export const PostVoucherReviewResponseSchema = createSelectSchema(
 
 export const PostCoWorkingSpaceReviewParamsSchema = z.object({
   coWorkingSpaceId: z.string().openapi({
-    example: 'coWorkingSpace-id',
+    example: 'example-coWorkingSpace-id',
     description: 'ID of the co-working space recommendation',
   }),
 });
@@ -110,6 +110,17 @@ export const PostCoWorkingSpaceReviewResponseSchema = createSelectSchema(
       .openapi({ example: 'Great place with excellent Wi-Fi!' }),
   },
 );
+
+export const GetVoucherReviewParamsSchema = z.object({
+  voucherId: z.string().openapi({
+    example: 'voucher-id',
+    description: 'ID of the voucher being reviewed',
+  }),
+  userId: z.string().openapi({
+    example: 'user-id',
+    description: 'ID of the review to delete',
+  }),
+});
 
 export const DeleteVoucherReviewParamsSchema = z.object({
   voucherId: z.string().openapi({

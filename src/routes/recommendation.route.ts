@@ -18,6 +18,7 @@ import {
   validationErrorResponse,
   serverErrorResponse,
   ErrorSchema,
+  errorResponse,
   ServerErrorSchema,
   ValidationErrorSchema,
 } from '~/types/responses.type';
@@ -106,22 +107,8 @@ export const postVoucherReviewRoute = createRoute({
         },
       },
     },
-    400: {
-      description: 'Bad request',
-      content: {
-        'application/json': {
-          schema: z.union([ErrorSchema, ValidationErrorSchema]),
-        },
-      },
-    },
-    500: {
-      description: 'Server error',
-      content: {
-        'application/json': {
-          schema: ErrorSchema,
-        },
-      },
-    },
+    400: validationErrorResponse,
+    500: serverErrorResponse,
   },
 });
 
@@ -158,22 +145,8 @@ export const postCoWorkingSpaceReviewRoute = createRoute({
         },
       },
     },
-    400: {
-      description: 'Bad request',
-      content: {
-        'application/json': {
-          schema: z.union([ErrorSchema, ValidationErrorSchema]),
-        },
-      },
-    },
-    500: {
-      description: 'Server error',
-      content: {
-        'application/json': {
-          schema: ErrorSchema,
-        },
-      },
-    },
+    400: validationErrorResponse,
+    500: serverErrorResponse,
   },
 });
 
@@ -195,22 +168,9 @@ export const deleteVoucherReviewRoute = createRoute({
         },
       },
     },
-    404: {
-      description: 'Review not found or unauthorized',
-      content: {
-        'application/json': {
-          schema: ErrorSchema,
-        },
-      },
-    },
-    500: {
-      description: 'Internal server error',
-      content: {
-        'application/json': {
-          schema: ServerErrorSchema,
-        },
-      },
-    },
+    400: validationErrorResponse,
+    404: errorResponse,
+    500: serverErrorResponse,
   },
 });
 
@@ -232,21 +192,8 @@ export const deleteCoWorkingSpaceReviewRoute = createRoute({
         },
       },
     },
-    404: {
-      description: 'Review not found or unauthorized',
-      content: {
-        'application/json': {
-          schema: ErrorSchema,
-        },
-      },
-    },
-    400: {
-      description: 'Bad request',
-      content: {
-        'application/json': {
-          schema: ValidationErrorSchema,
-        },
-      },
-    },
+    400: validationErrorResponse,
+    404: errorResponse,
+    500: serverErrorResponse,
   },
 });

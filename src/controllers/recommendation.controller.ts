@@ -3,6 +3,8 @@ import { createAuthRouter } from './router-factory';
 import {
   createCoWorkingSpaceRecommendation,
   createVoucherRecommendation,
+  getVoucherReviewById,
+  getCoWorkingSpaceReviewById,
   postVoucherReview,
   deleteVoucherReview,
   postCoWorkingSpaceReview,
@@ -16,7 +18,7 @@ import {
   deleteVoucherReviewRoute,
   deleteCoWorkingSpaceReviewRoute,
 } from '~/routes/recommendation.route';
-import { PostVoucherReviewParamsSchema } from '~/types/recommendations.types';
+import { PostgresError } from 'postgres';
 export const recommendationRoute = createAuthRouter();
 
 recommendationRoute.openapi(postRecommendationVoucherRoute, async (c) => {
@@ -57,11 +59,18 @@ recommendationRoute.openapi(postVoucherReviewRoute, async (c) => {
   };
   console.log('Created data:', data);
 
-  const voucher = await postVoucherReview(db, data);
-
-  console.log('Created voucher review:', voucher);
-
-  return c.json(voucher, 201);
+  try {
+    const voucher = await postVoucherReview(db, data);
+    console.log('Created voucher review:', voucher);
+    return c.json(voucher, 201);
+  } catch (error) {
+    if (error instanceof PostgresError) {
+      console.log('Postgres error:', error);
+      return c.json({ error: 'failed to create voucher review', formErrors: [], fieldErrors: { error: ['failed to create voucher review'] } }, 400);
+    } else {
+      return c.json({ error: 'Something went wrong', formErrors: [], fieldErrors: { error: ['Something went wrong'] } }, 500);
+    }
+  }
 });
 
 recommendationRoute.openapi(postCoWorkingSpaceReviewRoute, async (c) => {
@@ -77,31 +86,47 @@ recommendationRoute.openapi(postCoWorkingSpaceReviewRoute, async (c) => {
   };
   console.log('Created data:', data);
 
-  const voucher = await postCoWorkingSpaceReview(db, data);
-
-  console.log('Created voucher review:', voucher);
-
-  return c.json(voucher, 201);
+  try {
+    const coWorkingSpaceReview = await postCoWorkingSpaceReview(db, data);
+    console.log('Created co-working space review:', coWorkingSpaceReview);
+    return c.json(coWorkingSpaceReview, 201);
+  } catch (error) {
+    if (error instanceof PostgresError) {
+      return c.json({ error: 'failed to create co-working space review', formErrors: [], fieldErrors: { error: ['failed to create co-working space review'] } }, 400);
+    } else {
+      return c.json({ error: 'Something went wrong', formErrors: [], fieldErrors: { error: ['Something went wrong'] } }, 500);
+    }
+  }
 });
 
 recommendationRoute.openapi(deleteVoucherReviewRoute, async (c) => {
   const { id } = c.var.user;
   const { userId, voucherId } = c.req.valid('param');
 
-  if (id === userId) {
-    await deleteVoucherReview(db, voucherId, userId);
+  const voucherDB = await getVoucherReviewById(db, { voucherId, userId });
+  if (!voucherDB?.voucherId) {
+    return c.json({ error: 'Voucher review not found', formErrors: [], fieldErrors: { error: ['Voucher review not found'] } }, 404);
+  }
 
-    const response = {
-      success: true,
-    };
+  try {
+    if (id === userId) {
+      await deleteVoucherReview(db, voucherId, userId);
 
-    return c.json(response, 201);
-  } else {
-    const errorResponse = {
-      error: 'Unauthorized',
-    };
+      const response = {
+        success: true,
+        error: '',
+      };
 
-    return c.json(errorResponse, 404);
+      return c.json(response, 201);
+    } else {
+      return c.json({ error: 'failed to delete voucher', formErrors: [], fieldErrors: { error: ['Unauthorized'] } }, 400);
+    }
+  } catch (error) {
+    if (error instanceof PostgresError) {
+      return c.json({ error: 'failed to delete voucher', formErrors: [], fieldErrors: { error: ['failed to delete voucher'] } }, 400);
+    } else {
+      return c.json({ error: 'Something went wrong', formErrors: [], fieldErrors: { error: ['Something went wrong'] } }, 500);
+    }
   }
 });
 
@@ -109,19 +134,29 @@ recommendationRoute.openapi(deleteCoWorkingSpaceReviewRoute, async (c) => {
   const { id } = c.var.user;
   const { coWorkingSpaceId, userId } = c.req.valid('param');
 
-  if (id === userId) {
-    await deleteCoWorkingSpaceReview(db, coWorkingSpaceId, userId);
+  const coworkingDB = await getCoWorkingSpaceReviewById(db, { coWorkingSpaceId, userId });
+  if (!coworkingDB?.coWorkingSpaceId) {
+    return c.json({ error: 'Co-working space review not found', formErrors: [], fieldErrors: { error: ['Co-working space review not found'] } }, 404);
+  } 
 
-    const response = {
-      success: true,
-    };
+  try {
+    if (id === userId) {
+      await deleteCoWorkingSpaceReview(db, coWorkingSpaceId, userId);
 
-    return c.json(response, 201);
-  } else {
-    const errorResponse = {
-      error: 'Unauthorized',
-    };
+      const response = {
+        success: true,
+        error: '',
+      };
 
-    return c.json(errorResponse, 404);
+      return c.json(response, 201);
+    } else {
+      return c.json({ error: 'failed to delete voucher', formErrors: [], fieldErrors: { error: ['failed to delete voucher'] } }, 400);
+    }
+  } catch (error) {
+    if (error instanceof PostgresError) {
+      return c.json({ error: 'failed to delete co-working space review', formErrors: [], fieldErrors: { error: ['failed to delete co-working space review'] } }, 400);
+    } else {
+      return c.json({ error: 'Something went wrong', formErrors: [], fieldErrors: { error: ['Something went wrong'] } }, 500);
+    }
   }
 });
