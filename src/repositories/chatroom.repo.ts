@@ -1,6 +1,6 @@
-import { eq, InferInsertModel } from 'drizzle-orm';
+import { eq, InferInsertModel, not, sql, inArray } from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
-import { chatroomMessages, chatrooms } from '~/db/schema';
+import { chatroomMessageReads, chatroomMessages, chatrooms } from '~/db/schema';
 
 export async function getUserChatrooms(db: Database, userId: string) {
   const crms = await db.query.chatrooms.findMany({
@@ -71,4 +71,23 @@ export async function deleteChatroom(db: Database, chatroomId: string) {
   return await db.transaction(async (tx) => {
     return await tx.delete(chatrooms).where(eq(chatrooms.id, chatroomId));
   });
+}
+
+export async function getUnreadCountChatroomMessages(
+  db: Database,
+  userId: string,
+) {
+  const readMessageIdsSubquery = db
+    .select({ chatroomMessageId: chatroomMessageReads.chatroomMessageId })
+    .from(chatroomMessageReads)
+    .where(eq(chatroomMessageReads.userId, userId));
+
+  return await db
+    .select({
+      chatroomId: chatroomMessages.chatroomId,
+      unreadCount: sql<number>`COUNT(${chatroomMessages.id})`,
+    })
+    .from(chatroomMessages)
+    .where(not(inArray(chatroomMessages.id, readMessageIdsSubquery)))
+    .groupBy(chatroomMessages.chatroomId);
 }

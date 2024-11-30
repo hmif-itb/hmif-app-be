@@ -2,12 +2,14 @@ import {
   createChatroomRoute,
   deleteChatroomRoute,
   getUserChatroomsRoute,
+  unreadCountChatroomMessages,
 } from '~/routes/curhat.route';
 import { createAuthRouter } from './router-factory';
 import {
   createChatroom,
   deleteChatroom,
   getChatroomById,
+  getUnreadCountChatroomMessages,
   getUserChatrooms,
   getWelfareChatrooms,
 } from '~/repositories/chatroom.repo';
@@ -84,4 +86,20 @@ curhatRouter.openapi(deleteChatroomRoute, async (c) => {
 
   await deleteChatroom(db, chatroomId);
   return c.json({ message: 'Chatroom deleted' }, 200);
+});
+
+curhatRouter.openapi(unreadCountChatroomMessages, async (c) => {
+  const { id: userId } = c.var.user;
+
+  if (!userId) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
+  try {
+    const unreadMessages = await getUnreadCountChatroomMessages(db, userId);
+
+    return c.json(unreadMessages, 200);
+  } catch (error) {
+    return c.json({ error: 'Internal Server Error' }, 500);
+  }
 });
