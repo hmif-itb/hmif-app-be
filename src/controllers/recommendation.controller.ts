@@ -57,15 +57,14 @@ recommendationRoute.openapi(postVoucherReviewRoute, async (c) => {
     rating,
     review,
   };
-  console.log('Created data:', data);
 
   try {
     const voucher = await postVoucherReview(db, data);
-    console.log('Created voucher review:', voucher);
+    // console.log('Created voucher review:', voucher);
     return c.json(voucher, 201);
   } catch (error) {
     if (error instanceof PostgresError) {
-      console.log('Postgres error:', error);
+      // console.log('Postgres error:', error);
       return c.json(
         {
           error: 'failed to create voucher review',
@@ -98,11 +97,10 @@ recommendationRoute.openapi(postCoWorkingSpaceReviewRoute, async (c) => {
     rating,
     review,
   };
-  console.log('Created data:', data);
 
   try {
     const coWorkingSpaceReview = await postCoWorkingSpaceReview(db, data);
-    console.log('Created co-working space review:', coWorkingSpaceReview);
+    // console.log('Created co-working space review:', coWorkingSpaceReview);
     return c.json(coWorkingSpaceReview, 201);
   } catch (error) {
     if (error instanceof PostgresError) {
