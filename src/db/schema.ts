@@ -934,3 +934,60 @@ export const coWorkingSpaceRecommendationsRelation = relations(
     }),
   }),
 );
+
+export const voucherReviews = pgTable(
+  'voucher_reviews',
+  {
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    voucherId: text('voucher_id')
+      .references(() => voucherRecommendations.id, { onDelete: 'cascade' })
+      .notNull(),
+    rating: integer('rating').notNull(),
+    review: text('review').notNull(),
+  },
+  (t) => ({ pk: primaryKey({ columns: [t.voucherId, t.userId] }) }),
+);
+
+export const coWorkingSpaceReviews = pgTable(
+  'co_working_space_reviews',
+  {
+    coWorkingSpaceId: text('coWorkingSpace_id')
+      .references(() => coWorkingSpaceRecommendations.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    rating: integer('rating').notNull(),
+    review: text('review').notNull(),
+  },
+  (t) => ({ pk: primaryKey({ columns: [t.coWorkingSpaceId, t.userId] }) }),
+);
+
+export const voucherReviewsRelation = relations(voucherReviews, ({ one }) => ({
+  recommendation: one(voucherRecommendations, {
+    fields: [voucherReviews.voucherId],
+    references: [voucherRecommendations.id],
+  }),
+  user: one(users, {
+    fields: [voucherReviews.userId],
+    references: [users.id],
+  }),
+}));
+
+export const coWorkingSpaceReviewsRelation = relations(
+  coWorkingSpaceReviews,
+  ({ one }) => ({
+    recommendation: one(coWorkingSpaceRecommendations, {
+      fields: [coWorkingSpaceReviews.coWorkingSpaceId],
+      references: [coWorkingSpaceRecommendations.id],
+    }),
+    user: one(users, {
+      fields: [coWorkingSpaceReviews.userId],
+      references: [users.id],
+    }),
+  }),
+);
