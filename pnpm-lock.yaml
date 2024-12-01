@@ -80,6 +80,9 @@ importers:
       install:
         specifier: ^0.13.0
         version: 0.13.0
+      nodemailer:
+        specifier: ^6.9.16
+        version: 6.9.16
       open-graph-scraper:
         specifier: ^6.5.1
         version: 6.5.1
@@ -108,6 +111,9 @@ importers:
       '@types/node':
         specifier: ^20.11.17
         version: 20.11.30
+      '@types/nodemailer':
+        specifier: ^6.4.17
+        version: 6.4.17
       '@types/web-push':
         specifier: ^3.6.3
         version: 3.6.3
@@ -1140,6 +1146,9 @@ packages:
 
   '@types/node@20.14.15':
     resolution: {integrity: sha512-Fz1xDMCF/B00/tYSVMlmK7hVeLh7jE5f3B7X1/hmV0MJBwE27KlS7EvD/Yp+z1lm8mVhwV5w+n8jOZG8AfTlKw==}
+
+  '@types/nodemailer@6.4.17':
+    resolution: {integrity: sha512-I9CCaIp6DTldEg7vyUTZi8+9Vo0hi1/T8gv3C89yk1rSAAzoKQ8H8ki/jBYJSFoH/BisgLP8tkZMlQ91CIquww==}
 
   '@types/pg-pool@2.0.4':
     resolution: {integrity: sha512-qZAvkv1K3QbmHHFYSNRYPkRjOWRLBYrL4B9c+wG0GSVGBw0NtJwPcgx/DSddeDJvRGMHCEQ4VMEVfuJ/0gZ3XQ==}
@@ -2296,6 +2305,10 @@ packages:
     peerDependenciesMeta:
       encoding:
         optional: true
+
+  nodemailer@6.9.16:
+    resolution: {integrity: sha512-psAuZdTIRN08HKVd/E8ObdV6NO7NTBY3KsC30F7M4H1OnmLCUNaS56FpYxyb26zWLSyYF9Ozch9KYHhHegsiOQ==}
+    engines: {node: '>=6.0.0'}
 
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
@@ -4292,6 +4305,10 @@ snapshots:
     dependencies:
       undici-types: 5.26.5
 
+  '@types/nodemailer@6.4.17':
+    dependencies:
+      '@types/node': 20.14.15
+
   '@types/pg-pool@2.0.4':
     dependencies:
       '@types/pg': 8.11.6
@@ -5632,6 +5649,8 @@ snapshots:
   node-fetch@2.7.0:
     dependencies:
       whatwg-url: 5.0.0
+
+  nodemailer@6.9.16: {}
 
   nth-check@2.1.1:
     dependencies:
