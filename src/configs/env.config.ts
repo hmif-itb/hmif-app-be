@@ -15,7 +15,7 @@ const EnvSchema = z.object({
   SMTP_HOST: z.string(),
   SMTP_USER: z.string().email().optional(),
   SMTP_PORT: z.coerce.number(),
-  SMTP_SECURE: z.boolean().default(true),
+  SMTP_SECURE: z.coerce.boolean().default(true),
   SMTP_PASS: z.string(),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
