@@ -217,3 +217,49 @@ export const readChatroomMessages = createRoute({
     },
   },
 });
+
+export const unreadCountChatroomMessages = createRoute({
+  operationId: 'unreadCountChatroomMessages',
+  tags: ['curhat'],
+  method: 'get',
+  path: '/curhat/chatrooms/unread',
+  description: 'Get unread chatroom messages count',
+  request: {
+    params: ChatroomIdParamsSchema,
+  },
+  responses: {
+    200: {
+      description: 'Get unread chatroom messages count success',
+      content: {
+        'application/json': {
+          schema: z.array(
+            z.object({
+              chatroomId: z.string(),
+              unreadCount: z.number(),
+            }),
+          ),
+        },
+      },
+    },
+    401: {
+      description: 'Unauthorized',
+      content: {
+        'application/json': {
+          schema: z.object({
+            error: z.string(),
+          }),
+        },
+      },
+    },
+    500: {
+      description: 'Internal Server Error',
+      content: {
+        'application/json': {
+          schema: z.object({
+            error: z.string(),
+          }),
+        },
+      },
+    },
+  },
+});
