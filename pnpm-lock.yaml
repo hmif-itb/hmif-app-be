@@ -80,12 +80,18 @@ importers:
       install:
         specifier: ^0.13.0
         version: 0.13.0
+      nodemailer:
+        specifier: ^6.9.16
+        version: 6.9.16
       open-graph-scraper:
         specifier: ^6.5.1
         version: 6.5.1
       pg:
         specifier: ^8.11.3
         version: 8.11.5
+      pg-error:
+        specifier: ^1.1.0
+        version: 1.1.0
       postgres:
         specifier: ^3.4.4
         version: 3.4.4
@@ -108,6 +114,9 @@ importers:
       '@types/node':
         specifier: ^20.11.17
         version: 20.11.30
+      '@types/nodemailer':
+        specifier: ^6.4.17
+        version: 6.4.17
       '@types/web-push':
         specifier: ^3.6.3
         version: 3.6.3
@@ -1140,6 +1149,9 @@ packages:
 
   '@types/node@20.14.15':
     resolution: {integrity: sha512-Fz1xDMCF/B00/tYSVMlmK7hVeLh7jE5f3B7X1/hmV0MJBwE27KlS7EvD/Yp+z1lm8mVhwV5w+n8jOZG8AfTlKw==}
+
+  '@types/nodemailer@6.4.17':
+    resolution: {integrity: sha512-I9CCaIp6DTldEg7vyUTZi8+9Vo0hi1/T8gv3C89yk1rSAAzoKQ8H8ki/jBYJSFoH/BisgLP8tkZMlQ91CIquww==}
 
   '@types/pg-pool@2.0.4':
     resolution: {integrity: sha512-qZAvkv1K3QbmHHFYSNRYPkRjOWRLBYrL4B9c+wG0GSVGBw0NtJwPcgx/DSddeDJvRGMHCEQ4VMEVfuJ/0gZ3XQ==}
@@ -2297,6 +2309,10 @@ packages:
       encoding:
         optional: true
 
+  nodemailer@6.9.16:
+    resolution: {integrity: sha512-psAuZdTIRN08HKVd/E8ObdV6NO7NTBY3KsC30F7M4H1OnmLCUNaS56FpYxyb26zWLSyYF9Ozch9KYHhHegsiOQ==}
+    engines: {node: '>=6.0.0'}
+
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
 
@@ -2395,6 +2411,9 @@ packages:
 
   pg-connection-string@2.6.4:
     resolution: {integrity: sha512-v+Z7W/0EO707aNMaAEfiGnGL9sxxumwLl2fJvCQtMn9Fxsg+lPpPkdcyBSv/KFgpGdYkMfn+EI1Or2EHjpgLCA==}
+
+  pg-error@1.1.0:
+    resolution: {integrity: sha512-l+8naVC0ePgaljX0+XomFonCde9ENWRETWEb3ueBA53phD8izgrGKHsgWslNM/Tgf9vCtKbu3OgV3yKxUfUHXw==}
 
   pg-int8@1.0.1:
     resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==}
@@ -2634,6 +2653,9 @@ packages:
 
   stack-trace@0.0.10:
     resolution: {integrity: sha512-KGzahc7puUKkzyMt+IqAep+TVNbKP+k2Lmwhub39m1AsTSkaDutx56aDCo+HLDzf/D26BIHTJWNiTG1KAJiQCg==}
+
+  standard-error@1.1.0:
+    resolution: {integrity: sha512-4v7qzU7oLJfMI5EltUSHCaaOd65J6S4BqKRWgzMi4EYaE5fvNabPxmAPGdxpGXqrcWjhDGI/H09CIdEuUOUeXg==}
 
   string.prototype.trim@1.2.9:
     resolution: {integrity: sha512-klHuCNxiMZ8MlsOihJhJEBJAiMVqU3Z2nEXWfWnIqjN0gEFS9J9+IxKozWWtQGcgoa1WUZzLjKPTr4ZHNFTFxw==}
@@ -4292,6 +4314,10 @@ snapshots:
     dependencies:
       undici-types: 5.26.5
 
+  '@types/nodemailer@6.4.17':
+    dependencies:
+      '@types/node': 20.14.15
+
   '@types/pg-pool@2.0.4':
     dependencies:
       '@types/pg': 8.11.6
@@ -5633,6 +5659,8 @@ snapshots:
     dependencies:
       whatwg-url: 5.0.0
 
+  nodemailer@6.9.16: {}
+
   nth-check@2.1.1:
     dependencies:
       boolbase: 1.0.0
@@ -5744,6 +5772,10 @@ snapshots:
     optional: true
 
   pg-connection-string@2.6.4: {}
+
+  pg-error@1.1.0:
+    dependencies:
+      standard-error: 1.1.0
 
   pg-int8@1.0.1: {}
 
@@ -5982,6 +6014,8 @@ snapshots:
   split2@4.2.0: {}
 
   stack-trace@0.0.10: {}
+
+  standard-error@1.1.0: {}
 
   string.prototype.trim@1.2.9:
     dependencies:

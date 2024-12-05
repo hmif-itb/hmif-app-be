@@ -3,6 +3,7 @@ import {
   deleteChatroomRoute,
   getUserChatroomsRoute,
   unreadCountChatroomMessages,
+  pinChatroomRoute,
 } from '~/routes/curhat.route';
 import { createAuthRouter } from './router-factory';
 import {
@@ -12,11 +13,13 @@ import {
   getUnreadCountChatroomMessages,
   getUserChatrooms,
   getWelfareChatrooms,
+  pinChatroom,
 } from '~/repositories/chatroom.repo';
 import { db } from '~/db/drizzle';
 import { animals, colors, uniqueNamesGenerator } from 'unique-names-generator';
 import { getUserRoles } from '~/repositories/user-role.repo';
 import { Chatroom, ChatroomMessage } from '~/db/schema';
+import { PostgresError } from 'postgres';
 
 export const curhatRouter = createAuthRouter();
 
@@ -52,7 +55,7 @@ curhatRouter.openapi(getUserChatroomsRoute, async (c) => {
     }
   >;
   if (roles.includes('curhatadmin')) {
-    chatrooms = await getWelfareChatrooms(db);
+    chatrooms = await getWelfareChatrooms(db, userId);
   } else {
     chatrooms = await getUserChatrooms(db, userId);
   }
@@ -94,12 +97,38 @@ curhatRouter.openapi(unreadCountChatroomMessages, async (c) => {
   if (!userId) {
     return c.json({ error: 'Unauthorized' }, 401);
   }
-
   try {
     const unreadMessages = await getUnreadCountChatroomMessages(db, userId);
 
     return c.json(unreadMessages, 200);
   } catch (error) {
     return c.json({ error: 'Internal Server Error' }, 500);
+  }
+});
+
+curhatRouter.openapi(pinChatroomRoute, async (c) => {
+  const { id: userId } = c.var.user;
+  const { chatroomId } = c.req.valid('param');
+  const { isPinned } = c.req.valid('json');
+
+  const roles = await getUserRoles(db, userId);
+
+  if (!roles.includes('curhatadmin')) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
+  try {
+    await pinChatroom(db, chatroomId, userId, isPinned);
+    if (isPinned) {
+      return c.json({ message: 'Chatroom pinned' }, 200);
+    } else {
+      return c.json({ message: 'Chatroom unpinned' }, 200);
+    }
+  } catch (e) {
+    if (e instanceof PostgresError) {
+      return c.json({ error: 'Failed to pin chatroom' }, 400);
+    } else {
+      return c.json({ error: 'Something went wrong' }, 500);
+    }
   }
 });

@@ -1,6 +1,50 @@
-import { eq, InferInsertModel, not, sql, inArray } from 'drizzle-orm';
+import { eq, InferInsertModel, not, sql, inArray, and } from 'drizzle-orm';
 import { Database } from '~/db/drizzle';
-import { chatroomMessageReads, chatroomMessages, chatrooms } from '~/db/schema';
+import {
+  chatroomMessageReads,
+  chatroomMessages,
+  chatrooms,
+  userPinnedChatrooms,
+  Chatroom,
+  ChatroomMessage,
+  UserPinnedChatrooms,
+} from '~/db/schema';
+
+type ChatroomWithMessages = Chatroom & {
+  messages: ChatroomMessage[];
+};
+function processChatrooms(
+  crms: ChatroomWithMessages[],
+  pinned: UserPinnedChatrooms[],
+) {
+  return crms.map((chatroom) => {
+    const messages = chatroom.messages ?? [];
+    const messageMap = new Map(messages.map((msg) => [msg.id, msg]));
+
+    return {
+      ...chatroom,
+      messages: messages
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+        .map((message) => {
+          const reply = message.replyId
+            ? messageMap.get(message.replyId) ?? null
+            : null;
+          if (reply) {
+            const { userId, ...replyWithoutUserId } = reply;
+            return {
+              ...message,
+              reply: replyWithoutUserId,
+            };
+          }
+          return {
+            ...message,
+            reply: null,
+          };
+        }),
+      isPinned: pinned.some((p) => p.chatroomId === chatroom.id),
+    };
+  });
+}
 
 export async function getUserChatrooms(db: Database, userId: string) {
   const crms = await db.query.chatrooms.findMany({
@@ -9,26 +53,22 @@ export async function getUserChatrooms(db: Database, userId: string) {
       messages: true,
     },
   });
-  return crms.map((chatroom) => ({
-    ...chatroom,
-    messages: chatroom.messages.sort(
-      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
-    ),
-  }));
+  return processChatrooms(crms, []);
 }
 
-export async function getWelfareChatrooms(db: Database) {
-  const crms = await db.query.chatrooms.findMany({
-    with: {
-      messages: true,
-    },
-  });
-  return crms.map((chatroom) => ({
-    ...chatroom,
-    messages: chatroom.messages.sort(
-      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
-    ),
-  }));
+export async function getWelfareChatrooms(db: Database, userId: string) {
+  const [crms, pinned] = await Promise.all([
+    db.query.chatrooms.findMany({
+      with: {
+        messages: true,
+      },
+    }),
+    db.query.userPinnedChatrooms.findMany({
+      where: eq(userPinnedChatrooms.userId, userId),
+    }),
+  ]);
+
+  return processChatrooms(crms, pinned);
 }
 
 export async function createChatroom(
@@ -45,6 +85,7 @@ export async function saveMessage(
   userId: string,
   chatroomId: string,
   message: string,
+  replyId: string,
 ) {
   return await db.transaction(async (tx) => {
     return await tx
@@ -53,6 +94,7 @@ export async function saveMessage(
         chatroomId,
         userId,
         content: message,
+        replyId,
       })
       .returning();
   });
@@ -90,4 +132,28 @@ export async function getUnreadCountChatroomMessages(
     .from(chatroomMessages)
     .where(not(inArray(chatroomMessages.id, readMessageIdsSubquery)))
     .groupBy(chatroomMessages.chatroomId);
+}
+
+export async function pinChatroom(
+  db: Database,
+  chatroomId: string,
+  userId: string,
+  isPinned: boolean,
+) {
+  await db.transaction(async (tx) => {
+    if (isPinned) {
+      return await tx
+        .insert(userPinnedChatrooms)
+        .values({ userId, chatroomId });
+    } else {
+      return await tx
+        .delete(userPinnedChatrooms)
+        .where(
+          and(
+            eq(userPinnedChatrooms.chatroomId, chatroomId),
+            eq(userPinnedChatrooms.userId, userId),
+          ),
+        );
+    }
+  });
 }

@@ -8,6 +8,7 @@ interface Message {
   chatroomId: string;
   message: string;
   userId: string;
+  replyId: string;
 }
 
 export default function setupWebsocket(httpServer: ServerType) {
@@ -26,6 +27,7 @@ export default function setupWebsocket(httpServer: ServerType) {
         msg.userId,
         msg.chatroomId,
         msg.message,
+        msg.replyId,
       );
       socket.to(msg.chatroomId).emit('reply', {
         ...savedMessage,
