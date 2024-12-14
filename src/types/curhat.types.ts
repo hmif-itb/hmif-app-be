@@ -1,7 +1,9 @@
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import {
+  Chatroom,
   chatroomLabels,
   chatroomLabelsManyToMany,
+  ChatroomMessage,
   chatroomMessages,
   chatrooms,
 } from '~/db/schema';
@@ -45,7 +47,7 @@ export const ChatroomSchema = createSelectSchema(chatrooms)
   .openapi('Chatroom');
 
 export const ListChatroomSchema = z
-  .array(ChatroomSchema)
+  .record(z.string(), ChatroomSchema)
   .openapi('ListChatroom');
 
 export const ChatroomIdParamsSchema = z.object({
@@ -71,3 +73,7 @@ export const CreateLabelChatroomBodySchema = createInsertSchema(
 export const PinChatroomBodySchema = z.object({
   isPinned: z.boolean(),
 });
+
+export type TChatroom = Chatroom & {
+  messages: ChatroomMessage[];
+};

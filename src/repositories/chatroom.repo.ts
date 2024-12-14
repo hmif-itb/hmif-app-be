@@ -9,6 +9,7 @@ import {
   ChatroomMessage,
   UserPinnedChatrooms,
 } from '~/db/schema';
+import { TChatroom } from '~/types/curhat.types';
 
 type ChatroomWithMessages = Chatroom & {
   messages: ChatroomMessage[];
@@ -17,33 +18,39 @@ function processChatrooms(
   crms: ChatroomWithMessages[],
   pinned: UserPinnedChatrooms[],
 ) {
-  return crms.map((chatroom) => {
-    const messages = chatroom.messages ?? [];
-    const messageMap = new Map(messages.map((msg) => [msg.id, msg]));
+  const chatroomMap = new Map<string, TChatroom>();
 
-    return {
-      ...chatroom,
-      messages: messages
-        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-        .map((message) => {
-          const reply = message.replyId
-            ? messageMap.get(message.replyId) ?? null
-            : null;
-          if (reply) {
-            const { userId, ...replyWithoutUserId } = reply;
+  crms
+    .map((chatroom) => {
+      const messages = chatroom.messages ?? [];
+      const messageMap = new Map(messages.map((msg) => [msg.id, msg]));
+
+      return {
+        ...chatroom,
+        messages: messages
+          .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+          .map((message) => {
+            const reply = message.replyId
+              ? messageMap.get(message.replyId) ?? null
+              : null;
+            if (reply) {
+              const { userId, ...replyWithoutUserId } = reply;
+              return {
+                ...message,
+                reply: replyWithoutUserId,
+              };
+            }
             return {
               ...message,
-              reply: replyWithoutUserId,
+              reply: undefined,
             };
-          }
-          return {
-            ...message,
-            reply: null,
-          };
-        }),
-      isPinned: pinned.some((p) => p.chatroomId === chatroom.id),
-    };
-  });
+          }),
+        isPinned: pinned.some((p) => p.chatroomId === chatroom.id),
+      };
+    })
+    .forEach((chatroom) => chatroomMap.set(chatroom.id, chatroom));
+
+  return chatroomMap;
 }
 
 export async function getUserChatrooms(db: Database, userId: string) {

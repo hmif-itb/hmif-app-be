@@ -18,15 +18,15 @@ import {
 import { db } from '~/db/drizzle';
 import { animals, colors, uniqueNamesGenerator } from 'unique-names-generator';
 import { getUserRoles } from '~/repositories/user-role.repo';
-import { Chatroom, ChatroomMessage } from '~/db/schema';
 import { PostgresError } from 'postgres';
+import { TChatroom } from '~/types/curhat.types';
 
 export const curhatRouter = createAuthRouter();
 
 curhatRouter.openapi(createChatroomRoute, async (c) => {
   const { id: userId } = c.var.user;
-  const chatrooms = await getUserChatrooms(db, userId);
-  if (chatrooms.length >= 3) {
+  const chatroomMap = await getUserChatrooms(db, userId);
+  if (chatroomMap.keys.length >= 3) {
     return c.json(
       {
         error: 'You have reached the maximum chatrooms limit',
@@ -49,22 +49,19 @@ curhatRouter.openapi(getUserChatroomsRoute, async (c) => {
   const { id: userId } = c.var.user;
   const roles = await getUserRoles(db, userId);
 
-  let chatrooms: Array<
-    Chatroom & {
-      messages: ChatroomMessage[];
-    }
-  >;
+  let chatroomMap: Map<string, TChatroom>;
   if (roles.includes('curhatadmin')) {
-    chatrooms = await getWelfareChatrooms(db, userId);
+    chatroomMap = await getWelfareChatrooms(db, userId);
   } else {
-    chatrooms = await getUserChatrooms(db, userId);
+    chatroomMap = await getUserChatrooms(db, userId);
   }
-  const mappedChatrooms = chatrooms.map((c) => {
-    return {
-      ...c,
-      userId: undefined,
-      canDelete: c.userId === userId,
-      messages: c.messages.map((m) => ({
+
+  const mappedChatrooms: Record<string, any> = {};
+  chatroomMap.forEach((val, key) => {
+    mappedChatrooms[key] = {
+      ...val,
+      canDelete: val.userId === userId,
+      messages: val.messages?.map((m) => ({
         ...m,
         isSender: m.userId === userId,
         userId: undefined,
