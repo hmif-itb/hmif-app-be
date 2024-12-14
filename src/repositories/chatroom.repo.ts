@@ -10,6 +10,7 @@ import {
   UserPinnedChatrooms,
 } from '~/db/schema';
 import { TChatroom } from '~/types/curhat.types';
+import { getUsersByRole } from './user-role.repo';
 
 type ChatroomWithMessages = Chatroom & {
   messages: ChatroomMessage[];
@@ -163,4 +164,28 @@ export async function pinChatroom(
         );
     }
   });
+}
+
+/**
+ * Get the ids of all curhat admin and the user who created the chatroom
+ */
+export async function getChatroomParticipantIds(
+  db: Database,
+  chatroomId: string,
+) {
+  const chatroomPromise = getChatroomById(db, chatroomId);
+  const adminUsersPromise = getUsersByRole(db, 'curhatadmin');
+
+  const [chatroom, adminUsers] = await Promise.all([
+    chatroomPromise,
+    adminUsersPromise,
+  ]);
+
+  if (!chatroom) {
+    return [];
+  }
+
+  return [chatroom.userId, ...adminUsers.map((u) => u.id)].filter(
+    (id) => id !== null,
+  );
 }

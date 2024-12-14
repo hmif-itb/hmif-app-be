@@ -2,7 +2,13 @@ import { ServerType } from '@hono/node-server';
 import { Server } from 'socket.io';
 import { env } from '~/configs/env.config';
 import { db } from '~/db/drizzle';
-import { saveMessage } from '~/repositories/chatroom.repo';
+import { sendNotificationToAll } from '~/lib/push-manager';
+import {
+  getChatroomById,
+  getChatroomParticipantIds,
+  saveMessage,
+} from '~/repositories/chatroom.repo';
+import { getPushSubscriptionsByUserIds } from '~/repositories/push.repo';
 
 interface Message {
   chatroomId: string;
@@ -29,11 +35,41 @@ export default function setupWebsocket(httpServer: ServerType) {
         msg.message,
         msg.replyId,
       );
+
+      sendNotification(msg).then(
+        () => {},
+        () => {},
+      );
+
       socket.to(msg.chatroomId).emit('reply', {
         ...savedMessage,
         userId: undefined,
         isSender: false,
       });
     });
+  });
+}
+
+/**
+ * Send notification to all participants in a chatroom except the sender.
+ */
+async function sendNotification(msg: Message) {
+  const participantIds = (
+    await getChatroomParticipantIds(db, msg.chatroomId)
+  ).filter((ids) => ids !== msg.userId);
+
+  const pushSubscriptions = await getPushSubscriptionsByUserIds(
+    db,
+    participantIds,
+  );
+
+  await sendNotificationToAll(pushSubscriptions, {
+    title: 'New Curhat Message',
+    options: {
+      body: msg.message,
+      data: {
+        url: '/home/curhat',
+      },
+    },
   });
 }
