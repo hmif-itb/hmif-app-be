@@ -991,3 +991,7 @@ export const coWorkingSpaceReviewsRelation = relations(
     }),
   }),
 );
+
+export const accountNumbers = pgTable('account_numbers', {
+  accountNumber: text('accountNumber').unique().notNull().primaryKey(),
+});

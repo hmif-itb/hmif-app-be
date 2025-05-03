@@ -17,6 +17,7 @@ import { userProfileRoute } from './user-profile.controller';
 import { userUnsubscribeRouter } from './user-unsubscribe.controller';
 import { recommendationRoute } from './recommendation.controller';
 import { curhatRouter } from './curhat.controller';
+import { accountNumberRouter } from './account-number.controller';
 
 const unprotectedApiRouter = new OpenAPIHono();
 unprotectedApiRouter.route('/', loginRouter);
@@ -41,6 +42,7 @@ protectedApiRouter.route('/', competitionsRouter);
 protectedApiRouter.route('/', markdownRouter);
 protectedApiRouter.route('/', recommendationRoute);
 protectedApiRouter.route('/', curhatRouter);
+protectedApiRouter.route('/', accountNumberRouter);
 
 export const apiRouter = new OpenAPIHono();
 apiRouter.route('/', unprotectedApiRouter);
