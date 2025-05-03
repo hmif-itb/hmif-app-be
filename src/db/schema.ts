@@ -11,6 +11,7 @@ import {
   text,
   timestamp,
   unique,
+  numeric
 } from 'drizzle-orm/pg-core';
 import type webpush from 'web-push';
 import { rolesEnums } from './roles-group';
@@ -991,3 +992,55 @@ export const coWorkingSpaceReviewsRelation = relations(
     }),
   }),
 );
+
+export const invoiceTemplates = pgTable('invoice_templates', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  name: text('name').notNull(),
+  header: text('header').notNull(),
+  footer: text('footer').notNull(),
+  bankDetails: text('bank_details').notNull(),
+  terms: text('terms').notNull(),
+  defaultVatRate: numeric('default_vat_rate', { precision: 5, scale: 2 }).default('0.00').notNull(),
+  defaultServiceFee: numeric('default_service_fee', { precision: 10, scale: 2 }).default('0.00').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const invoices = pgTable('invoices', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  userId: text('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  templateId: text('template_id').references(() => invoiceTemplates.id).notNull(),
+  invoiceNumber: text('invoice_number').notNull(),
+  poNumber: text('po_number'),
+  clientName: text('client_name').notNull(),
+  clientAddress: text('client_address').notNull(),
+  clientPostalCode: text('client_postal_code').notNull(),
+  currency: text('currency').default('IDR').notNull(),
+  subtotal: numeric('subtotal', { precision: 15, scale: 2 }).notNull(),
+  vatRate: numeric('vat_rate', { precision: 5, scale: 2 }).notNull(),
+  vatAmount: numeric('vat_amount', { precision: 15, scale: 2 }).notNull(),
+  serviceFee: numeric('service_fee', { precision: 15, scale: 2 }).notNull(),
+  totalAmount: numeric('total_amount', { precision: 15, scale: 2 }).notNull(),
+  status: text('status', { enum: ['draft', 'sent', 'paid', 'cancelled']}).default('draft').notNull(),
+  issuedAt: timestamp('issued_at', { withTimezone: true }).defaultNow().notNull(),
+  dueAt: timestamp('due_at', { withTimezone: true }),
+  paidAt: timestamp('paid_at', { withTimezone: true }),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const invoiceItems = pgTable('invoice_items', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  invoiceId: text('invoice_id').references(() => invoices.id, { onDelete: 'cascade' }).notNull(),
+  description: text('description').notNull(),
+  quantity: numeric('quantity', { precision: 10, scale: 2 }).notNull(),
+  unitPrice: numeric('unit_price', { precision: 15, scale: 2 }).notNull(),
+  totalPrice: numeric('total_price', { precision: 15, scale: 2 }).notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const invoiceRelations = relations(invoices, ({ one, many }) => ({
+  user: one(users, { fields: [invoices.userId], references: [users.id] }),
+  template: one(invoiceTemplates, { fields: [invoices.templateId], references: [invoiceTemplates.id] }),
+  items: many(invoiceItems),
+}));
