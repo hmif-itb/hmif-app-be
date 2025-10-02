@@ -6,6 +6,7 @@ import {
   index,
   integer,
   json,
+  pgEnum,
   pgTable,
   primaryKey,
   text,
@@ -50,6 +51,7 @@ export const users = pgTable(
 export type User = InferSelectModel<typeof users>;
 
 export const usersRelation = relations(users, ({ many, one }) => ({
+  prestasi: many(prestasi),
   pushSubscriptions: many(pushSubscriptions),
   infos: many(infos),
   medias: many(medias),
@@ -991,3 +993,33 @@ export const coWorkingSpaceReviewsRelation = relations(
     }),
   }),
 );
+
+export const jenisPrestasiEnum = pgEnum('jenis_prestasi', [
+  'organisasi',
+  'kepanitiaan',
+  'kompetisi',
+]);
+
+export const prestasi = pgTable('prestasi', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  jenisPrestasi: jenisPrestasiEnum('jenis_prestasi').notNull(),
+  namaPrestasi: text('nama_prestasi').notNull(),
+  penyelenggara: text('penyelenggara').notNull(),
+  tanggalMulai: timestamp('tanggal_mulai', { withTimezone: true }).notNull(),
+  tanggalSelesai: timestamp('tanggal_selesai', { withTimezone: true }).notNull(),
+  urlSertifikat: text('url_sertifikat').notNull(),
+  urlFotoAwarding: text('url_foto_awarding'), // Nullable
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export const prestasiRelations = relations(prestasi, ({ one }) => ({
+  user: one(users, {
+    fields: [prestasi.userId],
+    references: [users.id],
+  }),
+}));
