@@ -14,6 +14,7 @@ import {
   testimonies,
   userRoles,
   users,
+  prestasi,
 } from './schema';
 
 if (!process.env.DATABASE_URL) {
@@ -364,6 +365,87 @@ export async function runRolesGroupSeed() {
   console.log('✅ Inserted roles group into database!');
 }
 
+export async function seedPrestasi() {
+  const filePath = 'src/db/seed/prestasi-seed.csv';
+
+  const usersList = await db.select({ id: users.id, nim: users.nim }).from(users);
+  const userMap = new Map(usersList.map((user) => [user.nim, user.id]));
+
+  const dataSchema = z.object({
+    userNim: z.string(),
+    jenisPrestasi: z.enum(['organisasi', 'kepanitiaan', 'kompetisi']),
+    namaPrestasi: z.string(),
+    penyelenggara: z.string(),
+    tanggalMulai: z.string().transform((val) => new Date(val)),
+    tanggalSelesai: z.string().transform((val) => new Date(val)),
+    urlSertifikat: z.string().url(),
+    urlFotoAwarding: z.string().url().optional().or(z.literal('')),
+  });
+
+  const validatedData: Array<typeof prestasi.$inferInsert> = [];
+
+  await new Promise((resolve, reject) => {
+    fs.createReadStream(filePath)
+      .pipe(parse({ delimiter: ',', from_line: 2, trim: true }))
+      .on('data', (row) => {
+        try {
+          const parsedRow = dataSchema.parse({
+            userNim: row[0],
+            jenisPrestasi: row[1],
+            namaPrestasi: row[2],
+            penyelenggara: row[3],
+            tanggalMulai: row[4],
+            tanggalSelesai: row[5],
+            urlSertifikat: row[6],
+            urlFotoAwarding: row[7],
+          });
+
+          const userId = userMap.get(parsedRow.userNim);
+
+          if (!userId) {
+            console.log(`User not found ${parsedRow.userNim}, skipping row.`);
+            return;
+          }
+
+          validatedData.push({
+            userId: userId,
+            jenisPrestasi: parsedRow.jenisPrestasi,
+            namaPrestasi: parsedRow.namaPrestasi,
+            penyelenggara: parsedRow.penyelenggara,
+            tanggalMulai: parsedRow.tanggalMulai,
+            tanggalSelesai: parsedRow.tanggalSelesai,
+            urlSertifikat: parsedRow.urlSertifikat,
+            urlFotoAwarding: parsedRow.urlFotoAwarding || null,
+          });
+        } catch (error) {
+          console.log('❌ Error parsing row:', row, error);
+        }
+      })
+      .on('end', () => {
+        console.log('📖 Finished reading prestasi CSV file.');
+        resolve(null); 
+      })
+      .on('error', (err) => {
+        console.log('❌ Something went wrong while reading prestasi CSV file!');
+        reject(err);
+      });
+  });
+
+  if (validatedData.length === 0) {
+    console.log('No prestasi data to insert.');
+    return;
+  }
+
+  console.log(`💾 Started inserting ${validatedData.length} prestasi into database...`);
+  try {
+    await db.insert(prestasi).values(validatedData).onConflictDoNothing();
+    console.log('✅ Inserted prestasi into database!');
+  } catch (err) {
+    console.log('❌ Something went wrong while inserting prestasi!');
+    console.log(err);
+  }
+}
+
 async function runAllSeeds() {
   try {
     // await runAngkatanSeed();
@@ -373,6 +455,7 @@ async function runAllSeeds() {
     // await runTestimoniSeed('testimoni-if.csv');
     // await runTestimoniSeed('testimoni-sti.csv');
     // await runCalendarSeed();
+    // await seedPrestasi();
     await runRolesGroupSeed();
   } catch (error) {
     console.log(error);
