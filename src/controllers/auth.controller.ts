@@ -195,6 +195,7 @@ loginRouter.openapi(loginBypassRoute, async (c) => {
       401,
     );
   }
+
   const tokenPayload = JWTPayloadSchema.parse(user);
   const jwtToken = await generateJWT(tokenPayload);
   setCookie(c, 'hmif-app.access-cookie', jwtToken, {
