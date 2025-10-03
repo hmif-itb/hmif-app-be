@@ -1,5 +1,5 @@
 import { z } from '@hono/zod-openapi';
-import { createSelectSchema } from 'drizzle-zod';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { prestasi } from '~/db/schema';
 
 const UserPrestasiSchema = z.object({
@@ -104,3 +104,42 @@ export const PrestasiIdParamsSchema = z.object({
     },
   }),
 });
+
+export const CreatePrestasiSchema = createInsertSchema(prestasi, {
+  bulan: z.number().int().min(1).max(12),
+  tahun: z.number().int().min(2000).max(2100),
+  deskripsi: z.string().min(1).optional(),
+  competitionType: z.enum(['CP', 'CTF', 'BCC', 'DS', 'AI', 'Hackathon']).optional(),
+})
+  .extend({
+    // Accept userId from request body for admin purposes
+    userId: z.string().optional(),
+    // Accept media URLs for form submission (similar to competitions and info)
+    mediaUrls: z
+      .array(z.string().url())
+      .optional()
+      .openapi({
+        example: [
+          'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/certificate.jpg',
+          'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/awarding.jpg',
+          'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/personal.jpg',
+        ],
+      }),
+  })
+  .omit({
+    id: true,
+    createdAt: true,
+    mediaSertifikat: true,
+    mediaFotoAwarding: true,
+    mediaFotoPribadi: true,
+  });
+
+export const CreatePrestasiResponseSchema = createSelectSchema(prestasi, {
+  createdAt: z.union([z.string(), z.date()]),
+})
+  .omit({
+    mediaSertifikat: true,
+    mediaFotoAwarding: true,
+    mediaFotoPribadi: true,
+  })
+  .openapi('CreatePrestasiResponse');

@@ -376,7 +376,7 @@ export async function seedPrestasi() {
   const dataSchema = z.object({
     userNim: z.string(),
     jenisPrestasi: z.enum(['organisasi', 'kepanitiaan', 'kompetisi']),
-    namaPrestasi: z.string(),
+    penyelenggara: z.string(),
     deskripsi: z.string(),
     bulan: z.number().int().min(1).max(12),
     tahun: z.number().int(),
@@ -398,7 +398,7 @@ export async function seedPrestasi() {
           const parsedRow = dataSchema.parse({
             userNim: row[0],
             jenisPrestasi: row[1],
-            namaPrestasi: row[2],
+            penyelenggara: row[2],
             deskripsi: row[3],
             bulan: +row[4],
             tahun: +row[5],
@@ -418,7 +418,7 @@ export async function seedPrestasi() {
           validatedData.push({
             userId,
             jenisPrestasi: parsedRow.jenisPrestasi,
-            namaPrestasi: parsedRow.namaPrestasi,
+            penyelenggara: parsedRow.penyelenggara,
             deskripsi: parsedRow.deskripsi,
             bulan: parsedRow.bulan,
             tahun: parsedRow.tahun,

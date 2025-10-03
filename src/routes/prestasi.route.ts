@@ -1,5 +1,7 @@
 import { createRoute, z } from '@hono/zod-openapi';
 import {
+  CreatePrestasiSchema,
+  CreatePrestasiResponseSchema,
   ListPrestasiQuerySchema,
   ListPrestasiSchema,
   PrestasiDetailSchema,
@@ -9,6 +11,7 @@ import {
 import {
   ErrorSchema,
   validationErrorResponse,
+  errorResponse,
 } from '~/types/responses.type';
 
 export const getListPrestasiRoute = createRoute({
@@ -58,5 +61,35 @@ export const getPrestasiByIdRoute = createRoute({
         },
       },
     },
+  },
+});
+
+export const createPrestasiRoute = createRoute({
+  operationId: 'createPrestasi',
+  tags: ['achievements'],
+  method: 'post',
+  path: '/achievements',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: CreatePrestasiSchema,
+        },
+      },
+    },
+  },
+  responses: {
+    201: {
+      description: 'Prestasi created successfully',
+      content: {
+        'application/json': {
+          schema: CreatePrestasiResponseSchema,
+        },
+      },
+    },
+    400: validationErrorResponse,
+    401: errorResponse,
+    404: errorResponse,
+    500: errorResponse,
   },
 });

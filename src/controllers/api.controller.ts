@@ -9,6 +9,7 @@ import { infoRouter } from './info.controller';
 import { markdownRouter } from './markdown.controller';
 import { mediaRouter } from './media.controller';
 import { openGraphScrapeRoute } from './open-graph.controller';
+import { prestasiRouter } from './prestasi.controller';
 import { pushPubRouter, pushRouter } from './push.controller';
 import { reactionRouter } from './reaction.controller';
 import { testimoniRoute } from './testimoni.controller';
@@ -17,7 +18,6 @@ import { userProfileRoute } from './user-profile.controller';
 import { userUnsubscribeRouter } from './user-unsubscribe.controller';
 import { recommendationRoute } from './recommendation.controller';
 import { curhatRouter } from './curhat.controller';
-import { prestasiRouter } from './prestasi.controller';
 
 const unprotectedApiRouter = new OpenAPIHono();
 unprotectedApiRouter.route('/', loginRouter);
