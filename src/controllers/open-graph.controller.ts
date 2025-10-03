@@ -1,4 +1,4 @@
-import og, { ErrorResult } from 'open-graph-scraper';
+import og from 'open-graph-scraper';
 import { getOpenGraph } from '~/routes/open-graph.route';
 import { OpenGraphErrorSchema, OgObjectSchema } from '~/types/open-graph.types';
 import { createRouter } from './router-factory';
@@ -10,7 +10,7 @@ openGraphScrapeRoute.openapi(getOpenGraph, async (c) => {
 
   const data = await og({ url })
     .then((data) => data)
-    .catch((err: ErrorResult) => err);
+    .catch((err) => err);
 
   // cache for one day
   c.header('Cache-Control', `public, max-age=${60 * 60 * 24}`);

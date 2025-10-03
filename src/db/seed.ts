@@ -14,6 +14,7 @@ import {
   testimonies,
   userRoles,
   users,
+  prestasi,
 } from './schema';
 
 if (!process.env.DATABASE_URL) {
@@ -364,16 +365,110 @@ export async function runRolesGroupSeed() {
   console.log('✅ Inserted roles group into database!');
 }
 
+export async function seedPrestasi() {
+  const filePath = 'src/db/seed/prestasi-seed.csv';
+
+  const usersList = await db
+    .select({ id: users.id, nim: users.nim })
+    .from(users);
+  const userMap = new Map(usersList.map((user) => [user.nim, user.id]));
+
+  const dataSchema = z.object({
+    userNim: z.string(),
+    jenisPrestasi: z.enum(['organisasi', 'kepanitiaan', 'kompetisi']),
+    namaPrestasi: z.string(),
+    deskripsi: z.string(),
+    bulan: z.number().int().min(1).max(12),
+    tahun: z.number().int(),
+    mediaSertifikat: z.string().optional(),
+    mediaFotoAwarding: z.string().optional(),
+    mediaFotoPribadi: z.string().optional(),
+    competitionType: z
+      .enum(['CP', 'CTF', 'BCC', 'DS', 'AI', 'Hackathon'])
+      .optional(),
+  });
+
+  const validatedData: Array<typeof prestasi.$inferInsert> = [];
+
+  await new Promise((resolve, reject) => {
+    fs.createReadStream(filePath)
+      .pipe(parse({ delimiter: ',', from_line: 2, trim: true }))
+      .on('data', (row) => {
+        try {
+          const parsedRow = dataSchema.parse({
+            userNim: row[0],
+            jenisPrestasi: row[1],
+            namaPrestasi: row[2],
+            deskripsi: row[3],
+            bulan: +row[4],
+            tahun: +row[5],
+            mediaSertifikat: row[6] || undefined,
+            mediaFotoAwarding: row[7] || undefined,
+            mediaFotoPribadi: row[8] || undefined,
+            competitionType: row[9] || undefined,
+          });
+
+          const userId = userMap.get(parsedRow.userNim);
+
+          if (!userId) {
+            console.log(`User not found ${parsedRow.userNim}, skipping row.`);
+            return;
+          }
+
+          validatedData.push({
+            userId,
+            jenisPrestasi: parsedRow.jenisPrestasi,
+            namaPrestasi: parsedRow.namaPrestasi,
+            deskripsi: parsedRow.deskripsi,
+            bulan: parsedRow.bulan,
+            tahun: parsedRow.tahun,
+            mediaSertifikat: parsedRow.mediaSertifikat ?? null,
+            mediaFotoAwarding: parsedRow.mediaFotoAwarding ?? null,
+            mediaFotoPribadi: parsedRow.mediaFotoPribadi ?? null,
+            competitionType: parsedRow.competitionType ?? null,
+          });
+        } catch (error) {
+          console.log('❌ Error parsing row:', row, error);
+        }
+      })
+      .on('end', () => {
+        console.log('📖 Finished reading prestasi CSV file.');
+        resolve(null);
+      })
+      .on('error', (err) => {
+        console.log('❌ Something went wrong while reading prestasi CSV file!');
+        reject(err);
+      });
+  });
+
+  if (validatedData.length === 0) {
+    console.log('No prestasi data to insert.');
+    return;
+  }
+
+  console.log(
+    `💾 Started inserting ${validatedData.length} prestasi into database...`,
+  );
+  try {
+    await db.insert(prestasi).values(validatedData).onConflictDoNothing();
+    console.log('✅ Inserted prestasi into database!');
+  } catch (err) {
+    console.log('❌ Something went wrong while inserting prestasi!');
+    console.log(err);
+  }
+}
+
 async function runAllSeeds() {
   try {
-    // await runAngkatanSeed();
-    // await runUserSeed();
-    // await runCourses();
-    // await new Promise((resolve) => setTimeout(resolve, 6000));
-    // await runTestimoniSeed('testimoni-if.csv');
-    // await runTestimoniSeed('testimoni-sti.csv');
-    // await runCalendarSeed();
-    await runRolesGroupSeed();
+    await runAngkatanSeed();
+    await runUserSeed();
+    await runCourses();
+    await new Promise((resolve) => setTimeout(resolve, 6000));
+    // await runTestimoniSeed('testimoni-if.csv'); // File doesn't exist
+    // await runTestimoniSeed('testimoni-sti.csv'); // File doesn't exist
+    // await runCalendarSeed(); // File doesn't exist
+    await seedPrestasi();
+    // await runRolesGroupSeed(); // Commented out until you have the real user data
   } catch (error) {
     console.log(error);
   }
