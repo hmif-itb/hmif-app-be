@@ -1002,7 +1002,7 @@ export const jenisPrestasiEnum = pgEnum('jenis_prestasi', [
 
 export const competitionTypeEnum = pgEnum('competition_type', [
   'CP',
-  'CTF', 
+  'CTF',
   'BCC',
   'DS',
   'AI',
@@ -1019,9 +1019,15 @@ export const prestasi = pgTable('prestasi', {
   deskripsi: text('deskripsi'),
   bulan: integer('bulan').notNull(), // 1-12
   tahun: integer('tahun').notNull(),
-  mediaSertifikat: text('media_sertifikat').references(() => medias.id, { onDelete: 'set null' }),
-  mediaFotoAwarding: text('media_foto_awarding').references(() => medias.id, { onDelete: 'set null' }),
-  mediaFotoPribadi: text('media_foto_pribadi').references(() => medias.id, { onDelete: 'set null' }),
+  mediaSertifikat: text('media_sertifikat').references(() => medias.id, {
+    onDelete: 'set null',
+  }),
+  mediaFotoAwarding: text('media_foto_awarding').references(() => medias.id, {
+    onDelete: 'set null',
+  }),
+  mediaFotoPribadi: text('media_foto_pribadi').references(() => medias.id, {
+    onDelete: 'set null',
+  }),
   competitionType: competitionTypeEnum('competition_type'),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()

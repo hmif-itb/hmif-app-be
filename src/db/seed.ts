@@ -368,7 +368,9 @@ export async function runRolesGroupSeed() {
 export async function seedPrestasi() {
   const filePath = 'src/db/seed/prestasi-seed.csv';
 
-  const usersList = await db.select({ id: users.id, nim: users.nim }).from(users);
+  const usersList = await db
+    .select({ id: users.id, nim: users.nim })
+    .from(users);
   const userMap = new Map(usersList.map((user) => [user.nim, user.id]));
 
   const dataSchema = z.object({
@@ -381,7 +383,9 @@ export async function seedPrestasi() {
     mediaSertifikat: z.string().optional(),
     mediaFotoAwarding: z.string().optional(),
     mediaFotoPribadi: z.string().optional(),
-    competitionType: z.enum(['CP', 'CTF', 'BCC', 'DS', 'AI', 'Hackathon']).optional(),
+    competitionType: z
+      .enum(['CP', 'CTF', 'BCC', 'DS', 'AI', 'Hackathon'])
+      .optional(),
   });
 
   const validatedData: Array<typeof prestasi.$inferInsert> = [];
@@ -412,16 +416,16 @@ export async function seedPrestasi() {
           }
 
           validatedData.push({
-            userId: userId,
+            userId,
             jenisPrestasi: parsedRow.jenisPrestasi,
             namaPrestasi: parsedRow.namaPrestasi,
             deskripsi: parsedRow.deskripsi,
             bulan: parsedRow.bulan,
             tahun: parsedRow.tahun,
-            mediaSertifikat: parsedRow.mediaSertifikat || null,
-            mediaFotoAwarding: parsedRow.mediaFotoAwarding || null,
-            mediaFotoPribadi: parsedRow.mediaFotoPribadi || null,
-            competitionType: parsedRow.competitionType || null,
+            mediaSertifikat: parsedRow.mediaSertifikat ?? null,
+            mediaFotoAwarding: parsedRow.mediaFotoAwarding ?? null,
+            mediaFotoPribadi: parsedRow.mediaFotoPribadi ?? null,
+            competitionType: parsedRow.competitionType ?? null,
           });
         } catch (error) {
           console.log('❌ Error parsing row:', row, error);
@@ -429,7 +433,7 @@ export async function seedPrestasi() {
       })
       .on('end', () => {
         console.log('📖 Finished reading prestasi CSV file.');
-        resolve(null); 
+        resolve(null);
       })
       .on('error', (err) => {
         console.log('❌ Something went wrong while reading prestasi CSV file!');
@@ -442,7 +446,9 @@ export async function seedPrestasi() {
     return;
   }
 
-  console.log(`💾 Started inserting ${validatedData.length} prestasi into database...`);
+  console.log(
+    `💾 Started inserting ${validatedData.length} prestasi into database...`,
+  );
   try {
     await db.insert(prestasi).values(validatedData).onConflictDoNothing();
     console.log('✅ Inserted prestasi into database!');
