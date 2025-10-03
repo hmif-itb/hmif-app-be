@@ -25,7 +25,7 @@ const client = postgres(process.env.DATABASE_URL);
 const db = drizzle(client);
 
 export async function runUserSeed() {
-  const filePath = 'src/db/seed/database.csv';
+  const filePath = 'src/db/seed/database-example.csv';
   const data: Array<typeof users.$inferInsert> = [];
 
   const dataSchema = createInsertSchema(users, {
