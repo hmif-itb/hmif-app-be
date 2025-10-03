@@ -375,11 +375,13 @@ export async function seedPrestasi() {
     userNim: z.string(),
     jenisPrestasi: z.enum(['organisasi', 'kepanitiaan', 'kompetisi']),
     namaPrestasi: z.string(),
-    penyelenggara: z.string(),
-    tanggalMulai: z.string().transform((val) => new Date(val)),
-    tanggalSelesai: z.string().transform((val) => new Date(val)),
-    urlSertifikat: z.string().url(),
-    urlFotoAwarding: z.string().url().optional().or(z.literal('')),
+    deskripsi: z.string(),
+    bulan: z.number().int().min(1).max(12),
+    tahun: z.number().int(),
+    mediaSertifikat: z.string().optional(),
+    mediaFotoAwarding: z.string().optional(),
+    mediaFotoPribadi: z.string().optional(),
+    competitionType: z.enum(['CP', 'CTF', 'BCC', 'DS', 'AI', 'Hackathon']).optional(),
   });
 
   const validatedData: Array<typeof prestasi.$inferInsert> = [];
@@ -393,11 +395,13 @@ export async function seedPrestasi() {
             userNim: row[0],
             jenisPrestasi: row[1],
             namaPrestasi: row[2],
-            penyelenggara: row[3],
-            tanggalMulai: row[4],
-            tanggalSelesai: row[5],
-            urlSertifikat: row[6],
-            urlFotoAwarding: row[7],
+            deskripsi: row[3],
+            bulan: +row[4],
+            tahun: +row[5],
+            mediaSertifikat: row[6] || undefined,
+            mediaFotoAwarding: row[7] || undefined,
+            mediaFotoPribadi: row[8] || undefined,
+            competitionType: row[9] || undefined,
           });
 
           const userId = userMap.get(parsedRow.userNim);
@@ -411,11 +415,13 @@ export async function seedPrestasi() {
             userId: userId,
             jenisPrestasi: parsedRow.jenisPrestasi,
             namaPrestasi: parsedRow.namaPrestasi,
-            penyelenggara: parsedRow.penyelenggara,
-            tanggalMulai: parsedRow.tanggalMulai,
-            tanggalSelesai: parsedRow.tanggalSelesai,
-            urlSertifikat: parsedRow.urlSertifikat,
-            urlFotoAwarding: parsedRow.urlFotoAwarding || null,
+            deskripsi: parsedRow.deskripsi,
+            bulan: parsedRow.bulan,
+            tahun: parsedRow.tahun,
+            mediaSertifikat: parsedRow.mediaSertifikat || null,
+            mediaFotoAwarding: parsedRow.mediaFotoAwarding || null,
+            mediaFotoPribadi: parsedRow.mediaFotoPribadi || null,
+            competitionType: parsedRow.competitionType || null,
           });
         } catch (error) {
           console.log('❌ Error parsing row:', row, error);

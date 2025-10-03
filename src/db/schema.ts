@@ -1000,6 +1000,15 @@ export const jenisPrestasiEnum = pgEnum('jenis_prestasi', [
   'kompetisi',
 ]);
 
+export const competitionTypeEnum = pgEnum('competition_type', [
+  'CP',
+  'CTF', 
+  'BCC',
+  'DS',
+  'AI',
+  'Hackathon',
+]);
+
 export const prestasi = pgTable('prestasi', {
   id: text('id').primaryKey().$defaultFn(createId),
   userId: text('user_id')
@@ -1007,11 +1016,13 @@ export const prestasi = pgTable('prestasi', {
     .references(() => users.id, { onDelete: 'cascade' }),
   jenisPrestasi: jenisPrestasiEnum('jenis_prestasi').notNull(),
   namaPrestasi: text('nama_prestasi').notNull(),
-  penyelenggara: text('penyelenggara').notNull(),
-  tanggalMulai: timestamp('tanggal_mulai', { withTimezone: true }).notNull(),
-  tanggalSelesai: timestamp('tanggal_selesai', { withTimezone: true }).notNull(),
-  urlSertifikat: text('url_sertifikat').notNull(),
-  urlFotoAwarding: text('url_foto_awarding'), // Nullable
+  deskripsi: text('deskripsi'),
+  bulan: integer('bulan').notNull(), // 1-12
+  tahun: integer('tahun').notNull(),
+  mediaSertifikat: text('media_sertifikat').references(() => medias.id, { onDelete: 'set null' }),
+  mediaFotoAwarding: text('media_foto_awarding').references(() => medias.id, { onDelete: 'set null' }),
+  mediaFotoPribadi: text('media_foto_pribadi').references(() => medias.id, { onDelete: 'set null' }),
+  competitionType: competitionTypeEnum('competition_type'),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
@@ -1021,5 +1032,17 @@ export const prestasiRelations = relations(prestasi, ({ one }) => ({
   user: one(users, {
     fields: [prestasi.userId],
     references: [users.id],
+  }),
+  mediaSertifikat: one(medias, {
+    fields: [prestasi.mediaSertifikat],
+    references: [medias.id],
+  }),
+  mediaFotoAwarding: one(medias, {
+    fields: [prestasi.mediaFotoAwarding],
+    references: [medias.id],
+  }),
+  mediaFotoPribadi: one(medias, {
+    fields: [prestasi.mediaFotoPribadi],
+    references: [medias.id],
   }),
 }));

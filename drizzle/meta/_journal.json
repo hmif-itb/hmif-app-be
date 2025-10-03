@@ -162,6 +162,20 @@
       "when": 1759372977480,
       "tag": "0022_great_diamondback",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1759467362993,
+      "tag": "0023_massive_logan",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1759467695382,
+      "tag": "0024_clean_hairball",
+      "breakpoints": true
     }
   ]
 }
