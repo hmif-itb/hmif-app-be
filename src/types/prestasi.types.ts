@@ -9,6 +9,19 @@ const UserPrestasiSchema = z.object({
   picture: z.string().nullable(),
 });
 
+const UserPrestasiDetailSchema = z.object({
+  id: z.string(),
+  nim: z.string(),
+  fullName: z.string(),
+  email: z.string(),
+  angkatan: z.number(),
+  major: z.enum(['IF', 'STI']),
+  picture: z.string().nullable(),
+  region: z.enum(['Ganesha', 'Jatinangor']),
+  gender: z.enum(['F', 'M']),
+  membershipStatus: z.string(),
+});
+
 export const PrestasiSchema = createSelectSchema(prestasi, {
   createdAt: z.union([z.string(), z.date()]),
 })
@@ -21,6 +34,14 @@ export const PrestasiSchema = createSelectSchema(prestasi, {
     user: UserPrestasiSchema.optional(),
   })
   .openapi('Prestasi');
+
+export const PrestasiDetailSchema = createSelectSchema(prestasi, {
+  createdAt: z.union([z.string(), z.date()]),
+})
+  .extend({
+    user: UserPrestasiDetailSchema.optional(),
+  })
+  .openapi('PrestasiDetail');
 
 export const ListPrestasiSchema = z.object({
   prestasi: z.array(PrestasiSchema),
@@ -70,6 +91,16 @@ export const ListPrestasiQuerySchema = z.object({
       in: 'query',
       description: 'Number of items per page',
       example: 10,
+    },
+  }),
+});
+
+export const PrestasiIdParamsSchema = z.object({
+  idPrestasi: z.string().openapi({
+    param: {
+      in: 'path',
+      description: 'Id of prestasi',
+      example: 'gtychnqg',
     },
   }),
 });

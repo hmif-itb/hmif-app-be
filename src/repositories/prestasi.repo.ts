@@ -1,6 +1,7 @@
 import { and, count, desc, eq, gte, lte, SQL, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
+import { first } from '~/db/helper';
 import { prestasi, users } from '~/db/schema';
 import { ListPrestasiQuerySchema } from '~/types/prestasi.types';
 
@@ -82,4 +83,15 @@ export async function getListPrestasi(
     prestasi: results,
     total,
   };
+}
+
+export async function getPrestasiById(db: Database, id: string) {
+  const result = await db.query.prestasi.findFirst({
+    where: eq(prestasi.id, id),
+    with: {
+      user: true,
+    },
+  });
+
+  return result;
 }
