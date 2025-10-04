@@ -1,9 +1,8 @@
-import { and, count, desc, eq, gte, lte, SQL, sql } from 'drizzle-orm';
+import { and, count, desc, eq, SQL, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
-import { first } from '~/db/helper';
-import { medias, prestasi, users } from '~/db/schema';
-import { createId } from '~/db/schema';
+import { medias, prestasi, createId } from '~/db/schema';
+
 import { ListPrestasiQuerySchema } from '~/types/prestasi.types';
 import { createMediasFromUrl } from './media.repo';
 
@@ -11,7 +10,7 @@ export async function getListPrestasi(
   db: Database,
   q: z.infer<typeof ListPrestasiQuerySchema>,
 ) {
-  const conditions: SQL<unknown>[] = [];
+  const conditions: Array<SQL<unknown>> = [];
 
   // Filter by category
   if (q.category) {
@@ -21,9 +20,7 @@ export async function getListPrestasi(
       committee: 'kepanitiaan',
     } as const;
 
-    conditions.push(
-      eq(prestasi.jenisPrestasi, categoryMap[q.category]),
-    );
+    conditions.push(eq(prestasi.jenisPrestasi, categoryMap[q.category]));
   }
 
   // Filter by date range
@@ -109,7 +106,7 @@ export async function createPrestasi(
     tahun: number;
     competitionType?: 'CP' | 'CTF' | 'BCC' | 'DS' | 'AI' | 'Hackathon';
   },
-  mediaUrls?: string[]
+  mediaUrls?: string[],
 ) {
   return await db.transaction(async (tx) => {
     // Create media entries from URLs if provided
@@ -133,7 +130,7 @@ export async function createPrestasi(
         userId: data.userId,
         jenisPrestasi: data.jenisPrestasi,
         penyelenggara: data.penyelenggara,
-        deskripsi: data.deskripsi || 'Tidak ada deskripsi tersedia',
+        deskripsi: data.deskripsi ?? 'Tidak ada deskripsi tersedia',
         bulan: data.bulan,
         tahun: data.tahun,
         mediaSertifikat: mediaSertifikatId,
@@ -159,7 +156,7 @@ export async function updatePrestasi(
     competitionType?: 'CP' | 'CTF' | 'BCC' | 'DS' | 'AI' | 'Hackathon' | null;
   },
   mediaUrls?: string[],
-  userId?: string
+  userId?: string,
 ) {
   return await db.transaction(async (tx) => {
     // Get existing prestasi
@@ -174,7 +171,8 @@ export async function updatePrestasi(
     // Check old media
     const oldMediaIds: string[] = [];
     if (existing.mediaSertifikat) oldMediaIds.push(existing.mediaSertifikat);
-    if (existing.mediaFotoAwarding) oldMediaIds.push(existing.mediaFotoAwarding);
+    if (existing.mediaFotoAwarding)
+      oldMediaIds.push(existing.mediaFotoAwarding);
     if (existing.mediaFotoPribadi) oldMediaIds.push(existing.mediaFotoPribadi);
 
     const [updatedPrestasi] = await tx
@@ -194,7 +192,11 @@ export async function updatePrestasi(
     if (mediaUrls !== undefined) {
       if (mediaUrls.length > 0) {
         // Create new media records
-        const newMedias = await createMediasFromUrl(tx, mediaUrls, userId || existing.userId);
+        const newMedias = await createMediasFromUrl(
+          tx,
+          mediaUrls,
+          userId ?? existing.userId,
+        );
 
         // Update prestasi with new media IDs
         const [finalPrestasi] = await tx
@@ -207,13 +209,14 @@ export async function updatePrestasi(
           .where(eq(prestasi.id, id))
           .returning();
 
-        // Delete old media 
+        // Delete old media
         if (oldMediaIds.length > 0) {
-          await tx
-            .delete(medias)
-            .where(
-              sql`${medias.id} IN (${sql.join(oldMediaIds.map(id => sql`${id}`), sql`, `)})`
-            );
+          await tx.delete(medias).where(
+            sql`${medias.id} IN (${sql.join(
+              oldMediaIds.map((id) => sql`${id}`),
+              sql`, `,
+            )})`,
+          );
         }
 
         return finalPrestasi;
@@ -230,11 +233,12 @@ export async function updatePrestasi(
 
         // Delete old media records
         if (oldMediaIds.length > 0) {
-          await tx
-            .delete(medias)
-            .where(
-              sql`${medias.id} IN (${sql.join(oldMediaIds.map(id => sql`${id}`), sql`, `)})`
-            );
+          await tx.delete(medias).where(
+            sql`${medias.id} IN (${sql.join(
+              oldMediaIds.map((id) => sql`${id}`),
+              sql`, `,
+            )})`,
+          );
         }
 
         return finalPrestasi;
@@ -247,7 +251,7 @@ export async function updatePrestasi(
 
 export async function deletePrestasi(db: Database, id: string) {
   return await db.transaction(async (tx) => {
-    // Get the prestasi 
+    // Get the prestasi
     const existing = await tx.query.prestasi.findFirst({
       where: eq(prestasi.id, id),
     });
@@ -258,9 +262,12 @@ export async function deletePrestasi(db: Database, id: string) {
 
     // Check media
     const mediaIdsToDelete: string[] = [];
-    if (existing.mediaSertifikat) mediaIdsToDelete.push(existing.mediaSertifikat);
-    if (existing.mediaFotoAwarding) mediaIdsToDelete.push(existing.mediaFotoAwarding);
-    if (existing.mediaFotoPribadi) mediaIdsToDelete.push(existing.mediaFotoPribadi);
+    if (existing.mediaSertifikat)
+      mediaIdsToDelete.push(existing.mediaSertifikat);
+    if (existing.mediaFotoAwarding)
+      mediaIdsToDelete.push(existing.mediaFotoAwarding);
+    if (existing.mediaFotoPribadi)
+      mediaIdsToDelete.push(existing.mediaFotoPribadi);
 
     // Delete prestasi
     const [deleted] = await tx
@@ -268,13 +275,14 @@ export async function deletePrestasi(db: Database, id: string) {
       .where(eq(prestasi.id, id))
       .returning();
 
-    // Delete associated media 
+    // Delete associated media
     if (mediaIdsToDelete.length > 0) {
-      await tx
-        .delete(medias)
-        .where(
-          sql`${medias.id} IN (${sql.join(mediaIdsToDelete.map(id => sql`${id}`), sql`, `)})`
-        );
+      await tx.delete(medias).where(
+        sql`${medias.id} IN (${sql.join(
+          mediaIdsToDelete.map((id) => sql`${id}`),
+          sql`, `,
+        )})`,
+      );
     }
 
     return deleted;

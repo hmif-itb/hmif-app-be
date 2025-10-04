@@ -79,20 +79,30 @@ export const ListPrestasiQuerySchema = z.object({
         example: '2025-12',
       },
     }),
-  page: z.coerce.number().int().positive().default(1).openapi({
-    param: {
-      in: 'query',
-      description: 'Page number',
-      example: 1,
-    },
-  }),
-  limit: z.coerce.number().int().positive().default(10).openapi({
-    param: {
-      in: 'query',
-      description: 'Number of items per page',
-      example: 10,
-    },
-  }),
+  page: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(1)
+    .openapi({
+      param: {
+        in: 'query',
+        description: 'Page number',
+        example: 1,
+      },
+    }),
+  limit: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(10)
+    .openapi({
+      param: {
+        in: 'query',
+        description: 'Number of items per page',
+        example: 10,
+      },
+    }),
 });
 
 export const PrestasiIdParamsSchema = z.object({
@@ -109,7 +119,9 @@ export const CreatePrestasiSchema = createInsertSchema(prestasi, {
   bulan: z.number().int().min(1).max(12),
   tahun: z.number().int().min(2000).max(2100),
   deskripsi: z.string().min(1).optional(),
-  competitionType: z.enum(['CP', 'CTF', 'BCC', 'DS', 'AI', 'Hackathon']).optional(),
+  competitionType: z
+    .enum(['CP', 'CTF', 'BCC', 'DS', 'AI', 'Hackathon'])
+    .optional(),
 })
   .extend({
     // Accept userId from request body for admin purposes
@@ -150,7 +162,10 @@ export const UpdatePrestasiBodySchema = z.object({
   deskripsi: z.string().optional(),
   bulan: z.number().int().min(1).max(12),
   tahun: z.number().int().min(2000).max(2100),
-  competitionType: z.enum(['CP', 'CTF', 'BCC', 'DS', 'AI', 'Hackathon']).nullable().optional(),
+  competitionType: z
+    .enum(['CP', 'CTF', 'BCC', 'DS', 'AI', 'Hackathon'])
+    .nullable()
+    .optional(),
   mediaUrls: z
     .array(z.string().url())
     .optional()

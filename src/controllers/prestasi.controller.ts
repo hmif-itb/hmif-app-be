@@ -2,7 +2,13 @@ import { PostgresError } from 'postgres';
 import { db } from '~/db/drizzle';
 import { users } from '~/db/schema';
 import { eq } from 'drizzle-orm';
-import { createPrestasi, deletePrestasi, getListPrestasi, getPrestasiById, updatePrestasi } from '~/repositories/prestasi.repo';
+import {
+  createPrestasi,
+  deletePrestasi,
+  getListPrestasi,
+  getPrestasiById,
+  updatePrestasi,
+} from '~/repositories/prestasi.repo';
 import {
   createPrestasiRoute,
   deletePrestasiRoute,
@@ -37,7 +43,7 @@ prestasiRouter.openapi(createPrestasiRoute, async (c) => {
     const user = c.var.user;
 
     // Determine user ID - use provided userId for admin, otherwise use current user
-    const targetUserId = body.userId || user.id;
+    const targetUserId = body.userId ?? user.id;
 
     // Verify user exists
     const [targetUser] = await db
@@ -50,15 +56,19 @@ prestasiRouter.openapi(createPrestasiRoute, async (c) => {
     }
 
     // Create prestasi
-    const newPrestasi = await createPrestasi(db, {
-      userId: targetUserId,
-      jenisPrestasi: body.jenisPrestasi,
-      penyelenggara: body.penyelenggara,
-      deskripsi: body.deskripsi || undefined,
-      bulan: body.bulan,
-      tahun: body.tahun,
-      competitionType: body.competitionType || undefined,
-    }, body.mediaUrls);
+    const newPrestasi = await createPrestasi(
+      db,
+      {
+        userId: targetUserId,
+        jenisPrestasi: body.jenisPrestasi,
+        penyelenggara: body.penyelenggara,
+        deskripsi: body.deskripsi ?? undefined,
+        bulan: body.bulan,
+        tahun: body.tahun,
+        competitionType: body.competitionType ?? undefined,
+      },
+      body.mediaUrls,
+    );
 
     // Return response without media fields to match schema
     const response = {
@@ -94,7 +104,6 @@ prestasiRouter.openapi(updatePrestasiRoute, async (c) => {
   try {
     const { idPrestasi } = c.req.valid('param');
     const body = c.req.valid('json');
-    const user = c.var.user;
 
     // Get the existing prestasi to use its original userId for media creation
     const existing = await getPrestasiById(db, idPrestasi);
@@ -104,14 +113,20 @@ prestasiRouter.openapi(updatePrestasiRoute, async (c) => {
     }
 
     // Update prestasi - use existing prestasi's userId for media creation
-    const updatedPrestasi = await updatePrestasi(db, idPrestasi, {
-      jenisPrestasi: body.jenisPrestasi,
-      penyelenggara: body.penyelenggara,
-      deskripsi: body.deskripsi,
-      bulan: body.bulan,
-      tahun: body.tahun,
-      competitionType: body.competitionType,
-    }, body.mediaUrls, existing.userId);
+    const updatedPrestasi = await updatePrestasi(
+      db,
+      idPrestasi,
+      {
+        jenisPrestasi: body.jenisPrestasi,
+        penyelenggara: body.penyelenggara,
+        deskripsi: body.deskripsi,
+        bulan: body.bulan,
+        tahun: body.tahun,
+        competitionType: body.competitionType,
+      },
+      body.mediaUrls,
+      existing.userId,
+    );
 
     if (!updatedPrestasi) {
       return c.json({ error: 'Achievement not found' }, 404);
