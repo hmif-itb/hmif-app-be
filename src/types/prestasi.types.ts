@@ -143,3 +143,36 @@ export const CreatePrestasiResponseSchema = createSelectSchema(prestasi, {
     mediaFotoPribadi: true,
   })
   .openapi('CreatePrestasiResponse');
+
+export const ExportPrestasiQuerySchema = z.object({
+  category: z
+    .enum(['competition', 'organization', 'committee'])
+    .optional()
+    .openapi({
+      param: {
+        in: 'query',
+        description: 'Filter by category',
+        example: 'competition',
+      },
+    }),
+  start_date: z
+    .string()
+    .optional()
+    .openapi({
+      param: {
+        in: 'query',
+        description: 'Start date filter (YYYY-MM format)',
+        example: '2025-01',
+      },
+    }),
+  end_date: z
+    .string()
+    .optional()
+    .openapi({
+      param: {
+        in: 'query',
+        description: 'End date filter (YYYY-MM format)',
+        example: '2025-12',
+      },
+    }),
+});

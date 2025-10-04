@@ -7,6 +7,7 @@ import {
   PrestasiDetailSchema,
   PrestasiIdParamsSchema,
   PrestasiSchema,
+  ExportPrestasiQuerySchema,
 } from '~/types/prestasi.types';
 import {
   ErrorSchema,
@@ -90,6 +91,41 @@ export const createPrestasiRoute = createRoute({
     400: validationErrorResponse,
     401: errorResponse,
     404: errorResponse,
+    500: errorResponse,
+  },
+});
+
+export const exportPrestasiRoute = createRoute({
+  operationId: 'exportPrestasi',
+  tags: ['achievements'],
+  method: 'get',
+  path: '/achievements/export/excel',
+  request: {
+    query: ExportPrestasiQuerySchema,
+  },
+  responses: {
+    200: {
+      description: 'Excel file with prestasi data',
+      content: {
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+          schema: {
+            type: 'string',
+            format: 'binary',
+          },
+        },
+      },
+      headers: {
+        'Content-Disposition': {
+          description: 'Attachment filename',
+          schema: {
+            type: 'string',
+            example: 'attachment; filename="prestasi-export.xlsx"',
+          },
+        },
+      },
+    },
+    400: validationErrorResponse,
+    401: errorResponse,
     500: errorResponse,
   },
 });

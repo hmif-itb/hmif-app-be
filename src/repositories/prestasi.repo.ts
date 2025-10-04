@@ -62,7 +62,7 @@ export async function getListPrestasi(
       id: true,
       userId: true,
       jenisPrestasi: true,
-      namaPrestasi: true,
+      penyelenggara: true,
       deskripsi: true,
       bulan: true,
       tahun: true,
@@ -96,6 +96,38 @@ export async function getPrestasiById(db: Database, id: string) {
   });
 
   return result;
+}
+
+export async function getAllPrestasiForExport(db: Database) {
+  const results = await db.query.prestasi.findMany({
+    orderBy: [desc(prestasi.tahun), desc(prestasi.bulan)],
+    columns: {
+      id: true,
+      jenisPrestasi: true,
+      penyelenggara: true,
+      deskripsi: true,
+      bulan: true,
+      tahun: true,
+      competitionType: true,
+      createdAt: true,
+    },
+    with: {
+      user: {
+        columns: {
+          id: true,
+          nim: true,
+          fullName: true,
+          email: true,
+          angkatan: true,
+          major: true,
+          region: true,
+          gender: true,
+        },
+      },
+    },
+  });
+
+  return results;
 }
 
 export async function createPrestasi(
