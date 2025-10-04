@@ -8,6 +8,7 @@ import {
   PrestasiIdParamsSchema,
   PrestasiSchema,
   ExportPrestasiQuerySchema,
+  UpdatePrestasiBodySchema,
 } from '~/types/prestasi.types';
 import {
   ErrorSchema,
@@ -126,6 +127,63 @@ export const exportPrestasiRoute = createRoute({
     },
     400: validationErrorResponse,
     401: errorResponse,
+    500: errorResponse,
+  },
+});
+
+export const updatePrestasiRoute = createRoute({
+  operationId: 'updatePrestasi',
+  tags: ['achievements'],
+  method: 'put',
+  path: '/achievements/{idPrestasi}',
+  request: {
+    params: PrestasiIdParamsSchema,
+    body: {
+      content: {
+        'application/json': {
+          schema: UpdatePrestasiBodySchema,
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'Prestasi updated successfully',
+      content: {
+        'application/json': {
+          schema: CreatePrestasiResponseSchema,
+        },
+      },
+    },
+    400: validationErrorResponse,
+    401: errorResponse,
+    404: errorResponse,
+    500: errorResponse,
+  },
+});
+
+export const deletePrestasiRoute = createRoute({
+  operationId: 'deletePrestasi',
+  tags: ['achievements'],
+  method: 'delete',
+  path: '/achievements/{idPrestasi}',
+  request: {
+    params: PrestasiIdParamsSchema,
+  },
+  responses: {
+    200: {
+      description: 'Prestasi deleted successfully',
+      content: {
+        'application/json': {
+          schema: z.object({
+            message: z.string(),
+          }),
+        },
+      },
+    },
+    400: validationErrorResponse,
+    401: errorResponse,
+    404: errorResponse,
     500: errorResponse,
   },
 });

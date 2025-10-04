@@ -176,3 +176,22 @@ export const ExportPrestasiQuerySchema = z.object({
       },
     }),
 });
+
+export const UpdatePrestasiBodySchema = z.object({
+  jenisPrestasi: z.enum(['organisasi', 'kepanitiaan', 'kompetisi']).optional(),
+  penyelenggara: z.string().min(1).optional(),
+  deskripsi: z.string().optional(),
+  bulan: z.number().int().min(1).max(12).optional(),
+  tahun: z.number().int().min(2000).max(2100).optional(),
+  competitionType: z.enum(['CP', 'CTF', 'BCC', 'DS', 'AI', 'Hackathon']).optional(),
+  mediaUrls: z
+    .array(z.string().url())
+    .optional()
+    .openapi({
+      example: [
+        'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/certificate.jpg',
+        'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/awarding.jpg',
+        'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/personal.jpg',
+      ],
+    }),
+});

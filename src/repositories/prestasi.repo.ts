@@ -178,3 +178,70 @@ export async function createPrestasi(
     return newPrestasi;
   });
 }
+
+export async function updatePrestasi(
+  db: Database,
+  id: string,
+  data: {
+    jenisPrestasi?: 'organisasi' | 'kepanitiaan' | 'kompetisi';
+    penyelenggara?: string;
+    deskripsi?: string;
+    bulan?: number;
+    tahun?: number;
+    competitionType?: 'CP' | 'CTF' | 'BCC' | 'DS' | 'AI' | 'Hackathon';
+  },
+  mediaUrls?: string[]
+) {
+  return await db.transaction(async (tx) => {
+    // Handle media updates if provided
+    let mediaSertifikatId: string | undefined;
+    let mediaFotoAwardingId: string | undefined;
+    let mediaFotoPribadiId: string | undefined;
+
+    if (mediaUrls && mediaUrls.length > 0) {
+      // Get the current prestasi to find the userId
+      const [currentPrestasi] = await tx
+        .select({ userId: prestasi.userId })
+        .from(prestasi)
+        .where(eq(prestasi.id, id));
+
+      if (currentPrestasi) {
+        const newMedias = await createMediasFromUrl(tx, mediaUrls, currentPrestasi.userId);
+        
+        // Assign media in order: certificate, awarding, personal
+        if (newMedias[0]) mediaSertifikatId = newMedias[0].id;
+        if (newMedias[1]) mediaFotoAwardingId = newMedias[1].id;
+        if (newMedias[2]) mediaFotoPribadiId = newMedias[2].id;
+      }
+    }
+
+    const updateData: any = {};
+    if (data.jenisPrestasi !== undefined) updateData.jenisPrestasi = data.jenisPrestasi;
+    if (data.penyelenggara !== undefined) updateData.penyelenggara = data.penyelenggara;
+    if (data.deskripsi !== undefined) updateData.deskripsi = data.deskripsi;
+    if (data.bulan !== undefined) updateData.bulan = data.bulan;
+    if (data.tahun !== undefined) updateData.tahun = data.tahun;
+    if (data.competitionType !== undefined) updateData.competitionType = data.competitionType;
+    
+    if (mediaSertifikatId !== undefined) updateData.mediaSertifikat = mediaSertifikatId;
+    if (mediaFotoAwardingId !== undefined) updateData.mediaFotoAwarding = mediaFotoAwardingId;
+    if (mediaFotoPribadiId !== undefined) updateData.mediaFotoPribadi = mediaFotoPribadiId;
+
+    const [updatedPrestasi] = await tx
+      .update(prestasi)
+      .set(updateData)
+      .where(eq(prestasi.id, id))
+      .returning();
+
+    return updatedPrestasi;
+  });
+}
+
+export async function deletePrestasi(db: Database, id: string) {
+  const [deletedPrestasi] = await db
+    .delete(prestasi)
+    .where(eq(prestasi.id, id))
+    .returning();
+
+  return deletedPrestasi;
+}
