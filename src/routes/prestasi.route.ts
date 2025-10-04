@@ -124,3 +124,29 @@ export const updatePrestasiRoute = createRoute({
     500: errorResponse,
   },
 });
+
+export const deletePrestasiRoute = createRoute({
+  operationId: 'deletePrestasi',
+  tags: ['achievements'],
+  method: 'delete',
+  path: '/achievements/{idPrestasi}',
+  request: {
+    params: PrestasiIdParamsSchema,
+  },
+  responses: {
+    200: {
+      description: 'Prestasi deleted successfully',
+      content: {
+        'application/json': {
+          schema: z.object({
+            message: z.string(),
+          }),
+        },
+      },
+    },
+    400: errorResponse,
+    401: errorResponse,
+    404: errorResponse,
+    500: errorResponse,
+  },
+});

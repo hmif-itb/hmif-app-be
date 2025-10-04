@@ -2,9 +2,10 @@ import { PostgresError } from 'postgres';
 import { db } from '~/db/drizzle';
 import { users } from '~/db/schema';
 import { eq } from 'drizzle-orm';
-import { createPrestasi, getListPrestasi, getPrestasiById, updatePrestasi } from '~/repositories/prestasi.repo';
+import { createPrestasi, deletePrestasi, getListPrestasi, getPrestasiById, updatePrestasi } from '~/repositories/prestasi.repo';
 import {
   createPrestasiRoute,
+  deletePrestasiRoute,
   getListPrestasiRoute,
   getPrestasiByIdRoute,
   updatePrestasiRoute,
@@ -139,6 +140,30 @@ prestasiRouter.openapi(updatePrestasiRoute, async (c) => {
       }
       if (error.code === '23505') {
         return c.json({ error: 'Duplicate entry' }, 400);
+      }
+    }
+
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+prestasiRouter.openapi(deletePrestasiRoute, async (c) => {
+  try {
+    const { idPrestasi } = c.req.valid('param');
+
+    const deleted = await deletePrestasi(db, idPrestasi);
+
+    if (!deleted) {
+      return c.json({ error: 'Achievement not found' }, 404);
+    }
+
+    return c.json({ message: 'Achievement deleted successfully' }, 200);
+  } catch (error) {
+    console.error('Error deleting prestasi:', error);
+
+    if (error instanceof PostgresError) {
+      if (error.code === '23503') {
+        return c.json({ error: 'Cannot delete: foreign key constraint' }, 400);
       }
     }
 

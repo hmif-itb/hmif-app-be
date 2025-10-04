@@ -171,6 +171,12 @@ export async function updatePrestasi(
       return null;
     }
 
+    // Check old media
+    const oldMediaIds: string[] = [];
+    if (existing.mediaSertifikat) oldMediaIds.push(existing.mediaSertifikat);
+    if (existing.mediaFotoAwarding) oldMediaIds.push(existing.mediaFotoAwarding);
+    if (existing.mediaFotoPribadi) oldMediaIds.push(existing.mediaFotoPribadi);
+
     const [updatedPrestasi] = await tx
       .update(prestasi)
       .set({
@@ -184,11 +190,13 @@ export async function updatePrestasi(
       .where(eq(prestasi.id, id))
       .returning();
 
-    // Handle media URLs if any
+    // Handle media URLs if provided
     if (mediaUrls !== undefined) {
       if (mediaUrls.length > 0) {
+        // Create new media records
         const newMedias = await createMediasFromUrl(tx, mediaUrls, userId || existing.userId);
 
+        // Update prestasi with new media IDs
         const [finalPrestasi] = await tx
           .update(prestasi)
           .set({
@@ -198,6 +206,15 @@ export async function updatePrestasi(
           })
           .where(eq(prestasi.id, id))
           .returning();
+
+        // Delete old media 
+        if (oldMediaIds.length > 0) {
+          await tx
+            .delete(medias)
+            .where(
+              sql`${medias.id} IN (${sql.join(oldMediaIds.map(id => sql`${id}`), sql`, `)})`
+            );
+        }
 
         return finalPrestasi;
       } else {
@@ -211,10 +228,55 @@ export async function updatePrestasi(
           .where(eq(prestasi.id, id))
           .returning();
 
+        // Delete old media records
+        if (oldMediaIds.length > 0) {
+          await tx
+            .delete(medias)
+            .where(
+              sql`${medias.id} IN (${sql.join(oldMediaIds.map(id => sql`${id}`), sql`, `)})`
+            );
+        }
+
         return finalPrestasi;
       }
     }
 
     return updatedPrestasi;
+  });
+}
+
+export async function deletePrestasi(db: Database, id: string) {
+  return await db.transaction(async (tx) => {
+    // Get the prestasi 
+    const existing = await tx.query.prestasi.findFirst({
+      where: eq(prestasi.id, id),
+    });
+
+    if (!existing) {
+      return null;
+    }
+
+    // Check media
+    const mediaIdsToDelete: string[] = [];
+    if (existing.mediaSertifikat) mediaIdsToDelete.push(existing.mediaSertifikat);
+    if (existing.mediaFotoAwarding) mediaIdsToDelete.push(existing.mediaFotoAwarding);
+    if (existing.mediaFotoPribadi) mediaIdsToDelete.push(existing.mediaFotoPribadi);
+
+    // Delete prestasi
+    const [deleted] = await tx
+      .delete(prestasi)
+      .where(eq(prestasi.id, id))
+      .returning();
+
+    // Delete associated media 
+    if (mediaIdsToDelete.length > 0) {
+      await tx
+        .delete(medias)
+        .where(
+          sql`${medias.id} IN (${sql.join(mediaIdsToDelete.map(id => sql`${id}`), sql`, `)})`
+        );
+    }
+
+    return deleted;
   });
 }
