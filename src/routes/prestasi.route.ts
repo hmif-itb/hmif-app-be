@@ -6,7 +6,7 @@ import {
   ListPrestasiSchema,
   PrestasiDetailSchema,
   PrestasiIdParamsSchema,
-  PrestasiSchema,
+  UpdatePrestasiBodySchema,
 } from '~/types/prestasi.types';
 import {
   ErrorSchema,
@@ -87,7 +87,38 @@ export const createPrestasiRoute = createRoute({
         },
       },
     },
-    400: validationErrorResponse,
+    400: errorResponse,
+    401: errorResponse,
+    404: errorResponse,
+    500: errorResponse,
+  },
+});
+
+export const updatePrestasiRoute = createRoute({
+  operationId: 'updatePrestasi',
+  tags: ['achievements'],
+  method: 'put',
+  path: '/achievements/{idPrestasi}',
+  request: {
+    params: PrestasiIdParamsSchema,
+    body: {
+      content: {
+        'application/json': {
+          schema: UpdatePrestasiBodySchema,
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'Prestasi updated successfully',
+      content: {
+        'application/json': {
+          schema: CreatePrestasiResponseSchema,
+        },
+      },
+    },
+    400: errorResponse,
     401: errorResponse,
     404: errorResponse,
     500: errorResponse,

@@ -143,3 +143,22 @@ export const CreatePrestasiResponseSchema = createSelectSchema(prestasi, {
     mediaFotoPribadi: true,
   })
   .openapi('CreatePrestasiResponse');
+
+export const UpdatePrestasiBodySchema = z.object({
+  jenisPrestasi: z.enum(['organisasi', 'kepanitiaan', 'kompetisi']),
+  penyelenggara: z.string().min(1),
+  deskripsi: z.string().optional(),
+  bulan: z.number().int().min(1).max(12),
+  tahun: z.number().int().min(2000).max(2100),
+  competitionType: z.enum(['CP', 'CTF', 'BCC', 'DS', 'AI', 'Hackathon']).nullable().optional(),
+  mediaUrls: z
+    .array(z.string().url())
+    .optional()
+    .openapi({
+      example: [
+        'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/certificate.jpg',
+        'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/awarding.jpg',
+        'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/personal.jpg',
+      ],
+    }),
+});

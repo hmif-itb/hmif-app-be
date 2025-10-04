@@ -2,7 +2,7 @@ import { and, count, desc, eq, gte, lte, SQL, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first } from '~/db/helper';
-import { prestasi, users } from '~/db/schema';
+import { medias, prestasi, users } from '~/db/schema';
 import { createId } from '~/db/schema';
 import { ListPrestasiQuerySchema } from '~/types/prestasi.types';
 import { createMediasFromUrl } from './media.repo';
@@ -62,7 +62,7 @@ export async function getListPrestasi(
       id: true,
       userId: true,
       jenisPrestasi: true,
-      namaPrestasi: true,
+      penyelenggara: true,
       deskripsi: true,
       bulan: true,
       tahun: true,
@@ -99,7 +99,7 @@ export async function getPrestasiById(db: Database, id: string) {
 }
 
 export async function createPrestasi(
-  db: Database, 
+  db: Database,
   data: {
     userId: string;
     jenisPrestasi: 'organisasi' | 'kepanitiaan' | 'kompetisi';
@@ -119,7 +119,7 @@ export async function createPrestasi(
 
     if (mediaUrls && mediaUrls.length > 0) {
       const newMedias = await createMediasFromUrl(tx, mediaUrls, data.userId);
-      
+
       // Assign media in order: certificate, awarding, personal
       if (newMedias[0]) mediaSertifikatId = newMedias[0].id;
       if (newMedias[1]) mediaFotoAwardingId = newMedias[1].id;
@@ -144,5 +144,77 @@ export async function createPrestasi(
       .returning();
 
     return newPrestasi;
+  });
+}
+
+export async function updatePrestasi(
+  db: Database,
+  id: string,
+  data: {
+    jenisPrestasi: 'organisasi' | 'kepanitiaan' | 'kompetisi';
+    penyelenggara: string;
+    deskripsi?: string;
+    bulan: number;
+    tahun: number;
+    competitionType?: 'CP' | 'CTF' | 'BCC' | 'DS' | 'AI' | 'Hackathon' | null;
+  },
+  mediaUrls?: string[],
+  userId?: string
+) {
+  return await db.transaction(async (tx) => {
+    // Get existing prestasi
+    const existing = await tx.query.prestasi.findFirst({
+      where: eq(prestasi.id, id),
+    });
+
+    if (!existing) {
+      return null;
+    }
+
+    const [updatedPrestasi] = await tx
+      .update(prestasi)
+      .set({
+        jenisPrestasi: data.jenisPrestasi,
+        penyelenggara: data.penyelenggara,
+        deskripsi: data.deskripsi,
+        bulan: data.bulan,
+        tahun: data.tahun,
+        competitionType: data.competitionType,
+      })
+      .where(eq(prestasi.id, id))
+      .returning();
+
+    // Handle media URLs if any
+    if (mediaUrls !== undefined) {
+      if (mediaUrls.length > 0) {
+        const newMedias = await createMediasFromUrl(tx, mediaUrls, userId || existing.userId);
+
+        const [finalPrestasi] = await tx
+          .update(prestasi)
+          .set({
+            mediaSertifikat: newMedias[0]?.id || null,
+            mediaFotoAwarding: newMedias[1]?.id || null,
+            mediaFotoPribadi: newMedias[2]?.id || null,
+          })
+          .where(eq(prestasi.id, id))
+          .returning();
+
+        return finalPrestasi;
+      } else {
+        const [finalPrestasi] = await tx
+          .update(prestasi)
+          .set({
+            mediaSertifikat: null,
+            mediaFotoAwarding: null,
+            mediaFotoPribadi: null,
+          })
+          .where(eq(prestasi.id, id))
+          .returning();
+
+        return finalPrestasi;
+      }
+    }
+
+    return updatedPrestasi;
   });
 }
