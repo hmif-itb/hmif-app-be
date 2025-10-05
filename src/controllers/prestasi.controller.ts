@@ -105,6 +105,10 @@ prestasiRouter.openapi(createPrestasiRoute, async (c) => {
   }
 });
 
+prestasiRouter.delete(
+  deletePrestasiRoute.getRoutingPath(),
+  roleMiddleware(['people', 'peopledev', 'peoplemanage']),
+);
 prestasiRouter.openapi(updatePrestasiRoute, async (c) => {
   try {
     const { idPrestasi } = c.req.valid('param');
@@ -170,7 +174,7 @@ prestasiRouter.openapi(updatePrestasiRoute, async (c) => {
 
 prestasiRouter.delete(
   deletePrestasiRoute.getRoutingPath(),
-  roleMiddleware(['people', 'peopledev', 'peoplemanage', 'cnc']),
+  roleMiddleware(['people', 'peopledev', 'peoplemanage']),
 );
 prestasiRouter.openapi(deletePrestasiRoute, async (c) => {
   try {
