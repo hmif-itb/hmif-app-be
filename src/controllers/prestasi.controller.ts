@@ -236,7 +236,7 @@ prestasiRouter.openapi(exportPrestasiRoute, async (c: any) => {
 
   const where = conditions.length > 0 ? and(...conditions) : undefined;
 
-  // Get all prestasi data with user information
+  // Get all prestasi data with user information and media
   const prestasiData = await db.query.prestasi.findMany({
     where,
     orderBy: [desc(prestasi.tahun), desc(prestasi.bulan)],
@@ -256,11 +256,24 @@ prestasiRouter.openapi(exportPrestasiRoute, async (c: any) => {
           id: true,
           nim: true,
           fullName: true,
-          email: true,
           angkatan: true,
           major: true,
           region: true,
-          gender: true,
+        },
+      },
+      mediaSertifikat: {
+        columns: {
+          url: true,
+        },
+      },
+      mediaFotoPribadi: {
+        columns: {
+          url: true,
+        },
+      },
+      mediaFotoAwarding: {
+        columns: {
+          url: true,
         },
       },
     },
@@ -272,21 +285,18 @@ prestasiRouter.openapi(exportPrestasiRoute, async (c: any) => {
 
   // Define columns
   worksheet.columns = [
-    { header: 'ID', key: 'id', width: 15 },
     { header: 'NIM', key: 'nim', width: 12 },
     { header: 'Nama Lengkap', key: 'fullName', width: 25 },
-    { header: 'Email', key: 'email', width: 30 },
     { header: 'Angkatan', key: 'angkatan', width: 10 },
-    { header: 'Major', key: 'major', width: 8 },
-    { header: 'Region', key: 'region', width: 12 },
-    { header: 'Gender', key: 'gender', width: 8 },
+    { header: 'Jurusan', key: 'jurusan', width: 10 },
+    { header: 'Kampus', key: 'kampus', width: 15 },
     { header: 'Jenis Prestasi', key: 'jenisPrestasi', width: 15 },
-    { header: 'Penyelenggara', key: 'penyelenggara', width: 25 },
-    { header: 'Deskripsi', key: 'deskripsi', width: 40 },
-    { header: 'Bulan', key: 'bulan', width: 8 },
-    { header: 'Tahun', key: 'tahun', width: 8 },
-    { header: 'Competition Type', key: 'competitionType', width: 15 },
-    { header: 'Created At', key: 'createdAt', width: 20 },
+    { header: 'Nama kompetisi/organisasi', key: 'penyelenggara', width: 30 },
+    { header: 'Deskripsi Prestasi', key: 'deskripsi', width: 40 },
+    { header: 'Periode pencapaian prestasi', key: 'periode', width: 20 },
+    { header: 'Sertifikat', key: 'sertifikat', width: 50 },
+    { header: 'Foto pribadi', key: 'fotoPribadi', width: 50 },
+    { header: 'Foto saat awarding', key: 'fotoAwarding', width: 50 },
   ];
 
   // Style the header row
@@ -299,24 +309,26 @@ prestasiRouter.openapi(exportPrestasiRoute, async (c: any) => {
 
   // Add data rows
   prestasiData.forEach((prestasiItem) => {
+    // Format periode (bulan-tahun)
+    const monthNames = [
+      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+    const periode = `${monthNames[prestasiItem.bulan - 1]} ${prestasiItem.tahun}`;
+
     worksheet.addRow({
-      id: prestasiItem.id,
       nim: prestasiItem.user?.nim || '',
       fullName: prestasiItem.user?.fullName || '',
-      email: prestasiItem.user?.email || '',
       angkatan: prestasiItem.user?.angkatan || '',
-      major: prestasiItem.user?.major || '',
-      region: prestasiItem.user?.region || '',
-      gender: prestasiItem.user?.gender || '',
+      jurusan: prestasiItem.user?.major || '',
+      kampus: prestasiItem.user?.region || '',
       jenisPrestasi: prestasiItem.jenisPrestasi,
       penyelenggara: prestasiItem.penyelenggara,
       deskripsi: prestasiItem.deskripsi || '',
-      bulan: prestasiItem.bulan,
-      tahun: prestasiItem.tahun,
-      competitionType: prestasiItem.competitionType || '',
-      createdAt: prestasiItem.createdAt instanceof Date
-        ? prestasiItem.createdAt.toISOString()
-        : prestasiItem.createdAt,
+      periode: periode,
+      sertifikat: prestasiItem.mediaSertifikat?.url || '',
+      fotoPribadi: prestasiItem.mediaFotoPribadi?.url || '',
+      fotoAwarding: prestasiItem.mediaFotoAwarding?.url || '',
     });
   });
 
