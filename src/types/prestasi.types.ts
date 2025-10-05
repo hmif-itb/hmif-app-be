@@ -156,16 +156,46 @@ export const CreatePrestasiResponseSchema = createSelectSchema(prestasi, {
   })
   .openapi('CreatePrestasiResponse');
 
+export const ExportPrestasiQuerySchema = z.object({
+  category: z
+    .enum(['competition', 'organization', 'committee'])
+    .optional()
+    .openapi({
+      param: {
+        in: 'query',
+        description: 'Filter by category',
+        example: 'competition',
+      },
+    }),
+  start_date: z
+    .string()
+    .optional()
+    .openapi({
+      param: {
+        in: 'query',
+        description: 'Start date filter (YYYY-MM format)',
+        example: '2025-01',
+      },
+    }),
+  end_date: z
+    .string()
+    .optional()
+    .openapi({
+      param: {
+        in: 'query',
+        description: 'End date filter (YYYY-MM format)',
+        example: '2025-12',
+      },
+    }),
+});
+
 export const UpdatePrestasiBodySchema = z.object({
-  jenisPrestasi: z.enum(['organisasi', 'kepanitiaan', 'kompetisi']),
-  penyelenggara: z.string().min(1),
+  jenisPrestasi: z.enum(['organisasi', 'kepanitiaan', 'kompetisi']).optional(),
+  penyelenggara: z.string().min(1).optional(),
   deskripsi: z.string().optional(),
-  bulan: z.number().int().min(1).max(12),
-  tahun: z.number().int().min(2000).max(2100),
-  competitionType: z
-    .enum(['CP', 'CTF', 'BCC', 'DS', 'AI', 'Hackathon'])
-    .nullable()
-    .optional(),
+  bulan: z.number().int().min(1).max(12).optional(),
+  tahun: z.number().int().min(2000).max(2100).optional(),
+  competitionType: z.enum(['CP', 'CTF', 'BCC', 'DS', 'AI', 'Hackathon']).optional(),
   mediaUrls: z
     .array(z.string().url())
     .optional()
