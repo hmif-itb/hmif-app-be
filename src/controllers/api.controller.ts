@@ -9,6 +9,7 @@ import { infoRouter } from './info.controller';
 import { markdownRouter } from './markdown.controller';
 import { mediaRouter } from './media.controller';
 import { openGraphScrapeRoute } from './open-graph.controller';
+import { prestasiRouter } from './prestasi.controller';
 import { pushPubRouter, pushRouter } from './push.controller';
 import { reactionRouter } from './reaction.controller';
 import { testimoniRoute } from './testimoni.controller';
@@ -41,6 +42,7 @@ protectedApiRouter.route('/', competitionsRouter);
 protectedApiRouter.route('/', markdownRouter);
 protectedApiRouter.route('/', recommendationRoute);
 protectedApiRouter.route('/', curhatRouter);
+protectedApiRouter.route('/', prestasiRouter);
 
 export const apiRouter = new OpenAPIHono();
 apiRouter.route('/', unprotectedApiRouter);

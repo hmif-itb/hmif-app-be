@@ -1015,7 +1015,7 @@ export const prestasi = pgTable('prestasi', {
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
   jenisPrestasi: jenisPrestasiEnum('jenis_prestasi').notNull(),
-  namaPrestasi: text('nama_prestasi').notNull(),
+  penyelenggara: text('penyelenggara').notNull(),
   deskripsi: text('deskripsi'),
   bulan: integer('bulan').notNull(), // 1-12
   tahun: integer('tahun').notNull(),

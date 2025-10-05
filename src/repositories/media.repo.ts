@@ -7,18 +7,22 @@ export const createMediasFromUrl = async (
   urls: string[],
   creatorId: string,
 ) => {
+  const timestamp = Date.now(); // Get current timestamp as seed
+
   return await db
     .insert(medias)
     .values(
-      urls.map((url) => {
+      urls.map((url, index) => {
         const file = url.split('/').at(-1); // asrielblunt.jpg
         if (!file) {
           throw Error('Invalid URL');
         }
         const [name, type] = file.split('.');
+        // Add timestamp and index to make name unique: timestamp_index_name
+        const uniqueName = `${timestamp}_${index}_${name}`;
         return {
           creatorId,
-          name,
+          name: uniqueName,
           type,
           url,
         };

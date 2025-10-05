@@ -100,7 +100,7 @@ loginRouter.openapi(loginAccessTokenRoute, async (c) => {
   } catch (err) {
     return c.json(
       {
-        error: err,
+        error: err instanceof Error ? err.message : 'Internal server error',
       },
       500,
     );
@@ -195,6 +195,7 @@ loginRouter.openapi(loginBypassRoute, async (c) => {
       401,
     );
   }
+
   const tokenPayload = JWTPayloadSchema.parse(user);
   const jwtToken = await generateJWT(tokenPayload);
   setCookie(c, 'hmif-app.access-cookie', jwtToken, {

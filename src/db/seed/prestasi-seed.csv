@@ -1,4 +1,4 @@
-userNim,jenisPrestasi,namaPrestasi,deskripsi,bulan,tahun,mediaSertifikat,mediaFotoAwarding,mediaFotoPribadi,competitionType
-13521001,kompetisi,"Juara 1 Gemastik Cabang Pengembangan Perangkat Lunak","Memenangkan kompetisi pengembangan perangkat lunak tingkat nasional",9,2024,,,,CP
-13521002,kepanitiaan,"Ketua Divisi Acara Wisuda April 2025","Memimpin divisi acara untuk wisuda mahasiswa",11,2024,,,,
-13521001,organisasi,"Staff Divisi Media dan Informasi","Menjadi staff di divisi media dan informasi kabinet",2,2024,,,,
+userNim,jenisPrestasi,penyelenggara,deskripsi,bulan,tahun,mediaSertifikat,mediaFotoAwarding,mediaFotoPribadi,competitionType
+18221000,kompetisi,"Gemastik","Juara 1 Gemastik Cabang Pengembangan Perangkat Lunak",9,2024,,,,CP
+18221000,kepanitiaan,"HMIF ITB","Ketua Divisi Acara Wisuda April 2025",11,2024,,,,
+18221000,organisasi,"HMIF ITB","Staff Divisi Media dan Informasi",2,2024,,,,
