@@ -40,7 +40,12 @@ prestasiRouter.openapi(createPrestasiRoute, async (c) => {
     const body = c.req.valid('json');
     const user = c.var.user;
 
-    // Determine user ID - use provided userId for admin, otherwise use current user
+    // Validate required media URLs
+    if (!body.mediaUrls || body.mediaUrls.length < 2) {
+      return c.json({ error: 'Certificate (mediaSertifikat) and personal photo (mediaFotoPribadi) are required' }, 400);
+    }
+
+    // Determine user ID 
     const targetUserId = body.userId ?? user.id;
 
     // Verify user exists
