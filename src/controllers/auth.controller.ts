@@ -100,7 +100,7 @@ loginRouter.openapi(loginAccessTokenRoute, async (c) => {
   } catch (err) {
     return c.json(
       {
-        error: err,
+        error: err instanceof Error ? err.message : 'Internal server error',
       },
       500,
     );

@@ -195,7 +195,9 @@ export const UpdatePrestasiBodySchema = z.object({
   deskripsi: z.string().optional(),
   bulan: z.number().int().min(1).max(12).optional(),
   tahun: z.number().int().min(2000).max(2100).optional(),
-  competitionType: z.enum(['CP', 'CTF', 'BCC', 'DS', 'AI', 'Hackathon']).optional(),
+  competitionType: z
+    .enum(['CP', 'CTF', 'BCC', 'DS', 'AI', 'Hackathon'])
+    .optional(),
   mediaUrls: z
     .array(z.string().url())
     .optional()

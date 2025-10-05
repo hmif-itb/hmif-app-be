@@ -2,7 +2,13 @@ import { PostgresError } from 'postgres';
 import { db } from '~/db/drizzle';
 import { users, prestasi } from '~/db/schema';
 import { eq, and, SQL, sql, desc } from 'drizzle-orm';
-import { createPrestasi, getListPrestasi, getPrestasiById, getAllPrestasiForExport, updatePrestasi, deletePrestasi } from '~/repositories/prestasi.repo';
+import {
+  createPrestasi,
+  getListPrestasi,
+  getPrestasiById,
+  updatePrestasi,
+  deletePrestasi,
+} from '~/repositories/prestasi.repo';
 import {
   createPrestasiRoute,
   getListPrestasiRoute,
@@ -12,15 +18,12 @@ import {
   deletePrestasiRoute,
 } from '~/routes/prestasi.route';
 import { createAuthRouter } from './router-factory';
-import { ExportPrestasiQuerySchema } from '~/types/prestasi.types';
-import { z } from 'zod';
 import ExcelJS from 'exceljs';
 import { roleMiddleware } from '~/middlewares/role.middleware';
 
 export const prestasiRouter = createAuthRouter();
 
 prestasiRouter.openapi(getListPrestasiRoute, async (c) => {
-  
   const query = c.req.valid('query');
   const result = await getListPrestasi(db, query);
   return c.json(result, 200);
@@ -44,10 +47,16 @@ prestasiRouter.openapi(createPrestasiRoute, async (c) => {
 
     // Validate required media URLs
     if (!body.mediaUrls || body.mediaUrls.length < 2) {
-      return c.json({ error: 'Certificate (mediaSertifikat) and personal photo (mediaFotoPribadi) are required' }, 400);
+      return c.json(
+        {
+          error:
+            'Certificate (mediaSertifikat) and personal photo (mediaFotoPribadi) are required',
+        },
+        400,
+      );
     }
 
-    // Determine user ID 
+    // Determine user ID
     const targetUserId = body.userId ?? user.id;
 
     // Verify user exists
@@ -132,7 +141,7 @@ prestasiRouter.openapi(updatePrestasiRoute, async (c) => {
         deskripsi: body.deskripsi ?? existing.deskripsi ?? undefined,
         bulan: body.bulan ?? existing.bulan,
         tahun: body.tahun ?? existing.tahun,
-        competitionType: body.competitionType !== undefined ? body.competitionType : existing.competitionType,
+        competitionType: body.competitionType ?? existing.competitionType,
       },
       body.mediaUrls,
       existing.userId,
@@ -161,10 +170,19 @@ prestasiRouter.openapi(updatePrestasiRoute, async (c) => {
 
     if (error instanceof PostgresError) {
       if (error.code === '23503') {
-        return c.json({ formErrors: [], fieldErrors: { general: ['Foreign key constraint violation'] } }, 400);
+        return c.json(
+          {
+            formErrors: [],
+            fieldErrors: { general: ['Foreign key constraint violation'] },
+          },
+          400,
+        );
       }
       if (error.code === '23505') {
-        return c.json({ formErrors: [], fieldErrors: { general: ['Duplicate entry'] } }, 400);
+        return c.json(
+          { formErrors: [], fieldErrors: { general: ['Duplicate entry'] } },
+          400,
+        );
       }
     }
 
@@ -192,7 +210,13 @@ prestasiRouter.openapi(deletePrestasiRoute, async (c) => {
 
     if (error instanceof PostgresError) {
       if (error.code === '23503') {
-        return c.json({ formErrors: [], fieldErrors: { general: ['Cannot delete: foreign key constraint'] } }, 400);
+        return c.json(
+          {
+            formErrors: [],
+            fieldErrors: { general: ['Cannot delete: foreign key constraint'] },
+          },
+          400,
+        );
       }
     }
 
@@ -208,7 +232,7 @@ prestasiRouter.openapi(exportPrestasiRoute, async (c: any) => {
   const query = c.req.valid('query');
 
   // Apply filters similar to getListPrestasi but without pagination
-  const conditions: SQL<unknown>[] = [];
+  const conditions: Array<SQL<unknown>> = [];
 
   // Filter by category
   if (query.category) {
@@ -219,7 +243,12 @@ prestasiRouter.openapi(exportPrestasiRoute, async (c: any) => {
     } as const;
 
     conditions.push(
-      eq(prestasi.jenisPrestasi, categoryMap[query.category as 'competition' | 'organization' | 'committee']),
+      eq(
+        prestasi.jenisPrestasi,
+        categoryMap[
+          query.category as 'competition' | 'organization' | 'committee'
+        ],
+      ),
     );
   }
 
@@ -315,24 +344,34 @@ prestasiRouter.openapi(exportPrestasiRoute, async (c: any) => {
   prestasiData.forEach((prestasiItem) => {
     // Format periode (bulan-tahun)
     const monthNames = [
-      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+      'Januari',
+      'Februari',
+      'Maret',
+      'April',
+      'Mei',
+      'Juni',
+      'Juli',
+      'Agustus',
+      'September',
+      'Oktober',
+      'November',
+      'Desember',
     ];
     const periode = `${monthNames[prestasiItem.bulan - 1]} ${prestasiItem.tahun}`;
 
     worksheet.addRow({
-      nim: prestasiItem.user?.nim || '',
-      fullName: prestasiItem.user?.fullName || '',
-      angkatan: prestasiItem.user?.angkatan || '',
-      jurusan: prestasiItem.user?.major || '',
-      kampus: prestasiItem.user?.region || '',
+      nim: prestasiItem.user?.nim ?? '',
+      fullName: prestasiItem.user?.fullName ?? '',
+      angkatan: prestasiItem.user?.angkatan ?? '',
+      jurusan: prestasiItem.user?.major ?? '',
+      kampus: prestasiItem.user?.region ?? '',
       jenisPrestasi: prestasiItem.jenisPrestasi,
       penyelenggara: prestasiItem.penyelenggara,
-      deskripsi: prestasiItem.deskripsi || '',
-      periode: periode,
-      sertifikat: prestasiItem.mediaSertifikat?.url || '',
-      fotoPribadi: prestasiItem.mediaFotoPribadi?.url || '',
-      fotoAwarding: prestasiItem.mediaFotoAwarding?.url || '',
+      deskripsi: prestasiItem.deskripsi ?? '',
+      periode,
+      sertifikat: prestasiItem.mediaSertifikat?.url ?? '',
+      fotoPribadi: prestasiItem.mediaFotoPribadi?.url ?? '',
+      fotoAwarding: prestasiItem.mediaFotoAwarding?.url ?? '',
     });
   });
 
@@ -343,7 +382,10 @@ prestasiRouter.openapi(exportPrestasiRoute, async (c: any) => {
   const timestamp = new Date().toISOString().split('T')[0];
   const filename = `prestasi-export-${timestamp}.xlsx`;
 
-  c.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  c.header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  );
   c.header('Content-Disposition', `attachment; filename="${filename}"`);
   c.header('Content-Length', buffer.byteLength.toString());
 
