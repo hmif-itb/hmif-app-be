@@ -15,10 +15,12 @@ import { createAuthRouter } from './router-factory';
 import { ExportPrestasiQuerySchema } from '~/types/prestasi.types';
 import { z } from 'zod';
 import ExcelJS from 'exceljs';
+import { roleMiddleware } from '~/middlewares/role.middleware';
 
 export const prestasiRouter = createAuthRouter();
 
 prestasiRouter.openapi(getListPrestasiRoute, async (c) => {
+  
   const query = c.req.valid('query');
   const result = await getListPrestasi(db, query);
   return c.json(result, 200);
@@ -166,6 +168,10 @@ prestasiRouter.openapi(updatePrestasiRoute, async (c) => {
   }
 });
 
+prestasiRouter.delete(
+  deletePrestasiRoute.getRoutingPath(),
+  roleMiddleware(['people', 'peopledev', 'peoplemanage', 'cnc']),
+);
 prestasiRouter.openapi(deletePrestasiRoute, async (c) => {
   try {
     const { idPrestasi } = c.req.valid('param');
@@ -190,9 +196,13 @@ prestasiRouter.openapi(deletePrestasiRoute, async (c) => {
   }
 });
 
+prestasiRouter.get(
+  exportPrestasiRoute.getRoutingPath(),
+  roleMiddleware(['people', 'peopledev', 'peoplemanage', 'cnc']),
+);
 prestasiRouter.openapi(exportPrestasiRoute, async (c: any) => {
   const query = c.req.valid('query');
-  
+
   // Apply filters similar to getListPrestasi but without pagination
   const conditions: SQL<unknown>[] = [];
 
@@ -304,8 +314,8 @@ prestasiRouter.openapi(exportPrestasiRoute, async (c: any) => {
       bulan: prestasiItem.bulan,
       tahun: prestasiItem.tahun,
       competitionType: prestasiItem.competitionType || '',
-      createdAt: prestasiItem.createdAt instanceof Date 
-        ? prestasiItem.createdAt.toISOString() 
+      createdAt: prestasiItem.createdAt instanceof Date
+        ? prestasiItem.createdAt.toISOString()
         : prestasiItem.createdAt,
     });
   });
@@ -316,7 +326,7 @@ prestasiRouter.openapi(exportPrestasiRoute, async (c: any) => {
   // Set response headers
   const timestamp = new Date().toISOString().split('T')[0];
   const filename = `prestasi-export-${timestamp}.xlsx`;
-  
+
   c.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   c.header('Content-Disposition', `attachment; filename="${filename}"`);
   c.header('Content-Length', buffer.byteLength.toString());
