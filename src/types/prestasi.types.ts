@@ -31,7 +31,7 @@ export const PrestasiSchema = createSelectSchema(prestasi, {
     mediaFotoPribadi: true,
   })
   .extend({
-    user: UserPrestasiSchema.optional(),
+    user: UserPrestasiSchema.nullish(),
   })
   .openapi('Prestasi');
 
