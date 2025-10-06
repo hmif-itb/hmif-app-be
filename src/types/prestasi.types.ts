@@ -31,7 +31,7 @@ export const PrestasiSchema = createSelectSchema(prestasi, {
     mediaFotoPribadi: true,
   })
   .extend({
-    user: UserPrestasiSchema.optional(),
+    user: UserPrestasiSchema.nullish(),
   })
   .openapi('Prestasi');
 
@@ -77,6 +77,16 @@ export const ListPrestasiQuerySchema = z.object({
         in: 'query',
         description: 'End date filter (YYYY-MM format)',
         example: '2025-12',
+      },
+    }),
+  search: z
+    .string()
+    .optional()
+    .openapi({
+      param: {
+        in: 'query',
+        description: 'Search by user full name',
+        example: 'John Doe',
       },
     }),
   page: z.coerce

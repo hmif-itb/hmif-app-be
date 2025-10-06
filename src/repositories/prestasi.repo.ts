@@ -1,7 +1,7 @@
-import { and, count, desc, eq, SQL, sql } from 'drizzle-orm';
+import { and, count, desc, eq, ilike, SQL, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
-import { medias, prestasi, createId } from '~/db/schema';
+import { medias, prestasi, createId, users } from '~/db/schema';
 
 import { ListPrestasiQuerySchema } from '~/types/prestasi.types';
 import { createMediasFromUrl } from './media.repo';
@@ -10,7 +10,11 @@ export async function getListPrestasi(
   db: Database,
   q: z.infer<typeof ListPrestasiQuerySchema>,
 ) {
-  const conditions: Array<SQL<unknown>> = [];
+  // If only prestasi related
+  const prestasiConditions: Array<SQL<unknown>> = [];
+
+  // If searched by user's name
+  const joinConditions: Array<SQL<unknown>> = [];
 
   // Filter by category
   if (q.category) {
@@ -20,38 +24,92 @@ export async function getListPrestasi(
       committee: 'kepanitiaan',
     } as const;
 
-    conditions.push(eq(prestasi.jenisPrestasi, categoryMap[q.category]));
+    prestasiConditions.push(
+      eq(prestasi.jenisPrestasi, categoryMap[q.category]),
+    );
+    joinConditions.push(eq(prestasi.jenisPrestasi, categoryMap[q.category]));
   }
 
   // Filter by date range
   if (q.start_date) {
     const [year, month] = q.start_date.split('-').map(Number);
-    conditions.push(
-      sql`(${prestasi.tahun} > ${year} OR (${prestasi.tahun} = ${year} AND ${prestasi.bulan} >= ${month}))`,
-    );
+    const dateCondition = sql`(${prestasi.tahun} > ${year} OR (${prestasi.tahun} = ${year} AND ${prestasi.bulan} >= ${month}))`;
+    prestasiConditions.push(dateCondition);
+    joinConditions.push(dateCondition);
   }
 
   if (q.end_date) {
     const [year, month] = q.end_date.split('-').map(Number);
-    conditions.push(
-      sql`(${prestasi.tahun} < ${year} OR (${prestasi.tahun} = ${year} AND ${prestasi.bulan} <= ${month}))`,
-    );
+    const dateCondition = sql`(${prestasi.tahun} < ${year} OR (${prestasi.tahun} = ${year} AND ${prestasi.bulan} <= ${month}))`;
+    prestasiConditions.push(dateCondition);
+    joinConditions.push(dateCondition);
   }
 
-  const where = conditions.length > 0 ? and(...conditions) : undefined;
+  // Search by user full name
+  if (q.search) {
+    joinConditions.push(ilike(users.fullName, `%${q.search}%`));
+  }
 
   // Calculate offset
   const offset = (q.page - 1) * q.limit;
+
+  // If search active
+  if (q.search) {
+    const joinWhere =
+      joinConditions.length > 0 ? and(...joinConditions) : undefined;
+
+    // Get total count
+    const [{ total }] = await db
+      .select({ total: count() })
+      .from(prestasi)
+      .leftJoin(users, eq(prestasi.userId, users.id))
+      .where(joinWhere);
+
+    // Get paginated results
+    const results = await db
+      .select({
+        id: prestasi.id,
+        userId: prestasi.userId,
+        jenisPrestasi: prestasi.jenisPrestasi,
+        penyelenggara: prestasi.penyelenggara,
+        deskripsi: prestasi.deskripsi,
+        bulan: prestasi.bulan,
+        tahun: prestasi.tahun,
+        competitionType: prestasi.competitionType,
+        createdAt: prestasi.createdAt,
+        user: {
+          id: users.id,
+          nim: users.nim,
+          fullName: users.fullName,
+          picture: users.picture,
+        },
+      })
+      .from(prestasi)
+      .leftJoin(users, eq(prestasi.userId, users.id))
+      .where(joinWhere)
+      .orderBy(desc(prestasi.tahun), desc(prestasi.bulan))
+      .limit(q.limit)
+      .offset(offset);
+
+    return {
+      prestasi: results,
+      total,
+    };
+  }
+
+  // No search
+  const prestasiWhere =
+    prestasiConditions.length > 0 ? and(...prestasiConditions) : undefined;
 
   // Get total count
   const [{ total }] = await db
     .select({ total: count() })
     .from(prestasi)
-    .where(where);
+    .where(prestasiWhere);
 
   // Get paginated results
   const results = await db.query.prestasi.findMany({
-    where,
+    where: prestasiWhere,
     limit: q.limit,
     offset,
     orderBy: [desc(prestasi.tahun), desc(prestasi.bulan)],
