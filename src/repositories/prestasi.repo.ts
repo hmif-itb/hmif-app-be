@@ -24,7 +24,9 @@ export async function getListPrestasi(
       committee: 'kepanitiaan',
     } as const;
 
-    prestasiConditions.push(eq(prestasi.jenisPrestasi, categoryMap[q.category]));
+    prestasiConditions.push(
+      eq(prestasi.jenisPrestasi, categoryMap[q.category]),
+    );
     joinConditions.push(eq(prestasi.jenisPrestasi, categoryMap[q.category]));
   }
 
@@ -43,7 +45,7 @@ export async function getListPrestasi(
     joinConditions.push(dateCondition);
   }
 
-  // Search by user full name 
+  // Search by user full name
   if (q.search) {
     joinConditions.push(ilike(users.fullName, `%${q.search}%`));
   }
@@ -51,9 +53,10 @@ export async function getListPrestasi(
   // Calculate offset
   const offset = (q.page - 1) * q.limit;
 
-  // If search active  
+  // If search active
   if (q.search) {
-    const joinWhere = joinConditions.length > 0 ? and(...joinConditions) : undefined;
+    const joinWhere =
+      joinConditions.length > 0 ? and(...joinConditions) : undefined;
 
     // Get total count
     const [{ total }] = await db
@@ -62,7 +65,7 @@ export async function getListPrestasi(
       .leftJoin(users, eq(prestasi.userId, users.id))
       .where(joinWhere);
 
-    // Get paginated results 
+    // Get paginated results
     const results = await db
       .select({
         id: prestasi.id,
@@ -95,7 +98,8 @@ export async function getListPrestasi(
   }
 
   // No search
-  const prestasiWhere = prestasiConditions.length > 0 ? and(...prestasiConditions) : undefined;
+  const prestasiWhere =
+    prestasiConditions.length > 0 ? and(...prestasiConditions) : undefined;
 
   // Get total count
   const [{ total }] = await db
