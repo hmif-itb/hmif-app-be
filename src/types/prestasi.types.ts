@@ -79,6 +79,16 @@ export const ListPrestasiQuerySchema = z.object({
         example: '2025-12',
       },
     }),
+  search: z
+    .string()
+    .optional()
+    .openapi({
+      param: {
+        in: 'query',
+        description: 'Search by user full name',
+        example: 'John Doe',
+      },
+    }),
   page: z.coerce
     .number()
     .int()
