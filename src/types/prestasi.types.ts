@@ -59,6 +59,16 @@ export const ListPrestasiQuerySchema = z.object({
         example: 'competition',
       },
     }),
+  title: z
+    .string()
+    .optional()
+    .openapi({
+      param: {
+        in: 'query',
+        description: 'Search by judul prestasi (penyelenggara)',
+        example: 'Gemastik',
+      },
+    }),
   start_date: z
     .string()
     .optional()
