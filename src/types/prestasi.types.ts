@@ -59,16 +59,6 @@ export const ListPrestasiQuerySchema = z.object({
         example: 'competition',
       },
     }),
-  title: z
-    .string()
-    .optional()
-    .openapi({
-      param: {
-        in: 'query',
-        description: 'Search by judul prestasi (penyelenggara)',
-        example: 'Gemastik',
-      },
-    }),
   start_date: z
     .string()
     .optional()
@@ -95,7 +85,7 @@ export const ListPrestasiQuerySchema = z.object({
     .openapi({
       param: {
         in: 'query',
-        description: 'Search by user full name',
+        description: 'Search by user full name or judul prestasi (penyelenggara)',
         example: 'John Doe',
       },
     }),

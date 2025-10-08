@@ -45,22 +45,18 @@ export async function getListPrestasi(
     joinConditions.push(dateCondition);
   }
 
-  // Search by user full name
+  // Search by user full name or judul prestasi (penyelenggara)
   if (q.search) {
-    joinConditions.push(ilike(users.fullName, `%${q.search}%`));
-  }
-
-  // Search by judul prestasi (penyelenggara)
-  if (q.title) {
-    prestasiConditions.push(ilike(prestasi.penyelenggara, `%${q.title}%`));
-    joinConditions.push(ilike(prestasi.penyelenggara, `%${q.title}%`));
+    joinConditions.push(
+      sql`(${ilike(users.fullName, `%${q.search}%`)} OR ${ilike(prestasi.penyelenggara, `%${q.search}%`)})`
+    );
   }
 
   // Calculate offset
   const offset = (q.page - 1) * q.limit;
 
-  // If search active (by user or title)
-  if (q.search || q.title) {
+  // If search active
+  if (q.search) {
     const joinWhere =
       joinConditions.length > 0 ? and(...joinConditions) : undefined;
 
