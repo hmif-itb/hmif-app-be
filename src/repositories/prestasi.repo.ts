@@ -13,7 +13,7 @@ export async function getListPrestasi(
   // If only prestasi related
   const prestasiConditions: Array<SQL<unknown>> = [];
 
-  // If searched by user's name
+  // If searched by user's name or title
   const joinConditions: Array<SQL<unknown>> = [];
 
   // Filter by category
@@ -45,9 +45,11 @@ export async function getListPrestasi(
     joinConditions.push(dateCondition);
   }
 
-  // Search by user full name
+  // Search by user full name or judul prestasi (penyelenggara)
   if (q.search) {
-    joinConditions.push(ilike(users.fullName, `%${q.search}%`));
+    joinConditions.push(
+      sql`(${ilike(users.fullName, `%${q.search}%`)} OR ${ilike(prestasi.penyelenggara, `%${q.search}%`)})`,
+    );
   }
 
   // Calculate offset

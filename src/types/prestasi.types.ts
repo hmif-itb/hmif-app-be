@@ -85,7 +85,8 @@ export const ListPrestasiQuerySchema = z.object({
     .openapi({
       param: {
         in: 'query',
-        description: 'Search by user full name',
+        description:
+          'Search by user full name or judul prestasi (penyelenggara)',
         example: 'John Doe',
       },
     }),

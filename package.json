@@ -9,8 +9,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "tsx src/db/seed.ts",
     "db:studio": "drizzle-kit studio",
-    "check": "pnpm run typecheck && pnpm run codecheck",
-    "codecheck": "eslint src --ext .ts",
+    "check": "bun run typecheck && bun run codecheck",
+    "codecheck": "eslint src --ext .ts --fix",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
