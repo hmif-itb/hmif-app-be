@@ -48,7 +48,7 @@ export async function getListPrestasi(
   // Search by user full name or judul prestasi (penyelenggara)
   if (q.search) {
     joinConditions.push(
-      sql`(${ilike(users.fullName, `%${q.search}%`)} OR ${ilike(prestasi.penyelenggara, `%${q.search}%`)})`
+      sql`(${ilike(users.fullName, `%${q.search}%`)} OR ${ilike(prestasi.penyelenggara, `%${q.search}%`)})`,
     );
   }
 
