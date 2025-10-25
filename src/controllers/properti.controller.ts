@@ -25,6 +25,7 @@ propertiRouter.openapi(getPropertiListRoute, async (c) => {
 
     const serialized = data.map((p) => ({
       ...p,
+      status: p.status ?? 'available',
       createdAt: p.createdAt.toISOString(),
       updatedAt: p.updatedAt.toISOString(),
       location: p.location as 'Sekretariat 1' | 'Sekretariat 2' | 'Jatinangor'

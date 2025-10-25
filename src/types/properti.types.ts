@@ -11,6 +11,7 @@ export const PropertiSchema = z.object({
   photo: z.string().nullable(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
+  status: z.enum(['in_use', 'available'])
 });
 
 export const PropertiIdParamSchema = z.object({

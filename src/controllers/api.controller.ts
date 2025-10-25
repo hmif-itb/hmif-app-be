@@ -21,6 +21,7 @@ import { curhatRouter } from './curhat.controller';
 import { peminjamanRouter } from './peminjaman.controller';
 import { propertiRouter } from './properti.controller';
 import { requestLaporanRouter } from './request-laporan.controller';
+import { pengajuanWargaRouter } from './pengajuan.controller';
 
 
 const unprotectedApiRouter = new OpenAPIHono();
@@ -50,6 +51,7 @@ protectedApiRouter.route('/', prestasiRouter);
 protectedApiRouter.route('/', peminjamanRouter);
 protectedApiRouter.route('/', propertiRouter);
 protectedApiRouter.route('/', requestLaporanRouter);
+protectedApiRouter.route('/', pengajuanWargaRouter);
 
 export const apiRouter = new OpenAPIHono();
 apiRouter.route('/', unprotectedApiRouter);

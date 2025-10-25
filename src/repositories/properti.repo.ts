@@ -43,15 +43,27 @@ export async function getPropertiById(db: Database, id: string) {
     where: eq(properti.id, id),
   });
 
-  return result ? castPropertiLocation(result) : result;
+  if (!result) return null;
+
+  return {
+    ...castPropertiLocation(result),
+    status: result.status ?? 'available',
+  };
 }
+
 
 export async function createProperti(
   db: Database,
   data: typeof properti.$inferInsert,
 ) {
   const result = await db.insert(properti).values(data).returning().then(firstSure);
-  return castPropertiLocation(result);
+
+  return castPropertiLocation({
+    ...result,
+    status: result.status ?? "available",
+    createdAt: result.createdAt.toISOString(),
+    updatedAt: result.updatedAt.toISOString(),
+  });
 }
 
 export async function updateProperti(
@@ -65,9 +77,15 @@ export async function updateProperti(
     .where(eq(properti.id, id))
     .returning()
     .then(firstSure);
-  
-  return castPropertiLocation(result);
+
+  return castPropertiLocation({
+    ...result,
+    status: result.status ?? "available",
+    createdAt: result.createdAt.toISOString(),
+    updatedAt: result.updatedAt.toISOString(),
+  });
 }
+
 
 export async function deleteProperti(db: Database, id: string) {
   const result = await db.delete(properti).where(eq(properti.id, id)).returning().then(first);
