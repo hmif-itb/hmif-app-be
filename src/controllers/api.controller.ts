@@ -18,6 +18,10 @@ import { userProfileRoute } from './user-profile.controller';
 import { userUnsubscribeRouter } from './user-unsubscribe.controller';
 import { recommendationRoute } from './recommendation.controller';
 import { curhatRouter } from './curhat.controller';
+import { peminjamanRouter } from './peminjaman.controller';
+import { propertiRouter } from './properti.controller';
+import { requestLaporanRouter } from './request-laporan.controller';
+
 
 const unprotectedApiRouter = new OpenAPIHono();
 unprotectedApiRouter.route('/', loginRouter);
@@ -43,6 +47,9 @@ protectedApiRouter.route('/', markdownRouter);
 protectedApiRouter.route('/', recommendationRoute);
 protectedApiRouter.route('/', curhatRouter);
 protectedApiRouter.route('/', prestasiRouter);
+protectedApiRouter.route('/', peminjamanRouter);
+protectedApiRouter.route('/', propertiRouter);
+protectedApiRouter.route('/', requestLaporanRouter);
 
 export const apiRouter = new OpenAPIHono();
 apiRouter.route('/', unprotectedApiRouter);
