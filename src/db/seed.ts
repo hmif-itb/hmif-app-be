@@ -15,6 +15,9 @@ import {
   userRoles,
   users,
   prestasi,
+  properti,
+  peminjaman,
+  laporan
 } from './schema';
 
 if (!process.env.DATABASE_URL) {
@@ -458,17 +461,166 @@ export async function seedPrestasi() {
   }
 }
 
+export async function runPropertiDanPeminjamanSeed() {
+  console.log('🗑️  Membersihkan data lama dari tabel peminjaman dan properti...');
+  await db.delete(peminjaman);
+  await db.delete(properti);
+  console.log('✅ Proses pembersihan selesai.');
+
+  const propertiToInsert: (typeof properti.$inferInsert)[] = [];
+  const propertiSchema = z.object({
+    name: z.string(),
+    category: z.enum(['sekre', 'properti']),
+    description: z.string().optional(),
+    quantity: z.coerce.number().int(),
+    condition: z.enum(['good', 'broken', 'cant_be_used', 'lost']),
+    location: z.enum(['Sekretariat 1', 'Sekretariat 2', 'Jatinangor']),
+  });
+
+  await new Promise((resolve, reject) => {
+    fs.createReadStream('src/db/seed/properti.csv')
+      .pipe(parse({ delimiter: ',', from_line: 2, trim: true }))
+      .on('data', (row) => {
+        try {
+          const parsed = propertiSchema.parse({
+            name: row[0],
+            category: row[1],
+            description: row[2] || undefined,
+            quantity: row[3],
+            condition: row[4],
+            location: row[5],
+          });
+          propertiToInsert.push(parsed);
+        } catch (error) {
+          console.log('❌ Gagal mem-parsing baris data properti:', row, error);
+        }
+      })
+      .on('end', resolve)
+      .on('error', reject);
+  });
+
+  if (propertiToInsert.length > 0) {
+    console.log('💾 Memulai proses memasukkan data properti...');
+    await db.insert(properti).values(propertiToInsert).onConflictDoNothing();
+    console.log('✅ Berhasil memasukkan data properti ke database!');
+  }
+
+  const allProperti = await db.select().from(properti);
+  const propertiMap = new Map(allProperti.map((p) => [p.name, p.id]));
+
+  const peminjamanToInsert: (typeof peminjaman.$inferInsert)[] = [];
+
+  await new Promise((resolve, reject) => {
+    fs.createReadStream('src/db/seed/peminjaman.csv')
+      .pipe(parse({ delimiter: ',', from_line: 2, trim: true }))
+      .on('data', (row) => {
+        try {
+          const parsed = {
+            title: row[0],
+            propertyName: row[1],
+            borrowerName: row[2],
+            startDate: row[3],
+            endDate: row[4],
+            status: row[5] as 'pending' | 'accepted' | 'rejected',
+          };
+          const propertyId = propertiMap.get(parsed.propertyName);
+          if (!propertyId) {
+            console.log(`Properti tidak ditemukan: ${parsed.propertyName}, baris dilewati.`);
+            return;
+          }
+          peminjamanToInsert.push({
+            title: parsed.title,
+            borrowerName: parsed.borrowerName,
+            startDate: new Date(parsed.startDate),
+            endDate: new Date(parsed.endDate),
+            status: parsed.status,
+            propertyId: propertyId,
+          });
+        } catch (error) {
+          console.log('❌ Gagal mem-parsing baris data peminjaman:', row, error);
+        }
+      })
+      .on('end', resolve)
+      .on('error', reject);
+  });
+
+  if (peminjamanToInsert.length > 0) {
+    console.log('💾 Memulai proses memasukkan data peminjaman...');
+    await db.insert(peminjaman).values(peminjamanToInsert).onConflictDoNothing();
+    console.log('✅ Berhasil memasukkan data peminjaman ke database!');
+  }
+}
+
+export async function runLaporanSeed() {
+  console.log('🗑️  Membersihkan data lama dari tabel laporan...');
+  await db.delete(laporan);
+  console.log('✅ Proses pembersihan selesai.');
+
+  const allProperti = await db.select().from(properti);
+  const propertiMap = new Map(allProperti.map((p) => [p.name, p.id]));
+  const allUsers = await db.select().from(users);
+  const userMap = new Map(allUsers.map((u) => [u.nim, u.id]));
+
+  const laporanToInsert: (typeof laporan.$inferInsert)[] = [];
+  const laporanSchema = z.object({
+    properti_name: z.string(),
+    pelapor_nim: z.string(),
+    deskripsi: z.string(),
+    fotoUrl: z.string().optional(),
+    status: z.enum(['pending', 'accepted', 'rejected']),
+  });
+
+  await new Promise((resolve, reject) => {
+    fs.createReadStream('src/db/seed/laporan.csv')
+      .pipe(parse({ delimiter: ',', from_line: 2, trim: true }))
+      .on('data', (row) => {
+        try {
+          const parsed = laporanSchema.parse({
+            properti_name: row[0],
+            pelapor_nim: row[1],
+            deskripsi: row[2],
+            fotoUrl: row[3] || undefined,
+            status: row[4],
+          });
+          const propertiId = propertiMap.get(parsed.properti_name);
+          const pelaporId = userMap.get(parsed.pelapor_nim);
+
+          if (!propertiId || !pelaporId) {
+            console.log(`Properti atau User tidak ditemukan: ${parsed.properti_name}, ${parsed.pelapor_nim}. Baris dilewati.`);
+            return;
+          }
+
+          laporanToInsert.push({
+            propertiId: propertiId,
+            pelaporId: pelaporId,
+            deskripsi: parsed.deskripsi,
+            fotoUrl: parsed.fotoUrl,
+            status: parsed.status,
+          });
+        } catch (error) {
+          console.log('❌ Gagal mem-parsing baris data laporan:', row, error);
+        }
+      })
+      .on('end', resolve)
+      .on('error', reject);
+  });
+
+  if (laporanToInsert.length > 0) {
+    console.log('💾 Memulai proses memasukkan data laporan...');
+    await db.insert(laporan).values(laporanToInsert).onConflictDoNothing();
+    console.log('✅ Berhasil memasukkan data laporan ke database!');
+  }
+}
+
 async function runAllSeeds() {
   try {
     await runAngkatanSeed();
     await runUserSeed();
     await runCourses();
     await new Promise((resolve) => setTimeout(resolve, 6000));
-    // await runTestimoniSeed('testimoni-if.csv'); // File doesn't exist
-    // await runTestimoniSeed('testimoni-sti.csv'); // File doesn't exist
-    // await runCalendarSeed(); // File doesn't exist
     await seedPrestasi();
-    // await runRolesGroupSeed(); // Commented out until you have the real user data
+    await runPropertiDanPeminjamanSeed();
+    await runLaporanSeed();
   } catch (error) {
     console.log(error);
   }

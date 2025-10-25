@@ -12,6 +12,7 @@ import {
   text,
   timestamp,
   unique,
+  varchar
 } from 'drizzle-orm/pg-core';
 import type webpush from 'web-push';
 import { rolesEnums } from './roles-group';
@@ -1052,3 +1053,99 @@ export const prestasiRelations = relations(prestasi, ({ one }) => ({
     references: [medias.id],
   }),
 }));
+
+export const propertyCategoryEnum = pgEnum('property_category', [
+  'sekre',
+  'properti',
+]);
+
+export const propertyStatusEnum = pgEnum('property_status', [
+  'available',
+  'in_use',
+]);
+
+export const propertyConditionEnum = pgEnum('property_condition', [
+  'good',
+  'cant_be_used',
+  'lost',
+  'broken'
+]);
+
+export const propertyLocationEnum = pgEnum('property_location', [
+  'Sekretariat 1',
+  'Sekretariat 2',
+  'Jatinangor',
+]);
+
+export const properti = pgTable('properti', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  name: varchar('name', { length: 255 }).notNull(),
+  description: text('description'),
+  category: propertyCategoryEnum('category').notNull(),
+  status: propertyStatusEnum('status').default('available'),
+  condition: propertyConditionEnum('condition').default('good').notNull(),
+  quantity: integer('quantity').default(1).notNull(),
+  location: text('location').notNull().default('Sekretariat 1'),
+  photo:varchar('photo', { length: 255 }),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+
+export const loanStatusEnum = pgEnum('loan_status', [
+  'pending',
+  'accepted',
+  'rejected',
+]);
+
+export const peminjamanTypeEnum = pgEnum('jenis_peminjaman', [
+  'eksklusif',
+  'non-eksklusif',
+]);
+
+export const peminjaman = pgTable('peminjaman', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  title: varchar('title', { length: 255 }).notNull(),
+  propertyId: text('property_id')
+    .notNull()
+    .references(() => properti.id, { onDelete: 'cascade' }),
+  borrowerName: varchar('borrower_name', { length: 255 }).notNull(),
+  startDate: timestamp('start_date', { withTimezone: true }).notNull(),
+  endDate: timestamp('end_date', { withTimezone: true }).notNull(),
+  status: loanStatusEnum('status').default('pending').notNull(),
+  
+  alasan: text('alasan'),
+  jenisPeminjaman: peminjamanTypeEnum('jenis_peminjaman')
+    .default('non-eksklusif')
+    .notNull(),
+  
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const laporanStatusEnum = pgEnum('laporan_status', [
+  'pending',
+  'accepted',
+  'rejected',
+]);
+
+export const laporan = pgTable('laporan', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  propertiId: text('properti_id')
+    .notNull()
+    .references(() => properti.id, { onDelete: 'cascade' }),
+  pelaporId: text('pelapor_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  deskripsi: text('deskripsi').notNull(),
+  fotoUrl: text('foto_url'),
+  status: laporanStatusEnum('status').default('pending').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});

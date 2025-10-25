@@ -1,0 +1,5 @@
+properti_name,pelapor_nim,deskripsi,fotoUrl,status
+Proyektor Epson EB-X500,ayam,"Layar proyektor terlihat ada bercak hitam di sudut kanan atas.",https://example.com/foto/proyektor_bercak.jpg,pending
+Speaker Aktif JBL EON715,ayam,"Salah satu speaker mati total, tidak ada suara.",,pending
+Meja Rapat,bebek,"Kaki meja goyang dan hampir patah.",https://example.com/foto/meja_goyang.jpg,accepted
+Kamera Mirrorless Sony A6400,bebek,"Lensa kamera sepertinya tergores.",,rejected
