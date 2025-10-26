@@ -22,6 +22,7 @@ import { peminjamanRouter } from './peminjaman.controller';
 import { propertiRouter } from './properti.controller';
 import { requestLaporanRouter } from './request-laporan.controller';
 import { pengajuanWargaRouter } from './pengajuan.controller';
+import { pengembalianWargaRouter } from './pengembalian.controller';
 
 
 const unprotectedApiRouter = new OpenAPIHono();
@@ -52,6 +53,7 @@ protectedApiRouter.route('/', peminjamanRouter);
 protectedApiRouter.route('/', propertiRouter);
 protectedApiRouter.route('/', requestLaporanRouter);
 protectedApiRouter.route('/', pengajuanWargaRouter);
+protectedApiRouter.route('/', pengembalianWargaRouter);
 
 export const apiRouter = new OpenAPIHono();
 apiRouter.route('/', unprotectedApiRouter);

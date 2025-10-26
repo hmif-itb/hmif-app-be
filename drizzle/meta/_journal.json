@@ -197,6 +197,13 @@
       "when": 1761367471606,
       "tag": "0027_acoustic_scarecrow",
       "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1761417561012,
+      "tag": "0028_cuddly_invisible_woman",
+      "breakpoints": true
     }
   ]
 }

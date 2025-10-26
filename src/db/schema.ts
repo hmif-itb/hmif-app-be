@@ -1096,8 +1096,10 @@ export const properti = pgTable('properti', {
 
 export const loanStatusEnum = pgEnum('loan_status', [
   'pending',
-  'accepted',
   'rejected',
+  'accepted',
+  'pending_return',
+  'completed',
 ]);
 
 export const peminjamanTypeEnum = pgEnum('jenis_peminjaman', [
@@ -1117,12 +1119,13 @@ export const peminjaman = pgTable('peminjaman', {
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
   endDate: timestamp('end_date', { withTimezone: true }).notNull(),
   status: loanStatusEnum('status').default('pending').notNull(),
-  
   alasan: text('alasan'),
   jenisPeminjaman: peminjamanTypeEnum('jenis_peminjaman')
     .default('non-eksklusif')
     .notNull(),
   
+  buktiFotoUrl: text('bukti_foto_url'),
+
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
