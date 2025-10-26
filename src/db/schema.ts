@@ -1093,6 +1093,11 @@ export const properti = pgTable('properti', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
+export const propertiRelations = relations(properti, ({ many }) => ({
+  peminjaman: many(peminjaman),
+  laporan: many(laporan),
+}));
+
 
 export const loanStatusEnum = pgEnum('loan_status', [
   'pending',
@@ -1130,6 +1135,13 @@ export const peminjaman = pgTable('peminjaman', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
+export const peminjamanRelations = relations(peminjaman, ({ one }) => ({
+  properti: one(properti, {
+    fields: [peminjaman.propertyId],
+    references: [properti.id],
+  }),
+}));
+
 export const laporanStatusEnum = pgEnum('laporan_status', [
   'pending',
   'accepted',
@@ -1152,3 +1164,14 @@ export const laporan = pgTable('laporan', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
+
+export const laporanRelations = relations(laporan, ({ one }) => ({
+  properti: one(properti, {
+    fields: [laporan.propertiId],
+    references: [properti.id],
+  }),
+  pelapor: one(users, {
+    fields: [laporan.pelaporId],
+    references: [users.id],
+  }),
+}));
