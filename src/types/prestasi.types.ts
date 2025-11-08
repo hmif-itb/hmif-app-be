@@ -137,24 +137,10 @@ export const CreatePrestasiSchema = createInsertSchema(prestasi, {
   .extend({
     // Accept userId from request body for admin purposes
     userId: z.string().optional(),
-    // Accept media URLs for form submission (similar to competitions and info)
-    mediaUrls: z
-      .array(z.string().url())
-      .optional()
-      .openapi({
-        example: [
-          'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/certificate.jpg',
-          'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/awarding.jpg',
-          'https://pub-45e54d5755814b02b87e024df83efb57.r2.dev/personal.jpg',
-        ],
-      }),
   })
   .omit({
     id: true,
     createdAt: true,
-    mediaSertifikat: true,
-    mediaFotoAwarding: true,
-    mediaFotoPribadi: true,
   });
 
 export const CreatePrestasiResponseSchema = createSelectSchema(prestasi, {

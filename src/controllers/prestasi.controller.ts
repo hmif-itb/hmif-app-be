@@ -31,11 +31,26 @@ prestasiRouter.openapi(getListPrestasiRoute, async (c) => {
 
 prestasiRouter.openapi(getPrestasiByIdRoute, async (c) => {
   const { idPrestasi } = c.req.valid('param');
-  const result = await getPrestasiById(db, idPrestasi);
-
-  if (!result) {
+  const prestasi = await getPrestasiById(db, idPrestasi);
+  if (!prestasi) {
     return c.json({ error: 'Achievement not found' }, 404);
   }
+
+  const result = {
+    id: prestasi.id,
+    userId: prestasi.userId,
+    jenisPrestasi: prestasi.jenisPrestasi,
+    penyelenggara: prestasi.penyelenggara,
+    deskripsi: prestasi.deskripsi,
+    bulan: prestasi.bulan,
+    tahun: prestasi.tahun,
+    competitionType: prestasi.competitionType,
+    createdAt: prestasi.createdAt,
+    user: prestasi.user,
+    mediaSertifikat: prestasi.mediaSertifikat?.url ?? '',
+    mediaFotoPribadi: prestasi.mediaFotoPribadi?.url ?? '',
+    mediaFotoAwarding: prestasi.mediaFotoAwarding?.url ?? '',
+  };
 
   return c.json(result, 200);
 });
@@ -46,7 +61,7 @@ prestasiRouter.openapi(createPrestasiRoute, async (c) => {
     const user = c.var.user;
 
     // Validate required media URLs
-    if (!body.mediaUrls || body.mediaUrls.length < 2) {
+    if (!body.mediaSertifikat || !body.mediaFotoPribadi) {
       return c.json(
         {
           error:
@@ -80,8 +95,10 @@ prestasiRouter.openapi(createPrestasiRoute, async (c) => {
         bulan: body.bulan,
         tahun: body.tahun,
         competitionType: body.competitionType ?? undefined,
+        mediaSertifikat: body.mediaSertifikat,
+        mediaFotoPribadi: body.mediaFotoPribadi,
+        mediaFotoAwarding: body.mediaFotoAwarding ?? undefined,
       },
-      body.mediaUrls,
     );
 
     // Return response without media fields to match schema
