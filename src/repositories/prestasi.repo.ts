@@ -149,6 +149,20 @@ export async function getPrestasiById(db: Database, id: string) {
     where: eq(prestasi.id, id),
     with: {
       user: true,
+      mediaSertifikat: true,
+      mediaFotoAwarding: true,
+      mediaFotoPribadi: true,
+    },
+    columns: {
+      id: true,
+      userId: true,
+      jenisPrestasi: true,
+      penyelenggara: true,
+      deskripsi: true,
+      bulan: true,
+      tahun: true,
+      competitionType: true,
+      createdAt: true,
     },
   });
 
@@ -197,22 +211,31 @@ export async function createPrestasi(
     bulan: number;
     tahun: number;
     competitionType?: 'CP' | 'CTF' | 'BCC' | 'DS' | 'AI' | 'Hackathon';
+    mediaSertifikat: string;
+    mediaFotoPribadi: string;
+    mediaFotoAwarding?: string;
   },
-  mediaUrls?: string[],
 ) {
   return await db.transaction(async (tx) => {
+    const mediaUrls = [data.mediaSertifikat, data.mediaFotoPribadi];
+    if (data.mediaFotoAwarding) {
+      mediaUrls.push(data.mediaFotoAwarding);
+    }
+
     // Create media entries from URLs if provided
     let mediaSertifikatId: string | undefined;
-    let mediaFotoAwardingId: string | undefined;
     let mediaFotoPribadiId: string | undefined;
+    let mediaFotoAwardingId: string | undefined;
 
     if (mediaUrls && mediaUrls.length > 0) {
       const newMedias = await createMediasFromUrl(tx, mediaUrls, data.userId);
 
       // Assign media in order: certificate, awarding, personal
       if (newMedias[0]) mediaSertifikatId = newMedias[0].id;
-      if (newMedias[1]) mediaFotoAwardingId = newMedias[1].id;
-      if (newMedias[2]) mediaFotoPribadiId = newMedias[2].id;
+      if (newMedias[1]) mediaFotoPribadiId = newMedias[1].id;
+      if (newMedias.length > 2) {
+        if (newMedias[2]) mediaFotoAwardingId = newMedias[2].id;
+      }
     }
 
     const [newPrestasi] = await tx
