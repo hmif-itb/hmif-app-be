@@ -269,9 +269,10 @@ export async function updatePrestasi(
     bulan: number;
     tahun: number;
     competitionType?: 'CP' | 'CTF' | 'BCC' | 'DS' | 'AI' | 'Hackathon' | null;
+    mediaSertifikat?: string;
+    mediaFotoPribadi?: string;
+    mediaFotoAwarding?: string;
   },
-  mediaUrls?: string[],
-  userId?: string,
 ) {
   return await db.transaction(async (tx) => {
     // Get existing prestasi
@@ -283,12 +284,39 @@ export async function updatePrestasi(
       return null;
     }
 
-    // Check old media
-    const oldMediaIds: string[] = [];
-    if (existing.mediaSertifikat) oldMediaIds.push(existing.mediaSertifikat);
-    if (existing.mediaFotoAwarding)
-      oldMediaIds.push(existing.mediaFotoAwarding);
-    if (existing.mediaFotoPribadi) oldMediaIds.push(existing.mediaFotoPribadi);
+    const mediaUrls = [];
+    if (data.mediaSertifikat) {
+      mediaUrls.push(data.mediaSertifikat);
+    }
+    if (data.mediaFotoPribadi) {
+      mediaUrls.push(data.mediaFotoPribadi);
+    }
+    if (data.mediaFotoAwarding) {
+      mediaUrls.push(data.mediaFotoAwarding);
+    }
+
+    // Create media entries from URLs if provided
+    let mediaSertifikatId: string | undefined;
+    let mediaFotoPribadiId: string | undefined;
+    let mediaFotoAwardingId: string | undefined;
+
+    if (mediaUrls && mediaUrls.length > 0) {
+      const newMedias = await createMediasFromUrl(tx, mediaUrls, existing.userId);
+
+      // Assign media in order: certificate, awarding, personal
+      if (newMedias[0]) mediaSertifikatId = newMedias[0].id;
+      if (newMedias[1]) mediaFotoPribadiId = newMedias[1].id;
+      if (newMedias.length > 2) {
+        if (newMedias[2]) mediaFotoAwardingId = newMedias[2].id;
+      }
+    }
+
+    if (!mediaSertifikatId) {
+      mediaSertifikatId = existing.mediaSertifikat ?? undefined;
+    }
+    if (!mediaFotoPribadiId) {
+      mediaFotoPribadiId = existing.mediaFotoPribadi ?? undefined;
+    }
 
     const [updatedPrestasi] = await tx
       .update(prestasi)
@@ -299,66 +327,13 @@ export async function updatePrestasi(
         bulan: data.bulan,
         tahun: data.tahun,
         competitionType: data.competitionType,
+        mediaSertifikat: mediaSertifikatId,
+        mediaFotoAwarding: mediaFotoAwardingId ?? null,
+        mediaFotoPribadi: mediaFotoPribadiId,
       })
       .where(eq(prestasi.id, id))
       .returning();
 
-    // Handle media URLs if provided
-    if (mediaUrls !== undefined) {
-      if (mediaUrls.length > 0) {
-        // Create new media records
-        const newMedias = await createMediasFromUrl(
-          tx,
-          mediaUrls,
-          userId ?? existing.userId,
-        );
-
-        // Update prestasi with new media IDs
-        const [finalPrestasi] = await tx
-          .update(prestasi)
-          .set({
-            mediaSertifikat: newMedias[0]?.id || null,
-            mediaFotoAwarding: newMedias[1]?.id || null,
-            mediaFotoPribadi: newMedias[2]?.id || null,
-          })
-          .where(eq(prestasi.id, id))
-          .returning();
-
-        // Delete old media
-        if (oldMediaIds.length > 0) {
-          await tx.delete(medias).where(
-            sql`${medias.id} IN (${sql.join(
-              oldMediaIds.map((id) => sql`${id}`),
-              sql`, `,
-            )})`,
-          );
-        }
-
-        return finalPrestasi;
-      } else {
-        const [finalPrestasi] = await tx
-          .update(prestasi)
-          .set({
-            mediaSertifikat: null,
-            mediaFotoAwarding: null,
-            mediaFotoPribadi: null,
-          })
-          .where(eq(prestasi.id, id))
-          .returning();
-
-        // Delete old media records
-        if (oldMediaIds.length > 0) {
-          await tx.delete(medias).where(
-            sql`${medias.id} IN (${sql.join(
-              oldMediaIds.map((id) => sql`${id}`),
-              sql`, `,
-            )})`,
-          );
-        }
-
-        return finalPrestasi;
-      }
-    }
 
     return updatedPrestasi;
   });

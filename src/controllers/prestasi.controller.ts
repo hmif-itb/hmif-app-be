@@ -116,17 +116,6 @@ prestasiRouter.openapi(createPrestasiRoute, async (c) => {
 
     return c.json(response, 201);
   } catch (error) {
-    console.error('Error creating prestasi:', error);
-
-    if (error instanceof PostgresError) {
-      if (error.code === '23503') {
-        return c.json({ error: 'Foreign key constraint violation' }, 400);
-      }
-      if (error.code === '23505') {
-        return c.json({ error: 'Duplicate entry' }, 400);
-      }
-    }
-
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
@@ -159,9 +148,10 @@ prestasiRouter.openapi(updatePrestasiRoute, async (c) => {
         bulan: body.bulan ?? existing.bulan,
         tahun: body.tahun ?? existing.tahun,
         competitionType: body.competitionType ?? existing.competitionType,
+        mediaSertifikat: body.mediaSertifikat,
+        mediaFotoAwarding: body.mediaFotoAwarding,
+        mediaFotoPribadi: body.mediaFotoPribadi,
       },
-      body.mediaUrls,
-      existing.userId,
     );
 
     if (!updatedPrestasi) {
@@ -183,26 +173,6 @@ prestasiRouter.openapi(updatePrestasiRoute, async (c) => {
 
     return c.json(response, 200);
   } catch (error) {
-    console.error('Error updating prestasi:', error);
-
-    if (error instanceof PostgresError) {
-      if (error.code === '23503') {
-        return c.json(
-          {
-            formErrors: [],
-            fieldErrors: { general: ['Foreign key constraint violation'] },
-          },
-          400,
-        );
-      }
-      if (error.code === '23505') {
-        return c.json(
-          { formErrors: [], fieldErrors: { general: ['Duplicate entry'] } },
-          400,
-        );
-      }
-    }
-
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
@@ -223,20 +193,6 @@ prestasiRouter.openapi(deletePrestasiRoute, async (c) => {
 
     return c.json({ message: 'Achievement deleted successfully' }, 200);
   } catch (error) {
-    console.error('Error deleting prestasi:', error);
-
-    if (error instanceof PostgresError) {
-      if (error.code === '23503') {
-        return c.json(
-          {
-            formErrors: [],
-            fieldErrors: { general: ['Cannot delete: foreign key constraint'] },
-          },
-          400,
-        );
-      }
-    }
-
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
