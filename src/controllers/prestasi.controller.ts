@@ -131,8 +131,8 @@ prestasiRouter.openapi(createPrestasiRoute, async (c) => {
   }
 });
 
-prestasiRouter.delete(
-  deletePrestasiRoute.getRoutingPath(),
+prestasiRouter.put(
+  updatePrestasiRoute.getRoutingPath(),
   roleMiddleware(['people', 'peopledev', 'peoplemanage']),
 );
 prestasiRouter.openapi(updatePrestasiRoute, async (c) => {
