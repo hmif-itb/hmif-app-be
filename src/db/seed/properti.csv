@@ -1,0 +1,9 @@
+name,category,description,quantity,condition,location,photo
+"Ruang Rapat 1","sekre","Ruang rapat kapasitas 10 orang dengan fasilitas proyektor.",1,"good","Sekretariat 1",
+"Proyektor Epson EB-X500","properti","Proyektor portabel dengan resolusi XGA.",3,"good","Sekretariat 2",
+"Speaker Aktif JBL EON715","properti","Speaker aktif 15-inch, cocok untuk acara indoor maupun outdoor.",2,"broken","Sekretariat 1",
+"Sekretariat HMIF","sekre","Ruang sekretariat utama untuk kegiatan harian himpunan.",1,"good","Sekretariat 1",
+"Papan Tulis Whiteboard","properti","Papan tulis whiteboard ukuran 120x80 cm beserta spidol.",5,"good","Jatinangor",
+"Kamera Mirrorless Sony A6400","properti","Kamera untuk keperluan dokumentasi acara.",2,"good","Sekretariat 2",
+"Meja Rapat","properti","Meja panjang untuk 10 orang.",1,"lost","Jatinangor",
+"Aula Barat","sekre","Aula serbaguna untuk acara besar, seminar, atau workshop.",1,"good","Jatinangor",

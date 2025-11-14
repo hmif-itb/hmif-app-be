@@ -4,7 +4,6 @@ import { env } from '~/configs/env.config';
 import { db } from '~/db/drizzle';
 import { sendNotificationToAll } from '~/lib/push-manager';
 import {
-  getChatroomById,
   getChatroomParticipantIds,
   saveMessage,
 } from '~/repositories/chatroom.repo';

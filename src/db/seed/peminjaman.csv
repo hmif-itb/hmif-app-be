@@ -1,0 +1,10 @@
+title,property_name,borrowerName,startDate,endDate,status,alasan,jenisPeminjaman
+Rapat Divisi Internal,Ruang Rapat 1,Guntara Ganteng,2025-10-16T09:00:00Z,2025-10-16T11:00:00Z,accepted,Rapat rutin bulanan,non-eksklusif
+Pinjam Proyektor untuk Presentasi Kelas,Proyektor Epson EB-X500,Test User,2025-10-17T13:00:00Z,2025-10-17T15:00:00Z,accepted,Presentasi tugas besar,non-eksklusif
+Booking Sekretariat untuk Kegiatan,Sekretariat HMIF,Guntara Ganteng,2025-10-20T08:00:00Z,2025-10-24T17:00:00Z,pending,Persiapan acara wisuda,eksklusif
+Penggunaan Speaker untuk Acara Musik,Speaker Aktif JBL EON715,Test User,2025-10-18T18:00:00Z,2025-10-18T22:00:00Z,accepted,Latihan band,non-eksklusif
+Peminjaman Papan Tulis untuk Workshop,Papan Tulis Whiteboard,Guntara Ganteng,2025-10-22T10:00:00Z,2025-10-22T12:00:00Z,rejected,Workshop desain,non-eksklusif
+Rapat Tim Proyek,Ruang Rapat 1,Test User,2025-11-03T14:00:00Z,2025-11-03T15:30:00Z,pending,Rapat progres mingguan,non-eksklusif
+Proyektor untuk Nobar,Proyektor Epson EB-X500,Guntara Ganteng,2025-11-07T19:00:00Z,2025-11-07T23:00:00Z,accepted,Nonton bareng final,non-eksklusif
+Dokumentasi Acara Wisuda,Kamera Mirrorless Sony A6400,Test User,2025-11-15T08:00:00Z,2025-11-15T16:00:00Z,accepted,Dokumentasi resmi,eksklusif
+Seminar Teknologi di Aula,Aula Barat,Guntara Ganteng,2025-11-20T09:00:00Z,2025-11-20T17:00:00Z,pending,Seminar AI,eksklusif

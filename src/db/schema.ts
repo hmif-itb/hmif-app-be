@@ -6,11 +6,13 @@ import {
   index,
   integer,
   json,
+  pgEnum,
   pgTable,
   primaryKey,
   text,
   timestamp,
   unique,
+  varchar,
 } from 'drizzle-orm/pg-core';
 import type webpush from 'web-push';
 import { rolesEnums } from './roles-group';
@@ -50,6 +52,7 @@ export const users = pgTable(
 export type User = InferSelectModel<typeof users>;
 
 export const usersRelation = relations(users, ({ many, one }) => ({
+  prestasi: many(prestasi),
   pushSubscriptions: many(pushSubscriptions),
   infos: many(infos),
   medias: many(medias),
@@ -991,3 +994,183 @@ export const coWorkingSpaceReviewsRelation = relations(
     }),
   }),
 );
+
+export const jenisPrestasiEnum = pgEnum('jenis_prestasi', [
+  'organisasi',
+  'kepanitiaan',
+  'kompetisi',
+]);
+
+export const competitionTypeEnum = pgEnum('competition_type', [
+  'CP',
+  'CTF',
+  'BCC',
+  'DS',
+  'AI',
+  'Hackathon',
+]);
+
+export const prestasi = pgTable('prestasi', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  jenisPrestasi: jenisPrestasiEnum('jenis_prestasi').notNull(),
+  penyelenggara: text('penyelenggara').notNull(),
+  deskripsi: text('deskripsi'),
+  bulan: integer('bulan').notNull(), // 1-12
+  tahun: integer('tahun').notNull(),
+  mediaSertifikat: text('media_sertifikat').references(() => medias.id, {
+    onDelete: 'set null',
+  }),
+  mediaFotoAwarding: text('media_foto_awarding').references(() => medias.id, {
+    onDelete: 'set null',
+  }),
+  mediaFotoPribadi: text('media_foto_pribadi').references(() => medias.id, {
+    onDelete: 'set null',
+  }),
+  competitionType: competitionTypeEnum('competition_type'),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export const prestasiRelations = relations(prestasi, ({ one }) => ({
+  user: one(users, {
+    fields: [prestasi.userId],
+    references: [users.id],
+  }),
+  mediaSertifikat: one(medias, {
+    fields: [prestasi.mediaSertifikat],
+    references: [medias.id],
+  }),
+  mediaFotoAwarding: one(medias, {
+    fields: [prestasi.mediaFotoAwarding],
+    references: [medias.id],
+  }),
+  mediaFotoPribadi: one(medias, {
+    fields: [prestasi.mediaFotoPribadi],
+    references: [medias.id],
+  }),
+}));
+
+export const propertyCategoryEnum = pgEnum('property_category', [
+  'sekre',
+  'properti',
+]);
+
+export const propertyStatusEnum = pgEnum('property_status', [
+  'available',
+  'in_use',
+]);
+
+export const propertyConditionEnum = pgEnum('property_condition', [
+  'good',
+  'cant_be_used',
+  'lost',
+  'broken',
+]);
+
+export const propertyLocationEnum = pgEnum('property_location', [
+  'Sekretariat 1',
+  'Sekretariat 2',
+  'Jatinangor',
+]);
+
+export const properti = pgTable('properti', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  name: varchar('name', { length: 255 }).notNull(),
+  description: text('description'),
+  category: propertyCategoryEnum('category').notNull(),
+  status: propertyStatusEnum('status').default('available'),
+  condition: propertyConditionEnum('condition').default('good').notNull(),
+  quantity: integer('quantity').default(1).notNull(),
+  location: text('location').notNull().default('Sekretariat 1'),
+  photo: varchar('photo', { length: 255 }),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const propertiRelations = relations(properti, ({ many }) => ({
+  peminjaman: many(peminjaman),
+  laporan: many(laporan),
+}));
+
+export const loanStatusEnum = pgEnum('loan_status', [
+  'pending',
+  'rejected',
+  'accepted',
+  'pending_return',
+  'completed',
+]);
+
+export const peminjamanTypeEnum = pgEnum('jenis_peminjaman', [
+  'eksklusif',
+  'non-eksklusif',
+]);
+
+export const peminjaman = pgTable('peminjaman', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  title: varchar('title', { length: 255 }).notNull(),
+  propertyId: text('property_id')
+    .notNull()
+    .references(() => properti.id, { onDelete: 'cascade' }),
+  borrowerName: varchar('borrower_name', { length: 255 }).notNull(),
+  startDate: timestamp('start_date', { withTimezone: true }).notNull(),
+  endDate: timestamp('end_date', { withTimezone: true }).notNull(),
+  status: loanStatusEnum('status').default('pending').notNull(),
+  alasan: text('alasan'),
+  jenisPeminjaman: peminjamanTypeEnum('jenis_peminjaman')
+    .default('non-eksklusif')
+    .notNull(),
+
+  buktiFotoUrl: text('bukti_foto_url'),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const peminjamanRelations = relations(peminjaman, ({ one }) => ({
+  properti: one(properti, {
+    fields: [peminjaman.propertyId],
+    references: [properti.id],
+  }),
+}));
+
+export const laporanStatusEnum = pgEnum('laporan_status', [
+  'pending',
+  'accepted',
+  'rejected',
+]);
+
+export const laporan = pgTable('laporan', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  propertiId: text('properti_id')
+    .notNull()
+    .references(() => properti.id, { onDelete: 'cascade' }),
+  pelaporId: text('pelapor_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  deskripsi: text('deskripsi').notNull(),
+  fotoUrl: text('foto_url'),
+  status: laporanStatusEnum('status').default('pending').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const laporanRelations = relations(laporan, ({ one }) => ({
+  properti: one(properti, {
+    fields: [laporan.propertiId],
+    references: [properti.id],
+  }),
+  pelapor: one(users, {
+    fields: [laporan.pelaporId],
+    references: [users.id],
+  }),
+}));

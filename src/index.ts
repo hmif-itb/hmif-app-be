@@ -105,6 +105,8 @@ app.doc('/doc', {
     { name: 'markdown', description: 'Markdown API' },
     { name: 'recommendation', description: 'Recommendations API' },
     { name: 'curhat', description: 'Curhat API' },
+    { name: 'achievements', description: 'Achievements API' },
+    { name: 'peminjaman-dashboard', description: 'Peminjaman Dashboard API' },
   ],
 });
 app.get('/swagger', swaggerUI({ url: '/doc' }));
