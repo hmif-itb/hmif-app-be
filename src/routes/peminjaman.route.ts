@@ -1,12 +1,9 @@
 import { createRoute, z } from '@hono/zod-openapi';
-import {
-  ErrorSchema,
-  ValidationErrorSchema,
-} from '~/types/responses.type';
+import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 import {
   PeminjamanSchema,
   GetPeminjamanNearingEndParamsSchema,
-  GetPeminjamanParamsSchema
+  GetPeminjamanParamsSchema,
 } from '~/types/peminjaman.types';
 
 export const getPeminjamanRoute = createRoute({

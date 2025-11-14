@@ -1,13 +1,16 @@
 import { and, asc, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
-import { first, firstSure } from '~/db/helper';
+import { firstSure } from '~/db/helper';
 import { peminjaman, properti } from '~/db/schema';
 import { SubmitPengembalianBodySchema } from '~/types/pengembalian.types';
 
-export async function getPeminjamanAktifByWarga(db: Database, borrowerName: string) {
+export async function getPeminjamanAktifByWarga(
+  db: Database,
+  borrowerName: string,
+) {
   const peminjamanList = await db
-      .select({
+    .select({
       id: peminjaman.id,
       borrowerName: peminjaman.borrowerName,
       propertiId: peminjaman.propertyId,
@@ -16,25 +19,30 @@ export async function getPeminjamanAktifByWarga(db: Database, borrowerName: stri
       status: peminjaman.status,
       createdAt: peminjaman.createdAt,
       updatedAt: peminjaman.updatedAt,
-      })
-      .from(peminjaman)
-      .where(and(eq(peminjaman.borrowerName, borrowerName), eq(peminjaman.status, 'accepted')))
-      .orderBy(asc(peminjaman.startDate));
+    })
+    .from(peminjaman)
+    .where(
+      and(
+        eq(peminjaman.borrowerName, borrowerName),
+        eq(peminjaman.status, 'accepted'),
+      ),
+    )
+    .orderBy(asc(peminjaman.startDate));
 
   const propertiList = await db
-      .select({
+    .select({
       id: properti.id,
       name: properti.name,
       category: properti.category,
       quantity: properti.quantity,
-      })
-      .from(properti);
+    })
+    .from(properti);
 
   return peminjamanList.map((p) => ({
-      ...p,
-      properti: propertiList.find((prop) => prop.id === p.propertiId) || null,
+    ...p,
+    properti: propertiList.find((prop) => prop.id === p.propertiId) ?? null,
   }));
-}  
+}
 
 export async function getPeminjamanByIdAndWarga(
   db: Database,

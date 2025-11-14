@@ -25,7 +25,6 @@ import { pengajuanWargaRouter } from './pengajuan.controller';
 import { pengembalianWargaRouter } from './pengembalian.controller';
 import { laporanWargaRouter } from './laporan-warga.controller';
 
-
 const unprotectedApiRouter = new OpenAPIHono();
 unprotectedApiRouter.route('/', loginRouter);
 unprotectedApiRouter.route('/', openGraphScrapeRoute);

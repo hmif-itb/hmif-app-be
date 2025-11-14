@@ -28,7 +28,7 @@ propertiRouter.openapi(getPropertiListRoute, async (c) => {
       status: p.status ?? 'available',
       createdAt: p.createdAt.toISOString(),
       updatedAt: p.updatedAt.toISOString(),
-      location: p.location as 'Sekretariat 1' | 'Sekretariat 2' | 'Jatinangor'
+      location: p.location as 'Sekretariat 1' | 'Sekretariat 2' | 'Jatinangor',
     }));
 
     return c.json(serialized, 200);
@@ -40,7 +40,6 @@ propertiRouter.openapi(getPropertiListRoute, async (c) => {
   }
 });
 
-
 propertiRouter.openapi(getPropertiByIdRoute, async (c) => {
   const { propertiId } = c.req.valid('param');
   const data = await getPropertiById(db, propertiId);
@@ -49,19 +48,21 @@ propertiRouter.openapi(getPropertiByIdRoute, async (c) => {
     return c.json({ error: 'Properti tidak ditemukan' }, 404);
   }
 
-  return c.json({
-    ...data,
-    createdAt: data.createdAt.toISOString(),
-    updatedAt: data.updatedAt.toISOString(),
-  }, 200);
+  return c.json(
+    {
+      ...data,
+      createdAt: data.createdAt.toISOString(),
+      updatedAt: data.updatedAt.toISOString(),
+    },
+    200,
+  );
 });
-
 
 propertiRouter.openapi(createPropertiRoute, async (c) => {
   const roles = await db.query.userRoles.findMany({
     where: (ur, { eq }) => eq(ur.userId, c.var.user.id),
   });
-  const userRoleNames = roles.map(r => r.role);
+  const userRoleNames = roles.map((r) => r.role);
 
   const isAdmin = isInRoles(userRoleNames, ['household', 'admin']);
 
@@ -76,12 +77,11 @@ propertiRouter.openapi(createPropertiRoute, async (c) => {
   return c.json(data, 201);
 });
 
-
 propertiRouter.openapi(updatePropertiRoute, async (c) => {
   const roles = await db.query.userRoles.findMany({
     where: (ur, { eq }) => eq(ur.userId, c.var.user.id),
   });
-  const userRoleNames = roles.map(r => r.role);
+  const userRoleNames = roles.map((r) => r.role);
   const isAdmin = isInRoles(userRoleNames, ['household', 'admin']);
 
   if (!isAdmin) {
@@ -104,7 +104,7 @@ propertiRouter.openapi(deletePropertiRoute, async (c) => {
   const roles = await db.query.userRoles.findMany({
     where: (ur, { eq }) => eq(ur.userId, c.var.user.id),
   });
-  const userRoleNames = roles.map(r => r.role);
+  const userRoleNames = roles.map((r) => r.role);
   const isAdmin = isInRoles(userRoleNames, ['household', 'admin']);
 
   if (!isAdmin) {
