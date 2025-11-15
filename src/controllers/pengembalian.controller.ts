@@ -27,22 +27,19 @@ pengembalianWargaRouter.openapi(getPeminjamanAktifRoute, async (c) => {
     }));
     
     return c.json(serialized, 200) as unknown as any;
-   } catch (error) {
-    console.error('Error in /pengembalian/saya:', error);
-  
+  } catch (error) {
     if (error instanceof PostgresError) {
       return c.json({ error: error.message }, 400) as unknown as any;
     }
-  
-    return c.json({ error: 'Internal Server Error', message: (error as any).message }, 500);
-   }
+    throw error;
+  }
 });
 
 pengembalianWargaRouter.openapi(submitPengembalianRoute, async (c) => {
   try {
     const { peminjamanId } = c.req.valid('param');
     const body = c.req.valid('json');
-    const { fullName } = c.var.user;
+    const { fullName, id: userId } = c.var.user;
 
     const existing = await getPeminjamanByIdAndWarga(db, peminjamanId, fullName);
 
@@ -54,7 +51,13 @@ pengembalianWargaRouter.openapi(submitPengembalianRoute, async (c) => {
       return c.json({ error: 'Hanya peminjaman yang sedang berjalan (accepted) yang bisa dikembalikan' }, 400) as unknown as any;
     }
 
-    const data = await submitPengembalianWarga(db, peminjamanId, body);
+    const data = await submitPengembalianWarga(
+      db, 
+      peminjamanId, 
+      body, 
+      userId, 
+      fullName
+    );
     
     const serialized = {
       ...data,
