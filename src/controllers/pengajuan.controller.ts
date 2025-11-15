@@ -1,6 +1,9 @@
 import { PostgresError } from 'postgres';
 import { db } from '~/db/drizzle';
-import { createPeminjaman, getWargaPropertiList } from '~/repositories/pengajuan.repo';
+import {
+  createPeminjaman,
+  getWargaPropertiList,
+} from '~/repositories/pengajuan.repo';
 import {
   createPengajuanRoute,
   getWargaPropertiListRoute,
@@ -12,13 +15,13 @@ export const pengajuanWargaRouter = createAuthRouter();
 pengajuanWargaRouter.openapi(getWargaPropertiListRoute, async (c) => {
   try {
     const data = await getWargaPropertiList(db, c.req.valid('query'));
-    
+
     const serialized = data.map((d) => ({
       ...d,
       createdAt: d.createdAt?.toISOString?.() ?? d.createdAt,
       updatedAt: d.updatedAt?.toISOString?.() ?? d.updatedAt,
     }));
-    
+
     return c.json(serialized, 200) as unknown as any;
   } catch (error) {
     if (error instanceof PostgresError) {
@@ -34,7 +37,7 @@ pengajuanWargaRouter.openapi(createPengajuanRoute, async (c) => {
     const { fullName } = c.var.user;
 
     const data = await createPeminjaman(db, body, fullName);
-    
+
     const serialized = {
       ...data,
       createdAt: data.createdAt?.toISOString?.() ?? data.createdAt,
@@ -42,7 +45,7 @@ pengajuanWargaRouter.openapi(createPengajuanRoute, async (c) => {
       startDate: data.startDate?.toISOString?.() ?? data.startDate,
       endDate: data.endDate?.toISOString?.() ?? data.endDate,
     };
-    
+
     return c.json(serialized, 201) as unknown as any;
   } catch (error) {
     if (error instanceof PostgresError) {

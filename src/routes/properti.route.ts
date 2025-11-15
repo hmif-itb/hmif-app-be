@@ -39,7 +39,7 @@ export const getPropertiListRoute = createRoute({
       },
       description: 'Kesalahan dari Postgres',
     },
-  }  
+  },
 });
 
 export const createPropertiRoute = createRoute({
@@ -48,7 +48,9 @@ export const createPropertiRoute = createRoute({
   method: 'post',
   path: '/properti',
   request: {
-    body: { content: { 'application/json': { schema: CreatePropertiBodySchema } } },
+    body: {
+      content: { 'application/json': { schema: CreatePropertiBodySchema } },
+    },
   },
   responses: {
     201: {
@@ -57,7 +59,11 @@ export const createPropertiRoute = createRoute({
     },
     400: {
       description: 'Bad request',
-      content: { 'application/json': { schema: z.union([ErrorSchema, ValidationErrorSchema]) } },
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
+        },
+      },
     },
     403: errorResponse,
   },
@@ -94,7 +100,9 @@ export const updatePropertiRoute = createRoute({
   path: '/properti/{propertiId}',
   request: {
     params: PropertiIdParamSchema,
-    body: { content: { 'application/json': { schema: UpdatePropertiBodySchema } } },
+    body: {
+      content: { 'application/json': { schema: UpdatePropertiBodySchema } },
+    },
   },
   responses: {
     200: {
@@ -103,7 +111,11 @@ export const updatePropertiRoute = createRoute({
     },
     400: {
       description: 'Bad request',
-      content: { 'application/json': { schema: z.union([ErrorSchema, ValidationErrorSchema]) } },
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
+        },
+      },
     },
     403: errorResponse,
     404: errorResponse,

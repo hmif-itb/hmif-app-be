@@ -12,9 +12,9 @@ laporanWargaRouter.openapi(createLaporanRoute, async (c) => {
     const { id: pelaporId } = c.var.user;
 
     const data = await createLaporan(db, body, pelaporId);
-    
+
     if (!data) {
-        return c.json({ error: 'Failed to create laporan' }, 400);
+      return c.json({ error: 'Failed to create laporan' }, 400);
     }
 
     const serialized = {

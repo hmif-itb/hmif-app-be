@@ -11,19 +11,21 @@ export const PropertiSchema = z.object({
   photo: z.string().nullable(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
-  status: z.enum(['in_use', 'available'])
+  status: z.enum(['in_use', 'available']),
 });
 
 export const PropertiIdParamSchema = z.object({
   propertiId: z.string(),
 });
 
-export const GetPropertiParamsSchema = z.object({
-  search: z.string().optional(),
-  category: z.enum(['sekre', 'properti']).optional(),
-  condition: z.enum(['good', 'broken', 'cant_be_used', 'lost']).optional(),
-  sortBy: z.enum(['name_asc', 'name_desc']).optional().default('name_asc'),
-}).openapi('GetPropertiParams');
+export const GetPropertiParamsSchema = z
+  .object({
+    search: z.string().optional(),
+    category: z.enum(['sekre', 'properti']).optional(),
+    condition: z.enum(['good', 'broken', 'cant_be_used', 'lost']).optional(),
+    sortBy: z.enum(['name_asc', 'name_desc']).optional().default('name_asc'),
+  })
+  .openapi('GetPropertiParams');
 
 export const CreatePropertiBodySchema = PropertiSchema.omit({
   id: true,
@@ -31,4 +33,5 @@ export const CreatePropertiBodySchema = PropertiSchema.omit({
   updatedAt: true,
 }).openapi('CreatePropertiBodySchema');
 
-export const UpdatePropertiBodySchema = CreatePropertiBodySchema.partial().openapi('UpdatePropertiBodySchema');
+export const UpdatePropertiBodySchema =
+  CreatePropertiBodySchema.partial().openapi('UpdatePropertiBodySchema');

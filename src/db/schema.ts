@@ -12,7 +12,7 @@ import {
   text,
   timestamp,
   unique,
-  varchar
+  varchar,
 } from 'drizzle-orm/pg-core';
 import type webpush from 'web-push';
 import { rolesEnums } from './roles-group';
@@ -1068,7 +1068,7 @@ export const propertyConditionEnum = pgEnum('property_condition', [
   'good',
   'cant_be_used',
   'lost',
-  'broken'
+  'broken',
 ]);
 
 export const propertyLocationEnum = pgEnum('property_location', [
@@ -1088,7 +1088,7 @@ export const properti = pgTable('properti', {
   condition: propertyConditionEnum('condition').default('good').notNull(),
   quantity: integer('quantity').default(1).notNull(),
   location: text('location').notNull().default('Sekretariat 1'),
-  photo:varchar('photo', { length: 255 }),
+  photo: varchar('photo', { length: 255 }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -1097,7 +1097,6 @@ export const propertiRelations = relations(properti, ({ many }) => ({
   peminjaman: many(peminjaman),
   laporan: many(laporan),
 }));
-
 
 export const loanStatusEnum = pgEnum('loan_status', [
   'pending',
@@ -1128,7 +1127,7 @@ export const peminjaman = pgTable('peminjaman', {
   jenisPeminjaman: peminjamanTypeEnum('jenis_peminjaman')
     .default('non-eksklusif')
     .notNull(),
-  
+
   buktiFotoUrl: text('bukti_foto_url'),
 
   createdAt: timestamp('created_at').defaultNow().notNull(),

@@ -11,7 +11,7 @@ export async function createLaporan(
 ) {
   const dataInsert: typeof laporan.$inferInsert = {
     ...data,
-    pelaporId: pelaporId,
+    pelaporId,
     status: 'pending',
     fotoUrl: data.fotoUrl ?? null,
   };
@@ -21,7 +21,7 @@ export async function createLaporan(
     .values(dataInsert)
     .returning()
     .then(firstSure);
-  
+
   return await db.query.laporan.findFirst({
     where: (l, { eq }) => eq(l.id, newLaporan.id),
     with: {

@@ -3,29 +3,33 @@ import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
 import { peminjaman, properti } from '~/db/schema';
-import { GetWargaPropertiParamsSchema, CreatePengajuanBodySchema } from '~/types/pengajuan.types';
+import {
+  GetWargaPropertiParamsSchema,
+  CreatePengajuanBodySchema,
+} from '~/types/pengajuan.types';
 
 export async function getWargaPropertiList(
-    db: Database,
-    q: z.infer<typeof GetWargaPropertiParamsSchema>,
+  db: Database,
+  q: z.infer<typeof GetWargaPropertiParamsSchema>,
 ) {
-const { search, category, condition, sortBy } = q;
-const [sortKey, sortOrder] = sortBy.split('_') as ['name', 'asc' | 'desc'];
+  const { search, category, condition, sortBy } = q;
+  const [sortKey, sortOrder] = sortBy.split('_') as ['name', 'asc' | 'desc'];
 
-return await db
+  return await db
     .select()
     .from(properti)
     .where(
-    and(
+      and(
         eq(properti.status, 'available'),
         search ? ilike(properti.name, `%${search}%`) : undefined,
         category ? eq(properti.category, category) : undefined,
         condition ? eq(properti.condition, condition) : undefined,
-    ),
+      ),
     )
-    .orderBy(sortOrder === 'asc' ? asc(properti[sortKey]) : desc(properti[sortKey]));
+    .orderBy(
+      sortOrder === 'asc' ? asc(properti[sortKey]) : desc(properti[sortKey]),
+    );
 }
-  
 
 async function checkKonflikPeminjaman(
   db: Database,
@@ -74,7 +78,9 @@ export async function createPeminjaman(
   if (jenisPeminjaman === 'eksklusif') {
     const adaKonflik = await checkKonflikPeminjaman(db, propertyId, start, end);
     if (adaKonflik) {
-      throw new Error('Jadwal peminjaman eksklusif bertabrakan dengan yang sudah ada.');
+      throw new Error(
+        'Jadwal peminjaman eksklusif bertabrakan dengan yang sudah ada.',
+      );
     }
   }
 
@@ -82,10 +88,14 @@ export async function createPeminjaman(
     ...data,
     startDate: start,
     endDate: end,
-    borrowerName: borrowerName,
+    borrowerName,
     alasan: data.alasan ?? null,
     status: 'pending',
   };
 
-  return await db.insert(peminjaman).values(dataInsert).returning().then(firstSure);
+  return await db
+    .insert(peminjaman)
+    .values(dataInsert)
+    .returning()
+    .then(firstSure);
 }

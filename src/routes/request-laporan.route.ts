@@ -9,11 +9,7 @@ import {
   UpdatePeminjamanStatusSchema,
   UpdateLaporanStatusSchema,
 } from '~/types/request-laporan.types';
-import {
-  ErrorSchema,
-  ValidationErrorSchema,
-  errorResponse,
-} from '~/types/responses.type';
+import { errorResponse } from '~/types/responses.type';
 
 export const getRequestListRoute = createRoute({
   operationId: 'getRequestList',
@@ -26,7 +22,9 @@ export const getRequestListRoute = createRoute({
   responses: {
     200: {
       description: 'Daftar request peminjaman',
-      content: { 'application/json': { schema: z.array(PeminjamanRequestSchema) } },
+      content: {
+        'application/json': { schema: z.array(PeminjamanRequestSchema) },
+      },
     },
   },
 });
@@ -38,7 +36,9 @@ export const updateRequestStatusRoute = createRoute({
   path: '/request/{peminjamanId}/status',
   request: {
     params: PeminjamanIdParamSchema,
-    body: { content: { 'application/json': { schema: UpdatePeminjamanStatusSchema } } },
+    body: {
+      content: { 'application/json': { schema: UpdatePeminjamanStatusSchema } },
+    },
   },
   responses: {
     200: {
@@ -73,7 +73,9 @@ export const updateLaporanStatusRoute = createRoute({
   path: '/laporan/{laporanId}/status',
   request: {
     params: LaporanIdParamSchema,
-    body: { content: { 'application/json': { schema: UpdateLaporanStatusSchema } } },
+    body: {
+      content: { 'application/json': { schema: UpdateLaporanStatusSchema } },
+    },
   },
   responses: {
     200: {

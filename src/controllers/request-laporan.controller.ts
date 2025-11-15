@@ -1,4 +1,3 @@
-import { PostgresError } from 'postgres';
 import { db } from '~/db/drizzle';
 import { isInRoles } from '~/lib/roles';
 import {
@@ -24,7 +23,7 @@ requestLaporanRouter.openapi(getRequestListRoute, async (c) => {
     const roles = await db.query.userRoles.findMany({
       where: (ur, { eq }) => eq(ur.userId, c.var.user.id),
     });
-    const userRoleNames = roles.map(r => r.role);
+    const userRoleNames = roles.map((r) => r.role);
     const isAdmin = isInRoles(userRoleNames, ['household', 'admin']);
 
     if (!isAdmin) {
@@ -40,25 +39,29 @@ requestLaporanRouter.openapi(getRequestListRoute, async (c) => {
     }));
 
     return c.json(serialized, 200) as unknown as any;
-  
   } catch (error) {
-
     if (
       error &&
       typeof error === 'object' &&
       'code' in error &&
       'message' in error
     ) {
-      return c.json({
-        error: (error as { message: string }).message,
-      }, 400) as unknown as any;
+      return c.json(
+        {
+          error: (error as { message: string }).message,
+        },
+        400,
+      ) as unknown as any;
     }
 
     if (error instanceof Error) {
       return c.json({ error: error.message }, 500) as unknown as any;
     }
 
-    return c.json({ error: 'Terjadi kesalahan tidak dikenal' }, 500) as unknown as any;
+    return c.json(
+      { error: 'Terjadi kesalahan tidak dikenal' },
+      500,
+    ) as unknown as any;
   }
 });
 
@@ -67,7 +70,7 @@ requestLaporanRouter.openapi(updateRequestStatusRoute, async (c) => {
     const roles = await db.query.userRoles.findMany({
       where: (ur, { eq }) => eq(ur.userId, c.var.user.id),
     });
-    const userRoleNames = roles.map(r => r.role);
+    const userRoleNames = roles.map((r) => r.role);
     const isAdmin = isInRoles(userRoleNames, ['household', 'admin']);
 
     if (!isAdmin) {
@@ -79,7 +82,10 @@ requestLaporanRouter.openapi(updateRequestStatusRoute, async (c) => {
     const existing = await getPeminjamanRequestById(db, peminjamanId);
 
     if (!existing) {
-      return c.json({ error: 'Request tidak ditemukan' }, 404) as unknown as any;
+      return c.json(
+        { error: 'Request tidak ditemukan' },
+        404,
+      ) as unknown as any;
     }
 
     const data = await updatePeminjamanStatus(db, peminjamanId, body);
@@ -91,25 +97,29 @@ requestLaporanRouter.openapi(updateRequestStatusRoute, async (c) => {
     };
 
     return c.json(serialized, 200) as unknown as any;
-  
   } catch (error) {
-
     if (
       error &&
       typeof error === 'object' &&
       'code' in error &&
       'message' in error
     ) {
-      return c.json({
-        error: (error as { message: string }).message,
-      }, 400) as unknown as any;
+      return c.json(
+        {
+          error: (error as { message: string }).message,
+        },
+        400,
+      ) as unknown as any;
     }
 
     if (error instanceof Error) {
       return c.json({ error: error.message }, 500) as unknown as any;
     }
 
-    return c.json({ error: 'Terjadi kesalahan tidak dikenal' }, 500) as unknown as any;
+    return c.json(
+      { error: 'Terjadi kesalahan tidak dikenal' },
+      500,
+    ) as unknown as any;
   }
 });
 
@@ -118,7 +128,7 @@ requestLaporanRouter.openapi(getLaporanListRoute, async (c) => {
     const roles = await db.query.userRoles.findMany({
       where: (ur, { eq }) => eq(ur.userId, c.var.user.id),
     });
-    const userRoleNames = roles.map(r => r.role);
+    const userRoleNames = roles.map((r) => r.role);
     const isAdmin = isInRoles(userRoleNames, ['household', 'admin']);
 
     if (!isAdmin) {
@@ -133,25 +143,29 @@ requestLaporanRouter.openapi(getLaporanListRoute, async (c) => {
     }));
 
     return c.json(serialized, 200) as unknown as any;
-  
   } catch (error) {
-
     if (
       error &&
       typeof error === 'object' &&
       'code' in error &&
       'message' in error
     ) {
-      return c.json({
-        error: (error as { message: string }).message,
-      }, 400) as unknown as any;
+      return c.json(
+        {
+          error: (error as { message: string }).message,
+        },
+        400,
+      ) as unknown as any;
     }
 
     if (error instanceof Error) {
       return c.json({ error: error.message }, 500) as unknown as any;
     }
 
-    return c.json({ error: 'Terjadi kesalahan tidak dikenal' }, 500) as unknown as any;
+    return c.json(
+      { error: 'Terjadi kesalahan tidak dikenal' },
+      500,
+    ) as unknown as any;
   }
 });
 
@@ -160,7 +174,7 @@ requestLaporanRouter.openapi(updateLaporanStatusRoute, async (c) => {
     const roles = await db.query.userRoles.findMany({
       where: (ur, { eq }) => eq(ur.userId, c.var.user.id),
     });
-    const userRoleNames = roles.map(r => r.role);
+    const userRoleNames = roles.map((r) => r.role);
     const isAdmin = isInRoles(userRoleNames, ['household', 'admin']);
 
     if (!isAdmin) {
@@ -172,7 +186,10 @@ requestLaporanRouter.openapi(updateLaporanStatusRoute, async (c) => {
     const existing = await getLaporanById(db, laporanId);
 
     if (!existing) {
-      return c.json({ error: 'Laporan tidak ditemukan' }, 404) as unknown as any;
+      return c.json(
+        { error: 'Laporan tidak ditemukan' },
+        404,
+      ) as unknown as any;
     }
 
     const data = await updateLaporanStatus(db, laporanId, body);
@@ -183,24 +200,28 @@ requestLaporanRouter.openapi(updateLaporanStatusRoute, async (c) => {
     };
 
     return c.json(serialized, 200) as unknown as any;
-  
   } catch (error) {
-
     if (
       error &&
       typeof error === 'object' &&
       'code' in error &&
       'message' in error
     ) {
-      return c.json({
-        error: (error as { message: string }).message,
-      }, 400) as unknown as any;
+      return c.json(
+        {
+          error: (error as { message: string }).message,
+        },
+        400,
+      ) as unknown as any;
     }
 
     if (error instanceof Error) {
       return c.json({ error: error.message }, 500) as unknown as any;
     }
 
-    return c.json({ error: 'Terjadi kesalahan tidak dikenal' }, 500) as unknown as any;
+    return c.json(
+      { error: 'Terjadi kesalahan tidak dikenal' },
+      500,
+    ) as unknown as any;
   }
 });

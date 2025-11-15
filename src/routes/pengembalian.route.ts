@@ -18,7 +18,9 @@ export const getPeminjamanAktifRoute = createRoute({
   responses: {
     200: {
       description: 'Daftar peminjaman aktif milik pengguna',
-      content: { 'application/json': { schema: z.array(PeminjamanAktifSchema) } },
+      content: {
+        'application/json': { schema: z.array(PeminjamanAktifSchema) },
+      },
     },
     403: errorResponse,
   },
@@ -42,7 +44,11 @@ export const submitPengembalianRoute = createRoute({
     },
     400: {
       description: 'Bad request',
-      content: { 'application/json': { schema: z.union([ErrorSchema, ValidationErrorSchema]) } },
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
+        },
+      },
     },
     403: errorResponse,
     404: errorResponse,

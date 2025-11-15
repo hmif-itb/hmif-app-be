@@ -26,7 +26,11 @@ export const createLaporanRoute = createRoute({
     },
     400: {
       description: 'Bad request',
-      content: { 'application/json': { schema: z.union([ErrorSchema, ValidationErrorSchema]) } },
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
+        },
+      },
     },
     403: errorResponse,
     404: errorResponse,

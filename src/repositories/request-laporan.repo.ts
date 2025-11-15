@@ -18,11 +18,7 @@ export async function getPeminjamanRequests(
     .select()
     .from(peminjaman)
     .leftJoin(properti, eq(peminjaman.propertyId, properti.id))
-    .where(
-      and(
-        q.category ? eq(properti.category, q.category) : undefined,
-      ),
-    )
+    .where(and(q.category ? eq(properti.category, q.category) : undefined))
     .orderBy(asc(peminjaman.startDate));
 
   return requests.map((row) => ({
@@ -31,7 +27,6 @@ export async function getPeminjamanRequests(
     properti: row.properti,
   }));
 }
-
 
 export async function updatePeminjamanStatus(
   db: Database,
@@ -66,12 +61,8 @@ export async function getLaporanList(
     .select()
     .from(laporan)
     .leftJoin(properti, eq(laporan.propertiId, properti.id))
-    .leftJoin(users, eq(laporan.pelaporId, users.id)) 
-    .where(
-      and(
-        q.category ? eq(properti.category, q.category) : undefined,
-      ),
-    )
+    .leftJoin(users, eq(laporan.pelaporId, users.id))
+    .where(and(q.category ? eq(properti.category, q.category) : undefined))
     .orderBy(desc(laporan.createdAt));
 
   return reports.map((row) => ({

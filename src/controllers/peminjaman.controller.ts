@@ -9,6 +9,7 @@ import {
   getPeminjamanRoute,
 } from '~/routes/peminjaman.route';
 import { createAuthRouter } from './router-factory';
+import { Peminjaman } from '~/types/peminjaman.types';
 
 export const peminjamanRouter = createAuthRouter();
 
@@ -16,7 +17,7 @@ peminjamanRouter.openapi(getPeminjamanRoute, async (c) => {
   const { startDate, endDate } = c.req.valid('query');
 
   try {
-    const data = await getPeminjaman(db, {
+    const data: Peminjaman[] = await getPeminjaman(db, {
       startDate: new Date(startDate),
       endDate: new Date(endDate),
     });
@@ -34,7 +35,10 @@ peminjamanRouter.openapi(getPeminjamanNearingEndRoute, async (c) => {
   const { days } = c.req.valid('query');
 
   try {
-    const data = await getPeminjamanNearingEnd(db, parseInt(days, 10));
+    const data: Peminjaman[] = await getPeminjamanNearingEnd(
+      db,
+      parseInt(days, 10),
+    );
     return c.json(data, 200);
   } catch (error) {
     if (error instanceof PostgresError) {

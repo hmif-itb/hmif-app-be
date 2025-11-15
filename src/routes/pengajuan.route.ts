@@ -5,11 +5,7 @@ import {
   CreatePengajuanBodySchema,
   PengajuanResponseSchema,
 } from '~/types/pengajuan.types';
-import {
-  ErrorSchema,
-  ValidationErrorSchema,
-  errorResponse,
-} from '~/types/responses.type';
+import { ErrorSchema, ValidationErrorSchema } from '~/types/responses.type';
 
 export const getWargaPropertiListRoute = createRoute({
   operationId: 'getWargaPropertiList',
@@ -33,7 +29,9 @@ export const createPengajuanRoute = createRoute({
   method: 'post',
   path: '/peminjaman',
   request: {
-    body: { content: { 'application/json': { schema: CreatePengajuanBodySchema } } },
+    body: {
+      content: { 'application/json': { schema: CreatePengajuanBodySchema } },
+    },
   },
   responses: {
     201: {
@@ -42,7 +40,11 @@ export const createPengajuanRoute = createRoute({
     },
     400: {
       description: 'Bad request',
-      content: { 'application/json': { schema: z.union([ErrorSchema, ValidationErrorSchema]) } },
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
+        },
+      },
     },
     409: {
       description: 'Konflik jadwal (untuk peminjaman eksklusif)',

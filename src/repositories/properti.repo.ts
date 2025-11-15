@@ -3,7 +3,10 @@ import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { first, firstSure } from '~/db/helper';
 import { properti } from '~/db/schema';
-import { GetPropertiParamsSchema, UpdatePropertiBodySchema } from '~/types/properti.types';
+import {
+  GetPropertiParamsSchema,
+  UpdatePropertiBodySchema,
+} from '~/types/properti.types';
 
 // Define the location enum type
 type LocationEnum = 'Sekretariat 1' | 'Sekretariat 2' | 'Jatinangor';
@@ -33,7 +36,9 @@ export async function getPropertiList(
         condition ? eq(properti.condition, condition) : undefined,
       ),
     )
-    .orderBy(sortOrder === 'asc' ? asc(properti[sortKey]) : desc(properti[sortKey]));
+    .orderBy(
+      sortOrder === 'asc' ? asc(properti[sortKey]) : desc(properti[sortKey]),
+    );
 
   return results.map(castPropertiLocation);
 }
@@ -51,16 +56,19 @@ export async function getPropertiById(db: Database, id: string) {
   };
 }
 
-
 export async function createProperti(
   db: Database,
   data: typeof properti.$inferInsert,
 ) {
-  const result = await db.insert(properti).values(data).returning().then(firstSure);
+  const result = await db
+    .insert(properti)
+    .values(data)
+    .returning()
+    .then(firstSure);
 
   return castPropertiLocation({
     ...result,
-    status: result.status ?? "available",
+    status: result.status ?? 'available',
     createdAt: result.createdAt.toISOString(),
     updatedAt: result.updatedAt.toISOString(),
   });
@@ -80,14 +88,17 @@ export async function updateProperti(
 
   return castPropertiLocation({
     ...result,
-    status: result.status ?? "available",
+    status: result.status ?? 'available',
     createdAt: result.createdAt.toISOString(),
     updatedAt: result.updatedAt.toISOString(),
   });
 }
 
-
 export async function deleteProperti(db: Database, id: string) {
-  const result = await db.delete(properti).where(eq(properti.id, id)).returning().then(first);
+  const result = await db
+    .delete(properti)
+    .where(eq(properti.id, id))
+    .returning()
+    .then(first);
   return result ? castPropertiLocation(result) : result;
 }

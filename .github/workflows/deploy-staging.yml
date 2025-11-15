@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - develop
+      - develop-household
 
 jobs:
   deploy:

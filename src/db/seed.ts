@@ -17,7 +17,7 @@ import {
   prestasi,
   properti,
   peminjaman,
-  laporan
+  laporan,
 } from './schema';
 
 if (!process.env.DATABASE_URL) {
@@ -462,12 +462,14 @@ export async function seedPrestasi() {
 }
 
 export async function runPropertiDanPeminjamanSeed() {
-  console.log('🗑️  Membersihkan data lama dari tabel peminjaman dan properti...');
+  console.log(
+    '🗑️  Membersihkan data lama dari tabel peminjaman dan properti...',
+  );
   await db.delete(peminjaman);
   await db.delete(properti);
   console.log('✅ Proses pembersihan selesai.');
 
-  const propertiToInsert: (typeof properti.$inferInsert)[] = [];
+  const propertiToInsert: Array<typeof properti.$inferInsert> = [];
   const propertiSchema = z.object({
     name: z.string(),
     category: z.enum(['sekre', 'properti']),
@@ -508,7 +510,7 @@ export async function runPropertiDanPeminjamanSeed() {
   const allProperti = await db.select().from(properti);
   const propertiMap = new Map(allProperti.map((p) => [p.name, p.id]));
 
-  const peminjamanToInsert: (typeof peminjaman.$inferInsert)[] = [];
+  const peminjamanToInsert: Array<typeof peminjaman.$inferInsert> = [];
 
   await new Promise((resolve, reject) => {
     fs.createReadStream('src/db/seed/peminjaman.csv')
@@ -525,7 +527,9 @@ export async function runPropertiDanPeminjamanSeed() {
           };
           const propertyId = propertiMap.get(parsed.propertyName);
           if (!propertyId) {
-            console.log(`Properti tidak ditemukan: ${parsed.propertyName}, baris dilewati.`);
+            console.log(
+              `Properti tidak ditemukan: ${parsed.propertyName}, baris dilewati.`,
+            );
             return;
           }
           peminjamanToInsert.push({
@@ -534,10 +538,14 @@ export async function runPropertiDanPeminjamanSeed() {
             startDate: new Date(parsed.startDate),
             endDate: new Date(parsed.endDate),
             status: parsed.status,
-            propertyId: propertyId,
+            propertyId,
           });
         } catch (error) {
-          console.log('❌ Gagal mem-parsing baris data peminjaman:', row, error);
+          console.log(
+            '❌ Gagal mem-parsing baris data peminjaman:',
+            row,
+            error,
+          );
         }
       })
       .on('end', resolve)
@@ -546,7 +554,10 @@ export async function runPropertiDanPeminjamanSeed() {
 
   if (peminjamanToInsert.length > 0) {
     console.log('💾 Memulai proses memasukkan data peminjaman...');
-    await db.insert(peminjaman).values(peminjamanToInsert).onConflictDoNothing();
+    await db
+      .insert(peminjaman)
+      .values(peminjamanToInsert)
+      .onConflictDoNothing();
     console.log('✅ Berhasil memasukkan data peminjaman ke database!');
   }
 }
@@ -561,7 +572,7 @@ export async function runLaporanSeed() {
   const allUsers = await db.select().from(users);
   const userMap = new Map(allUsers.map((u) => [u.nim, u.id]));
 
-  const laporanToInsert: (typeof laporan.$inferInsert)[] = [];
+  const laporanToInsert: Array<typeof laporan.$inferInsert> = [];
   const laporanSchema = z.object({
     properti_name: z.string(),
     pelapor_nim: z.string(),
@@ -586,13 +597,15 @@ export async function runLaporanSeed() {
           const pelaporId = userMap.get(parsed.pelapor_nim);
 
           if (!propertiId || !pelaporId) {
-            console.log(`Properti atau User tidak ditemukan: ${parsed.properti_name}, ${parsed.pelapor_nim}. Baris dilewati.`);
+            console.log(
+              `Properti atau User tidak ditemukan: ${parsed.properti_name}, ${parsed.pelapor_nim}. Baris dilewati.`,
+            );
             return;
           }
 
           laporanToInsert.push({
-            propertiId: propertiId,
-            pelaporId: pelaporId,
+            propertiId,
+            pelaporId,
             deskripsi: parsed.deskripsi,
             fotoUrl: parsed.fotoUrl,
             status: parsed.status,
