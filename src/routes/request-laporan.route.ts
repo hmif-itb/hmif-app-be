@@ -8,7 +8,9 @@ import {
   LaporanIdParamSchema,
   UpdatePeminjamanStatusSchema,
   UpdateLaporanStatusSchema,
+  PeminjamanScheduleResponseSchema,
 } from '~/types/request-laporan.types';
+import { PropertiIdParamSchema } from '~/types/properti.types';
 import { errorResponse } from '~/types/responses.type';
 
 export const getRequestListRoute = createRoute({
@@ -46,6 +48,25 @@ export const updateRequestStatusRoute = createRoute({
       content: { 'application/json': { schema: PeminjamanRequestSchema } },
     },
     403: errorResponse,
+    404: errorResponse,
+  },
+});
+
+export const getPeminjamanScheduleRoute = createRoute({
+  operationId: 'getPeminjamanSchedule',
+  tags: ['manajemen-request-laporan'],
+  method: 'get',
+  path: '/request/{propertiId}/schedule',
+  request: {
+    params: PropertiIdParamSchema,
+  },
+  responses: {
+    200: {
+      description: 'Jadwal peminjaman properti',
+      content: {
+        'application/json': { schema: PeminjamanScheduleResponseSchema },
+      },
+    },
     404: errorResponse,
   },
 });

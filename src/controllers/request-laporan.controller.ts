@@ -5,11 +5,13 @@ import {
   getLaporanList,
   getPeminjamanRequestById,
   getPeminjamanRequests,
+  getPeminjamanSchedule,
   updateLaporanStatus,
   updatePeminjamanStatus,
 } from '~/repositories/request-laporan.repo';
 import {
   getLaporanListRoute,
+  getPeminjamanScheduleRoute,
   getRequestListRoute,
   updateLaporanStatusRoute,
   updateRequestStatusRoute,
@@ -37,6 +39,54 @@ requestLaporanRouter.openapi(getRequestListRoute, async (c) => {
       startDate: d.startDate?.toISOString?.() ?? d.startDate,
       endDate: d.endDate?.toISOString?.() ?? d.endDate,
     }));
+
+    return c.json(serialized, 200) as unknown as any;
+  } catch (error) {
+    if (
+      error &&
+      typeof error === 'object' &&
+      'code' in error &&
+      'message' in error
+    ) {
+      return c.json(
+        {
+          error: (error as { message: string }).message,
+        },
+        400,
+      ) as unknown as any;
+    }
+
+    if (error instanceof Error) {
+      return c.json({ error: error.message }, 500) as unknown as any;
+    }
+
+    return c.json(
+      { error: 'Terjadi kesalahan tidak dikenal' },
+      500,
+    ) as unknown as any;
+  }
+});
+
+requestLaporanRouter.openapi(getPeminjamanScheduleRoute, async (c) => {
+  try {
+    const { propertiId } = c.req.valid('param');
+    const schedule = await getPeminjamanSchedule(db, propertiId);
+
+    if (!schedule) {
+      return c.json(
+        { error: 'Properti tidak ditemukan' },
+        404,
+      ) as unknown as any;
+    }
+
+    const serialized = {
+      propertyId: schedule.propertyId,
+      schedules: schedule.schedules.map((s) => ({
+        ...s,
+        startDate: s.startDate?.toISOString?.() ?? s.startDate,
+        endDate: s.endDate?.toISOString?.() ?? s.endDate,
+      })),
+    };
 
     return c.json(serialized, 200) as unknown as any;
   } catch (error) {

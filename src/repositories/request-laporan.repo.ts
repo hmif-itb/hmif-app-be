@@ -53,6 +53,36 @@ export async function getPeminjamanRequestById(db: Database, id: string) {
   return { ...result[0].peminjaman, properti: result[0].properti };
 }
 
+export async function getPeminjamanSchedule(db: Database, propertyId: string) {
+  const property = await db
+    .select()
+    .from(properti)
+    .where(eq(properti.id, propertyId))
+    .limit(1);
+
+  if (!property.length) return undefined;
+
+  const schedules = await db
+    .select({
+      startDate: peminjaman.startDate,
+      endDate: peminjaman.endDate,
+      jenisPeminjaman: peminjaman.jenisPeminjaman,
+    })
+    .from(peminjaman)
+    .where(
+      and(
+        eq(peminjaman.propertyId, propertyId),
+        eq(peminjaman.status, 'accepted'),
+      ),
+    )
+    .orderBy(asc(peminjaman.startDate));
+
+  return {
+    propertyId,
+    schedules,
+  };
+}
+
 export async function getLaporanList(
   db: Database,
   q: z.infer<typeof GetLaporanParamsSchema>,

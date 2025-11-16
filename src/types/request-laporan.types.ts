@@ -37,6 +37,17 @@ export const GetLaporanParamsSchema = z
   })
   .openapi('GetLaporanParamsSchema');
 
+export const PeminjamanScheduleItemSchema = z.object({
+  startDate: z.union([z.string().datetime(), z.date()]),
+  endDate: z.union([z.string().datetime(), z.date()]),
+  jenisPeminjaman: z.enum(['eksklusif', 'non-eksklusif']),
+});
+
+export const PeminjamanScheduleResponseSchema = z.object({
+  propertyId: z.string(),
+  schedules: z.array(PeminjamanScheduleItemSchema),
+});
+
 export const PeminjamanIdParamSchema = z.object({
   peminjamanId: z.string(),
 });
