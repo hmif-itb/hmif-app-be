@@ -1,4 +1,4 @@
-import { and, asc, desc, eq } from 'drizzle-orm';
+import { and, asc, count, desc, eq, ilike, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { Database } from '~/db/drizzle';
 import { firstSure } from '~/db/helper';
@@ -14,18 +14,72 @@ export async function getPeminjamanRequests(
   db: Database,
   q: z.infer<typeof GetRequestParamsSchema>,
 ) {
+  const conditions = [];
+
+  // Filter by category
+  if (q.category) {
+    conditions.push(eq(properti.category, q.category));
+  }
+
+  // Filter by status
+  if (q.status) {
+    conditions.push(eq(peminjaman.status, q.status));
+  }
+
+  // Search by borrowerName or title
+  if (q.search) {
+    conditions.push(
+      or(
+        ilike(peminjaman.borrowerName, `%${q.search}%`),
+        ilike(peminjaman.title, `%${q.search}%`),
+      ),
+    );
+  }
+
+  const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+
+  // Calculate offset
+  const offset = (q.page - 1) * q.limit;
+
+  // Get total count
+  const [{ total }] = await db
+    .select({ total: count() })
+    .from(peminjaman)
+    .leftJoin(properti, eq(peminjaman.propertyId, properti.id))
+    .where(whereClause);
+
+  // Get paginated results
   const requests = await db
     .select()
     .from(peminjaman)
     .leftJoin(properti, eq(peminjaman.propertyId, properti.id))
-    .where(and(q.category ? eq(properti.category, q.category) : undefined))
-    .orderBy(asc(peminjaman.startDate));
+    .where(whereClause)
+    .orderBy(
+      sql`CASE ${peminjaman.status}
+        WHEN 'pending' THEN 1
+        WHEN 'pending_return' THEN 2
+        WHEN 'accepted' THEN 3
+        WHEN 'completed' THEN 4
+        WHEN 'rejected' THEN 5
+        ELSE 6
+      END`,
+      desc(peminjaman.createdAt),
+    )
+    .limit(q.limit)
+    .offset(offset);
 
-  return requests.map((row) => ({
+  const mapped = requests.map((row) => ({
     ...row.peminjaman,
     borrowerName: row.peminjaman.borrowerName,
     properti: row.properti,
   }));
+
+  return {
+    requests: mapped,
+    total,
+    page: q.page,
+    limit: q.limit,
+  };
 }
 
 export async function updatePeminjamanStatus(
@@ -87,15 +141,48 @@ export async function getLaporanList(
   db: Database,
   q: z.infer<typeof GetLaporanParamsSchema>,
 ) {
+  const conditions = [];
+
+  // Filter by category
+  if (q.category) {
+    conditions.push(eq(properti.category, q.category));
+  }
+
+  // Filter by status
+  if (q.status) {
+    conditions.push(eq(laporan.status, q.status));
+  }
+
+  // Search by description
+  if (q.search) {
+    conditions.push(ilike(laporan.deskripsi, `%${q.search}%`));
+  }
+
+  const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+
+  // Calculate offset
+  const offset = (q.page - 1) * q.limit;
+
+  // Get total count
+  const [{ total }] = await db
+    .select({ total: count() })
+    .from(laporan)
+    .leftJoin(properti, eq(laporan.propertiId, properti.id))
+    .leftJoin(users, eq(laporan.pelaporId, users.id))
+    .where(whereClause);
+
+  // Get paginated results
   const reports = await db
     .select()
     .from(laporan)
     .leftJoin(properti, eq(laporan.propertiId, properti.id))
     .leftJoin(users, eq(laporan.pelaporId, users.id))
-    .where(and(q.category ? eq(properti.category, q.category) : undefined))
-    .orderBy(desc(laporan.createdAt));
+    .where(whereClause)
+    .orderBy(desc(laporan.createdAt))
+    .limit(q.limit)
+    .offset(offset);
 
-  return reports.map((row) => ({
+  const mapped = reports.map((row) => ({
     ...row.laporan,
     properti: row.properti,
     pelapor: {
@@ -104,6 +191,13 @@ export async function getLaporanList(
       nim: row.users?.nim,
     },
   }));
+
+  return {
+    laporan: mapped,
+    total,
+    page: q.page,
+    limit: q.limit,
+  };
 }
 
 export async function updateLaporanStatus(

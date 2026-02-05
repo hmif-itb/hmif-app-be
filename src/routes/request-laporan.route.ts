@@ -9,6 +9,8 @@ import {
   UpdatePeminjamanStatusSchema,
   UpdateLaporanStatusSchema,
   PeminjamanScheduleResponseSchema,
+  PaginatedPeminjamanRequestSchema,
+  PaginatedLaporanSchema,
 } from '~/types/request-laporan.types';
 import { PropertiIdParamSchema } from '~/types/properti.types';
 import { errorResponse } from '~/types/responses.type';
@@ -25,7 +27,7 @@ export const getRequestListRoute = createRoute({
     200: {
       description: 'Daftar request peminjaman',
       content: {
-        'application/json': { schema: z.array(PeminjamanRequestSchema) },
+        'application/json': { schema: PaginatedPeminjamanRequestSchema },
       },
     },
   },
@@ -82,7 +84,7 @@ export const getLaporanListRoute = createRoute({
   responses: {
     200: {
       description: 'Daftar laporan properti',
-      content: { 'application/json': { schema: z.array(LaporanSchema) } },
+      content: { 'application/json': { schema: PaginatedLaporanSchema } },
     },
   },
 });

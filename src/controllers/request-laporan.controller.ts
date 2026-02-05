@@ -32,13 +32,18 @@ requestLaporanRouter.openapi(getRequestListRoute, async (c) => {
       return c.json({ error: 'Akses ditolak' }, 403) as unknown as any;
     }
 
-    const data = await getPeminjamanRequests(db, c.req.valid('query'));
-    const serialized = data.map((d) => ({
-      ...d,
-      createdAt: d.createdAt?.toISOString?.() ?? d.createdAt,
-      startDate: d.startDate?.toISOString?.() ?? d.startDate,
-      endDate: d.endDate?.toISOString?.() ?? d.endDate,
-    }));
+    const result = await getPeminjamanRequests(db, c.req.valid('query'));
+    const serialized = {
+      requests: result.requests.map((d) => ({
+        ...d,
+        createdAt: d.createdAt?.toISOString?.() ?? d.createdAt,
+        startDate: d.startDate?.toISOString?.() ?? d.startDate,
+        endDate: d.endDate?.toISOString?.() ?? d.endDate,
+      })),
+      total: result.total,
+      page: result.page,
+      limit: result.limit,
+    };
 
     return c.json(serialized, 200) as unknown as any;
   } catch (error) {
@@ -185,12 +190,17 @@ requestLaporanRouter.openapi(getLaporanListRoute, async (c) => {
       return c.json({ error: 'Akses ditolak' }, 403) as unknown as any;
     }
 
-    const data = await getLaporanList(db, c.req.valid('query'));
-    const serialized = data.map((d) => ({
-      ...d,
-      createdAt: d.createdAt?.toISOString?.() ?? d.createdAt,
-      updatedAt: d.updatedAt?.toISOString?.() ?? d.updatedAt,
-    }));
+    const result = await getLaporanList(db, c.req.valid('query'));
+    const serialized = {
+      laporan: result.laporan.map((d) => ({
+        ...d,
+        createdAt: d.createdAt?.toISOString?.() ?? d.createdAt,
+        updatedAt: d.updatedAt?.toISOString?.() ?? d.updatedAt,
+      })),
+      total: result.total,
+      page: result.page,
+      limit: result.limit,
+    };
 
     return c.json(serialized, 200) as unknown as any;
   } catch (error) {

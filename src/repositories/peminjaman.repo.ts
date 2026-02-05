@@ -26,6 +26,7 @@ export async function getPeminjaman(
       and(
         lte(peminjaman.startDate, endDate),
         gte(peminjaman.endDate, startDate),
+        eq(peminjaman.status, 'accepted'),
       ),
     )
     .orderBy(asc(peminjaman.startDate));

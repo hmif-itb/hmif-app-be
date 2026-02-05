@@ -7,6 +7,8 @@ export const PeminjamanRequestSchema = PeminjamanSchema.extend({
   jenisPeminjaman: z.enum(['eksklusif', 'non-eksklusif']),
   properti: PropertiSchema,
   createdAt: z.coerce.date(),
+  buktiFotoUrl: z.string().nullable(),
+  deskripsiPengembalian: z.string().nullable(),
 });
 
 export const LaporanSchema = z.object({
@@ -28,12 +30,100 @@ export const LaporanSchema = z.object({
 export const GetRequestParamsSchema = z
   .object({
     category: z.enum(['sekre', 'properti']).optional(),
+    status: z
+      .enum(['pending', 'rejected', 'accepted', 'pending_return', 'completed'])
+      .optional()
+      .openapi({
+        param: {
+          in: 'query',
+          description: 'Filter by status',
+          example: 'pending',
+        },
+      }),
+    search: z
+      .string()
+      .optional()
+      .openapi({
+        param: {
+          in: 'query',
+          description: 'Search by borrower name or title',
+          example: 'John',
+        },
+      }),
+    page: z.coerce
+      .number()
+      .int()
+      .positive()
+      .default(1)
+      .openapi({
+        param: {
+          in: 'query',
+          description: 'Page number',
+          example: 1,
+        },
+      }),
+    limit: z.coerce
+      .number()
+      .int()
+      .positive()
+      .default(10)
+      .openapi({
+        param: {
+          in: 'query',
+          description: 'Number of items per page',
+          example: 10,
+        },
+      }),
   })
   .openapi('GetRequestParamsSchema');
 
 export const GetLaporanParamsSchema = z
   .object({
     category: z.enum(['sekre', 'properti']).optional(),
+    status: z
+      .enum(['pending', 'accepted', 'rejected'])
+      .optional()
+      .openapi({
+        param: {
+          in: 'query',
+          description: 'Filter by status',
+          example: 'pending',
+        },
+      }),
+    search: z
+      .string()
+      .optional()
+      .openapi({
+        param: {
+          in: 'query',
+          description: 'Search by description',
+          example: 'rusak',
+        },
+      }),
+    page: z.coerce
+      .number()
+      .int()
+      .positive()
+      .default(1)
+      .openapi({
+        param: {
+          in: 'query',
+          description: 'Page number',
+          example: 1,
+        },
+      }),
+    limit: z.coerce
+      .number()
+      .int()
+      .positive()
+      .default(10)
+      .openapi({
+        param: {
+          in: 'query',
+          description: 'Number of items per page',
+          example: 10,
+        },
+      }),
   })
   .openapi('GetLaporanParamsSchema');
 
@@ -58,7 +148,7 @@ export const LaporanIdParamSchema = z.object({
 
 export const UpdatePeminjamanStatusSchema = z
   .object({
-    status: z.enum(['accepted', 'rejected']),
+    status: z.enum(['accepted', 'rejected', 'completed']),
   })
   .openapi('UpdatePeminjamanStatusSchema');
 
@@ -67,3 +157,17 @@ export const UpdateLaporanStatusSchema = z
     status: z.enum(['accepted', 'rejected']),
   })
   .openapi('UpdateLaporanStatusSchema');
+
+export const PaginatedPeminjamanRequestSchema = z.object({
+  requests: z.array(PeminjamanRequestSchema),
+  total: z.number(),
+  page: z.number(),
+  limit: z.number(),
+});
+
+export const PaginatedLaporanSchema = z.object({
+  laporan: z.array(LaporanSchema),
+  total: z.number(),
+  page: z.number(),
+  limit: z.number(),
+});

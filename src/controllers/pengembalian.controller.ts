@@ -17,7 +17,7 @@ pengembalianWargaRouter.openapi(getPeminjamanAktifRoute, async (c) => {
   try {
     const { fullName } = c.var.user;
     const data = await getPeminjamanAktifByWarga(db, fullName);
-    
+
     const serialized = data.map((d) => ({
       ...d,
       createdAt: d.createdAt?.toISOString?.() ?? d.createdAt,
@@ -25,7 +25,7 @@ pengembalianWargaRouter.openapi(getPeminjamanAktifRoute, async (c) => {
       startDate: d.startDate?.toISOString?.() ?? d.startDate,
       endDate: d.endDate?.toISOString?.() ?? d.endDate,
     }));
-    
+
     return c.json(serialized, 200) as unknown as any;
   } catch (error) {
     if (error instanceof PostgresError) {
@@ -41,24 +41,31 @@ pengembalianWargaRouter.openapi(submitPengembalianRoute, async (c) => {
     const body = c.req.valid('json');
     const { fullName, id: userId } = c.var.user;
 
-    const existing = await getPeminjamanByIdAndWarga(db, peminjamanId, fullName);
+    const existing = await getPeminjamanByIdAndWarga(
+      db,
+      peminjamanId,
+      fullName,
+    );
 
     if (!existing) {
-      return c.json({ error: 'Peminjaman tidak ditemukan atau bukan milik Anda' }, 404) as unknown as any;
+      return c.json(
+        { error: 'Peminjaman tidak ditemukan atau bukan milik Anda' },
+        404,
+      ) as unknown as any;
     }
 
     if (existing.status !== 'accepted') {
-      return c.json({ error: 'Hanya peminjaman yang sedang berjalan (accepted) yang bisa dikembalikan' }, 400) as unknown as any;
+      return c.json(
+        {
+          error:
+            'Hanya peminjaman yang sedang berjalan (accepted) yang bisa dikembalikan',
+        },
+        400,
+      ) as unknown as any;
     }
 
-    const data = await submitPengembalianWarga(
-      db, 
-      peminjamanId, 
-      body, 
-      userId, 
-      fullName
-    );
-    
+    const data = await submitPengembalianWarga(db, peminjamanId, body);
+
     const serialized = {
       ...data,
       createdAt: data.createdAt?.toISOString?.() ?? data.createdAt,
@@ -66,7 +73,7 @@ pengembalianWargaRouter.openapi(submitPengembalianRoute, async (c) => {
       startDate: data.startDate?.toISOString?.() ?? data.startDate,
       endDate: data.endDate?.toISOString?.() ?? data.endDate,
     };
-    
+
     return c.json(serialized, 200) as unknown as any;
   } catch (error) {
     if (error instanceof PostgresError) {
