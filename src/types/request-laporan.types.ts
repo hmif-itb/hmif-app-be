@@ -8,7 +8,6 @@ export const PeminjamanRequestSchema = PeminjamanSchema.extend({
   properti: PropertiSchema,
   createdAt: z.coerce.date(),
   buktiFotoUrl: z.string().nullable(),
-  deskripsiPengembalian: z.string().nullable(),
 });
 
 export const LaporanSchema = z.object({

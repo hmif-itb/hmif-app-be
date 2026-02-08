@@ -15,8 +15,8 @@ export const pengembalianWargaRouter = createAuthRouter();
 
 pengembalianWargaRouter.openapi(getPeminjamanAktifRoute, async (c) => {
   try {
-    const { fullName } = c.var.user;
-    const data = await getPeminjamanAktifByWarga(db, fullName);
+    const { id: userId } = c.var.user;
+    const data = await getPeminjamanAktifByWarga(db, userId);
 
     const serialized = data.map((d) => ({
       ...d,
@@ -39,13 +39,9 @@ pengembalianWargaRouter.openapi(submitPengembalianRoute, async (c) => {
   try {
     const { peminjamanId } = c.req.valid('param');
     const body = c.req.valid('json');
-    const { fullName, id: userId } = c.var.user;
+    const { id: userId } = c.var.user;
 
-    const existing = await getPeminjamanByIdAndWarga(
-      db,
-      peminjamanId,
-      fullName,
-    );
+    const existing = await getPeminjamanByIdAndWarga(db, peminjamanId, userId);
 
     if (!existing) {
       return c.json(

@@ -5,13 +5,10 @@ import { first, firstSure } from '~/db/helper';
 import { peminjaman, laporan } from '~/db/schema';
 import { SubmitPengembalianBodySchema } from '~/types/pengembalian.types';
 
-export async function getPeminjamanAktifByWarga(
-  db: Database,
-  borrowerName: string,
-) {
+export async function getPeminjamanAktifByWarga(db: Database, userId: string) {
   return await db.query.peminjaman.findMany({
     where: and(
-      eq(peminjaman.borrowerName, borrowerName),
+      eq(peminjaman.borrowerId, userId),
       eq(peminjaman.status, 'accepted'),
     ),
     with: {
@@ -24,13 +21,10 @@ export async function getPeminjamanAktifByWarga(
 export async function getPeminjamanByIdAndWarga(
   db: Database,
   id: string,
-  borrowerName: string,
+  userId: string,
 ) {
   return await db.query.peminjaman.findFirst({
-    where: and(
-      eq(peminjaman.id, id),
-      eq(peminjaman.borrowerName, borrowerName),
-    ),
+    where: and(eq(peminjaman.id, id), eq(peminjaman.borrowerId, userId)),
     with: {
       properti: true,
     },

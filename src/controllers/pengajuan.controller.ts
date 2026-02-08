@@ -34,9 +34,9 @@ pengajuanWargaRouter.openapi(getWargaPropertiListRoute, async (c) => {
 pengajuanWargaRouter.openapi(createPengajuanRoute, async (c) => {
   try {
     const body = c.req.valid('json');
-    const { fullName } = c.var.user;
+    const { fullName, id: userId } = c.var.user;
 
-    const data = await createPeminjaman(db, body, fullName);
+    const data = await createPeminjaman(db, body, userId, fullName);
 
     const serialized = {
       ...data,
