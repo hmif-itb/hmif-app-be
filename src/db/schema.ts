@@ -73,6 +73,7 @@ export const usersRelation = relations(users, ({ many, one }) => ({
   pinnedChatrooms: many(userPinnedChatrooms),
   chatroomMessageReads: many(chatroomMessageReads),
   coWorkingSpaceRecommendations: many(coWorkingSpaceRecommendations),
+  borrowerPeminjaman: many(peminjaman),
 }));
 
 export const pushSubscriptions = pgTable(
@@ -1119,6 +1120,9 @@ export const peminjaman = pgTable('peminjaman', {
   propertyId: text('property_id')
     .notNull()
     .references(() => properti.id, { onDelete: 'cascade' }),
+  borrowerId: text('borrower_id')
+    .notNull()
+    .references(() => users.id),
   borrowerName: varchar('borrower_name', { length: 255 }).notNull(),
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
   endDate: timestamp('end_date', { withTimezone: true }).notNull(),
@@ -1138,6 +1142,10 @@ export const peminjamanRelations = relations(peminjaman, ({ one }) => ({
   properti: one(properti, {
     fields: [peminjaman.propertyId],
     references: [properti.id],
+  }),
+  borrower: one(users, {
+    fields: [peminjaman.borrowerId],
+    references: [users.id],
   }),
 }));
 

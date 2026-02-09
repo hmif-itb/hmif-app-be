@@ -69,6 +69,7 @@ async function checkKonflikPeminjaman(
 export async function createPeminjaman(
   db: Database,
   data: z.infer<typeof CreatePengajuanBodySchema>,
+  userId: string,
   borrowerName: string,
 ) {
   const { propertyId, startDate, endDate, jenisPeminjaman } = data;
@@ -88,6 +89,7 @@ export async function createPeminjaman(
     ...data,
     startDate: start,
     endDate: end,
+    borrowerId: userId,
     borrowerName,
     alasan: data.alasan ?? null,
     status: 'pending',

@@ -4,6 +4,8 @@ import {
   PeminjamanSchema,
   GetPeminjamanNearingEndParamsSchema,
   GetPeminjamanParamsSchema,
+  GetUserPeminjamanParamsSchema,
+  PaginatedUserPeminjamanSchema,
 } from '~/types/peminjaman.types';
 
 export const getPeminjamanRoute = createRoute({
@@ -48,6 +50,34 @@ export const getPeminjamanNearingEndRoute = createRoute({
       content: {
         'application/json': {
           schema: z.array(PeminjamanSchema),
+        },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: z.union([ErrorSchema, ValidationErrorSchema]),
+        },
+      },
+    },
+  },
+});
+
+export const getUserPeminjamanRoute = createRoute({
+  operationId: 'getUserPeminjaman',
+  tags: ['pengajuan-peminjaman'],
+  method: 'get',
+  path: '/peminjaman',
+  request: {
+    query: GetUserPeminjamanParamsSchema,
+  },
+  responses: {
+    200: {
+      description: "Get list of user's property loans",
+      content: {
+        'application/json': {
+          schema: PaginatedUserPeminjamanSchema,
         },
       },
     },

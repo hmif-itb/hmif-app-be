@@ -41,4 +41,78 @@ export const GetPeminjamanNearingEndParamsSchema = z
   })
   .openapi('GetPeminjamanNearingEndParamsSchema');
 
+export const GetUserPeminjamanParamsSchema = z
+  .object({
+    category: z
+      .enum(['sekre', 'properti'])
+      .optional()
+      .openapi({
+        param: {
+          in: 'query',
+          description: 'Filter by category',
+          example: 'properti',
+        },
+      }),
+    status: z
+      .enum(['pending', 'rejected', 'accepted', 'pending_return', 'completed'])
+      .optional()
+      .openapi({
+        param: {
+          in: 'query',
+          description: 'Filter by status',
+          example: 'pending',
+        },
+      }),
+    search: z
+      .string()
+      .optional()
+      .openapi({
+        param: {
+          in: 'query',
+          description: 'Search by property name or title',
+          example: 'laptop',
+        },
+      }),
+    page: z.coerce
+      .number()
+      .int()
+      .positive()
+      .default(1)
+      .openapi({
+        param: {
+          in: 'query',
+          description: 'Page number',
+          example: 1,
+        },
+      }),
+    limit: z.coerce
+      .number()
+      .int()
+      .positive()
+      .default(10)
+      .openapi({
+        param: {
+          in: 'query',
+          description: 'Number of items per page',
+          example: 10,
+        },
+      }),
+  })
+  .openapi('GetUserPeminjamanParamsSchema');
+
+export const UserPeminjamanSchema = PeminjamanSchema.extend({
+  alasan: z.string().nullable(),
+  jenisPeminjaman: z.enum(['eksklusif', 'non-eksklusif']),
+  createdAt: z.coerce.date(),
+  buktiFotoUrl: z.string().nullable(),
+});
+
+export const PaginatedUserPeminjamanSchema = z.object({
+  peminjaman: z.array(UserPeminjamanSchema),
+  total: z.number(),
+  page: z.number(),
+  limit: z.number(),
+});
+
 export type Peminjaman = z.infer<typeof PeminjamanSchema>;
+export type UserPeminjaman = z.infer<typeof UserPeminjamanSchema>;
