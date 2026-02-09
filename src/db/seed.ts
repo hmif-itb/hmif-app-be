@@ -512,54 +512,55 @@ export async function runPropertiDanPeminjamanSeed() {
 
   const peminjamanToInsert: Array<typeof peminjaman.$inferInsert> = [];
 
-  await new Promise((resolve, reject) => {
-    fs.createReadStream('src/db/seed/peminjaman.csv')
-      .pipe(parse({ delimiter: ',', from_line: 2, trim: true }))
-      .on('data', (row) => {
-        try {
-          const parsed = {
-            title: row[0],
-            propertyName: row[1],
-            borrowerName: row[2],
-            startDate: row[3],
-            endDate: row[4],
-            status: row[5] as 'pending' | 'accepted' | 'rejected',
-          };
-          const propertyId = propertiMap.get(parsed.propertyName);
-          if (!propertyId) {
-            console.log(
-              `Properti tidak ditemukan: ${parsed.propertyName}, baris dilewati.`,
-            );
-            return;
-          }
-          peminjamanToInsert.push({
-            title: parsed.title,
-            borrowerName: parsed.borrowerName,
-            startDate: new Date(parsed.startDate),
-            endDate: new Date(parsed.endDate),
-            status: parsed.status,
-            propertyId,
-          });
-        } catch (error) {
-          console.log(
-            '❌ Gagal mem-parsing baris data peminjaman:',
-            row,
-            error,
-          );
-        }
-      })
-      .on('end', resolve)
-      .on('error', reject);
-  });
+  // await new Promise((resolve, reject) => {
+  //   fs.createReadStream('src/db/seed/peminjaman.csv')
+  //     .pipe(parse({ delimiter: ',', from_line: 2, trim: true }))
+  //     .on('data', (row) => {
+  //       try {
+  //         const parsed = {
+  //           title: row[0],
+  //           propertyName: row[1],
+  //           borrowerName: row[2],
+  //           startDate: row[3],
+  //           endDate: row[4],
+  //           status: row[5] as 'pending' | 'accepted' | 'rejected',
+  //         };
+  //         const propertyId = propertiMap.get(parsed.propertyName);
+  //         if (!propertyId) {
+  //           console.log(
+  //             `Properti tidak ditemukan: ${parsed.propertyName}, baris dilewati.`,
+  //           );
+  //           return;
+  //         }
+  //         peminjamanToInsert.push({
+  //           title: parsed.title,
 
-  if (peminjamanToInsert.length > 0) {
-    console.log('💾 Memulai proses memasukkan data peminjaman...');
-    await db
-      .insert(peminjaman)
-      .values(peminjamanToInsert)
-      .onConflictDoNothing();
-    console.log('✅ Berhasil memasukkan data peminjaman ke database!');
-  }
+  //           borrowerName: parsed.borrowerName,
+  //           startDate: new Date(parsed.startDate),
+  //           endDate: new Date(parsed.endDate),
+  //           status: parsed.status,
+  //           propertyId,
+  //         });
+  //       } catch (error) {
+  //         console.log(
+  //           '❌ Gagal mem-parsing baris data peminjaman:',
+  //           row,
+  //           error,
+  //         );
+  //       }
+  //     })
+  //     .on('end', resolve)
+  //     .on('error', reject);
+  // });
+
+  // if (peminjamanToInsert.length > 0) {
+  //   console.log('💾 Memulai proses memasukkan data peminjaman...');
+  //   await db
+  //     .insert(peminjaman)
+  //     .values(peminjamanToInsert)
+  //     .onConflictDoNothing();
+  //   console.log('✅ Berhasil memasukkan data peminjaman ke database!');
+  // }
 }
 
 export async function runLaporanSeed() {
