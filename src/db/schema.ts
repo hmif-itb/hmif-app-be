@@ -991,3 +991,133 @@ export const coWorkingSpaceReviewsRelation = relations(
     }),
   }),
 );
+
+export interface InternshipQuestion {
+  id: string;
+  label: string;
+  type: 'text' | 'textarea' | 'select';
+  options?: string[];
+  required: boolean;
+}
+
+export interface InternshipKesibukan {
+  jabatan: string;
+  organisasi: string;
+  periode: string;
+}
+
+export interface InternshipAnswer {
+  questionId: string;
+  answer: string;
+}
+
+export const internshipDepartments = pgTable('internship_departments', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  name: text('name').notNull().unique(),
+  order: integer('order').notNull().default(0),
+});
+
+export const internshipDepartmentsRelation = relations(
+  internshipDepartments,
+  ({ many }) => ({
+    divisions: many(internshipDivisions),
+  }),
+);
+
+export const internshipDivisions = pgTable('internship_divisions', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  departmentId: text('department_id')
+    .notNull()
+    .references(() => internshipDepartments.id, { onDelete: 'cascade' }),
+  name: text('name').notNull(),
+  quotaMin: integer('quota_min'),
+  quotaIdeal: integer('quota_ideal'),
+  quotaMax: integer('quota_max'),
+  questions: json('questions')
+    .$type<InternshipQuestion[]>()
+    .notNull()
+    .default([]),
+  questionsRaw: text('questions_raw'),
+  order: integer('order').notNull().default(0),
+});
+
+export const internshipDivisionsRelation = relations(
+  internshipDivisions,
+  ({ one, many }) => ({
+    department: one(internshipDepartments, {
+      fields: [internshipDivisions.departmentId],
+      references: [internshipDepartments.id],
+    }),
+    choices: many(internshipSubmissionChoices),
+  }),
+);
+
+export const internshipSubmissions = pgTable('internship_submissions', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  userId: text('user_id')
+    .notNull()
+    .unique()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  nim: text('nim').notNull(),
+  fullName: text('full_name').notNull(),
+  jurusan: text('jurusan').notNull(),
+  kelas: text('kelas').notNull(),
+  idLine: text('id_line').notNull(),
+  pengalamanOrganisasi: text('pengalaman_organisasi'),
+  kesibukan: json('kesibukan')
+    .$type<InternshipKesibukan[]>()
+    .notNull()
+    .default([]),
+  isLocked: boolean('is_locked').notNull().default(false),
+  submittedAt: timestamp('submitted_at', { withTimezone: true }),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export const internshipSubmissionsRelation = relations(
+  internshipSubmissions,
+  ({ one, many }) => ({
+    user: one(users, {
+      fields: [internshipSubmissions.userId],
+      references: [users.id],
+    }),
+    choices: many(internshipSubmissionChoices),
+  }),
+);
+
+export const internshipSubmissionChoices = pgTable(
+  'internship_submission_choices',
+  {
+    id: text('id').primaryKey().$defaultFn(createId),
+    submissionId: text('submission_id')
+      .notNull()
+      .references(() => internshipSubmissions.id, { onDelete: 'cascade' }),
+    divisionId: text('division_id')
+      .notNull()
+      .references(() => internshipDivisions.id, { onDelete: 'cascade' }),
+    priorityOrder: integer('priority_order').notNull(),
+    answers: json('answers').$type<InternshipAnswer[]>().notNull().default([]),
+  },
+  (t) => ({
+    uniqSubmissionDivision: unique().on(t.submissionId, t.divisionId),
+    uniqSubmissionPriority: unique().on(t.submissionId, t.priorityOrder),
+  }),
+);
+
+export const internshipSubmissionChoicesRelation = relations(
+  internshipSubmissionChoices,
+  ({ one }) => ({
+    submission: one(internshipSubmissions, {
+      fields: [internshipSubmissionChoices.submissionId],
+      references: [internshipSubmissions.id],
+    }),
+    division: one(internshipDivisions, {
+      fields: [internshipSubmissionChoices.divisionId],
+      references: [internshipDivisions.id],
+    }),
+  }),
+);
