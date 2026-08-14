@@ -1038,6 +1038,7 @@ export const internshipDivisions = pgTable('internship_divisions', {
     .notNull()
     .default([]),
   questionsRaw: text('questions_raw'),
+  description: text('description'),
   order: integer('order').notNull().default(0),
 });
 

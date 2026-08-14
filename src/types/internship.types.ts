@@ -109,10 +109,9 @@ export const UpsertInternshipSubmissionSchema = z.object({
   kesibukan: z.array(InternshipKesibukanSchema).default([]),
   choices: z
     .array(UpsertInternshipSubmissionChoiceSchema)
-    .min(1)
-    .max(4)
+    .length(4, 'Wajib memilih tepat 4 divisi')
     .openapi({
-      description: 'Pilihan divisi berdasarkan prioritas, maksimal 4',
+      description: 'Pilihan divisi berdasarkan prioritas, wajib tepat 4',
     }),
 });
 
