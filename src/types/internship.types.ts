@@ -11,7 +11,7 @@ export const InternshipQuestionSchema = z
   .object({
     id: z.string(),
     label: z.string(),
-    type: z.enum(['text', 'textarea', 'select']),
+    type: z.enum(['text', 'textarea', 'select', 'radio', 'checkbox', 'file']),
     options: z.array(z.string()).optional(),
     required: z.boolean(),
   })

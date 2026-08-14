@@ -995,7 +995,7 @@ export const coWorkingSpaceReviewsRelation = relations(
 export interface InternshipQuestion {
   id: string;
   label: string;
-  type: 'text' | 'textarea' | 'select';
+  type: 'text' | 'textarea' | 'select' | 'radio' | 'checkbox' | 'file';
   options?: string[];
   required: boolean;
 }
