@@ -58,41 +58,37 @@ External,Extracampus,jujccdna1c9m1eu0r5tnaeby,2,q3,"3. Apakah kamu memiliki kont
 External,Alumni Relations,1sx4kijb5ayhhquj3bq5du6s,0,q1,1. Apa alasanmu memilih divisi Alumni Relations,textarea,,True
 External,Alumni Relations,1sx4kijb5ayhhquj3bq5du6s,1,q2,2. Pernah punya pengalaman berkomunikasi dengan orang baru/alumni/kating? ceritakan singkat,textarea,,True
 External,Alumni Relations,1sx4kijb5ayhhquj3bq5du6s,2,q3,3. Seberapa fast respon kamu?,textarea,,True
-Tech Issues and Exploration,Technology Development,px3pkv5elfo7hooecjiesemq,0,q1,1. Alasan ingin masuk Technology Development?,textarea,,True
-Tech Issues and Exploration,Technology Development,px3pkv5elfo7hooecjiesemq,1,q2,2. Seberapa bagus time management kamu? Serta berikan bukti konkretnya,textarea,,True
-Tech Issues and Exploration,Technology Development,px3pkv5elfo7hooecjiesemq,2,q3,"3. Apakah kamu familiar dengan Web Development? Atau projek serupa lainnya?
-
-Switch Cases Questions (Priority 1)",textarea,,True
-Tech Issues and Exploration,Technology Development,px3pkv5elfo7hooecjiesemq,3,q4,"4. Kamu berminat masuk sub-divisi apa?
-(options: UI/UX or PM or Frontend Developer or Backend Developer)
-
-ROLE 1 (UI/UX):
-- Apakah kamu mahir dengan penggunaan Figma?
-- Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?
-
-ROLE 2 (PM):
-- Bagaimana pengalaman kamu dalam manajemen projek dan tim? Ceritakan
-- Apakah kamu familiar dengan bagaimana tim developer bekerja? Apa yang kamu pahami tentang workflow para developer, terutama teman STEI-K di lingkungan kamu?
-- Apakah kamu yakin bisa memastikan untuk keep-up tim dalam mengerjakan projek Technology Development berdasarkan request warga HMIF ITB dengan time management yang tertata rapi?
-
-ROLE 3 (Frontend Developer):
-- Tech Stack apa yang kamu sudah familiar?
-- Bagaimana cara kamu mengoptimalkan Coding Agent untuk mempercepat workflow tanpa menghancurkan kerjaan kamu atau tim mu sendiri?
-- Apakah kamu pernah tidak sengaja merusak kerjaan temanmu dengan Coding Agentmu? Ceritakan dan apa yang kamu dapatkan dari kejadian itu?
-- Seberapa mahir kamu menggunakan Git? Jelaskan
-- Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?
-
-ROLE 4 (Backend Developer):
-- Tech Stack apa yang kamu sudah familiar?
-- Bagaimana cara kamu mengoptimalkan Coding Agent untuk mempercepat workflow tanpa menghancurkan kerjaan kamu atau tim mu sendiri?
-- Apakah kamu pernah tidak sengaja merusak kerjaan temanmu dengan Coding Agentmu? Ceritakan dan apa yang kamu dapatkan dari kejadian itu?
-- Seberapa mahir kamu menggunakan Git? Jelaskan
-- Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?
-
-Iterasi ulang pertanyaan untuk Priority 2 role pilihan responded
-
-LAST QUESTION",textarea,,True
-Tech Issues and Exploration,Technology Development,px3pkv5elfo7hooecjiesemq,4,q5,5. Bagaimana komitmen kamu apabila terpilih menjadi anggota magang di Technology Development HMIF ITB?,textarea,,True
+Tech Issues and Exploration,Technology Development (UI/UX),xmfkja0nwcf4hn5le66kebxsj,0,q1,1. Alasan ingin masuk Technology Development (UI/UX)?,textarea,,True
+Tech Issues and Exploration,Technology Development (UI/UX),xmfkja0nwcf4hn5le66kebxsj,1,q2,2. Seberapa bagus time management kamu? Serta berikan bukti konkretnya,textarea,,True
+Tech Issues and Exploration,Technology Development (UI/UX),xmfkja0nwcf4hn5le66kebxsj,2,q3,3. Apakah kamu familiar dengan Web Development? Atau projek serupa lainnya?,textarea,,True
+Tech Issues and Exploration,Technology Development (UI/UX),xmfkja0nwcf4hn5le66kebxsj,3,q4,4. Apakah kamu mahir dengan penggunaan Figma?,textarea,,True
+Tech Issues and Exploration,Technology Development (UI/UX),xmfkja0nwcf4hn5le66kebxsj,4,q5,5. Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?,textarea,,True
+Tech Issues and Exploration,Technology Development (UI/UX),xmfkja0nwcf4hn5le66kebxsj,5,q6,6. Bagaimana komitmen kamu apabila terpilih menjadi anggota magang di Technology Development HMIF ITB?,textarea,,True
+Tech Issues and Exploration,Technology Development (PM),nsq0jx2kke8nyyv4nvbvmtl7m,0,q1,1. Alasan ingin masuk Technology Development (PM)?,textarea,,True
+Tech Issues and Exploration,Technology Development (PM),nsq0jx2kke8nyyv4nvbvmtl7m,1,q2,2. Seberapa bagus time management kamu? Serta berikan bukti konkretnya,textarea,,True
+Tech Issues and Exploration,Technology Development (PM),nsq0jx2kke8nyyv4nvbvmtl7m,2,q3,3. Apakah kamu familiar dengan Web Development? Atau projek serupa lainnya?,textarea,,True
+Tech Issues and Exploration,Technology Development (PM),nsq0jx2kke8nyyv4nvbvmtl7m,3,q4,4. Bagaimana pengalaman kamu dalam manajemen projek dan tim? Ceritakan,textarea,,True
+Tech Issues and Exploration,Technology Development (PM),nsq0jx2kke8nyyv4nvbvmtl7m,4,q5,"5. Apakah kamu familiar dengan bagaimana tim developer bekerja? Apa yang kamu pahami tentang workflow para developer, terutama teman STEI-K di lingkungan kamu?",textarea,,True
+Tech Issues and Exploration,Technology Development (PM),nsq0jx2kke8nyyv4nvbvmtl7m,5,q6,6. Apakah kamu yakin bisa memastikan untuk keep-up tim dalam mengerjakan projek Technology Development berdasarkan request warga HMIF ITB dengan time management yang tertata rapi?,textarea,,True
+Tech Issues and Exploration,Technology Development (PM),nsq0jx2kke8nyyv4nvbvmtl7m,6,q7,7. Bagaimana komitmen kamu apabila terpilih menjadi anggota magang di Technology Development HMIF ITB?,textarea,,True
+Tech Issues and Exploration,Technology Development (Frontend Dev),idue9b2ut880rio5dfp7lbska,0,q1,1. Alasan ingin masuk Technology Development (Frontend Developer)?,textarea,,True
+Tech Issues and Exploration,Technology Development (Frontend Dev),idue9b2ut880rio5dfp7lbska,1,q2,2. Seberapa bagus time management kamu? Serta berikan bukti konkretnya,textarea,,True
+Tech Issues and Exploration,Technology Development (Frontend Dev),idue9b2ut880rio5dfp7lbska,2,q3,3. Apakah kamu familiar dengan Web Development? Atau projek serupa lainnya?,textarea,,True
+Tech Issues and Exploration,Technology Development (Frontend Dev),idue9b2ut880rio5dfp7lbska,3,q4,4. Tech Stack apa yang kamu sudah familiar?,textarea,,True
+Tech Issues and Exploration,Technology Development (Frontend Dev),idue9b2ut880rio5dfp7lbska,4,q5,5. Bagaimana cara kamu mengoptimalkan Coding Agent untuk mempercepat workflow tanpa menghancurkan kerjaan kamu atau tim mu sendiri?,textarea,,True
+Tech Issues and Exploration,Technology Development (Frontend Dev),idue9b2ut880rio5dfp7lbska,5,q6,6. Apakah kamu pernah tidak sengaja merusak kerjaan temanmu dengan Coding Agentmu? Ceritakan dan apa yang kamu dapatkan dari kejadian itu?,textarea,,True
+Tech Issues and Exploration,Technology Development (Frontend Dev),idue9b2ut880rio5dfp7lbska,6,q7,7. Seberapa mahir kamu menggunakan Git? Jelaskan,textarea,,True
+Tech Issues and Exploration,Technology Development (Frontend Dev),idue9b2ut880rio5dfp7lbska,7,q8,8. Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?,textarea,,True
+Tech Issues and Exploration,Technology Development (Frontend Dev),idue9b2ut880rio5dfp7lbska,8,q9,9. Bagaimana komitmen kamu apabila terpilih menjadi anggota magang di Technology Development HMIF ITB?,textarea,,True
+Tech Issues and Exploration,Technology Development (Backend Dev),0mfkpwa2mdtrgc2gefuw6ir8x,0,q1,1. Alasan ingin masuk Technology Development (Backend Developer)?,textarea,,True
+Tech Issues and Exploration,Technology Development (Backend Dev),0mfkpwa2mdtrgc2gefuw6ir8x,1,q2,2. Seberapa bagus time management kamu? Serta berikan bukti konkretnya,textarea,,True
+Tech Issues and Exploration,Technology Development (Backend Dev),0mfkpwa2mdtrgc2gefuw6ir8x,2,q3,3. Apakah kamu familiar dengan Web Development? Atau projek serupa lainnya?,textarea,,True
+Tech Issues and Exploration,Technology Development (Backend Dev),0mfkpwa2mdtrgc2gefuw6ir8x,3,q4,4. Tech Stack apa yang kamu sudah familiar?,textarea,,True
+Tech Issues and Exploration,Technology Development (Backend Dev),0mfkpwa2mdtrgc2gefuw6ir8x,4,q5,5. Bagaimana cara kamu mengoptimalkan Coding Agent untuk mempercepat workflow tanpa menghancurkan kerjaan kamu atau tim mu sendiri?,textarea,,True
+Tech Issues and Exploration,Technology Development (Backend Dev),0mfkpwa2mdtrgc2gefuw6ir8x,5,q6,6. Apakah kamu pernah tidak sengaja merusak kerjaan temanmu dengan Coding Agentmu? Ceritakan dan apa yang kamu dapatkan dari kejadian itu?,textarea,,True
+Tech Issues and Exploration,Technology Development (Backend Dev),0mfkpwa2mdtrgc2gefuw6ir8x,6,q7,7. Seberapa mahir kamu menggunakan Git? Jelaskan,textarea,,True
+Tech Issues and Exploration,Technology Development (Backend Dev),0mfkpwa2mdtrgc2gefuw6ir8x,7,q8,8. Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?,textarea,,True
+Tech Issues and Exploration,Technology Development (Backend Dev),0mfkpwa2mdtrgc2gefuw6ir8x,8,q9,9. Bagaimana komitmen kamu apabila terpilih menjadi anggota magang di Technology Development HMIF ITB?,textarea,,True
 Tech Issues and Exploration,Competition and Community,w1qft1j1df9nmh5tdv3qvdra,0,q1,1. Kenapa kamu mau masuk CnC?,textarea,,True
 Tech Issues and Exploration,Competition and Community,w1qft1j1df9nmh5tdv3qvdra,1,q2,"2. Dari 4 komunitas perlombaan yang ada, mana yang kamu paling tertarik?",checkbox,Hackathon; CP; CTF; Data Science,True
 Tech Issues and Exploration,Competition and Community,w1qft1j1df9nmh5tdv3qvdra,2,q3,"3. Apa pengalaman, baik profesional / organisasional / personal, yang menunjukkan minat mu terhadap salah satu bidang kompetisi? Ceritainn donggg dengan detail!",textarea,,True

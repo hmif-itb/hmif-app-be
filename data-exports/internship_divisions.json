@@ -3,6 +3,9 @@
     "id": "fcgqgfv3nlxezslip14isdi9",
     "department_name": "General Secretary",
     "division_name": "Secretary",
+    "quota_min": 1,
+    "quota_ideal": 2,
+    "quota_max": 3,
     "questions": [
       {
         "id": "q1",
@@ -23,12 +26,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Apa alasan kamu tertarik magang di sekretaris HMIF?\n2. Kamu punya pengalaman apa aja yang berhubungan dengan sekretaris?\n3. Apakah kamu sanggup handle ratusan surat yang masuk?"
+    "questions_raw": "1. Apa alasan kamu tertarik magang di sekretaris HMIF?\n2. Kamu punya pengalaman apa aja yang berhubungan dengan sekretaris?\n3. Apakah kamu sanggup handle ratusan surat yang masuk?",
+    "description": "Masih mikir kalau sekretaris itu cuma nulis notulen rapat? 🤔\nEits, di HMIF sekretaris bukan cuma soal catat-mencatat kok 👀✨\n\nDi sini kita jadi orang yang memastikan seluruh administrasi HMIF berjalan rapi, terstruktur, dan gampang diakses. Mulai dari ngelola dokumen, nyusun agenda dan notulensi rapat, sampai ngurus sistem surat-menyurat dan database anggota 📂💻\n\n\"Emang sekretaris ngapain aja sih?? 🤨\"\n📝 Menyusun agenda dan notulensi rapat\n📁 Mengelola serta mengarsipkan dokumen HMIF\n📨 Mengurus administrasi dan surat-menyurat\n📋 Mengelola sistem permohonan surat dan database anggota\n✨ Memastikan seluruh dokumentasi tersusun rapi dan mudah diakses\n\nNah, divisi ini cocok banget buat kamu yang teliti, suka hal-hal terorganisir, bertanggung jawab, dan pengen belajar skill administrasi serta manajemen dokumen yang kepake banget di dunia organisasi maupun kerja nanti 🚀\nYuk join Divisi Secretary HMIF!! 🤎📚\n",
+    "order": 0
   },
   {
     "id": "4qnorf4dmsiq8dkv7ffxb8u7",
     "department_name": "General Secretary",
     "division_name": "Treasurer",
+    "quota_min": 0,
+    "quota_ideal": 2,
+    "quota_max": 2,
     "questions": [
       {
         "id": "q1",
@@ -49,12 +57,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Apa alasan kamu pilih magang di divisi Treasurer? (Paragraph)\n2. Ceritakan pengalamanmu yang berhubungan dengan divisi ini (Paragraph)\n3. Menurut kamu, apa tantangan terbesar dalam mengelola keuangan sebuah organisasi, dan bagaimana cara kamu mengatasinya? (Paragraph)"
+    "questions_raw": "1. Apa alasan kamu pilih magang di divisi Treasurer? (Paragraph)\n2. Ceritakan pengalamanmu yang berhubungan dengan divisi ini (Paragraph)\n3. Menurut kamu, apa tantangan terbesar dalam mengelola keuangan sebuah organisasi, dan bagaimana cara kamu mengatasinya? (Paragraph)",
+    "description": "Treasurer adalah divisi yang bertanggung jawab atas perencanaan dan pengelolaan keuangan HMIF ITB. Di sini, kita nggak cuma mencatat pemasukan dan pengeluaran, tapi juga memastikan pengelolaan keuangan HMIF berjalan dengan baik melalui koordinasi bersama divisi dan departemen lain. 💰📊\n\nJadi, kira-kira bakal ngapain aja sih di Treasurer? 💸\n1. Mencatat pemasukan dan pengeluaran HMIF dengan rapi. \n2. Memantau penggunaan anggaran berbagai kegiatan dan divisi. 📈 \n3. Menyusun rekap serta laporan keuangan secara berkala. \n4. Berkoordinasi dengan divisi dan departemen lain terkait kebutuhan serta administrasi keuangan. 🤝\n\nKalau kamu tertarik ngelola keuangan dan suka kolaborasi bareng orang-orang, divisi ini cocok banget buat kamu. Gasss join Treasurer!!",
+    "order": 1
   },
   {
     "id": "sqvtc484vkwwbfm1girrb455",
     "department_name": "General Secretary",
     "division_name": "Capital Catalyst",
+    "quota_min": 2,
+    "quota_ideal": 4,
+    "quota_max": 6,
     "questions": [
       {
         "id": "q1",
@@ -81,12 +94,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1.  Apa alasan kamu tertarik bergabung dengan Capital Catalysts? (Paragraph)\n2. Menurutmu, apa peran Capital Catalyst dalam mendukung HMIF?\n3. Ceritakan pengalaman yang menunjukkan kemampuanmu dalam membangun relasi, bernegosiasi, atau mengelola kegiatan yang melibatkan pihak eksternal.\n4. Jika diberi kesempatan mengembangkan satu program atau sumber pendanaan baru untuk HMIF, ide apa yang ingin kamu usulkan? Jelaskan alasan dan gambaran singkat pelaksanaannya. (Paragraph)"
+    "questions_raw": "1.  Apa alasan kamu tertarik bergabung dengan Capital Catalysts? (Paragraph)\n2. Menurutmu, apa peran Capital Catalyst dalam mendukung HMIF?\n3. Ceritakan pengalaman yang menunjukkan kemampuanmu dalam membangun relasi, bernegosiasi, atau mengelola kegiatan yang melibatkan pihak eksternal.\n4. Jika diberi kesempatan mengembangkan satu program atau sumber pendanaan baru untuk HMIF, ide apa yang ingin kamu usulkan? Jelaskan alasan dan gambaran singkat pelaksanaannya. (Paragraph)",
+    "description": "\"Pernah kepikiran nggak sih, dari mana HMIF bisa punya merchandise dan jaket himpunan yang keren banget itu?\" 👀💸\nNah, jawabannya ada di Capital Catalyst!\n\nCapital Catalyst adalah divisi yang berfokus pada pengembangan sumber pendanaan dan peluang kolaborasi HMIF. Di sini, kita nggak cuma mengembangkan unit usaha HMIF, kita juga menciptakan produk potensial yang bisa mendukung keberlangsungan program-program HMIF.\n\nTerus, di Capital Catalyst bakal ngapain aja sih?\n1. Menjalin komunikasi dan kerja sama dengan vendor, brand, maupun pihak eksternal sebagai calon partner produksi HMIF.\n2. Mengembangkan unit usaha HMIF, seperti merchandise maupun program bisnis lainnya.\n3. Menyusun proposal, media kit, dan kebutuhan administrasi untuk proses kemitraan.\n4. Melakukan follow-up serta menjaga hubungan baik dengan partner agar kolaborasi dapat berjalan secara berkelanjutan.\n5. Mengembangkan ide-ide baru yang dapat menjadi peluang pendanaan dan memberikan nilai tambah bagi HMIF.\n\nCocok banget buat kamu yang:\n1. Suka ngobrol dan membangun relasi dengan orang baru.\n2. Tertarik dengan dunia bisnis, sponsorship, atau partnership.\n3. Punya banyak ide kreatif dan senang mencari peluang baru.\n4. Ingin belajar negosiasi, komunikasi profesional, dan project management.\nKalau kamu pengen belajar gimana cara membangun kerja sama yang berdampak sekaligus ikut mengembangkan HMIF dari sisi bisnis dan kemitraan, Capital Catalyst adalah tempatnya! 🚀🤎",
+    "order": 2
   },
   {
     "id": "jcydwpaa3jvd7eb76y86qmhu",
     "department_name": "General Secretary",
     "division_name": "Household",
+    "quota_min": 4,
+    "quota_ideal": 5,
+    "quota_max": 8,
     "questions": [
       {
         "id": "q1",
@@ -123,12 +141,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Apa alasan kamu mw join RumahPegang? (Paragraph)\n2. Apakah kamu punya pengalaman kerja (BP/Kepanitiaan, tidak perlu relevan dengan Household)? (Paragraph, optional)\n3. Menurut kamu, adakah hal yang bisa ditingkatkan dari kondisi sekre 1 dan/atau 2 untuk sekarang? (Paragraph, wajib)\n4. Apakah kamu bersedia bekerja di Weekend? (Max. 1 atau 2 kali per bulan) (Yes/No)\n5.  Apakah bersedia memberikan foto kondisi meja belajar kalian? (Foto, wajib)"
+    "questions_raw": "1. Apa alasan kamu mw join RumahPegang? (Paragraph)\n2. Apakah kamu punya pengalaman kerja (BP/Kepanitiaan, tidak perlu relevan dengan Household)? (Paragraph, optional)\n3. Menurut kamu, adakah hal yang bisa ditingkatkan dari kondisi sekre 1 dan/atau 2 untuk sekarang? (Paragraph, wajib)\n4. Apakah kamu bersedia bekerja di Weekend? (Max. 1 atau 2 kali per bulan) (Yes/No)\n5.  Apakah bersedia memberikan foto kondisi meja belajar kalian? (Foto, wajib)",
+    "description": "Divisi Household adalah divisi yang bertanggung jawab atas fasilitas sekretariat HMIF ITB. Nah jadi semua yang berkaitan sama sekre, mulai dari kebersihan, barang ilang, sampai peminjaman sekre, itu kita yang urus semua.\n\nNah, di divisi RumahPegang (soalnya House Hold iy tw lucu bgt) ini kita ngapain aja sihhh? masa  kerjanya cuman jadi babu bebersih sekre doang??? 😱😱\n\n1. Menjaga kebersihan & kenyamanan ruang sekretariat HMIF ITB secara rutin yang mencakup: bebersih secara langsung, melakukan pengawasan terhadap kegiatan bebersih, dan mendata barang Lost and Found.\n2. Melakukan pendataan rutin fasilitas sekretariat beserta kondisinya dan melakukan perawatan terhadap fasilitas yang membutuhkan.\n3. Ikut serta membantu dalam proyek renovasi sekretariat.\n\nNah langsung aja join divisi Household, dijamin bakalan seru-seruan bareng dan ada benefit khusus anggota household loh 😉",
+    "order": 3
   },
   {
     "id": "c8qa63fxbkvoiwm3k81dyado",
     "department_name": "People",
     "division_name": "People Development",
+    "quota_min": 10,
+    "quota_ideal": 15,
+    "quota_max": 20,
     "questions": [
       {
         "id": "q1",
@@ -167,12 +190,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Apa alasan kamu ingin masuk People Development? (paragraph)\n2. Menurut kamu, People Development itu sebenernya ngapain aja? (paragraph)\n3. Adakah pengalaman organisasi atau kepanitiaan yang berkaitan dengan kaderisasi atau pembinaan anggota sebelumnya? Ceritain singkat! (paragraph)\n4. Kalau kamu diminta merancang sekolah kepanitiaan untuk staff/panitia acara HMIF (Wispril, Wisokto, Dies Natalis, dll.), kira-kira seperti apa? (paragraph)\n5. Selama periode intensif, PepDev rutin menyusun progress report dan matriks penilaian. Seberapa siap kamu berkomitmen pada rutinitas administratif ini dan apakah kamu memiliki pengalaman serupa? (paragraph) 6. Yakinkan kami bahwa kamu  cocok untuk magang di  People Development! (paragraph)"
+    "questions_raw": "1. Apa alasan kamu ingin masuk People Development? (paragraph)\n2. Menurut kamu, People Development itu sebenernya ngapain aja? (paragraph)\n3. Adakah pengalaman organisasi atau kepanitiaan yang berkaitan dengan kaderisasi atau pembinaan anggota sebelumnya? Ceritain singkat! (paragraph)\n4. Kalau kamu diminta merancang sekolah kepanitiaan untuk staff/panitia acara HMIF (Wispril, Wisokto, Dies Natalis, dll.), kira-kira seperti apa? (paragraph)\n5. Selama periode intensif, PepDev rutin menyusun progress report dan matriks penilaian. Seberapa siap kamu berkomitmen pada rutinitas administratif ini dan apakah kamu memiliki pengalaman serupa? (paragraph) 6. Yakinkan kami bahwa kamu  cocok untuk magang di  People Development! (paragraph)",
+    "description": "Di People Development, kita akan mengurus gimana caranya warga HMIF bisa tumbuh dan berkembang, dari yang baru pertama kali kenal HMIF sampai yang siap mimpin kepanitiaan besar.\nKira-kira bakal ngapain aja di People Development?\n\n1. Menangani Pra-SPARTA, mulai dari kepanitiaan, kegiatan, dan materi, sampai memastikan hari-H berjalan lancar. 🚪🤝\n2. Mempersiapkan rangkaian pemilihan ketua kepanitiaan HMIF secara terstruktur, mulai dari pengambilan serta pengembalian berkas, hearing, hingga FPT dan sekolah kepanitiaan. 👑🏫\n3. Mengkaji dan mendiskusikan GDK HMIF bersama pemangku kepentingan terkait, agar sistem kaderisasi HMIF tetap relevan dan adaptif. 📝🔄\n\nKalau kamu tertarik ngurus proses berkembangnya warga HMIF dan pengen punya impact langsung ke orang-orang di himpunan, People Development cocok buat kamu.",
+    "order": 0
   },
   {
     "id": "tz49p5nev30ftlb0jpk1vfnu",
     "department_name": "People",
     "division_name": "People Management",
+    "quota_min": 5,
+    "quota_ideal": 7,
+    "quota_max": 8,
     "questions": [
       {
         "id": "q1",
@@ -193,12 +221,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Alasan kamu ingin masuk People Management? (paragraph)\n2. Apakah kamu punya pengalaman dalam organisasi/kepanitiaan berhubungan dengan MSDM? Jika punya, deskripsikan pengalaman tersebut! (paragraph)\n3. Apakah kamu punya pengalaman menggunakan spreadsheet dalam melakukan manajerial data mahasiswa? Jika punya, deskripsikan pengalaman tersebut! (paragraph)"
+    "questions_raw": "1. Alasan kamu ingin masuk People Management? (paragraph)\n2. Apakah kamu punya pengalaman dalam organisasi/kepanitiaan berhubungan dengan MSDM? Jika punya, deskripsikan pengalaman tersebut! (paragraph)\n3. Apakah kamu punya pengalaman menggunakan spreadsheet dalam melakukan manajerial data mahasiswa? Jika punya, deskripsikan pengalaman tersebut! (paragraph)",
+    "description": "Di balik HMIF yang berjalan lancar, ada orang-orang yang memastikan setiap Pips terdata, diapresiasi, dan terus berkembang! Kalau kamu tertarik jadi bagian dari itu, yuk kenalan sama People Management! 💚💛\n\nPeople Management berfokus pada bagaimana cara untuk mendata dan mengelola warga aktif HMIF ITB. Di Pepmen, kita bakal ngelakuin beberapa hal, antara lain:\n1. Menyimpan database terpusat untuk seluruh warga aktif HMIF ITB 📂\n2. Melakukan penilaian personalia secara berkala, sekaligus memberikan apresiasi bagi mereka yang menunjukkan kinerja terbaik ⭐\n3. Menginisiasi proses pemilihan ketua di setiap kepanitiaan HMIF ITB 🗳️\n4. Mendata serta mendokumentasikan berbagai prestasi warga aktif HMIF ITB 🏆\n5. Menjadi wadah bagi proses rekrutmen magang staf DE HMIF ITB PRISMA 2026/2027 🚀\n\nAyo join Pepmen <3",
+    "order": 1
   },
   {
     "id": "7jvln64q5vv1hozgvei9aom8",
     "department_name": "Creative and Branding",
     "division_name": "Visual and Design",
+    "quota_min": 3,
+    "quota_ideal": 5,
+    "quota_max": 8,
     "questions": [
       {
         "id": "q1",
@@ -219,12 +252,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Alasan kamu pilih VisDes apa yah (paragraph)\n2. Apakah kamu punya pengalaman bikin desain? Kalau punya ceritain plis (paragraph)\n3. Software apa yang kamu gunakan untuk desain dan kalau belum pernah pakai, kamu bersedia belajar pake Figma kah (paragraph)"
+    "questions_raw": "1. Alasan kamu pilih VisDes apa yah (paragraph)\n2. Apakah kamu punya pengalaman bikin desain? Kalau punya ceritain plis (paragraph)\n3. Software apa yang kamu gunakan untuk desain dan kalau belum pernah pakai, kamu bersedia belajar pake Figma kah (paragraph)",
+    "description": "Visual and Design adalah divisi yang tugasnya bikin desain grafis untuk berbagai kegiatan di HMIF\nApa aja yah yang bakal dilakuin di visdes 🤔?\n\n1. Pertama-tama, menerima request desain dari divisi atau departemen lain yang butuh konten desain grafis\n2. Membuat konten desain grafis, utamanya menggunakan Figma, dengan mengikuti GDV yang ada\n\n\"Kalau aku belum punya pengalaman pakai Figma sebelumnya gimana?\" GAPAPA KITA AJARIN!1!1!!1!!111!",
+    "order": 0
   },
   {
     "id": "7kq0cft8lcbxmoj63mq0f5e1",
     "department_name": "Creative and Branding",
     "division_name": "Media and Information",
+    "quota_min": 2,
+    "quota_ideal": 4,
+    "quota_max": 5,
     "questions": [
       {
         "id": "q1",
@@ -251,12 +289,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Apa alasan kamu pilih media and information? (paragraph)\n2. Kamu punya pengalaman di bidang dokum atau publi kah? (Isian list)\n3. Gear apa aja yang kamu punya berhubungan dengan fotografi atau videografi? (isian)\n4. Kalau punya link portfolio kamu boleh yaa dimasukkin disini! (isian)"
+    "questions_raw": "1. Apa alasan kamu pilih media and information? (paragraph)\n2. Kamu punya pengalaman di bidang dokum atau publi kah? (Isian list)\n3. Gear apa aja yang kamu punya berhubungan dengan fotografi atau videografi? (isian)\n4. Kalau punya link portfolio kamu boleh yaa dimasukkin disini! (isian)",
+    "description": "Media and Information adalah division yang bertugas pada penyebaran informasi serta pendokumentasian kegiatan internal serta eksternal HMIF. Kira-kira akan ngapain aja di medinfo yaa?\n\n1. Pastinya dokumentasi setiap kegiatan di HMIF\n2. Dapet VVVVVIP access buat kegiatan HMIF\n3. Live report untuk kegiatan HMIF\n4. Menyebarkan informasi sesuai request di grup line, whatsapp, serta story instagram\n\nKalian ga punya gear buat dokum?? AMAN AJAH nanti bisa dipinjemin. Ayo tunggu apalagi?? Langsung aja gas daftar medinfowww",
+    "order": 1
   },
   {
     "id": "1ff5ej82i3lxy65i6jykcc6v",
     "department_name": "Creative and Branding",
     "division_name": "Content Strategist",
+    "quota_min": null,
+    "quota_ideal": null,
+    "quota_max": null,
     "questions": [
       {
         "id": "q1",
@@ -277,12 +320,17 @@
         "required": true
       }
     ],
-    "questions_raw": null
+    "questions_raw": null,
+    "description": "Content Strategist adalah divisi yang berfokus pada pengelolaan strategi dan arah konten media sosial HMIF. Di sini, kita bukan cuma bikin postingan, tapi juga membantu departemen dan divisi lain menyampaikan informasi dengan cara yang lebih menarik, jelas, dan sesuai dengan audiens. 📱✨\nKamu bakal belajar tentang penyusunan strategi media sosial, pembuatan copywriting, pengembangan ide konten, sampai analisis engagement untuk melihat efektivitas suatu konten. 📊💬\nKira-kira bakal ngapain aja di Content Strategist?\n\n1. Menyusun content pillar dan konsep konten agar media sosial HMIF lebih terarah dan konsisten. 🗂️🎯\n2. Membuat copywriting untuk berbagai kebutuhan publikasi dan campaign media sosial. ✍️📱\n3. Merancang strategi konten untuk meningkatkan engagement dan jangkauan audiens. 📈🔥\n4. Membantu departemen/divisi lain dalam mengembangkan ide dan bentuk konten yang sesuai. 🤝💡\n5. Mengikuti tren media sosial dan menyesuaikannya dengan kebutuhan konten HMIF. 📲✨\n6. Melakukan evaluasi insight media sosial untuk menentukan pengembangan konten selanjutnya. 📊✅\n\nYuk join Content Strategist dan ikut mengembangkan media sosial HMIF jadi lebih aktif, menarik, dan terstruktur. 🚀",
+    "order": 2
   },
   {
     "id": "oujbs8k0104aekh25bz9mngc",
     "department_name": "Internal",
     "division_name": "Kinship",
+    "quota_min": 10,
+    "quota_ideal": 12,
+    "quota_max": 14,
     "questions": [
       {
         "id": "q1",
@@ -309,12 +357,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Kenapa nih mau join Kinship? (paragraph)\n2. Udah tau belum Kinship itu apa? Jelasin dong yang kamu tau tentang Kinship! (paragraph)\n3. Ceritain dikit dong pengalaman berharga kamu ketika ikut serta menyelenggarakan sebuah acara! (paragraph)\n4. Apa nih ekspektasi kamu kalau bisa join Kinship? Dan mau berpartisipasi apa di Kinship? (paragraph)"
+    "questions_raw": "1. Kenapa nih mau join Kinship? (paragraph)\n2. Udah tau belum Kinship itu apa? Jelasin dong yang kamu tau tentang Kinship! (paragraph)\n3. Ceritain dikit dong pengalaman berharga kamu ketika ikut serta menyelenggarakan sebuah acara! (paragraph)\n4. Apa nih ekspektasi kamu kalau bisa join Kinship? Dan mau berpartisipasi apa di Kinship? (paragraph)",
+    "description": "“Tugas terus, deadline terus… kapan seru-seruannya? 😔”\nTenang, ada Kinship!\n\nKinship adalah divisi yang bertujuan untuk menumbuhkan rasa kekeluargaan antarwarga HMIF. Di sini, kita bakal menciptakan suasana yang lebih nyaman, akrab, dan bikin Pips merasa punya tempat untuk seru-seruan bareng.\n\nTerus, di Kinship bakal ngapain aja sih?\n\n🎂 Cie Ultah\nKita bakal memberikan ucapan ulang tahun kepada Pips melalui Instagram Story. Boleh banget juga kalau mau ngucapin langsung, biar makin personal.\n🎁 Candy for Pips\nKita juga bakal memberikan apresiasi dan semangat untuk Pips selama masa UTS dan UAS dalam bentuk bingkisan lucu. Lumayan, di tengah tugas dan ujian yang bikin pusing, masih ada alasan buat senyum dikit.\n🎉 Welcoming Party untuk calon Pips\nAcara buat menyambut calon Pips supaya bisa mulai kenal, ngobrol, dan merasa nyaman bareng warga HMIF.\n🌿 Healing Yuk Pips\nKarena hidup nggak boleh isinya tugas dan deadline terus, kita bakal seru-seruan dan healing bareng Pips. Namanya juga healing, jadi kita bakal jalan-jalan ke alam yaaa.\n👥 Sehari Bersama Pips\nKesempatan buat menghabiskan waktu bareng Pips lewat kegiatan yang seru dan bikin makin dekat satu sama lain.\n🎬 PIPS Nobar\nNonton film bareng pips di bioskop\n\nDi acara-acara ini, kamu juga punya kesempatan buat jadi ketua pelaksana, loh! Cocok buat kamu yang pengen belajar ngurus acara, memimpin tim, dan sesekali bilang, “Teman-teman, boleh kumpul dulu nggak?”\n\n📸 Konten Instagram @dibalikhmif\nKita juga bakal membuat konten untuk Instagram @dibalikhmif supaya keseruan Pips bisa dilihat oleh lebih banyak orang.\n\nCocok banget buat kamu yang:\n\n✅ Suka bikin acara\n✅ Suka ngobrol dan ketemu orang\n✅ Punya banyak ide seru\n✅ Suka ngonten\n✅ Pengen bikin Pips makin dekat satu sama lain\n\nKalau kamu pengen seru-seruan sambil bikin suasana HMIF makin hangat, Kinship adalah tempatnya.\nYuk, gabung Kinship! Biar Pips bisa lebih bonding lagi dan merasakan kehangatan HMIF🤝",
+    "order": 0
   },
   {
     "id": "6yu2gl1llifne6keue82040g",
     "department_name": "Internal",
     "division_name": "Welfare",
+    "quota_min": 8,
+    "quota_ideal": 10,
+    "quota_max": 14,
     "questions": [
       {
         "id": "q1",
@@ -341,12 +394,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Apasih alasan kamu ingin masuk Divisi Welfare? (paragraph)\n2. Kamu punya pengalaman  yang berhubungan dengan welfare/kesejahteraan mahasiswa gaa (seperti advokasi finansial, aksi sosial, atau kampanye mental health)? Jika punya, coba ceritain dong pengalaman tersebut (paragraph)\n3. Divisi Welfare berurusan dengan banyak data yang cukup sensitif. Apakah kamu punya pengalaman mengelola data rahasia atau menjadi pendengar (peer counselor) bagi temanmu? Jika punya, ceritakan bagaimana caramu menjaga privasi (paragraph)\n4. Jika ada seorang teman yang tiba-tiba menghubungimu dan cerita bahwa ia sedang burnout parah hingga ingin menyerah dengan kuliahnya, kira-kira apa langkah pertama yang akan kamu lakukan sebagai staf Welfare?"
+    "questions_raw": "1. Apasih alasan kamu ingin masuk Divisi Welfare? (paragraph)\n2. Kamu punya pengalaman  yang berhubungan dengan welfare/kesejahteraan mahasiswa gaa (seperti advokasi finansial, aksi sosial, atau kampanye mental health)? Jika punya, coba ceritain dong pengalaman tersebut (paragraph)\n3. Divisi Welfare berurusan dengan banyak data yang cukup sensitif. Apakah kamu punya pengalaman mengelola data rahasia atau menjadi pendengar (peer counselor) bagi temanmu? Jika punya, ceritakan bagaimana caramu menjaga privasi (paragraph)\n4. Jika ada seorang teman yang tiba-tiba menghubungimu dan cerita bahwa ia sedang burnout parah hingga ingin menyerah dengan kuliahnya, kira-kira apa langkah pertama yang akan kamu lakukan sebagai staf Welfare?",
+    "description": "Mau jadi alasan seseorang gak jadi 'menyerah' hari ini?\nDivisi Welfare hadir untuk menjaga kesejahteraan fisik, mental, dan sosial warga HMIF. Welfare bukan sekadar divisi, tapi rumah yang memastikan setiap warga punya tempat untuk bersandar, mencari solusi krisis, hingga mendapatkan lingkungan yang suportif. \n\nKalau kamu punya empati yang tinggi, bisa jaga rahasia, dan pengen jadi alasan kenapa warga HMIF ngerasa aman dan nggak sendirian pas lagi mumet nugas, this is the right place for you! 🏠🩵\n\nHal-hal yang akan kita eksekusi bareng di Welfare:\n1. Mengadvokasi masalah UKT, mengelola Dana Duka, merangkul teman-teman yang \"ngilang\", serta menjadi pendamping dan tempat perlindungan untuk kasus kekerasan 🫂❤️‍🩹\n2. Mengelola layanan PIPS Curhat Yuk dan memfasilitasi ketersediaan sesi konseling bersama psikolog profesional 💬👩‍⚕️\n3. Memastikan ketersediaan P3K dan essential kit seperti obat-obatan dasar agar selalu siap sedia di sekre saat keadaan darurat 💊⛑️\n4. Mengelola Welfare Hub di Mading dan HMIF App sebagai navigasi warga mencari info beasiswa, promo, fasilitas, hingga peta mitigasi darurat 🗓️📌\n5. Merancang program interaktif seperti lifestyle challenge dan event kolaboratif sebagai sarana healing untuk warga HMIF. 🧘🏻‍♀️🥗",
+    "order": 1
   },
   {
     "id": "ie59hngjpzc3yw7s67h8rgdr",
     "department_name": "Internal",
     "division_name": "Club and Hobbies",
+    "quota_min": 4,
+    "quota_ideal": 7,
+    "quota_max": 8,
     "questions": [
       {
         "id": "q1",
@@ -385,12 +443,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Apa saja hobimu saat ini?\n2. Apakah ingin menambah teman untuk hobimu? (yes/no)\n3. Jika HMIF membuat suatu klub hobimu, apakah mau bergabung klub tersebut? (yes/no)\n4. Apakah siap menjadi panitia perlombaan internal HMIF? (yes/no)"
+    "questions_raw": "1. Apa saja hobimu saat ini?\n2. Apakah ingin menambah teman untuk hobimu? (yes/no)\n3. Jika HMIF membuat suatu klub hobimu, apakah mau bergabung klub tersebut? (yes/no)\n4. Apakah siap menjadi panitia perlombaan internal HMIF? (yes/no)",
+    "description": "Club & Hobbies berfungsi sebagai wadah yang mengakomodasi kegiatan PIPS yang mengarah kepada hobi. Saat ini, CnH menyediakan 6 klub olahraga untuk PIPS. Kalo ada usulan klub lain yang memiliki banyak peminat dan berpotensi aktif berkegiatan secara komunal, maka klub tersebut bisa kita bentuk. Nahh kalo kalian mau ikut mengelola klub dan mengorganisir kegiatan klub, sabi banget join kita di CnH!\n\nSelain kegiatan klub, kita juga punya proker Home Tournament, yaitu kompetisi internal antar kontingen HMIF. Kompetisi ini terbuka untuk seluruh anggota dan angkatan aktif HMIF, yang rencananya akan dilaksanakan pada semester ganjil tahun akademik. Cabangnya meliputi voli, futsal, badminton, basket, dan e-sports. Jika ada usulan perlombaan lain yang memiliki banyak calon peserta, bisa bangett kita atur buat lombanya. Siap-siap ajak dan rekrut teman-teman kalian biar meramaikan turnamen ini!\n\nSelain itu, kita juga bisa dapet request dari ikatan alumni buat bantu jadi panitia lomba. Salah satu kegiatan kita semester ini adalah ITB Ultra Marathon, dimana kita membantu memantau para peserta IAIF dan HMIF selama marathon berlangsung. Biar semangat buat bantu panitia mantau peserta, mereka juga menyediakan makanan dan snack gratis guyss :DD.\n\nTunggu apa lagi? Ayo seru-seruan di CnH HMIF dan (semoga bisa) inisiasi klub-klub dan kompetisi baru buat para PIPS!",
+    "order": 2
   },
   {
     "id": "h5lawyikn3x8fufuwj7j78zf",
     "department_name": "Internal",
     "division_name": "Academic",
+    "quota_min": 14,
+    "quota_ideal": 16,
+    "quota_max": 20,
     "questions": [
       {
         "id": "q1",
@@ -411,12 +474,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Berapa lama waktu yang dapat kamu sisihkan untuk keperluan divisi akademik? (Isian)\n2. Apa matkul favoritmu di semester ini? (Isian)\n3. Matkul apa yang menurutmu menarik di semester depan untuk jurusanmu?"
+    "questions_raw": "1. Berapa lama waktu yang dapat kamu sisihkan untuk keperluan divisi akademik? (Isian)\n2. Apa matkul favoritmu di semester ini? (Isian)\n3. Matkul apa yang menurutmu menarik di semester depan untuk jurusanmu?",
+    "description": "Academic fokus pada kebutuhan akademik massa HMIF ITB. Tahun ini bakal fokus di dokumentasi dan penyebaran resource secara async. Tenang, semua tugas akan dibagi rata sesuai beban akademik masing-masing ✋\n1. Maintenance Ding Dong 🦾💾\n2. Membuat dokumen AyoUjian (Rangkuman, latsol, pembahasan soal) (Tenang aja, ini bagi tugas) ✍️🧑‍💻\n3. Rekonstruksi soal ujian / dokumentasi soal ujian 💡📝\n4. Mengurus kegiatan Open House Lab, Sharing Spesialisasi & Minor, Sharing TA (semua online) 🎥🤝\n5. Mencari tutor / menjadi tutor untuk matkul yang membutuhkan serta mengurus tubay 🧑‍🏫📖",
+    "order": 3
   },
   {
     "id": "c4al0f5mxgkhi8b975jqd6bs",
     "department_name": "External",
     "division_name": "Intracampus",
+    "quota_min": 8,
+    "quota_ideal": 10,
+    "quota_max": 12,
     "questions": [
       {
         "id": "q1",
@@ -443,12 +511,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Apa motivasi kamu memilih divisi Intracampus? (paragraph)\n2. Kesibukan kamu selama periode ini ngapain aja? (Isian)\n3. Hampir seluruh kegiatan rutin Inkam itu offline, gimana cara kamu mengatasi pembagian waktu?\n4. Seberapa fast respon kamu?"
+    "questions_raw": "1. Apa motivasi kamu memilih divisi Intracampus? (paragraph)\n2. Kesibukan kamu selama periode ini ngapain aja? (Isian)\n3. Hampir seluruh kegiatan rutin Inkam itu offline, gimana cara kamu mengatasi pembagian waktu?\n4. Seberapa fast respon kamu?",
+    "description": "Intracampus adalah divisi yang menjembatani antara HMIF dengan organisasi/kepanitiaan internal ITB lainnya. Biasanya ngapain aja si di inkam?? \n1. Mengadakan studi banding dengan himpunan yang ada di ITB\n2. ⁠Jalan jalan menghadiri acara acara pusat (contoh: OSKM, AMI)\n3. ⁠Menjembatani aspirasi warga HMIF ke dosen / tendik yang ada di STEI\n4. ⁠Mengucapkan dan menghadiri dies natalis himpunan yang ada di ITB (Bisa orasi juga tau)🫣\n\nCocok buat siapa aja, terutama kalian yang pengen punya banyak kenalan baru, nyari jodoh, atau suka main keliling ITB. GASKAAN JOIN INKAAAM",
+    "order": 0
   },
   {
     "id": "jujccdna1c9m1eu0r5tnaeby",
     "department_name": "External",
     "division_name": "Extracampus",
+    "quota_min": 11,
+    "quota_ideal": 15,
+    "quota_max": 17,
     "questions": [
       {
         "id": "q1",
@@ -469,12 +542,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Apa yang kamu ketahui mengenai Ekstrakampus? (paragraf)\n2. Apa alasan kamu memilih divisi Ekstrakampus dan kenapa kami harus memilih kamu? Sertakan pengalaman yang relevan jika ada (paragraf)\n3. Apakah kamu memiliki kontak perusahaan yang dapat dihubungi untuk menjadi potential partner Ekstrakampus HMIF? (Jika tidak, isi dengan -\")"
+    "questions_raw": "1. Apa yang kamu ketahui mengenai Ekstrakampus? (paragraf)\n2. Apa alasan kamu memilih divisi Ekstrakampus dan kenapa kami harus memilih kamu? Sertakan pengalaman yang relevan jika ada (paragraf)\n3. Apakah kamu memiliki kontak perusahaan yang dapat dihubungi untuk menjadi potential partner Ekstrakampus HMIF? (Jika tidak, isi dengan -\")",
+    "description": "Naik Gojek kasih tipsnya seribu,\nSambil pamer rekam di HP.\nHai pips, nggak usah ragu,\nYuk join EKSKAM yang paling kece! ‼️\n\nPengen tau gimana serunya dunia kerja biar nggak kaget pas lulus nanti? Atau pengen nambah networking seluas lapangan bola? Ekstrakampus (EKSKAM) lah tempatnya! 🤝\n\nKita adalah divisi yang jadi \"jembatan utama\" HMIF ke dunia luar. Di sini, kamu nggak cuma bakal dapet pengalaman organisasi, tapi juga kesempatan buat \"main\" ke tempat-tempat keren.\n\nNgapain aja sih di Ekskam?\n1. HMIF Cari Kerja (Compvis): Jalan-jalan berkedok belajar! Kita bakal berkunjung ke perusahaan raksasa buat intip dapur mereka dan cari \"hilal\" karir masa depan. 🏢\n2. HMIF Cari Kawan (Stuban): Main bareng himpunan kampus lain, curhat dan gosip, dan bangun koneksi yang siapa tahu jadi kolaborasi seru. 🤝\n3. HMIF Partnership & Media partner: Jadi wajah HMIF buat jalin kerja sama eksklusif dan ngelola publikasi bareng mitra eksternal yang keren-keren. 📱\n\nKalau pengen nambah skill komunikasi, negosiasi, dan punya banyak kenalan orang hebat di industri, EKSKAM cocok banget buat kamu.\n\nDitunggu di ekskam yaaaaak!",
+    "order": 1
   },
   {
     "id": "1sx4kijb5ayhhquj3bq5du6s",
     "department_name": "External",
     "division_name": "Alumni Relations",
+    "quota_min": 10,
+    "quota_ideal": 12,
+    "quota_max": 14,
     "questions": [
       {
         "id": "q1",
@@ -495,16 +573,21 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Apa alasanmu memilih divisi Alumni Relations (paragraph)\n2. Pernah punya pengalaman berkomunikasi dengan orang baru/alumni/kating? ceritakan singkat (paragraph)\n3. Seberapa fast respon kamu?"
+    "questions_raw": "1. Apa alasanmu memilih divisi Alumni Relations (paragraph)\n2. Pernah punya pengalaman berkomunikasi dengan orang baru/alumni/kating? ceritakan singkat (paragraph)\n3. Seberapa fast respon kamu?",
+    "description": "naik angkot ketemu pak haji\npulangnya mampir beli roti\nyuk join Alumni Relations HMIF di sini\nnambah relasi sambil kenal alumni\n\nAlumni Relations adalah divisi yang menjadi jembatan antara warga HMIF dengan alumni, melalui pengelolaan relasi, komunikasi, dan kolaborasi dengan alumni. Kita bakalan melakukan beberapa hal antara lain:\n1. Menjalin dan menjaga hubungan dengan alumni HMIF\n2. Melakukan pendataan serta pembaruan informasi alumni\n3. Menghubungkan warga HMIF dengan alumni untuk sharing pengalaman dan karier\n4. Mengadakan kegiatan interaktif dan kolaborasi bersama alumni\n\nCocok buat kamu yang suka networking, komunikasi, dan ingin kenal lebih dekat dengan alumni HMIF 👀\n\nYUKK JOIN RELUNIIZZZ!!!",
+    "order": 2
   },
   {
-    "id": "px3pkv5elfo7hooecjiesemq",
+    "id": "xmfkja0nwcf4hn5le66kebxsj",
     "department_name": "Tech Issues and Exploration",
-    "division_name": "Technology Development",
+    "division_name": "Technology Development (UI/UX)",
+    "quota_min": null,
+    "quota_ideal": null,
+    "quota_max": null,
     "questions": [
       {
         "id": "q1",
-        "label": "1. Alasan ingin masuk Technology Development?",
+        "label": "1. Alasan ingin masuk Technology Development (UI/UX)?",
         "type": "textarea",
         "required": true
       },
@@ -516,29 +599,229 @@
       },
       {
         "id": "q3",
-        "label": "3. Apakah kamu familiar dengan Web Development? Atau projek serupa lainnya?\n\nSwitch Cases Questions (Priority 1)",
+        "label": "3. Apakah kamu familiar dengan Web Development? Atau projek serupa lainnya?",
         "type": "textarea",
         "required": true
       },
       {
         "id": "q4",
-        "label": "4. Kamu berminat masuk sub-divisi apa?\n(options: UI/UX or PM or Frontend Developer or Backend Developer)\n\nROLE 1 (UI/UX):\n- Apakah kamu mahir dengan penggunaan Figma?\n- Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?\n\nROLE 2 (PM):\n- Bagaimana pengalaman kamu dalam manajemen projek dan tim? Ceritakan\n- Apakah kamu familiar dengan bagaimana tim developer bekerja? Apa yang kamu pahami tentang workflow para developer, terutama teman STEI-K di lingkungan kamu?\n- Apakah kamu yakin bisa memastikan untuk keep-up tim dalam mengerjakan projek Technology Development berdasarkan request warga HMIF ITB dengan time management yang tertata rapi?\n\nROLE 3 (Frontend Developer):\n- Tech Stack apa yang kamu sudah familiar?\n- Bagaimana cara kamu mengoptimalkan Coding Agent untuk mempercepat workflow tanpa menghancurkan kerjaan kamu atau tim mu sendiri?\n- Apakah kamu pernah tidak sengaja merusak kerjaan temanmu dengan Coding Agentmu? Ceritakan dan apa yang kamu dapatkan dari kejadian itu?\n- Seberapa mahir kamu menggunakan Git? Jelaskan\n- Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?\n\nROLE 4 (Backend Developer):\n- Tech Stack apa yang kamu sudah familiar?\n- Bagaimana cara kamu mengoptimalkan Coding Agent untuk mempercepat workflow tanpa menghancurkan kerjaan kamu atau tim mu sendiri?\n- Apakah kamu pernah tidak sengaja merusak kerjaan temanmu dengan Coding Agentmu? Ceritakan dan apa yang kamu dapatkan dari kejadian itu?\n- Seberapa mahir kamu menggunakan Git? Jelaskan\n- Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?\n\nIterasi ulang pertanyaan untuk Priority 2 role pilihan responded\n\nLAST QUESTION",
+        "label": "4. Apakah kamu mahir dengan penggunaan Figma?",
         "type": "textarea",
         "required": true
       },
       {
         "id": "q5",
-        "label": "5. Bagaimana komitmen kamu apabila terpilih menjadi anggota magang di Technology Development HMIF ITB?",
+        "label": "5. Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q6",
+        "label": "6. Bagaimana komitmen kamu apabila terpilih menjadi anggota magang di Technology Development HMIF ITB?",
         "type": "textarea",
         "required": true
       }
     ],
-    "questions_raw": "1. Alasan ingin masuk Technology Development?\n2. Seberapa bagus time management kamu? Serta berikan bukti konkretnya\n3. Apakah kamu familiar dengan Web Development? Atau projek serupa lainnya?\n\nSwitch Cases Questions (Priority 1)\n4. Kamu berminat masuk sub-divisi apa?\n(options: UI/UX or PM or Frontend Developer or Backend Developer)\n\nROLE 1 (UI/UX):\n- Apakah kamu mahir dengan penggunaan Figma?\n- Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?\n\nROLE 2 (PM):\n- Bagaimana pengalaman kamu dalam manajemen projek dan tim? Ceritakan\n- Apakah kamu familiar dengan bagaimana tim developer bekerja? Apa yang kamu pahami tentang workflow para developer, terutama teman STEI-K di lingkungan kamu?\n- Apakah kamu yakin bisa memastikan untuk keep-up tim dalam mengerjakan projek Technology Development berdasarkan request warga HMIF ITB dengan time management yang tertata rapi?\n\nROLE 3 (Frontend Developer):\n- Tech Stack apa yang kamu sudah familiar?\n- Bagaimana cara kamu mengoptimalkan Coding Agent untuk mempercepat workflow tanpa menghancurkan kerjaan kamu atau tim mu sendiri?\n- Apakah kamu pernah tidak sengaja merusak kerjaan temanmu dengan Coding Agentmu? Ceritakan dan apa yang kamu dapatkan dari kejadian itu?\n- Seberapa mahir kamu menggunakan Git? Jelaskan\n- Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?\n\nROLE 4 (Backend Developer):\n- Tech Stack apa yang kamu sudah familiar?\n- Bagaimana cara kamu mengoptimalkan Coding Agent untuk mempercepat workflow tanpa menghancurkan kerjaan kamu atau tim mu sendiri?\n- Apakah kamu pernah tidak sengaja merusak kerjaan temanmu dengan Coding Agentmu? Ceritakan dan apa yang kamu dapatkan dari kejadian itu?\n- Seberapa mahir kamu menggunakan Git? Jelaskan\n- Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?\n\nIterasi ulang pertanyaan untuk Priority 2 role pilihan responded\n\nLAST QUESTION\n5. Bagaimana komitmen kamu apabila terpilih menjadi anggota magang di Technology Development HMIF ITB?"
+    "questions_raw": null,
+    "description": null,
+    "order": 0
+  },
+  {
+    "id": "nsq0jx2kke8nyyv4nvbvmtl7m",
+    "department_name": "Tech Issues and Exploration",
+    "division_name": "Technology Development (PM)",
+    "quota_min": null,
+    "quota_ideal": null,
+    "quota_max": null,
+    "questions": [
+      {
+        "id": "q1",
+        "label": "1. Alasan ingin masuk Technology Development (PM)?",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q2",
+        "label": "2. Seberapa bagus time management kamu? Serta berikan bukti konkretnya",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q3",
+        "label": "3. Apakah kamu familiar dengan Web Development? Atau projek serupa lainnya?",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q4",
+        "label": "4. Bagaimana pengalaman kamu dalam manajemen projek dan tim? Ceritakan",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q5",
+        "label": "5. Apakah kamu familiar dengan bagaimana tim developer bekerja? Apa yang kamu pahami tentang workflow para developer, terutama teman STEI-K di lingkungan kamu?",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q6",
+        "label": "6. Apakah kamu yakin bisa memastikan untuk keep-up tim dalam mengerjakan projek Technology Development berdasarkan request warga HMIF ITB dengan time management yang tertata rapi?",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q7",
+        "label": "7. Bagaimana komitmen kamu apabila terpilih menjadi anggota magang di Technology Development HMIF ITB?",
+        "type": "textarea",
+        "required": true
+      }
+    ],
+    "questions_raw": null,
+    "description": null,
+    "order": 1
+  },
+  {
+    "id": "idue9b2ut880rio5dfp7lbska",
+    "department_name": "Tech Issues and Exploration",
+    "division_name": "Technology Development (Frontend Dev)",
+    "quota_min": null,
+    "quota_ideal": null,
+    "quota_max": null,
+    "questions": [
+      {
+        "id": "q1",
+        "label": "1. Alasan ingin masuk Technology Development (Frontend Developer)?",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q2",
+        "label": "2. Seberapa bagus time management kamu? Serta berikan bukti konkretnya",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q3",
+        "label": "3. Apakah kamu familiar dengan Web Development? Atau projek serupa lainnya?",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q4",
+        "label": "4. Tech Stack apa yang kamu sudah familiar?",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q5",
+        "label": "5. Bagaimana cara kamu mengoptimalkan Coding Agent untuk mempercepat workflow tanpa menghancurkan kerjaan kamu atau tim mu sendiri?",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q6",
+        "label": "6. Apakah kamu pernah tidak sengaja merusak kerjaan temanmu dengan Coding Agentmu? Ceritakan dan apa yang kamu dapatkan dari kejadian itu?",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q7",
+        "label": "7. Seberapa mahir kamu menggunakan Git? Jelaskan",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q8",
+        "label": "8. Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q9",
+        "label": "9. Bagaimana komitmen kamu apabila terpilih menjadi anggota magang di Technology Development HMIF ITB?",
+        "type": "textarea",
+        "required": true
+      }
+    ],
+    "questions_raw": null,
+    "description": null,
+    "order": 2
+  },
+  {
+    "id": "0mfkpwa2mdtrgc2gefuw6ir8x",
+    "department_name": "Tech Issues and Exploration",
+    "division_name": "Technology Development (Backend Dev)",
+    "quota_min": null,
+    "quota_ideal": null,
+    "quota_max": null,
+    "questions": [
+      {
+        "id": "q1",
+        "label": "1. Alasan ingin masuk Technology Development (Backend Developer)?",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q2",
+        "label": "2. Seberapa bagus time management kamu? Serta berikan bukti konkretnya",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q3",
+        "label": "3. Apakah kamu familiar dengan Web Development? Atau projek serupa lainnya?",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q4",
+        "label": "4. Tech Stack apa yang kamu sudah familiar?",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q5",
+        "label": "5. Bagaimana cara kamu mengoptimalkan Coding Agent untuk mempercepat workflow tanpa menghancurkan kerjaan kamu atau tim mu sendiri?",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q6",
+        "label": "6. Apakah kamu pernah tidak sengaja merusak kerjaan temanmu dengan Coding Agentmu? Ceritakan dan apa yang kamu dapatkan dari kejadian itu?",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q7",
+        "label": "7. Seberapa mahir kamu menggunakan Git? Jelaskan",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q8",
+        "label": "8. Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "q9",
+        "label": "9. Bagaimana komitmen kamu apabila terpilih menjadi anggota magang di Technology Development HMIF ITB?",
+        "type": "textarea",
+        "required": true
+      }
+    ],
+    "questions_raw": null,
+    "description": null,
+    "order": 3
   },
   {
     "id": "w1qft1j1df9nmh5tdv3qvdra",
     "department_name": "Tech Issues and Exploration",
     "division_name": "Competition and Community",
+    "quota_min": 8,
+    "quota_ideal": 12,
+    "quota_max": 16,
     "questions": [
       {
         "id": "q1",
@@ -577,12 +860,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Kenapa kamu mau masuk CnC?\n(Paragraph)\n2. Dari 4 komunitas perlombaan yang ada (Hackathon, CP, CTF, Data Science) mana yang kamu paling tertarik?\n(Checkbox)\n3. Apa pengalaman, baik profesional / organisasional / personal, yang menunjukkan minat mu terhadap salah satu bidang kompetisi? Ceritainn donggg dengan detail!\n(Paragraph)\n4. Kira-kira kesibukannya apa ya satu tahun kedepan?\n5. Apa komitmen kamu yang bisa kami pegang bahwa kamu bisa berkontribusi secara maksimal di CnC?\n(Paragraph)"
+    "questions_raw": "1. Kenapa kamu mau masuk CnC?\n(Paragraph)\n2. Dari 4 komunitas perlombaan yang ada (Hackathon, CP, CTF, Data Science) mana yang kamu paling tertarik?\n(Checkbox)\n3. Apa pengalaman, baik profesional / organisasional / personal, yang menunjukkan minat mu terhadap salah satu bidang kompetisi? Ceritainn donggg dengan detail!\n(Paragraph)\n4. Kira-kira kesibukannya apa ya satu tahun kedepan?\n5. Apa komitmen kamu yang bisa kami pegang bahwa kamu bisa berkontribusi secara maksimal di CnC?\n(Paragraph)",
+    "description": "*Kamu mau bantai\" lomba?🤔 kamu mau jadi GOAT di bidang lomba tertentu?🤔 kamu mau memajukan komunitas lomba di ITB?🤔*\n\nNahhhh di Competition and Community (CnC) kita bakalan MENUMBUHKAN komunitas perlombaan di ITB\n\n🗣️: bidang lombanya apa aja tuh bang?!?!??!?!\n\nNAH UNTUK BIDANG LOMBANYA, bakalan ada 4, yaitu:\n1. Hackathon\n2. CP\n3. CTF\n4. Data Science\n\ndengan masuk ke CnC kalian juga bakalan ngurusin dan dapat benefit, seperti bimbingan lomba, arsip-arsip lomba terdahulu, infoin lomba dan masih banyak lah yang lainnnya!\n\njadi tunggu apalagi?!?!?! AYO JOIN CnC🔥🔥🔥🔥🔥🔥",
+    "order": 4
   },
   {
     "id": "kbtxuq9vdkx37ihmxz5wy7rr",
     "department_name": "Tech Issues and Exploration",
     "division_name": "Career Development",
+    "quota_min": 6,
+    "quota_ideal": 9,
+    "quota_max": 12,
     "questions": [
       {
         "id": "q1",
@@ -615,12 +903,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Alasan ingin masuk ke Career Development?\n(Paragraph)\n2. Bidang karir apa yang ingin dieksplorasi beberapa tahun ke depan beserta alasan?\n(Paragraph)\n3. Pilih yang kamu suka:\n- Menulis dan bikin konten\n- Ngobrol & wawancara kakak tingkat/alumni\n- Ngecek info lowongan & nyusun data biar rapi\n- Ngonsep acara\n(checkbox)\n4. Kesibukan satu tahun ke depan"
+    "questions_raw": "1. Alasan ingin masuk ke Career Development?\n(Paragraph)\n2. Bidang karir apa yang ingin dieksplorasi beberapa tahun ke depan beserta alasan?\n(Paragraph)\n3. Pilih yang kamu suka:\n- Menulis dan bikin konten\n- Ngobrol & wawancara kakak tingkat/alumni\n- Ngecek info lowongan & nyusun data biar rapi\n- Ngonsep acara\n(checkbox)\n4. Kesibukan satu tahun ke depan",
+    "description": "\"Aku bingung mau mulai karier dari mana 😔\"\nTenang, kamu nggak sendirian.\n\nDi Career Development, kita bantu temen-temen HMIF biar lebih siap masuk dunia kerja 💼\n\nTapiii… jangan salah, kamu juga bakal ikutan tumbuh bareng ✨\n\nDi sini kita:\n🔍 Cari & share info magang/kerja\n🎙️ Ngobrol sama alumni & perusahaan\n🧠 Bikin mentoring bareng kakak tingkat\n✍️ Nulis cerita karier alumni yang bikin “wah aku juga pengen!”\n💬 Bikin Career Talk bareng alumni atau profesional\n\nCocok banget buat kamu yang:\n✅ Suka ngobrol\n✅ Suka nulis\n✅ Suka bantuin orang\n✅ Suka bingung tapi pengen maju 😭\n\nKalau kamu pengen tumbuh sambil bantu orang lain tumbuh juga,\nini tempat kamu.\n\nYuk join Career Development 🌿\nBiar kita sama-sama nyiapin masa depan — sambil ketawa, belajar, dan bermanfaat 💖",
+    "order": 5
   },
   {
     "id": "gxb1xrz0xo59a5mn2qnb007n",
     "department_name": "Community Service",
     "division_name": "Tech Insight",
+    "quota_min": 5,
+    "quota_ideal": 7,
+    "quota_max": 12,
     "questions": [
       {
         "id": "q1",
@@ -647,12 +940,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Seberapa sering kamu membaca berita atau konten seputar teknologi? (rate 1-5)\n2. Topik teknologi apa yang sedang kamu minati? (AI, Cyber Security, Data Science, IoT, dll.)(paragraf)\n3. Apakah ada isu atau topik yang ingin kamu bahas di kegiatan kajian? (paragraf)\n4. Harapan atau ide yang ingin kamu bawa untuk Tech Insight ke depannya? (paragraf)"
+    "questions_raw": "1. Seberapa sering kamu membaca berita atau konten seputar teknologi? (rate 1-5)\n2. Topik teknologi apa yang sedang kamu minati? (AI, Cyber Security, Data Science, IoT, dll.)(paragraf)\n3. Apakah ada isu atau topik yang ingin kamu bahas di kegiatan kajian? (paragraf)\n4. Harapan atau ide yang ingin kamu bawa untuk Tech Insight ke depannya? (paragraf)",
+    "description": "Tech Insight merupakan divisi yang berfokus pada pengkajian isu-isu teknologi terkini yang relevan di masyarakat. Di sini, kamu bisa belajar, diskusi, dan berkembang bareng orang-orang yang punya ketertarikan yang sama di dunia teknologi, mulai dari mencari topik yang menarik untuk dibahas, melakukan kajian rutin, hingga menyusun konten edukatif yang dapat dibagikan melalui sosial media HMIF.\n\nYang akan dilakukan di Tech Insight:\n1. Pencarian topik dan isu teknologi terkini.\n2. Pelaksanaan kegiatan kajian rutin.\n3. Penyusunan konten berdasarkan hasil kajian.\n4. Analisis kebutuhan massa terhadap topik kajian.\n\nKalau kamu suka ngikutin perkembangan teknologi, tertarik bahas isu-isu terkini, atau pengen ikut bikin konten dan insight yang bermanfaat buat orang lain, yuk gabung bareng Tech Insight! 🚀",
+    "order": 0
   },
   {
     "id": "o5rbiqhkxtm5a1ejjwn5e65x",
     "department_name": "Community Service",
     "division_name": "Tech Action",
+    "quota_min": 10,
+    "quota_ideal": 15,
+    "quota_max": 20,
     "questions": [
       {
         "id": "q1",
@@ -702,12 +1000,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Kasih tau dong alasan utama kamu pengen join Tech Action dan berpengmas di HMIF? (paragraph)\n2.1 Di Tech Action, kita bakal sering banget kegiatan offline dan turun ke lapangan lho! Seberapa siap kamu berkomitmen untuk mobilitas ini? (scale 1-5)\n2.2 Gimana cara kamu atur waktu antara tech action dan urusan akademik biar keduanya tetep aman? (paragraf)\n3.1 Nah, dari 4 keseruan program kerja kita, kamu paling ngincer sub-divisi yang mana nih?:\n- Tech For School,\n- Desa.dev,\n- Relasi++\n(checkbox)\n3.2 Spill dong kenapa kamu pilih sub-divisi itu! (paragraf)\n4. Kalo tiba-tiba program yang udah direncanain matang sama divisi tech action ternyata gak sesuai sama kondisi di lapangan saat dieksekusi (misal pesertanya gak responsif atau fasilitas kurang), apa yang bakal kamu lakuin? (paragraph)\n5. Ceritain satu pengalaman kepanitiaan/organisasimu yang paling memorable dong, terutama pas kamu dituntut buat kerja sama bareng orang-orang baru! (paragraph)"
+    "questions_raw": "1. Kasih tau dong alasan utama kamu pengen join Tech Action dan berpengmas di HMIF? (paragraph)\n2.1 Di Tech Action, kita bakal sering banget kegiatan offline dan turun ke lapangan lho! Seberapa siap kamu berkomitmen untuk mobilitas ini? (scale 1-5)\n2.2 Gimana cara kamu atur waktu antara tech action dan urusan akademik biar keduanya tetep aman? (paragraf)\n3.1 Nah, dari 4 keseruan program kerja kita, kamu paling ngincer sub-divisi yang mana nih?:\n- Tech For School,\n- Desa.dev,\n- Relasi++\n(checkbox)\n3.2 Spill dong kenapa kamu pilih sub-divisi itu! (paragraf)\n4. Kalo tiba-tiba program yang udah direncanain matang sama divisi tech action ternyata gak sesuai sama kondisi di lapangan saat dieksekusi (misal pesertanya gak responsif atau fasilitas kurang), apa yang bakal kamu lakuin? (paragraph)\n5. Ceritain satu pengalaman kepanitiaan/organisasimu yang paling memorable dong, terutama pas kamu dituntut buat kerja sama bareng orang-orang baru! (paragraph)",
+    "description": "Tech Action merupakan divisi yang berfokus pada implementasi teknologi ke masyarakat langsung yang menjadikan teknologi sebagai solusi dari permasalahan yang ada di masyarakat (and serving the community). Selain ituu, disini kita juga bakal seru seruan melakukan kegiatan offline bareng dan bertemu langsung ke masyarakat untuk tau ada masalah apa sih di masyarakat.  \n\n\"Tech Action bakal ngapain aja sih tahun ini?\"\n\nKegiatan Tech Action di tahun ini ada:\n🌄Desa.dev: Turun langsung ke lapangan untuk riset dan implementasi tech ke desa binaan kita\n👬Relasi++: Kerja sama  dengan Himpunan atau UKM lain untuk menyelenggarakan program bakti sosial.\n🧑‍🏫Tech For School: Terjun langsung ke sekolah buat ngasih awareness ke siswa mengenai Tech Industry and Development\n\nCocok banget buat kamu yang: \n✅Mau berdampak langsung ke masyarakat\n✅Mau mengimplementasikan ide ide luar biasa\n✅Mau nambah soft skill dan pengalaman yang berkesan\n\nTertarik turun langsung ke masyarakat? Atau pengen ngeliat gimana ilmu kita bisa jadi solusi? Tunggu apa lagi, gas gabung bareng Tech Action! 🔥",
+    "order": 1
   },
   {
     "id": "lzqch1uruibog59dty2f46m4",
     "department_name": "Badan Kesenatoran",
     "division_name": "Kesekjenan",
+    "quota_min": null,
+    "quota_ideal": null,
+    "quota_max": null,
     "questions": [
       {
         "id": "q1",
@@ -722,12 +1025,17 @@
         "required": true
       }
     ],
-    "questions_raw": null
+    "questions_raw": null,
+    "description": "📑 Administratif Kesekjenan\n\nBiar urusan surat-menyurat nggak jadi sumber keribetan 👀\n\n📄 Ngurus berbagai dokumen dan kebutuhan administrasi Kesenatoran.\n🗂️ Merapikan dan mengarsipkan dokumen biar semuanya gampang dicari.\n✨ Memastikan kebutuhan administrasi tiap kegiatan aman dan tertata.\n\n🗓️ Linimasa Kesenatoran\n\nAgenda banyak? Tenang, kita bikin semuanya tetap on track! 🫡\n\n📌 Menyusun timeline kegiatan Kesenatoran dari awal sampai akhir.\n🔄 Memantau keberjalanan agenda dan memastikan nggak ada yang kelewat.\n👀 Melihat progres tiap fase kepengurusan supaya semuanya tetap sesuai arah.\n\n📊 Pendataan Kesenatoran\n\nData rapi, kerja pun lebih sat-set! 😝\n\n📝 Mengelola dan memperbarui data anggota Kesenatoran.\n🔎 Memastikan data tetap akurat, rapi, dan up to date.\n🤝 Menjadi salah satu sumber informasi untuk mendukung kebutuhan organisasi.\n\n💸 Anggaran Kesenatoran\n\nKarena bikin proker juga butuh duit…😭\n\n💰 Mengelola kebutuhan dan perencanaan anggaran Kesenatoran.\n🤝 Berkoordinasi dengan bidang terkait dalam pengelolaan keuangan.\n📈 Memastikan anggaran digunakan sesuai kebutuhan dan tetap bertanggung jawab.\n\nKalau kamu suka ngatur, planning, keeping things organized, atau justru pengen belajar gimana kesenatoran bisa jalan dari balik layar…Yukk joinn kesekjenan badsen!! #temeninaliciapls",
+    "order": 0
   },
   {
     "id": "aaa67y0hkdqw0fkkrsjjuzd0",
     "department_name": "Badan Kesenatoran",
     "division_name": "Kajian",
+    "quota_min": 2,
+    "quota_ideal": 4,
+    "quota_max": 6,
     "questions": [
       {
         "id": "q1",
@@ -742,12 +1050,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Kenapa Kajian (paragraph) 2. Sebutkan isu yang ingin kamu bawakan dalam kajian, dan mengapa? Berikan 1 topik nasional dan 1 topik internasional yang kamu suka (paragraph)"
+    "questions_raw": "1. Kenapa Kajian (paragraph) 2. Sebutkan isu yang ingin kamu bawakan dalam kajian, dan mengapa? Berikan 1 topik nasional dan 1 topik internasional yang kamu suka (paragraph)",
+    "description": "Bidang Kajian Kesenatoran HMIF sebagai fondasi kesenatoran untuk terus mengkritisi  dan memberikan solusi terhadap situasi nyata yang ada di lingkungan berdasarkan dengan keahlian dan ilmu kita masing-masing. ",
+    "order": 1
   },
   {
     "id": "a92s8mvb1i47owba6569kafl",
     "department_name": "Badan Kesenatoran",
     "division_name": "Aspirasi",
+    "quota_min": 2,
+    "quota_ideal": 4,
+    "quota_max": 6,
     "questions": [
       {
         "id": "q1",
@@ -768,12 +1081,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Kenapa aspirasi? (paragraph)\n2. Seberapa penting menurut kamu bidang aspirasi di badan kesenatoran hmif itb? dan kenapa (paragraph)\n3. Coba sebutkan satu isu terkini (bebas memilih isu informatika, kampus, atau nasional) yang menurutmu penting untuk dikawal, dan berikan pandangan singkatmu mengenai isu tersebut! (paragraph)"
+    "questions_raw": "1. Kenapa aspirasi? (paragraph)\n2. Seberapa penting menurut kamu bidang aspirasi di badan kesenatoran hmif itb? dan kenapa (paragraph)\n3. Coba sebutkan satu isu terkini (bebas memilih isu informatika, kampus, atau nasional) yang menurutmu penting untuk dikawal, dan berikan pandangan singkatmu mengenai isu tersebut! (paragraph)",
+    "description": "Bidang Aspirasi Kesenatoran HMIF ITB adalah tempatnya warga HMIF buat speak up! Pernah gregetan sama kebijakan kampus yang tiba-tiba berubah? Suka ngikutin isu teknologi kayak regulasi AI dan kebocoran data, atau gatal pengen bahas isu nasional yang lagi rame? Nah, daripada cuma jadi bahan overthinking atau obrolan warung kopi, mending kita olah bareng di sini.\n\nFokus utama kita adalah ngebangun \"wadah\" yang nyaman buat nampung suara dan keresahan massa HMIF terkait isu-isu strategis (Informatika, ITB, dan Nasional). Kita nggak cuma sekadar dengerin, tapi juga mengelola aspirasi tersebut biar jadi bahan pergerakan atau sikap himpunan.",
+    "order": 2
   },
   {
     "id": "36kmp466merbfiqb4enludwt",
     "department_name": "Badan Kesenatoran",
     "division_name": "Kinship",
+    "quota_min": 4,
+    "quota_ideal": 6,
+    "quota_max": 8,
     "questions": [
       {
         "id": "q1",
@@ -813,12 +1131,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Apa yang membuatmu tertarik bergabung dengan Kinship Badan Kesenatoran? (paragraph)\n2. Jika menjadi bagian dari Kinship, bagaimana cara kamu menjaga kedekatan antaranggota yang memiliki kesibukan dan karakter yang berbeda-beda? (paragraph)\n3. Misalnya setelah beberapa bulan kepengurusan, kamu melihat masih ada beberapa anggota yang jarang ikut kegiatan informal dan cenderung menyendiri. Sebagai anggota Kinship, apa yang akan kamu lakukan? (paragraph)\n4. Spill donggg ide kegiatan refreshing sebanyak mungkin yang menurutmu seru untuk Badsen Geser dan banyak orang tertarik untuk mengikutinya! Bebas yahh, bisa indoor ataupun outdoor (short answer)\n5. SEBERAPA SIAP KAMU BERSENANG-SENANG DI KINSHIP KESENATORAN??? (linear scale)"
+    "questions_raw": "1. Apa yang membuatmu tertarik bergabung dengan Kinship Badan Kesenatoran? (paragraph)\n2. Jika menjadi bagian dari Kinship, bagaimana cara kamu menjaga kedekatan antaranggota yang memiliki kesibukan dan karakter yang berbeda-beda? (paragraph)\n3. Misalnya setelah beberapa bulan kepengurusan, kamu melihat masih ada beberapa anggota yang jarang ikut kegiatan informal dan cenderung menyendiri. Sebagai anggota Kinship, apa yang akan kamu lakukan? (paragraph)\n4. Spill donggg ide kegiatan refreshing sebanyak mungkin yang menurutmu seru untuk Badsen Geser dan banyak orang tertarik untuk mengikutinya! Bebas yahh, bisa indoor ataupun outdoor (short answer)\n5. SEBERAPA SIAP KAMU BERSENANG-SENANG DI KINSHIP KESENATORAN??? (linear scale)",
+    "description": "Pernah nggak sih ngerasa suatu organisasi jadi menyenangkan bukan cuma karena kegiatannya, tapi juga karena orang-orang di dalamnya? 🥹\nNah, itulah yang dibangun di Kinship Kesenatoran! 💚\nDi Badan Kesenatoran, kita bukan cuma bekerja sebagai satu tim, tapi juga bertumbuh bersama sebagai satu keluarga. Nah, Kinship hadir untuk menciptakan ruang agar setiap anggota merasa nyaman, saling mengenal, dan punya tempat untuk pulang di tengah padatnya agenda kuliah.\n\nTerus, di Kinship Kesenatoran bakal ngapain aja sih? 👀\n👋 Sapa Badsen\nMembangun identitas khas Badan Kesenatoran melalui salam yang digunakan dalam interaksi sehari-hari. Sederhana, tetapi menjadi simbol kebersamaan yang dibangun sejak awal kepengurusan.\n📦 Badsen Unboxed\nMengadakan welcoming party bagi anggota magang baru dalam suasana yang santai dan hangat. Selain jadi momen untuk saling mengenal, kegiatan ini juga membantu anggota memahami program kerja lintas bidang sehingga lebih siap berkolaborasi selama satu periode kepengurusan.\n🎂 Badsen Wishes\nMerayakan momen spesial setiap anggota melalui ucapan ulang tahun, kartu ucapan, dan mini gift karena perhatian kecil bisa membuat seseorang merasa dihargai menjadi bagian dari keluarga Badan Kesenatoran.\n🚶 Badsen Geser\nMengadakan kegiatan refreshing dan bonding secara berkala, mulai dari makan bersama, board game, olahraga, hingga aktivitas indoor maupun outdoor lainnya. Selain untuk melepas penat, Badsen Geser juga menjadi ruang diskusi yang lebih santai untuk saling berbagi cerita, bertukar perspektif, maupun membahas dinamika secara lebih cair.\n\nCocok banget buat kamu yang...\n✅ Senang membangun hubungan dengan banyak orang\n✅ Suka merancang kegiatan yang hangat, bermakna, dan berkesan\n✅ Peka terhadap orang-orang di sekitarmu\n✅ Ingin menciptakan Badan Kesenatoran yang semakin nyaman, akrab, dan suportif\n\nYUK JADI BAGIAN DARI KINSHIP KESENATORAN!!!",
+    "order": 3
   },
   {
     "id": "rgj0rv17s59y2vr44ky90sa3",
     "department_name": "Badan Kesenatoran",
     "division_name": "Kreatif",
+    "quota_min": 1,
+    "quota_ideal": 2,
+    "quota_max": 3,
     "questions": [
       {
         "id": "q1",
@@ -851,12 +1174,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Apa alasan kamu ingin bergabung dengan Divisi Kreatif Badan Kesenatoran? (Paragraph)\n2. Ceritakan pengalamanmu membuat desain, ilustrasi, konten media sosial, atau karya kreatif lainnya (boleh organisasi, kepanitiaan, maupun pribadi). (Paragraph)\n3. Software atau tools apa yang biasa kamu gunakan untuk mendesain? (Figma, Canva, Illustrator, Photoshop, dll.) (Paragraph)\n4. Menurutmu, bagaimana cara menyampaikan informasi yang cukup kompleks agar tetap menarik dan mudah dipahami oleh mahasiswa? (Paragraph)\n5. Jika memiliki portofolio, silakan lampirkan link-nya di sini. (Short answer)"
+    "questions_raw": "1. Apa alasan kamu ingin bergabung dengan Divisi Kreatif Badan Kesenatoran? (Paragraph)\n2. Ceritakan pengalamanmu membuat desain, ilustrasi, konten media sosial, atau karya kreatif lainnya (boleh organisasi, kepanitiaan, maupun pribadi). (Paragraph)\n3. Software atau tools apa yang biasa kamu gunakan untuk mendesain? (Figma, Canva, Illustrator, Photoshop, dll.) (Paragraph)\n4. Menurutmu, bagaimana cara menyampaikan informasi yang cukup kompleks agar tetap menarik dan mudah dipahami oleh mahasiswa? (Paragraph)\n5. Jika memiliki portofolio, silakan lampirkan link-nya di sini. (Short answer)",
+    "description": "Divisi Kreatif adalah divisi yang bertugas mengelola berbagai publikasi dan media informasi Badan Kesenatoran HMIF ITB. Di sini, kamu nggak cuma bikin desain, tapi juga ikut menyampaikan informasi kemahasiswaan agar lebih mudah dipahami dan menarik bagi warga HMIF. 🎨✨\n\nKira-kira bakal ngapain aja ya di Divisi Kreatif?\n\n✨ Mengelola desain, konten, dan media sosial Badan Kesenatoran HMIF ITB.\n📢 Membuat publikasi untuk berbagai agenda, program kerja, dan informasi kemahasiswaan.\n🤝 Berkolaborasi dengan Bidang Kreatif Dewan Eksekutif HMIF dalam kebutuhan publikasi melalui Media Informasi HMIF.\n📖 Membantu menyusun rekap Kongres dan konten pencerdasan agar warga HMIF semakin memahami dinamika kemahasiswaan KM ITB.\n\nKalau kamu suka desain, senang menuangkan ide menjadi karya visual, atau tertarik mengolah informasi supaya lebih menarik dan mudah dipahami, yuk jadi bagian dari Divisi Kreatif! 🚀",
+    "order": 4
   },
   {
     "id": "wtfarg8ahvkqubbnlom6nhgr",
     "department_name": "Dewan Perwakilan dan Pengawasan (DPP)",
     "division_name": "Kesekjenan",
+    "quota_min": 1,
+    "quota_ideal": 1,
+    "quota_max": 2,
     "questions": [
       {
         "id": "q1",
@@ -899,12 +1227,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. [PENTING!] Siapa waifu/husbando/oshi kamu? (short answer)\n2. Seberapa terbiasa kamu dengan Google Docs dan Spreadsheet? (linear scale 1-4)\n3. Sebutkan favorit kamu untuk tiap hal berikut: makanan, minuman, game, anime/film, manga/manhwa/komik, VTuber (kalo ada), lagu (paragraf)\n4. Kenapa pengen join Kesekjenan? (paragraf)\n5. Apakah kamu bersedia menjadi notulen rapat dan menjadi anggota PPZI? (multiple choice yes or no)"
+    "questions_raw": "1. [PENTING!] Siapa waifu/husbando/oshi kamu? (short answer)\n2. Seberapa terbiasa kamu dengan Google Docs dan Spreadsheet? (linear scale 1-4)\n3. Sebutkan favorit kamu untuk tiap hal berikut: makanan, minuman, game, anime/film, manga/manhwa/komik, VTuber (kalo ada), lagu (paragraf)\n4. Kenapa pengen join Kesekjenan? (paragraf)\n5. Apakah kamu bersedia menjadi notulen rapat dan menjadi anggota PPZI? (multiple choice yes or no)",
+    "description": "A a a mission sutaato~ Kira kira kesekjenan DPP ngapain yh? #korbansirkel#\nKesekjenan (meski aslinya cuma satu orang) bertugas mengelola administrasi DPP seperti surat menyurat dan mengelola keuangan. Kesekjenan juga membantu keberjalanan komisi-komisi DPP agar seluruh kegiatan dapat berjalan dengan baik.\n\nKalau kamu join Kesekjenan, kamu akan:\n- Menjadi Zecretaries yang handal, baik hati, dan rajin menabung 📜\n- Memuja the one and only Vestia Zeta my istrinya sekjen DPP 😻\n- Menerima request surat dan membantu penyusunan serta pengarsipan surat ✍️\n- Jadi notulen di rapat-rapat dan kegiatan DPP lainnya 😱\n- Udah sih itu aja sebenarnya\n\nKalau kamu suka ngedokumen dan ngespreadsheet, atau gatau aja mau milih apa, boleh banget join kesekjenan yaw! Ditunggu~",
+    "order": 0
   },
   {
     "id": "3i3qmdjq51h148tvqcdzya4o",
     "department_name": "Dewan Perwakilan dan Pengawasan (DPP)",
     "division_name": "Perbaikan Sistem",
+    "quota_min": 1,
+    "quota_ideal": 2,
+    "quota_max": 3,
     "questions": [
       {
         "id": "q1",
@@ -931,12 +1264,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Sebutkan satu hal unik mengenai dirimu (paragraph)\n2. Sebutkan lagu yang mau kamu rekomenkan ke semua orang (paragraph)\n3. Kenapa mau join perbaikan sistem? (paragraph)\n4. Tuliskan komitmenmu bila masuk ke perbaikan sistem? (paragraph)"
+    "questions_raw": "1. Sebutkan satu hal unik mengenai dirimu (paragraph)\n2. Sebutkan lagu yang mau kamu rekomenkan ke semua orang (paragraph)\n3. Kenapa mau join perbaikan sistem? (paragraph)\n4. Tuliskan komitmenmu bila masuk ke perbaikan sistem? (paragraph)",
+    "description": "Error 404!!! Sistem Recovery Needed!\nPerbaikan Sistem merupakan komisi yang bekerja untuk memperbaiki dan memastikan bahwa sistem keorganisasian HMIF berjalan sesuai dengan kondisi aktual massa. \n\nKerjanya ngapain aja sih? Kerjanya itu adalah : \nMelakukan Kajian AD/ART \nStudi Banding \nEvaluasi Internal DPP \nMengapresiasi kinerja HMIF\n\nAyo Join Perbaikan Sistem!",
+    "order": 1
   },
   {
     "id": "qmhq52bp4tevl55rjuuz3oix",
     "department_name": "Dewan Perwakilan dan Pengawasan (DPP)",
     "division_name": "Pengawasan",
+    "quota_min": 2,
+    "quota_ideal": 2,
+    "quota_max": 3,
     "questions": [
       {
         "id": "q1",
@@ -963,12 +1301,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Sebutin 1 game yang paling kamu suka, dan kenapa? (paragraph)\n2. Kirimin meme favorit kamu (upload file)\n3. Kenapa mau apply ke pengawasan? (paragraph)\n4. Tuliskan komitmenmu kalo keterima di pengawasan (paragraph)"
+    "questions_raw": "1. Sebutin 1 game yang paling kamu suka, dan kenapa? (paragraph)\n2. Kirimin meme favorit kamu (upload file)\n3. Kenapa mau apply ke pengawasan? (paragraph)\n4. Tuliskan komitmenmu kalo keterima di pengawasan (paragraph)",
+    "description": "GAWK GAWK GAWK halo semuanya petrik (alter ego ketua komisi pengawasan) disini\nPengawasan, kayak namanya sendiri adalah komisi yang bakal ngawasin segala pekerjaan yang ada di HMIF, mastiin kalau memang kinerja dari tiap badan itu bekerja secara lancar.\n\nJobdesc:\n1. Mengawasi kerja elit global 🌍 (DE/Kesenatoran/BSO)\n2. Membantu keberjalanan rapat meja bundar (LPJ)👨‍💻\n3. Membantu mengelola aspirasi massa HMIF📣\n\nKalo kamu mau nyantai dan fokus akademik, mending join divisi kami (ASELI RILL CUY NO FEK FEK). Cihuyyy (੭˃ᴗ˂)੭ (੭˃ᴗ˂)੭",
+    "order": 2
   },
   {
     "id": "936hhcsesd9g82k7trd1b6pr",
     "department_name": "Dewan Perwakilan dan Pengawasan (DPP)",
     "division_name": "Regenerasi",
+    "quota_min": 2,
+    "quota_ideal": 2,
+    "quota_max": 3,
     "questions": [
       {
         "id": "q1",
@@ -995,12 +1338,17 @@
         "required": true
       }
     ],
-    "questions_raw": "1. Sebutkan lagu yang kamu harap semua orang dengar, boleh lebih dari 1 (paragraph)\n2. Sebutkan film yang kamu harap semua orang nonton, boleh lebih dari 1 (paragraph)\n3. Kenapa mau join ke Regenerasi?\n4. Kerjaan Regen padatnya di akhir semester ganjil dan awal semester genap, kamu yakin bisa bung? (isian singkat)"
+    "questions_raw": "1. Sebutkan lagu yang kamu harap semua orang dengar, boleh lebih dari 1 (paragraph)\n2. Sebutkan film yang kamu harap semua orang nonton, boleh lebih dari 1 (paragraph)\n3. Kenapa mau join ke Regenerasi?\n4. Kerjaan Regen padatnya di akhir semester ganjil dan awal semester genap, kamu yakin bisa bung? (isian singkat)",
+    "description": "\"Duh pengen berkontribusi buat himpunan tapi takut ngeganggu kegiatan akademik 😥. Gimana yaaa??? 😓\"\nYaelah cuyy, kan ada Komisi Regen. Kerja kalian cuma 1, yaitu pas Pemilu HMIF. \"BENERAN NIH BANH\", beneran cik. Langsung aja join regenerasi cikkk 😍😍😍",
+    "order": 3
   },
   {
     "id": "wp46lcx594kyzbt5wh8pdm9z",
     "department_name": "Dewan Perwakilan dan Pengawasan (DPP)",
     "division_name": "Publikasi dan Dokumentasi",
+    "quota_min": 2,
+    "quota_ideal": 2,
+    "quota_max": 3,
     "questions": [
       {
         "id": "q1",
@@ -1045,6 +1393,8 @@
         "required": true
       }
     ],
-    "questions_raw": "1. apkh km punya PASSION utk desain? fyi kita pake figma & canva (multiple choice yes/no)\n2. apkh km punya PASSION utk videografi/fotografi? fyi kita chill aja modal hp aman bgt (multiple choice)\n3. apkh km bs menyisihkan waktu km utk support ketua & wakil ketua dlm acara dpp (kerjaannya dibagi adil & nyantai)? (multiple choice yes/no)\n4. kl blh tau, kesibukan km 6 bulan kedepan aph? (paragraph)\n5. LAST BGT yg udh nonton obsession, pgn wish apa kl ada one wish willow? dah itu aja see u di pubdok (paragraph)"
+    "questions_raw": "1. apkh km punya PASSION utk desain? fyi kita pake figma & canva (multiple choice yes/no)\n2. apkh km punya PASSION utk videografi/fotografi? fyi kita chill aja modal hp aman bgt (multiple choice)\n3. apkh km bs menyisihkan waktu km utk support ketua & wakil ketua dlm acara dpp (kerjaannya dibagi adil & nyantai)? (multiple choice yes/no)\n4. kl blh tau, kesibukan km 6 bulan kedepan aph? (paragraph)\n5. LAST BGT yg udh nonton obsession, pgn wish apa kl ada one wish willow? dah itu aja see u di pubdok (paragraph)",
+    "description": "hi guys…kalian suka design & dokumentasi tapi mau yg chill2 ajh & gak bebanin kuliah? PUDOK DPP LAH TEMPATNYA REALLLLL!!!!\n\nJobdesc:\n1. Dokumentasi kegiatan DPP (which is dikit bgt biasanya Pemilu, acara internal DPP, & rapat2 kalo perlu dokum)\n2. Design di figma/canva\n3. JADI ATMIN IG DPP\n\nayuks join pubdok modal hp doank udah acc banget kami tunggu di pubdoks\n",
+    "order": 4
   }
 ]
