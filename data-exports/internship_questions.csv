@@ -1,0 +1,164 @@
+department,division,division_id,question_index,question_id,label,type,options,required,label_char_count
+General Secretary,Secretary,fcgqgfv3nlxezslip14isdi9,0,q1,1. Apa alasan kamu tertarik magang di sekretaris HMIF?,textarea,,True,54
+General Secretary,Secretary,fcgqgfv3nlxezslip14isdi9,1,q2,2. Kamu punya pengalaman apa aja yang berhubungan dengan sekretaris?,textarea,,True,68
+General Secretary,Secretary,fcgqgfv3nlxezslip14isdi9,2,q3,3. Apakah kamu sanggup handle ratusan surat yang masuk?,textarea,,True,55
+General Secretary,Treasurer,4qnorf4dmsiq8dkv7ffxb8u7,0,q1,1. Apa alasan kamu pilih magang di divisi Treasurer? (Paragraph),textarea,,True,64
+General Secretary,Treasurer,4qnorf4dmsiq8dkv7ffxb8u7,1,q2,2. Ceritakan pengalamanmu yang berhubungan dengan divisi ini (Paragraph),textarea,,True,72
+General Secretary,Treasurer,4qnorf4dmsiq8dkv7ffxb8u7,2,q3,"3. Menurut kamu, apa tantangan terbesar dalam mengelola keuangan sebuah organisasi, dan bagaimana cara kamu mengatasinya? (Paragraph)",textarea,,True,133
+General Secretary,Capital Catalyst,sqvtc484vkwwbfm1girrb455,0,q1,1.  Apa alasan kamu tertarik bergabung dengan Capital Catalysts? (Paragraph),textarea,,True,76
+General Secretary,Capital Catalyst,sqvtc484vkwwbfm1girrb455,1,q2,"2. Menurutmu, apa peran Capital Catalyst dalam mendukung HMIF?",textarea,,True,62
+General Secretary,Capital Catalyst,sqvtc484vkwwbfm1girrb455,2,q3,"3. Ceritakan pengalaman yang menunjukkan kemampuanmu dalam membangun relasi, bernegosiasi, atau mengelola kegiatan yang melibatkan pihak eksternal.",textarea,,True,147
+General Secretary,Capital Catalyst,sqvtc484vkwwbfm1girrb455,3,q4,"4. Jika diberi kesempatan mengembangkan satu program atau sumber pendanaan baru untuk HMIF, ide apa yang ingin kamu usulkan? Jelaskan alasan dan gambaran singkat pelaksanaannya. (Paragraph)",textarea,,True,189
+General Secretary,Household,jcydwpaa3jvd7eb76y86qmhu,0,q1,1. Apa alasan kamu mw join RumahPegang? (Paragraph),textarea,,True,51
+General Secretary,Household,jcydwpaa3jvd7eb76y86qmhu,1,q2,"2. Apakah kamu punya pengalaman kerja (BP/Kepanitiaan, tidak perlu relevan dengan Household)? (Paragraph, optional)",textarea,,False,115
+General Secretary,Household,jcydwpaa3jvd7eb76y86qmhu,2,q3,"3. Menurut kamu, adakah hal yang bisa ditingkatkan dari kondisi sekre 1 dan/atau 2 untuk sekarang? (Paragraph, wajib)",textarea,,True,117
+General Secretary,Household,jcydwpaa3jvd7eb76y86qmhu,3,q4,4. Apakah kamu bersedia bekerja di Weekend? (Max. 1 atau 2 kali per bulan) (Yes/No),radio,Ya; Tidak,True,83
+General Secretary,Household,jcydwpaa3jvd7eb76y86qmhu,4,q5,"5.  Apakah bersedia memberikan foto kondisi meja belajar kalian? (Foto, wajib)",file,,True,78
+People,People Development,c8qa63fxbkvoiwm3k81dyado,0,q1,1. Apa alasan kamu ingin masuk People Development? (paragraph),textarea,,True,62
+People,People Development,c8qa63fxbkvoiwm3k81dyado,1,q2,"2. Menurut kamu, People Development itu sebenernya ngapain aja? (paragraph)",textarea,,True,75
+People,People Development,c8qa63fxbkvoiwm3k81dyado,2,q3,3. Adakah pengalaman organisasi atau kepanitiaan yang berkaitan dengan kaderisasi atau pembinaan anggota sebelumnya? Ceritain singkat! (paragraph),textarea,,True,146
+People,People Development,c8qa63fxbkvoiwm3k81dyado,3,q4,"4. Kalau kamu diminta merancang sekolah kepanitiaan untuk staff/panitia acara HMIF (Wispril, Wisokto, Dies Natalis, dll.), kira-kira seperti apa? (paragraph)",textarea,,True,157
+People,People Development,c8qa63fxbkvoiwm3k81dyado,4,q5,"5. Selama periode intensif, PepDev rutin menyusun progress report dan matriks penilaian. Seberapa siap kamu berkomitmen pada rutinitas administratif ini dan apakah kamu memiliki pengalaman serupa? (paragraph) 6. Yakinkan kami bahwa kamu  cocok untuk magang di  People Development! (paragraph)",textarea,,True,292
+People,People Management,tz49p5nev30ftlb0jpk1vfnu,0,q1,1. Alasan kamu ingin masuk People Management? (paragraph),textarea,,True,57
+People,People Management,tz49p5nev30ftlb0jpk1vfnu,1,q2,"2. Apakah kamu punya pengalaman dalam organisasi/kepanitiaan berhubungan dengan MSDM? Jika punya, deskripsikan pengalaman tersebut! (paragraph)",textarea,,True,143
+People,People Management,tz49p5nev30ftlb0jpk1vfnu,2,q3,"3. Apakah kamu punya pengalaman menggunakan spreadsheet dalam melakukan manajerial data mahasiswa? Jika punya, deskripsikan pengalaman tersebut! (paragraph)",textarea,,True,156
+Creative and Branding,Visual and Design,7jvln64q5vv1hozgvei9aom8,0,q1,1. Alasan kamu pilih VisDes apa yah (paragraph),textarea,,True,47
+Creative and Branding,Visual and Design,7jvln64q5vv1hozgvei9aom8,1,q2,2. Apakah kamu punya pengalaman bikin desain? Kalau punya ceritain plis (paragraph),textarea,,True,83
+Creative and Branding,Visual and Design,7jvln64q5vv1hozgvei9aom8,2,q3,"3. Software apa yang kamu gunakan untuk desain dan kalau belum pernah pakai, kamu bersedia belajar pake Figma kah (paragraph)",textarea,,True,125
+Creative and Branding,Media and Information,7kq0cft8lcbxmoj63mq0f5e1,0,q1,1. Apa alasan kamu pilih media and information? (paragraph),textarea,,True,59
+Creative and Branding,Media and Information,7kq0cft8lcbxmoj63mq0f5e1,1,q2,2. Kamu punya pengalaman di bidang dokum atau publi kah? (Isian list),textarea,,True,69
+Creative and Branding,Media and Information,7kq0cft8lcbxmoj63mq0f5e1,2,q3,3. Gear apa aja yang kamu punya berhubungan dengan fotografi atau videografi? (isian),textarea,,True,85
+Creative and Branding,Media and Information,7kq0cft8lcbxmoj63mq0f5e1,3,q4,4. Kalau punya link portfolio kamu boleh yaa dimasukkin disini! (isian),textarea,,True,71
+Creative and Branding,Content Strategist,1ff5ej82i3lxy65i6jykcc6v,,,(NO QUESTIONS),,,,0
+Internal,Kinship,oujbs8k0104aekh25bz9mngc,0,q1,1. Kenapa nih mau join Kinship? (paragraph),textarea,,True,43
+Internal,Kinship,oujbs8k0104aekh25bz9mngc,1,q2,2. Udah tau belum Kinship itu apa? Jelasin dong yang kamu tau tentang Kinship! (paragraph),textarea,,True,90
+Internal,Kinship,oujbs8k0104aekh25bz9mngc,2,q3,3. Ceritain dikit dong pengalaman berharga kamu ketika ikut serta menyelenggarakan sebuah acara! (paragraph),textarea,,True,108
+Internal,Kinship,oujbs8k0104aekh25bz9mngc,3,q4,4. Apa nih ekspektasi kamu kalau bisa join Kinship? Dan mau berpartisipasi apa di Kinship? (paragraph),textarea,,True,102
+Internal,Welfare,6yu2gl1llifne6keue82040g,0,q1,1. Apasih alasan kamu ingin masuk Divisi Welfare? (paragraph),textarea,,True,61
+Internal,Welfare,6yu2gl1llifne6keue82040g,1,q2,"2. Kamu punya pengalaman  yang berhubungan dengan welfare/kesejahteraan mahasiswa gaa (seperti advokasi finansial, aksi sosial, atau kampanye mental health)? Jika punya, coba ceritain dong pengalaman tersebut (paragraph)",textarea,,True,220
+Internal,Welfare,6yu2gl1llifne6keue82040g,2,q3,"3. Divisi Welfare berurusan dengan banyak data yang cukup sensitif. Apakah kamu punya pengalaman mengelola data rahasia atau menjadi pendengar (peer counselor) bagi temanmu? Jika punya, ceritakan bagaimana caramu menjaga privasi (paragraph)",textarea,,True,240
+Internal,Welfare,6yu2gl1llifne6keue82040g,3,q4,"4. Jika ada seorang teman yang tiba-tiba menghubungimu dan cerita bahwa ia sedang burnout parah hingga ingin menyerah dengan kuliahnya, kira-kira apa langkah pertama yang akan kamu lakukan sebagai staf Welfare?",textarea,,True,210
+Internal,Club and Hobbies,ie59hngjpzc3yw7s67h8rgdr,0,q1,1. Apa saja hobimu saat ini?,textarea,,True,28
+Internal,Club and Hobbies,ie59hngjpzc3yw7s67h8rgdr,1,q2,2. Apakah ingin menambah teman untuk hobimu? (yes/no),radio,Ya; Tidak,True,53
+Internal,Club and Hobbies,ie59hngjpzc3yw7s67h8rgdr,2,q3,"3. Jika HMIF membuat suatu klub hobimu, apakah mau bergabung klub tersebut? (yes/no)",radio,Ya; Tidak,True,84
+Internal,Club and Hobbies,ie59hngjpzc3yw7s67h8rgdr,3,q4,4. Apakah siap menjadi panitia perlombaan internal HMIF? (yes/no),radio,Ya; Tidak,True,65
+Internal,Academic,h5lawyikn3x8fufuwj7j78zf,0,q1,1. Berapa lama waktu yang dapat kamu sisihkan untuk keperluan divisi akademik? (Isian),textarea,,True,86
+Internal,Academic,h5lawyikn3x8fufuwj7j78zf,1,q2,2. Apa matkul favoritmu di semester ini? (Isian),textarea,,True,48
+Internal,Academic,h5lawyikn3x8fufuwj7j78zf,2,q3,3. Matkul apa yang menurutmu menarik di semester depan untuk jurusanmu?,textarea,,True,71
+External,Intracampus,c4al0f5mxgkhi8b975jqd6bs,0,q1,1. Apa motivasi kamu memilih divisi Intracampus? (paragraph),textarea,,True,60
+External,Intracampus,c4al0f5mxgkhi8b975jqd6bs,1,q2,2. Kesibukan kamu selama periode ini ngapain aja? (Isian),textarea,,True,57
+External,Intracampus,c4al0f5mxgkhi8b975jqd6bs,2,q3,"3. Hampir seluruh kegiatan rutin Inkam itu offline, gimana cara kamu mengatasi pembagian waktu?",textarea,,True,95
+External,Intracampus,c4al0f5mxgkhi8b975jqd6bs,3,q4,4. Seberapa fast respon kamu?,textarea,,True,29
+External,Extracampus,jujccdna1c9m1eu0r5tnaeby,0,q1,1. Apa yang kamu ketahui mengenai Ekstrakampus? (paragraf),textarea,,True,58
+External,Extracampus,jujccdna1c9m1eu0r5tnaeby,1,q2,2. Apa alasan kamu memilih divisi Ekstrakampus dan kenapa kami harus memilih kamu? Sertakan pengalaman yang relevan jika ada (paragraf),textarea,,True,135
+External,Extracampus,jujccdna1c9m1eu0r5tnaeby,2,q3,"3. Apakah kamu memiliki kontak perusahaan yang dapat dihubungi untuk menjadi potential partner Ekstrakampus HMIF? (Jika tidak, isi dengan -"")",textarea,,True,141
+External,Alumni Relations,1sx4kijb5ayhhquj3bq5du6s,0,q1,1. Apa alasanmu memilih divisi Alumni Relations (paragraph),textarea,,True,59
+External,Alumni Relations,1sx4kijb5ayhhquj3bq5du6s,1,q2,2. Pernah punya pengalaman berkomunikasi dengan orang baru/alumni/kating? ceritakan singkat (paragraph),textarea,,True,103
+External,Alumni Relations,1sx4kijb5ayhhquj3bq5du6s,2,q3,3. Seberapa fast respon kamu?,textarea,,True,29
+Tech Issues and Exploration,Technology Development,px3pkv5elfo7hooecjiesemq,0,q1,1. Alasan ingin masuk Technology Development?,textarea,,True,45
+Tech Issues and Exploration,Technology Development,px3pkv5elfo7hooecjiesemq,1,q2,2. Seberapa bagus time management kamu? Serta berikan bukti konkretnya,textarea,,True,70
+Tech Issues and Exploration,Technology Development,px3pkv5elfo7hooecjiesemq,2,q3,"3. Apakah kamu familiar dengan Web Development? Atau projek serupa lainnya?
+
+Switch Cases Questions (Priority 1)",textarea,,True,112
+Tech Issues and Exploration,Technology Development,px3pkv5elfo7hooecjiesemq,3,q4,"4. Kamu berminat masuk sub-divisi apa?
+(options: UI/UX or PM or Frontend Developer or Backend Developer)
+
+ROLE 1 (UI/UX):
+- Apakah kamu mahir dengan penggunaan Figma?
+- Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?
+
+ROLE 2 (PM):
+- Bagaimana pengalaman kamu dalam manajemen projek dan tim? Ceritakan
+- Apakah kamu familiar dengan bagaimana tim developer bekerja? Apa yang kamu pahami tentang workflow para developer, terutama teman STEI-K di lingkungan kamu?
+- Apakah kamu yakin bisa memastikan untuk keep-up tim dalam mengerjakan projek Technology Development berdasarkan request warga HMIF ITB dengan time management yang tertata rapi?
+
+ROLE 3 (Frontend Developer):
+- Tech Stack apa yang kamu sudah familiar?
+- Bagaimana cara kamu mengoptimalkan Coding Agent untuk mempercepat workflow tanpa menghancurkan kerjaan kamu atau tim mu sendiri?
+- Apakah kamu pernah tidak sengaja merusak kerjaan temanmu dengan Coding Agentmu? Ceritakan dan apa yang kamu dapatkan dari kejadian itu?
+- Seberapa mahir kamu menggunakan Git? Jelaskan
+- Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?
+
+ROLE 4 (Backend Developer):
+- Tech Stack apa yang kamu sudah familiar?
+- Bagaimana cara kamu mengoptimalkan Coding Agent untuk mempercepat workflow tanpa menghancurkan kerjaan kamu atau tim mu sendiri?
+- Apakah kamu pernah tidak sengaja merusak kerjaan temanmu dengan Coding Agentmu? Ceritakan dan apa yang kamu dapatkan dari kejadian itu?
+- Seberapa mahir kamu menggunakan Git? Jelaskan
+- Sertakan (link) dan ceritakan project yang paling kamu banggakan. Apa peranmu dalam pengerjaan project tersebut?
+
+Iterasi ulang pertanyaan untuk Priority 2 role pilihan responded
+
+LAST QUESTION",textarea,,True,1793
+Tech Issues and Exploration,Technology Development,px3pkv5elfo7hooecjiesemq,4,q5,5. Bagaimana komitmen kamu apabila terpilih menjadi anggota magang di Technology Development HMIF ITB?,textarea,,True,102
+Tech Issues and Exploration,Competition and Community,w1qft1j1df9nmh5tdv3qvdra,0,q1,"1. Kenapa kamu mau masuk CnC?
+(Paragraph)",textarea,,True,41
+Tech Issues and Exploration,Competition and Community,w1qft1j1df9nmh5tdv3qvdra,1,q2,"2. Dari 4 komunitas perlombaan yang ada (Hackathon, CP, CTF, Data Science) mana yang kamu paling tertarik?
+(Checkbox)",checkbox,Hackathon; CP; CTF; Data Science,True,117
+Tech Issues and Exploration,Competition and Community,w1qft1j1df9nmh5tdv3qvdra,2,q3,"3. Apa pengalaman, baik profesional / organisasional / personal, yang menunjukkan minat mu terhadap salah satu bidang kompetisi? Ceritainn donggg dengan detail!
+(Paragraph)",textarea,,True,172
+Tech Issues and Exploration,Competition and Community,w1qft1j1df9nmh5tdv3qvdra,3,q4,4. Kira-kira kesibukannya apa ya satu tahun kedepan?,textarea,,True,52
+Tech Issues and Exploration,Competition and Community,w1qft1j1df9nmh5tdv3qvdra,4,q5,"5. Apa komitmen kamu yang bisa kami pegang bahwa kamu bisa berkontribusi secara maksimal di CnC?
+(Paragraph)",textarea,,True,108
+Tech Issues and Exploration,Career Development,kbtxuq9vdkx37ihmxz5wy7rr,0,q1,"1. Alasan ingin masuk ke Career Development?
+(Paragraph)",textarea,,True,56
+Tech Issues and Exploration,Career Development,kbtxuq9vdkx37ihmxz5wy7rr,1,q2,"2. Bidang karir apa yang ingin dieksplorasi beberapa tahun ke depan beserta alasan?
+(Paragraph)",textarea,,True,95
+Tech Issues and Exploration,Career Development,kbtxuq9vdkx37ihmxz5wy7rr,2,q3,"3. Pilih yang kamu suka:
+- Menulis dan bikin konten
+- Ngobrol & wawancara kakak tingkat/alumni
+- Ngecek info lowongan & nyusun data biar rapi
+- Ngonsep acara
+(checkbox)",checkbox,Menulis dan bikin konten; Ngobrol & wawancara kakak tingkat/alumni; Ngecek info lowongan & nyusun data biar rapi; Ngonsep acara,True,168
+Tech Issues and Exploration,Career Development,kbtxuq9vdkx37ihmxz5wy7rr,3,q4,4. Kesibukan satu tahun ke depan,textarea,,True,32
+Community Service,Tech Insight,gxb1xrz0xo59a5mn2qnb007n,0,q1,1. Seberapa sering kamu membaca berita atau konten seputar teknologi? (rate 1-5),textarea,,True,80
+Community Service,Tech Insight,gxb1xrz0xo59a5mn2qnb007n,1,q2,"2. Topik teknologi apa yang sedang kamu minati? (AI, Cyber Security, Data Science, IoT, dll.)(paragraf)",textarea,,True,103
+Community Service,Tech Insight,gxb1xrz0xo59a5mn2qnb007n,2,q3,3. Apakah ada isu atau topik yang ingin kamu bahas di kegiatan kajian? (paragraf),textarea,,True,81
+Community Service,Tech Insight,gxb1xrz0xo59a5mn2qnb007n,3,q4,4. Harapan atau ide yang ingin kamu bawa untuk Tech Insight ke depannya? (paragraf),textarea,,True,83
+Community Service,Tech Action,o5rbiqhkxtm5a1ejjwn5e65x,0,q1,1. Kasih tau dong alasan utama kamu pengen join Tech Action dan berpengmas di HMIF? (paragraph),textarea,,True,95
+Community Service,Tech Action,o5rbiqhkxtm5a1ejjwn5e65x,1,q2,"2.1 Di Tech Action, kita bakal sering banget kegiatan offline dan turun ke lapangan lho! Seberapa siap kamu berkomitmen untuk mobilitas ini? (scale 1-5)",textarea,,True,152
+Community Service,Tech Action,o5rbiqhkxtm5a1ejjwn5e65x,2,q3,2.2 Gimana cara kamu atur waktu antara tech action dan urusan akademik biar keduanya tetep aman? (paragraf),textarea,,True,107
+Community Service,Tech Action,o5rbiqhkxtm5a1ejjwn5e65x,3,q4,"3.1 Nah, dari 4 keseruan program kerja kita, kamu paling ngincer sub-divisi yang mana nih?:
+- Tech For School,
+- Desa.dev,
+- Relasi++
+(checkbox)",checkbox,Tech For School; Desa.dev; Relasi++,True,144
+Community Service,Tech Action,o5rbiqhkxtm5a1ejjwn5e65x,4,q5,3.2 Spill dong kenapa kamu pilih sub-divisi itu! (paragraf),textarea,,True,59
+Community Service,Tech Action,o5rbiqhkxtm5a1ejjwn5e65x,5,q6,"4. Kalo tiba-tiba program yang udah direncanain matang sama divisi tech action ternyata gak sesuai sama kondisi di lapangan saat dieksekusi (misal pesertanya gak responsif atau fasilitas kurang), apa yang bakal kamu lakuin? (paragraph)",textarea,,True,235
+Community Service,Tech Action,o5rbiqhkxtm5a1ejjwn5e65x,6,q7,"5. Ceritain satu pengalaman kepanitiaan/organisasimu yang paling memorable dong, terutama pas kamu dituntut buat kerja sama bareng orang-orang baru! (paragraph)",textarea,,True,160
+Badan Kesenatoran,Kesekjenan,lzqch1uruibog59dty2f46m4,,,(NO QUESTIONS),,,,0
+Badan Kesenatoran,Kajian,aaa67y0hkdqw0fkkrsjjuzd0,0,q1,"1. Kenapa Kajian (paragraph) 2. Sebutkan isu yang ingin kamu bawakan dalam kajian, dan mengapa? Berikan 1 topik nasional dan 1 topik internasional yang kamu suka (paragraph)",textarea,,True,173
+Badan Kesenatoran,Aspirasi,a92s8mvb1i47owba6569kafl,0,q1,1. Kenapa aspirasi? (paragraph),textarea,,True,31
+Badan Kesenatoran,Aspirasi,a92s8mvb1i47owba6569kafl,1,q2,2. Seberapa penting menurut kamu bidang aspirasi di badan kesenatoran hmif itb? dan kenapa (paragraph),textarea,,True,102
+Badan Kesenatoran,Aspirasi,a92s8mvb1i47owba6569kafl,2,q3,"3. Coba sebutkan satu isu terkini (bebas memilih isu informatika, kampus, atau nasional) yang menurutmu penting untuk dikawal, dan berikan pandangan singkatmu mengenai isu tersebut! (paragraph)",textarea,,True,193
+Badan Kesenatoran,Kinship,36kmp466merbfiqb4enludwt,0,q1,1. Apa yang membuatmu tertarik bergabung dengan Kinship Badan Kesenatoran? (paragraph),textarea,,True,86
+Badan Kesenatoran,Kinship,36kmp466merbfiqb4enludwt,1,q2,"2. Jika menjadi bagian dari Kinship, bagaimana cara kamu menjaga kedekatan antaranggota yang memiliki kesibukan dan karakter yang berbeda-beda? (paragraph)",textarea,,True,155
+Badan Kesenatoran,Kinship,36kmp466merbfiqb4enludwt,2,q3,"3. Misalnya setelah beberapa bulan kepengurusan, kamu melihat masih ada beberapa anggota yang jarang ikut kegiatan informal dan cenderung menyendiri. Sebagai anggota Kinship, apa yang akan kamu lakukan? (paragraph)",textarea,,True,214
+Badan Kesenatoran,Kinship,36kmp466merbfiqb4enludwt,3,q4,"4. Spill donggg ide kegiatan refreshing sebanyak mungkin yang menurutmu seru untuk Badsen Geser dan banyak orang tertarik untuk mengikutinya! Bebas yahh, bisa indoor ataupun outdoor (short answer)",textarea,,True,196
+Badan Kesenatoran,Kinship,36kmp466merbfiqb4enludwt,4,q5,5. SEBERAPA SIAP KAMU BERSENANG-SENANG DI KINSHIP KESENATORAN??? (linear scale),radio,1; 2; 3; 4; 5,True,79
+Badan Kesenatoran,Kreatif,rgj0rv17s59y2vr44ky90sa3,0,q1,1. Apa alasan kamu ingin bergabung dengan Divisi Kreatif Badan Kesenatoran? (Paragraph),textarea,,True,87
+Badan Kesenatoran,Kreatif,rgj0rv17s59y2vr44ky90sa3,1,q2,"2. Ceritakan pengalamanmu membuat desain, ilustrasi, konten media sosial, atau karya kreatif lainnya (boleh organisasi, kepanitiaan, maupun pribadi). (Paragraph)",textarea,,True,161
+Badan Kesenatoran,Kreatif,rgj0rv17s59y2vr44ky90sa3,2,q3,"3. Software atau tools apa yang biasa kamu gunakan untuk mendesain? (Figma, Canva, Illustrator, Photoshop, dll.) (Paragraph)",textarea,,True,124
+Badan Kesenatoran,Kreatif,rgj0rv17s59y2vr44ky90sa3,3,q4,"4. Menurutmu, bagaimana cara menyampaikan informasi yang cukup kompleks agar tetap menarik dan mudah dipahami oleh mahasiswa? (Paragraph)",textarea,,True,137
+Badan Kesenatoran,Kreatif,rgj0rv17s59y2vr44ky90sa3,4,q5,"5. Jika memiliki portofolio, silakan lampirkan link-nya di sini. (Short answer)",textarea,,True,79
+Dewan Perwakilan dan Pengawasan (DPP),Kesekjenan,wtfarg8ahvkqubbnlom6nhgr,0,q1,1. [PENTING!] Siapa waifu/husbando/oshi kamu? (short answer),textarea,,True,60
+Dewan Perwakilan dan Pengawasan (DPP),Kesekjenan,wtfarg8ahvkqubbnlom6nhgr,1,q2,2. Seberapa terbiasa kamu dengan Google Docs dan Spreadsheet? (linear scale 1-4),radio,1; 2; 3; 4,True,80
+Dewan Perwakilan dan Pengawasan (DPP),Kesekjenan,wtfarg8ahvkqubbnlom6nhgr,2,q3,"3. Sebutkan favorit kamu untuk tiap hal berikut: makanan, minuman, game, anime/film, manga/manhwa/komik, VTuber (kalo ada), lagu (paragraf)",textarea,,True,139
+Dewan Perwakilan dan Pengawasan (DPP),Kesekjenan,wtfarg8ahvkqubbnlom6nhgr,3,q4,4. Kenapa pengen join Kesekjenan? (paragraf),textarea,,True,44
+Dewan Perwakilan dan Pengawasan (DPP),Kesekjenan,wtfarg8ahvkqubbnlom6nhgr,4,q5,5. Apakah kamu bersedia menjadi notulen rapat dan menjadi anggota PPZI? (multiple choice yes or no),radio,Ya; Tidak,True,99
+Dewan Perwakilan dan Pengawasan (DPP),Perbaikan Sistem,3i3qmdjq51h148tvqcdzya4o,0,q1,1. Sebutkan satu hal unik mengenai dirimu (paragraph),textarea,,True,53
+Dewan Perwakilan dan Pengawasan (DPP),Perbaikan Sistem,3i3qmdjq51h148tvqcdzya4o,1,q2,2. Sebutkan lagu yang mau kamu rekomenkan ke semua orang (paragraph),textarea,,True,68
+Dewan Perwakilan dan Pengawasan (DPP),Perbaikan Sistem,3i3qmdjq51h148tvqcdzya4o,2,q3,3. Kenapa mau join perbaikan sistem? (paragraph),textarea,,True,48
+Dewan Perwakilan dan Pengawasan (DPP),Perbaikan Sistem,3i3qmdjq51h148tvqcdzya4o,3,q4,4. Tuliskan komitmenmu bila masuk ke perbaikan sistem? (paragraph),textarea,,True,66
+Dewan Perwakilan dan Pengawasan (DPP),Pengawasan,qmhq52bp4tevl55rjuuz3oix,0,q1,"1. Sebutin 1 game yang paling kamu suka, dan kenapa? (paragraph)",textarea,,True,64
+Dewan Perwakilan dan Pengawasan (DPP),Pengawasan,qmhq52bp4tevl55rjuuz3oix,1,q2,2. Kirimin meme favorit kamu (upload file),file,,True,42
+Dewan Perwakilan dan Pengawasan (DPP),Pengawasan,qmhq52bp4tevl55rjuuz3oix,2,q3,3. Kenapa mau apply ke pengawasan? (paragraph),textarea,,True,46
+Dewan Perwakilan dan Pengawasan (DPP),Pengawasan,qmhq52bp4tevl55rjuuz3oix,3,q4,4. Tuliskan komitmenmu kalo keterima di pengawasan (paragraph),textarea,,True,62
+Dewan Perwakilan dan Pengawasan (DPP),Regenerasi,936hhcsesd9g82k7trd1b6pr,0,q1,"1. Sebutkan lagu yang kamu harap semua orang dengar, boleh lebih dari 1 (paragraph)",textarea,,True,83
+Dewan Perwakilan dan Pengawasan (DPP),Regenerasi,936hhcsesd9g82k7trd1b6pr,1,q2,"2. Sebutkan film yang kamu harap semua orang nonton, boleh lebih dari 1 (paragraph)",textarea,,True,83
+Dewan Perwakilan dan Pengawasan (DPP),Regenerasi,936hhcsesd9g82k7trd1b6pr,2,q3,3. Kenapa mau join ke Regenerasi?,textarea,,True,33
+Dewan Perwakilan dan Pengawasan (DPP),Regenerasi,936hhcsesd9g82k7trd1b6pr,3,q4,"4. Kerjaan Regen padatnya di akhir semester ganjil dan awal semester genap, kamu yakin bisa bung? (isian singkat)",textarea,,True,113
+Dewan Perwakilan dan Pengawasan (DPP),Publikasi dan Dokumentasi,wp46lcx594kyzbt5wh8pdm9z,0,q1,1. apkh km punya PASSION utk desain? fyi kita pake figma & canva (multiple choice yes/no),radio,Ya; Tidak,True,89
+Dewan Perwakilan dan Pengawasan (DPP),Publikasi dan Dokumentasi,wp46lcx594kyzbt5wh8pdm9z,1,q2,2. apkh km punya PASSION utk videografi/fotografi? fyi kita chill aja modal hp aman bgt (multiple choice),radio,Ya; Tidak,True,105
+Dewan Perwakilan dan Pengawasan (DPP),Publikasi dan Dokumentasi,wp46lcx594kyzbt5wh8pdm9z,2,q3,3. apkh km bs menyisihkan waktu km utk support ketua & wakil ketua dlm acara dpp (kerjaannya dibagi adil & nyantai)? (multiple choice yes/no),radio,Ya; Tidak,True,141
+Dewan Perwakilan dan Pengawasan (DPP),Publikasi dan Dokumentasi,wp46lcx594kyzbt5wh8pdm9z,3,q4,"4. kl blh tau, kesibukan km 6 bulan kedepan aph? (paragraph)",textarea,,True,60
+Dewan Perwakilan dan Pengawasan (DPP),Publikasi dan Dokumentasi,wp46lcx594kyzbt5wh8pdm9z,4,q5,"5. LAST BGT yg udh nonton obsession, pgn wish apa kl ada one wish willow? dah itu aja see u di pubdok (paragraph)",textarea,,True,113
