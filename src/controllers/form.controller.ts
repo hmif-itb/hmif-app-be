@@ -27,14 +27,24 @@ import { createAuthRouter } from './router-factory';
 
 const FORM_ADMIN_ROLES = ['admin'] as const;
 
+// One-off early-access allowlist: these NIMs may fill the form before opensAt.
+const EARLY_ACCESS_NIMS = ['18225020', '13525006'];
+
+function isFormOpenForUser(form: Pick<Form, 'opensAt'>, nim: string): boolean {
+  return (
+    new Date() >= new Date(form.opensAt) || EARLY_ACCESS_NIMS.includes(nim)
+  );
+}
+
 export const formRouter = createAuthRouter();
 
 function computeStatus(
   form: Pick<Form, 'opensAt'>,
   hasResponse: boolean,
+  nim: string,
 ): 'not_opened' | 'open' | 'already_responded' {
   if (hasResponse) return 'already_responded';
-  if (new Date() < new Date(form.opensAt)) return 'not_opened';
+  if (!isFormOpenForUser(form, nim)) return 'not_opened';
   return 'open';
 }
 
@@ -51,7 +61,7 @@ formRouter.openapi(listFormsRoute, async (c) => {
       const { sections: _sections, ...rest } = f;
       return {
         ...rest,
-        status: computeStatus(f, !!response),
+        status: computeStatus(f, !!response, user.nim),
       };
     }),
   );
@@ -71,10 +81,11 @@ formRouter.openapi(listAllFormsRoute, async (c) => {
 
 formRouter.openapi(getFormRoute, async (c) => {
   const { formId } = c.req.valid('param');
+  const user = c.var.user;
   const form = await getFormById(db, formId);
   if (!form) return c.json({ error: 'Form not found' }, 404);
 
-  const opened = new Date() >= new Date(form.opensAt);
+  const opened = isFormOpenForUser(form, user.nim);
 
   return c.json(
     {
@@ -106,7 +117,7 @@ formRouter.openapi(submitFormResponseRoute, async (c) => {
     return c.json({ error: 'You are not eligible for this form' }, 403);
   }
 
-  if (new Date() < new Date(form.opensAt)) {
+  if (!isFormOpenForUser(form, user.nim)) {
     return c.json({ error: 'This form has not opened yet' }, 403);
   }
 
