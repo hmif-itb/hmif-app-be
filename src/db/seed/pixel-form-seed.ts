@@ -59,6 +59,13 @@ const pixelFormSections: FormSection[] = [
         ],
       },
       {
+        id: 'q22',
+        label:
+          'Sebutkan kegiatan waktu luang lain yang Anda maksud. (Apabila belum memiliki jawaban pasti, Anda dapat mengisi tanda "-".)',
+        type: 'text',
+        dependsOn: { questionId: 'q6', value: 'Other' },
+      },
+      {
         id: 'q7',
         label:
           'Kegiatan apa yang biasanya kamu lakukan saat santai bareng teman?',
@@ -74,6 +81,13 @@ const pixelFormSections: FormSection[] = [
           'Jarang atau tidak pernah berkegiatan santai bareng teman',
           'Other',
         ],
+      },
+      {
+        id: 'q23',
+        label:
+          'Sebutkan kegiatan santai bareng teman lain yang Anda maksud. (Apabila belum memiliki jawaban pasti, Anda dapat mengisi tanda "-".)',
+        type: 'text',
+        dependsOn: { questionId: 'q7', value: 'Other' },
       },
       {
         id: 'q8',
@@ -104,6 +118,13 @@ const pixelFormSections: FormSection[] = [
         ],
       },
       {
+        id: 'q24',
+        label:
+          'Sebutkan alasan ketertarikan Anda yang dimaksud. (Apabila belum memiliki jawaban pasti, Anda dapat mengisi tanda "-".)',
+        type: 'text',
+        dependsOn: { questionId: 'q9', value: 'Other' },
+      },
+      {
         id: 'q10',
         label:
           'Supaya kamu nyaman, kegiatan santai HMIF sebaiknya dibuat seperti apa?',
@@ -122,6 +143,13 @@ const pixelFormSections: FormSection[] = [
           'Tidak ada harapan khusus',
           'Other',
         ],
+      },
+      {
+        id: 'q25',
+        label:
+          'Sebutkan harapan Anda yang dimaksud. (Apabila belum memiliki jawaban pasti, Anda dapat mengisi tanda "-".)',
+        type: 'text',
+        dependsOn: { questionId: 'q11', value: 'Other' },
       },
       {
         id: 'q12',
@@ -151,6 +179,13 @@ const pixelFormSections: FormSection[] = [
         ],
       },
       {
+        id: 'q26',
+        label:
+          'Sebutkan kegiatan jalan-jalan lain yang Anda maksud. (Apabila belum memiliki jawaban pasti, Anda dapat mengisi tanda "-".)',
+        type: 'text',
+        dependsOn: { questionId: 'q13', value: 'Other' },
+      },
+      {
         id: 'q14',
         label: 'Apa yang bikin kamu tertarik ikut jalan-jalan bareng HMIF?',
         type: 'checkbox',
@@ -167,6 +202,13 @@ const pixelFormSections: FormSection[] = [
         ],
       },
       {
+        id: 'q27',
+        label:
+          'Sebutkan alasan ketertarikan Anda yang dimaksud. (Apabila belum memiliki jawaban pasti, Anda dapat mengisi tanda "-".)',
+        type: 'text',
+        dependsOn: { questionId: 'q14', value: 'Other' },
+      },
+      {
         id: 'q15',
         label: 'Setelah ikut jalan-jalan bareng HMIF, apa yang kamu harapkan?',
         type: 'checkbox',
@@ -179,6 +221,13 @@ const pixelFormSections: FormSection[] = [
           'Tidak ada harapan khusus',
           'Other',
         ],
+      },
+      {
+        id: 'q28',
+        label:
+          'Sebutkan harapan Anda yang dimaksud. (Apabila belum memiliki jawaban pasti, Anda dapat mengisi tanda "-".)',
+        type: 'text',
+        dependsOn: { questionId: 'q15', value: 'Other' },
       },
       {
         id: 'q16',
@@ -210,7 +259,7 @@ const pixelFormSections: FormSection[] = [
       {
         id: 'q19',
         label:
-          'Sebutkan acara HMIF yang kamu maksud (boleh isi tanda "-" kalau belum kepikiran)',
+          'Sebutkan acara HMIF yang Anda maksud. (Apabila belum memiliki jawaban pasti, Anda dapat mengisi tanda "-".)',
         type: 'text',
         dependsOn: { questionId: 'q18', value: 'Others' },
       },
@@ -224,7 +273,7 @@ const pixelFormSections: FormSection[] = [
       {
         id: 'q21',
         label:
-          'Sebutkan orientasi kegiatan yang kamu maksud (boleh isi tanda "-" kalau belum kepikiran)',
+          'Sebutkan orientasi kegiatan yang Anda maksud. (Apabila belum memiliki jawaban pasti, Anda dapat mengisi tanda "-".)',
         type: 'text',
         dependsOn: { questionId: 'q20', value: 'Others' },
       },

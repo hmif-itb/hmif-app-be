@@ -216,9 +216,11 @@ function findMissingRequiredQuestions(
 
   const isRequired = (question: FormQuestion) => {
     if (!question.dependsOn) return true;
-    return (
-      answerMap.get(question.dependsOn.questionId) === question.dependsOn.value
-    );
+    const dependsAnswer = answerMap.get(question.dependsOn.questionId);
+    if (Array.isArray(dependsAnswer)) {
+      return dependsAnswer.includes(question.dependsOn.value);
+    }
+    return dependsAnswer === question.dependsOn.value;
   };
 
   for (const section of sections) {
