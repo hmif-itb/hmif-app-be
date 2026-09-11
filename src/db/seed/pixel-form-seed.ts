@@ -23,7 +23,7 @@ const pixelFormSections: FormSection[] = [
         id: 'q3',
         label: 'Dari angkatan mana nih?',
         type: 'radio',
-        options: ['Cipher', 'Proxy', "IF/STI '25"],
+        options: ['PIXEL'],
       },
       {
         id: 'q4',
@@ -35,7 +35,7 @@ const pixelFormSections: FormSection[] = [
         id: 'q5',
         label: 'Kelas berapa tuh?',
         type: 'radio',
-        options: ['Kelas 1', 'Kelas 2', 'Kelas 3'],
+        options: ['IF K1', 'IF K2', 'IF K3', 'STI Genap', 'STI Ganjil'],
       },
     ],
   },
@@ -195,6 +195,38 @@ const pixelFormSections: FormSection[] = [
         // plan's judgment call #1 (forcing everyone to answer "why not
         // interested" would be a logical fallacy).
         dependsOn: { questionId: 'q16', value: 'Tidak tertarik' },
+      },
+      {
+        id: 'q18',
+        label:
+          'Kira-kira acara HMIF apa yang kamu antusias banget untuk ikut kalau diadakan?',
+        type: 'radio',
+        options: [
+          'Lomba Keinformatikaan Internal',
+          'Nonton Bareng PIPS',
+          'Others',
+        ],
+      },
+      {
+        id: 'q19',
+        label:
+          'Sebutkan acara HMIF yang kamu maksud (boleh isi tanda "-" kalau belum kepikiran)',
+        type: 'text',
+        dependsOn: { questionId: 'q18', value: 'Others' },
+      },
+      {
+        id: 'q20',
+        label:
+          'Kegiatan yang mengorientasikan kemana yang kamu inginkan ada di HMIF?',
+        type: 'radio',
+        options: ['Career', 'Akademik', 'Job Opportunity', 'Others'],
+      },
+      {
+        id: 'q21',
+        label:
+          'Sebutkan orientasi kegiatan yang kamu maksud (boleh isi tanda "-" kalau belum kepikiran)',
+        type: 'text',
+        dependsOn: { questionId: 'q20', value: 'Others' },
       },
     ],
   },
