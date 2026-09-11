@@ -43,6 +43,8 @@ export const rolesEnums = [
   'de',
   'dpp',
   'curhatadmin',
+  // admin
+  'admin',
 ] as const;
 
 export const rolesGroup: Record<(typeof rolesEnums)[number], string> = {
@@ -81,4 +83,5 @@ export const rolesGroup: Record<(typeof rolesEnums)[number], string> = {
   de: 'DE',
   dpp: 'DPP',
   curhatadmin: 'Curhat Admin',
+  admin: 'Admin',
 };

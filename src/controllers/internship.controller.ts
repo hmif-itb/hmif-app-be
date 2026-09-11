@@ -31,7 +31,7 @@ import {
 } from '~/routes/internship.route';
 import { createAuthRouter } from './router-factory';
 
-const SPARTA_ADMIN_ROLES = ['peoplemanage'] as const;
+const SPARTA_ADMIN_ROLES = ['peoplemanage', 'admin'] as const;
 
 export const internshipRouter = createAuthRouter();
 

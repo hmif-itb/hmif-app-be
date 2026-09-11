@@ -105,6 +105,8 @@ app.doc('/doc', {
     { name: 'markdown', description: 'Markdown API' },
     { name: 'recommendation', description: 'Recommendations API' },
     { name: 'curhat', description: 'Curhat API' },
+    { name: 'internship', description: 'Internship API' },
+    { name: 'form', description: 'Form API' },
   ],
 });
 app.get('/swagger', swaggerUI({ url: '/doc' }));

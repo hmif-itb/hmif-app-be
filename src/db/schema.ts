@@ -1122,3 +1122,82 @@ export const internshipSubmissionChoicesRelation = relations(
     }),
   }),
 );
+
+export interface FormQuestion {
+  id: string;
+  label: string;
+  type: 'text' | 'textarea' | 'radio' | 'checkbox';
+  options?: string[];
+  // When set, this question is only shown/required if the question
+  // `dependsOn.questionId` was answered with `dependsOn.value`. Otherwise
+  // it's considered N/A and excluded from "required" validation.
+  dependsOn?: { questionId: string; value: string };
+}
+
+export interface FormSection {
+  id: string;
+  title: string;
+  questions: FormQuestion[];
+}
+
+export interface FormAnswer {
+  questionId: string;
+  answer: string | string[];
+}
+
+export const forms = pgTable('forms', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  slug: text('slug').unique().notNull(),
+  title: text('title').notNull(),
+  description: text('description'),
+  eligibleAngkatan: json('eligible_angkatan')
+    .$type<number[]>()
+    .notNull()
+    .default([]),
+  sections: json('sections').$type<FormSection[]>().notNull().default([]),
+  opensAt: timestamp('opens_at', { withTimezone: true }).notNull(),
+  isActive: boolean('is_active').notNull().default(true),
+  order: integer('order').notNull().default(0),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export type Form = InferSelectModel<typeof forms>;
+
+export const formsRelation = relations(forms, ({ many }) => ({
+  responses: many(formResponses),
+}));
+
+export const formResponses = pgTable(
+  'form_responses',
+  {
+    id: text('id').primaryKey().$defaultFn(createId),
+    formId: text('form_id')
+      .references(() => forms.id, { onDelete: 'cascade' })
+      .notNull(),
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    answers: json('answers').$type<FormAnswer[]>().notNull(),
+    submittedAt: timestamp('submitted_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => ({
+    uniqueUserForm: unique().on(t.formId, t.userId),
+  }),
+);
+
+export type FormResponse = InferSelectModel<typeof formResponses>;
+
+export const formResponsesRelation = relations(formResponses, ({ one }) => ({
+  form: one(forms, {
+    fields: [formResponses.formId],
+    references: [forms.id],
+  }),
+  user: one(users, {
+    fields: [formResponses.userId],
+    references: [users.id],
+  }),
+}));

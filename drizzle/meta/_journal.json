@@ -176,6 +176,13 @@
       "when": 1755000000002,
       "tag": "0024_internship_division_description",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1789111961010,
+      "tag": "0025_wooden_virginia_dare",
+      "breakpoints": true
     }
   ]
 }

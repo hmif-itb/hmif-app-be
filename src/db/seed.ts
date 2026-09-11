@@ -7,6 +7,7 @@ import fs from 'fs';
 import postgres from 'postgres';
 import { z } from 'zod';
 import { rolesGroup } from './roles-group';
+import { runPixelFormSeed } from './seed/pixel-form-seed';
 import {
   angkatan,
   calendarGroup,
@@ -373,7 +374,8 @@ async function runAllSeeds() {
     // await runTestimoniSeed('testimoni-if.csv');
     // await runTestimoniSeed('testimoni-sti.csv');
     // await runCalendarSeed();
-    await runRolesGroupSeed();
+    // await runRolesGroupSeed();
+    await runPixelFormSeed(db);
   } catch (error) {
     console.log(error);
   }
