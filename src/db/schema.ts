@@ -1126,12 +1126,15 @@ export const internshipSubmissionChoicesRelation = relations(
 export interface FormQuestion {
   id: string;
   label: string;
-  type: 'text' | 'textarea' | 'radio' | 'checkbox';
+  type: 'text' | 'textarea' | 'radio' | 'checkbox' | 'rating';
   options?: string[];
   // When set, this question is only shown/required if the question
   // `dependsOn.questionId` was answered with `dependsOn.value`. Otherwise
   // it's considered N/A and excluded from "required" validation.
   dependsOn?: { questionId: string; value: string };
+  // When true, this question is always shown but never required (e.g. an
+  // optional free-text suggestion box).
+  optional?: boolean;
 }
 
 export interface FormSection {

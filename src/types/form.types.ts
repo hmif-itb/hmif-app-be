@@ -6,11 +6,12 @@ export const FormQuestionSchema = z
   .object({
     id: z.string(),
     label: z.string(),
-    type: z.enum(['text', 'textarea', 'radio', 'checkbox']),
+    type: z.enum(['text', 'textarea', 'radio', 'checkbox', 'rating']),
     options: z.array(z.string()).optional(),
     dependsOn: z
       .object({ questionId: z.string(), value: z.string() })
       .optional(),
+    optional: z.boolean().optional(),
   })
   .openapi('FormQuestion');
 
@@ -145,7 +146,7 @@ export const FormAnalyticsOptionCountSchema = z.object({
 export const FormAnalyticsQuestionSchema = z.object({
   questionId: z.string(),
   label: z.string(),
-  type: z.enum(['radio', 'checkbox']),
+  type: z.enum(['radio', 'checkbox', 'rating']),
   options: z.array(FormAnalyticsOptionCountSchema),
 });
 

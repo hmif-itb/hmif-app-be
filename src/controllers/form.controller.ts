@@ -215,6 +215,7 @@ function findMissingRequiredQuestions(
   };
 
   const isRequired = (question: FormQuestion) => {
+    if (question.optional) return false;
     if (!question.dependsOn) return true;
     const dependsAnswer = answerMap.get(question.dependsOn.questionId);
     if (Array.isArray(dependsAnswer)) {

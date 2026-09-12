@@ -279,6 +279,26 @@ const pixelFormSections: FormSection[] = [
       },
     ],
   },
+  {
+    id: 'feedback-welpar',
+    title: 'Feedback Welcoming Party 2025',
+    questions: [
+      {
+        id: 'q29',
+        label:
+          'Secara keseluruhan, gimana penilaian kamu soal Welcoming Party 2025? (1 = sangat kurang, 5 = sangat baik)',
+        type: 'rating',
+        options: ['1', '2', '3', '4', '5'],
+      },
+      {
+        id: 'q30',
+        label:
+          'Apabila ada masukan untuk Welcoming Party 2025 boleh diisi di bawah ya',
+        type: 'textarea',
+        optional: true,
+      },
+    ],
+  },
 ];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

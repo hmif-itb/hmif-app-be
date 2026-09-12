@@ -118,7 +118,9 @@ export function buildAnalytics(
   }>,
 ) {
   const choiceQuestions = sections.flatMap((s) =>
-    s.questions.filter((q) => q.type === 'radio' || q.type === 'checkbox'),
+    s.questions.filter(
+      (q) => q.type === 'radio' || q.type === 'checkbox' || q.type === 'rating',
+    ),
   );
 
   const questions = choiceQuestions.map((question) => {
@@ -142,7 +144,7 @@ export function buildAnalytics(
     return {
       questionId: question.id,
       label: question.label,
-      type: question.type as 'radio' | 'checkbox',
+      type: question.type as 'radio' | 'checkbox' | 'rating',
       options: Array.from(counts.entries()).map(([value, count]) => ({
         value,
         count,
