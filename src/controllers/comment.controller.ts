@@ -1,4 +1,4 @@
-import { PostgresError } from 'postgres';
+import postgres from 'postgres';
 import { db } from '~/db/drizzle';
 import {
   createComment,
@@ -40,7 +40,7 @@ commentRouter.openapi(postCommentRoute, async (c) => {
     const comment = await createComment(db, data, userId);
     return c.json({ ...comment, creator: c.var.user }, 201);
   } catch (err) {
-    if (err instanceof PostgresError)
+    if (err instanceof postgres.PostgresError)
       return c.json({ error: err.message }, 400);
     throw err;
   }

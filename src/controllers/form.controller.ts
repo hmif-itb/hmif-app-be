@@ -1,4 +1,4 @@
-import { PostgresError } from 'postgres';
+import postgres from 'postgres';
 import { db } from '~/db/drizzle';
 import { Form, FormQuestion, FormSection } from '~/db/schema';
 import { roleMiddleware } from '~/middlewares/role.middleware';
@@ -143,7 +143,7 @@ formRouter.openapi(submitFormResponseRoute, async (c) => {
 
     return c.json(response, 201);
   } catch (err) {
-    if (err instanceof PostgresError) {
+    if (err instanceof postgres.PostgresError) {
       if (err.code === '23505') {
         return c.json(
           { error: 'Already submitted a response for this form' },

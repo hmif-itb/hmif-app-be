@@ -2,6 +2,9 @@ import { z } from '@hono/zod-openapi';
 import 'dotenv/config';
 
 const EnvSchema = z.object({
+  NODE_ENV: z.enum(['development', 'test', 'production']).default('production'),
+  DEV_LOGIN_EMAIL: z.string().email().optional(),
+  DEV_LOGIN_PASSWORD_HASH: z.string().optional(),
   PORT: z.coerce.number().default(5000),
   DATABASE_URL: z.string().url(),
   ALLOWED_ORIGINS: z

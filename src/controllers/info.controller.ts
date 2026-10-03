@@ -1,4 +1,4 @@
-import { PostgresError } from 'postgres';
+import postgres from 'postgres';
 import { db } from '~/db/drizzle';
 import {
   createInfo,
@@ -74,7 +74,7 @@ infoRouter.openapi(createInfoRoute, async (c) => {
 
     return c.json(info, 201);
   } catch (err) {
-    if (err instanceof PostgresError)
+    if (err instanceof postgres.PostgresError)
       return c.json({ error: err.message }, 400);
     throw err;
   }

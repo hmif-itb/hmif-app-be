@@ -18,7 +18,7 @@ import {
   deleteVoucherReviewRoute,
   deleteCoWorkingSpaceReviewRoute,
 } from '~/routes/recommendation.route';
-import { PostgresError } from 'postgres';
+import postgres from 'postgres';
 export const recommendationRoute = createAuthRouter();
 
 recommendationRoute.openapi(postRecommendationVoucherRoute, async (c) => {
@@ -63,7 +63,7 @@ recommendationRoute.openapi(postVoucherReviewRoute, async (c) => {
     // console.log('Created voucher review:', voucher);
     return c.json(voucher, 201);
   } catch (error) {
-    if (error instanceof PostgresError) {
+    if (error instanceof postgres.PostgresError) {
       // console.log('Postgres error:', error);
       return c.json(
         {
@@ -103,7 +103,7 @@ recommendationRoute.openapi(postCoWorkingSpaceReviewRoute, async (c) => {
     // console.log('Created co-working space review:', coWorkingSpaceReview);
     return c.json(coWorkingSpaceReview, 201);
   } catch (error) {
-    if (error instanceof PostgresError) {
+    if (error instanceof postgres.PostgresError) {
       return c.json(
         {
           error: 'failed to create co-working space review',
@@ -162,7 +162,7 @@ recommendationRoute.openapi(deleteVoucherReviewRoute, async (c) => {
       );
     }
   } catch (error) {
-    if (error instanceof PostgresError) {
+    if (error instanceof postgres.PostgresError) {
       return c.json(
         {
           error: 'failed to delete voucher',
@@ -224,7 +224,7 @@ recommendationRoute.openapi(deleteCoWorkingSpaceReviewRoute, async (c) => {
       );
     }
   } catch (error) {
-    if (error instanceof PostgresError) {
+    if (error instanceof postgres.PostgresError) {
       return c.json(
         {
           error: 'failed to delete co-working space review',

@@ -18,7 +18,7 @@ import {
 import { db } from '~/db/drizzle';
 import { animals, colors, uniqueNamesGenerator } from 'unique-names-generator';
 import { getUserRoles } from '~/repositories/user-role.repo';
-import { PostgresError } from 'postgres';
+import postgres from 'postgres';
 import { TChatroom } from '~/types/curhat.types';
 
 export const curhatRouter = createAuthRouter();
@@ -122,7 +122,7 @@ curhatRouter.openapi(pinChatroomRoute, async (c) => {
       return c.json({ message: 'Chatroom unpinned' }, 200);
     }
   } catch (e) {
-    if (e instanceof PostgresError) {
+    if (e instanceof postgres.PostgresError) {
       return c.json({ error: 'Failed to pin chatroom' }, 400);
     } else {
       return c.json({ error: 'Something went wrong' }, 500);

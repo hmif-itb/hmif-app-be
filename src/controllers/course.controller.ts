@@ -1,4 +1,4 @@
-import { PostgresError } from 'postgres';
+import postgres from 'postgres';
 import { db } from '~/db/drizzle';
 import {
   batchCreateOrUpdateUserCourse,
@@ -37,7 +37,7 @@ courseRouter.openapi(createUserCourseRoute, async (c) => {
     const newUserCourse = await createUserCourse(db, data, userId);
     return c.json(newUserCourse, 201);
   } catch (err) {
-    if (err instanceof PostgresError) {
+    if (err instanceof postgres.PostgresError) {
       if (err.code === '23503')
         return c.json({ error: 'Course not found' }, 404);
       return c.json({ error: 'Course has already been taken' }, 400);
@@ -94,7 +94,7 @@ courseRouter.openapi(createCourseRoute, async (c) => {
     const newCourse = CourseSchema.parse(await createCourse(db, data));
     return c.json(newCourse, 201);
   } catch (err) {
-    if (err instanceof PostgresError)
+    if (err instanceof postgres.PostgresError)
       return c.json({ error: 'Course has already been created' }, 400);
     throw err;
   }

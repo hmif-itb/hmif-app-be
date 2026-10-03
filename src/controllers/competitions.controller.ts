@@ -1,4 +1,4 @@
-import { PostgresError } from 'postgres';
+import postgres from 'postgres';
 import { db } from '~/db/drizzle';
 import { competitionCategories } from '~/db/schema';
 import { roleMiddleware } from '~/middlewares/role.middleware';
@@ -36,7 +36,7 @@ competitionsRouter.openapi(createCompetitionRoute, async (c) => {
     const competition = await createCompetition(db, data, c.var.user.id);
     return c.json(competition, 201);
   } catch (err) {
-    if (err instanceof PostgresError) {
+    if (err instanceof postgres.PostgresError) {
       return c.json({ error: err.message }, 400);
     }
     throw err;
@@ -60,7 +60,7 @@ competitionsRouter.openapi(updateCompetitionRoute, async (c) => {
     const competition = await updateCompetition(db, id, data, c.var.user.id);
     return c.json(competition, 200);
   } catch (err) {
-    if (err instanceof PostgresError) {
+    if (err instanceof postgres.PostgresError) {
       return c.json({ error: err.message }, 400);
     }
     throw err;

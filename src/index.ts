@@ -118,6 +118,7 @@ setupCron();
 const httpServer = serve({
   fetch: app.fetch,
   port: env.PORT,
+  hostname: '127.0.0.1',
 });
 
 setupWebsocket(httpServer);
