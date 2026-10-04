@@ -1,12 +1,14 @@
 import { scryptSync, timingSafeEqual } from 'node:crypto';
 
 export function isDevLoginEnabled(config: {
-  NODE_ENV: string;
+  APP_ENV?: string;
+  ENABLE_TEST_LOGIN?: boolean;
   DEV_LOGIN_EMAIL?: string;
   DEV_LOGIN_PASSWORD_HASH?: string;
 }) {
   return (
-    config.NODE_ENV === 'development' &&
+    (config.APP_ENV === 'development' || config.APP_ENV === 'staging') &&
+    config.ENABLE_TEST_LOGIN === true &&
     Boolean(config.DEV_LOGIN_EMAIL && config.DEV_LOGIN_PASSWORD_HASH)
   );
 }

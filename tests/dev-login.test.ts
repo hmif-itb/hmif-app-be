@@ -9,15 +9,28 @@ const credentials = {
   DEV_LOGIN_PASSWORD_HASH: hash,
 };
 
-test('production and unspecified environments never enable test login', () => {
-  for (const NODE_ENV of ['production', 'test', '', 'staging']) {
-    assert.equal(isDevLoginEnabled({ NODE_ENV, ...credentials }), false);
+test('test login requires an explicit non-production environment and opt-in', () => {
+  for (const APP_ENV of ['production', undefined, '', 'test']) {
+    assert.equal(
+      isDevLoginEnabled({ APP_ENV, ENABLE_TEST_LOGIN: true, ...credentials }),
+      false,
+    );
   }
-  assert.equal(isDevLoginEnabled({ NODE_ENV: 'development' }), false);
-  assert.equal(
-    isDevLoginEnabled({ NODE_ENV: 'development', ...credentials }),
-    true,
-  );
+  for (const APP_ENV of ['development', 'staging']) {
+    assert.equal(isDevLoginEnabled({ APP_ENV, ...credentials }), false);
+    assert.equal(
+      isDevLoginEnabled({ APP_ENV, ENABLE_TEST_LOGIN: false, ...credentials }),
+      false,
+    );
+    assert.equal(
+      isDevLoginEnabled({ APP_ENV, ENABLE_TEST_LOGIN: true }),
+      false,
+    );
+    assert.equal(
+      isDevLoginEnabled({ APP_ENV, ENABLE_TEST_LOGIN: true, ...credentials }),
+      true,
+    );
+  }
 });
 
 test('password verification rejects wrong passwords and malformed hashes', () => {

@@ -3,6 +3,13 @@ import 'dotenv/config';
 
 const EnvSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('production'),
+  APP_ENV: z
+    .enum(['development', 'staging', 'production'])
+    .default('production'),
+  ENABLE_TEST_LOGIN: z
+    .enum(['true', 'false'])
+    .default('false')
+    .transform((value) => value === 'true'),
   DEV_LOGIN_EMAIL: z.string().email().optional(),
   DEV_LOGIN_PASSWORD_HASH: z.string().optional(),
   PORT: z.coerce.number().default(5000),
