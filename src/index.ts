@@ -26,6 +26,7 @@ import { apiRouter } from './controllers/api.controller';
 import { setupCron } from './cron/setup';
 import { logger } from './logger';
 import setupWebsocket from './websocket/setup';
+import { listenAddress } from '~/lib/listen';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageJson = JSON.parse(
@@ -117,8 +118,7 @@ setupCron();
 
 const httpServer = serve({
   fetch: app.fetch,
-  port: env.PORT,
-  hostname: '127.0.0.1',
+  ...listenAddress(env),
 });
 
 setupWebsocket(httpServer);

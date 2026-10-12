@@ -13,6 +13,8 @@ const EnvSchema = z.object({
   DEV_LOGIN_EMAIL: z.string().email().optional(),
   DEV_LOGIN_PASSWORD_HASH: z.string().optional(),
   PORT: z.coerce.number().default(5000),
+  // Interface to listen on. Unset listens on all interfaces (containers need that); the shared staging host sets 127.0.0.1.
+  LISTEN_HOST: z.string().min(1).optional(),
   DATABASE_URL: z.string().url(),
   ALLOWED_ORIGINS: z
     .string()

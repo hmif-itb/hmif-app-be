@@ -1,7 +1,7 @@
 import { strict as assert } from 'node:assert';
 import { scryptSync } from 'node:crypto';
 import { test } from 'node:test';
-import { isDevLoginEnabled, verifyDevPassword } from '../src/lib/dev-login.ts';
+import { isDevLoginEnabled, verifyDevPassword } from '../src/lib/dev-login';
 
 const hash = `test-salt:${scryptSync('test-password', 'test-salt', 32).toString('hex')}`;
 const credentials = {
