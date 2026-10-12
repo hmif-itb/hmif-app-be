@@ -11,7 +11,8 @@
     "db:studio": "drizzle-kit studio",
     "check": "pnpm run typecheck && pnpm run codecheck",
     "codecheck": "eslint src --ext .ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.556.0",

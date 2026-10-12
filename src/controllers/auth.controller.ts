@@ -3,6 +3,8 @@ import { deleteCookie, setCookie } from 'hono/cookie';
 import { sign } from 'hono/jwt';
 import { env } from '~/configs/env.config';
 import { db } from '~/db/drizzle';
+import { angkatan, users } from '~/db/schema';
+import { isDevLoginEnabled, verifyDevPassword } from '~/lib/dev-login';
 import {
   findUserByEmail,
   getUserAndUpdatePicture,
@@ -17,6 +19,7 @@ import {
 } from '~/types/login.types';
 import {
   authCallbackRoute,
+  devLoginRoute,
   getUserGroupsRoute,
   loginAccessTokenRoute,
   loginBypassRoute,
@@ -224,3 +227,55 @@ loginProtectedRouter.openapi(getUserGroupsRoute, async (c) => {
   const groups = await getUserGroups(db, user.id);
   return c.json(groups, 200);
 });
+
+const devLoginEmail = env.DEV_LOGIN_EMAIL;
+const devLoginPasswordHash = env.DEV_LOGIN_PASSWORD_HASH;
+if (isDevLoginEnabled(env) && devLoginEmail && devLoginPasswordHash) {
+  loginRouter.openapi(devLoginRoute, async (c) => {
+    const { email, password } = c.req.valid('json');
+    const passwordMatches = verifyDevPassword(password, devLoginPasswordHash);
+    if (
+      email.toLowerCase() !== devLoginEmail.toLowerCase() ||
+      !passwordMatches
+    ) {
+      return c.json({ error: 'Invalid email or password' }, 401);
+    }
+
+    // Create only the configured test identity, after verifying its credentials.
+    const user = await db.transaction(async (tx) => {
+      await tx
+        .insert(angkatan)
+        .values({ year: 2025, name: '2025' })
+        .onConflictDoNothing();
+      await tx
+        .insert(users)
+        .values({
+          nim: 'DEVTEST01',
+          email: devLoginEmail.toLowerCase(),
+          fullName: 'Development Tester',
+          major: 'IF',
+          region: 'Ganesha',
+          angkatan: 2025,
+          gender: 'M',
+          membershipStatus: 'Anggota Biasa',
+        })
+        .onConflictDoNothing();
+      return await findUserByEmail(tx, devLoginEmail.toLowerCase());
+    });
+    if (!user || user.nim !== 'DEVTEST01')
+      return c.json({ error: 'Test account unavailable' }, 401);
+    const payload = JWTPayloadSchema.parse(user);
+    const secure =
+      new URL(c.req.url).protocol === 'https:' ||
+      c.req.header('x-forwarded-proto') === 'https';
+    setCookie(c, 'hmif-app.access-cookie', await generateJWT(payload), {
+      path: '/',
+      secure,
+      httpOnly: true,
+      sameSite: 'Lax',
+      maxAge: parseInt(env.TOKEN_EXPIRATION),
+    });
+    await updateUserLastLogin(db, user.id);
+    return c.json(payload, 200);
+  });
+}

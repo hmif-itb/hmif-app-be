@@ -1,4 +1,4 @@
-import { PostgresError } from 'postgres';
+import postgres from 'postgres';
 import { db } from '~/db/drizzle';
 import { internshipEligibilityMiddleware } from '~/middlewares/internship-eligibility.middleware';
 import { roleMiddleware } from '~/middlewares/role.middleware';
@@ -50,7 +50,7 @@ internshipRouter.openapi(createInternshipDepartmentRoute, async (c) => {
     const department = await createDepartment(db, data);
     return c.json(department, 201);
   } catch (err) {
-    if (err instanceof PostgresError) {
+    if (err instanceof postgres.PostgresError) {
       return c.json({ error: err.message }, 400);
     }
     throw err;
@@ -90,7 +90,7 @@ internshipRouter.openapi(createInternshipDivisionRoute, async (c) => {
     const division = await createDivision(db, data);
     return c.json(division, 201);
   } catch (err) {
-    if (err instanceof PostgresError) {
+    if (err instanceof postgres.PostgresError) {
       return c.json({ error: err.message }, 400);
     }
     throw err;
@@ -152,7 +152,7 @@ internshipRouter.openapi(upsertMyInternshipSubmissionRoute, async (c) => {
     if (err instanceof Error && err.message === 'LOCKED') {
       return c.json({ error: 'Submission is already locked' }, 409);
     }
-    if (err instanceof PostgresError) {
+    if (err instanceof postgres.PostgresError) {
       return c.json({ error: err.message }, 400);
     }
     throw err;
@@ -182,7 +182,7 @@ internshipRouter.openapi(submitMyInternshipSubmissionRoute, async (c) => {
     if (err instanceof Error && err.message === 'LOCKED') {
       return c.json({ error: 'Submission is already locked' }, 409);
     }
-    if (err instanceof PostgresError) {
+    if (err instanceof postgres.PostgresError) {
       return c.json({ error: err.message }, 400);
     }
     throw err;

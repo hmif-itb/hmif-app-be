@@ -1,6 +1,6 @@
 import { GaxiosError } from 'gaxios';
-import { calendar_v3, google } from 'googleapis';
-import { PostgresError } from 'postgres';
+import { calendar, type calendar_v3 } from 'googleapis/build/src/apis/calendar';
+import postgres from 'postgres';
 import { db } from '~/db/drizzle';
 import { calendarEvent, CalendarGroup } from '~/db/schema';
 import { googleAuth } from '~/lib/googleapi';
@@ -79,7 +79,7 @@ calendarRouter.openapi(postCalendarEventRoute, async (c) => {
   let eventGCal: calendar_v3.Schema$Event;
   try {
     eventGCal = (
-      await google.calendar('v3').events.insert({
+      await calendar('v3').events.insert({
         auth: googleAuth,
         calendarId: calendarGroup.googleCalendarUrl,
         requestBody: event,
@@ -131,7 +131,7 @@ calendarRouter.openapi(getCalendarEventRoute, async (c) => {
 
     return c.json(data, 200);
   } catch (error) {
-    if (error instanceof PostgresError) {
+    if (error instanceof postgres.PostgresError) {
       return c.json({ error: error.message }, 400);
     }
     throw error;
@@ -147,7 +147,7 @@ calendarRouter.openapi(getCalendarEventByIdRoute, async (c) => {
     if (!data) return c.json("error: 'Event not found'", 404);
     return c.json(data, 200);
   } catch (error) {
-    if (error instanceof PostgresError) {
+    if (error instanceof postgres.PostgresError) {
       return c.json({ error: error.message }, 400);
     }
     throw error;
@@ -189,7 +189,7 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
   // 2. If exists, ambil id sama groupId dan get event from GCal
   let fetchedData: calendar_v3.Schema$Event;
   try {
-    const response = await google.calendar('v3').events.get({
+    const response = await calendar('v3').events.get({
       auth: googleAuth,
       calendarId: eventDB.calendarGroup.googleCalendarUrl,
       eventId: eventDB.googleCalendarId,
@@ -218,7 +218,7 @@ calendarRouter.openapi(updateCalendarEventRoute, async (c) => {
 
   // console.log(event);
   try {
-    await google.calendar('v3').events.update({
+    await calendar('v3').events.update({
       auth: googleAuth,
       calendarId: eventDB.calendarGroup.googleCalendarUrl,
       eventId: eventDB.googleCalendarId,
@@ -267,7 +267,7 @@ calendarRouter.openapi(deleteCalendarEventRoute, async (c) => {
       }
     }
 
-    await google.calendar('v3').events.delete({
+    await calendar('v3').events.delete({
       auth: googleAuth,
       calendarId: eventDB?.calendarGroup.googleCalendarUrl,
       eventId: eventDB?.googleCalendarId,

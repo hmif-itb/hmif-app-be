@@ -1,5 +1,7 @@
-import { PostgresError } from 'postgres';
+import postgres from 'postgres';
 import { db } from '~/db/drizzle';
+import { COURSE_CATALOG_MANAGER_ROLES } from '~/lib/authorization';
+import { roleMiddleware } from '~/middlewares/role.middleware';
 import {
   batchCreateOrUpdateUserCourse,
   createCourse,
@@ -28,6 +30,20 @@ import { createAuthRouter } from './router-factory';
 
 export const courseRouter = createAuthRouter();
 
+// The shared course catalog is maintained by academic staff and admins only.
+courseRouter.post(
+  createCourseRoute.getRoutingPath(),
+  roleMiddleware([...COURSE_CATALOG_MANAGER_ROLES]),
+);
+courseRouter.put(
+  updateCourseRoute.getRoutingPath(),
+  roleMiddleware([...COURSE_CATALOG_MANAGER_ROLES]),
+);
+courseRouter.delete(
+  deleteCourseRoute.getRoutingPath(),
+  roleMiddleware([...COURSE_CATALOG_MANAGER_ROLES]),
+);
+
 // User Course Controller
 
 courseRouter.openapi(createUserCourseRoute, async (c) => {
@@ -37,7 +53,7 @@ courseRouter.openapi(createUserCourseRoute, async (c) => {
     const newUserCourse = await createUserCourse(db, data, userId);
     return c.json(newUserCourse, 201);
   } catch (err) {
-    if (err instanceof PostgresError) {
+    if (err instanceof postgres.PostgresError) {
       if (err.code === '23503')
         return c.json({ error: 'Course not found' }, 404);
       return c.json({ error: 'Course has already been taken' }, 400);
@@ -94,7 +110,7 @@ courseRouter.openapi(createCourseRoute, async (c) => {
     const newCourse = CourseSchema.parse(await createCourse(db, data));
     return c.json(newCourse, 201);
   } catch (err) {
-    if (err instanceof PostgresError)
+    if (err instanceof postgres.PostgresError)
       return c.json({ error: 'Course has already been created' }, 400);
     throw err;
   }

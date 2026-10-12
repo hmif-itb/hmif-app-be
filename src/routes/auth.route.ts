@@ -1,4 +1,4 @@
-import { createRoute } from '@hono/zod-openapi';
+import { z, createRoute } from '@hono/zod-openapi';
 import {
   CallbackQueryParamsSchema,
   JWTPayloadSchema,
@@ -193,5 +193,35 @@ export const getUserGroupsRoute = createRoute({
       },
       description: 'Get user groups',
     },
+  },
+});
+
+export const devLoginRoute = createRoute({
+  operationId: 'devLogin',
+  tags: ['auth'],
+  method: 'post',
+  path: '/auth/login/dev',
+  request: {
+    body: {
+      required: true,
+      content: {
+        'application/json': {
+          schema: z.object({
+            email: z.string().email(),
+            password: z.string().min(1).max(256),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'Development login successful',
+      content: {
+        'application/json': { schema: JWTPayloadSchema },
+      },
+    },
+    400: validationErrorResponse,
+    401: authorizaitonErrorResponse,
   },
 });
