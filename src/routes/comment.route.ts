@@ -97,6 +97,14 @@ export const updateCommentContentRoute = createRoute({
         },
       },
     },
+    403: {
+      description: 'Only the author can edit this comment',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
+        },
+      },
+    },
     404: {
       description: 'Comment not found',
       content: {
@@ -164,6 +172,14 @@ export const deleteCommentRoute = createRoute({
     },
     400: {
       description: 'Bad request',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
+        },
+      },
+    },
+    403: {
+      description: 'Only the author or a moderator can delete this comment',
       content: {
         'application/json': {
           schema: ErrorSchema,

@@ -1,5 +1,6 @@
 import postgres from 'postgres';
 import { db } from '~/db/drizzle';
+import { canDeleteContent, canEditContent } from '~/lib/authorization';
 import {
   createComment,
   deleteComment,
@@ -7,6 +8,7 @@ import {
   getCommentList,
   updateCommentContent,
 } from '~/repositories/comment.repo';
+import { getUserRoles } from '~/repositories/user-role.repo';
 import {
   deleteCommentRoute,
   getCommentsByIdRoute,
@@ -47,18 +49,37 @@ commentRouter.openapi(postCommentRoute, async (c) => {
 });
 
 commentRouter.openapi(deleteCommentRoute, async (c) => {
+  const { id: userId } = c.var.user;
   const { commentId } = c.req.valid('param');
+
+  const existing = await getCommentById(db, { commentId });
+  if (!existing) {
+    return c.json({ error: 'Comment not found' }, 404);
+  }
+
+  const roles = await getUserRoles(db, userId);
+  if (!canDeleteContent({ id: userId, roles }, existing.creatorId)) {
+    return c.json({ error: 'Forbidden' }, 403);
+  }
+
   const comment = await deleteComment(db, commentId);
   if (!comment) {
     return c.json({ error: 'Comment not found' }, 404);
   }
-  return c.json({ ...comment, creator: c.var.user }, 200);
+  return c.json({ ...comment, creator: existing.creator }, 200);
 });
 
 commentRouter.openapi(updateCommentContentRoute, async (c) => {
   try {
     const data = c.req.valid('json');
     const param = c.req.valid('param');
+
+    const existing = await getCommentById(db, param);
+    if (!existing) return c.json({ error: 'Comment not found' }, 404);
+    if (!canEditContent(c.var.user, existing.creatorId)) {
+      return c.json({ error: 'Forbidden' }, 403);
+    }
+
     const comment = await updateCommentContent(db, param, data);
     if (!comment) return c.json({ error: 'Comment not found' }, 404);
     return c.json({ ...comment, creator: c.var.user }, 200);

@@ -1,5 +1,7 @@
 import postgres from 'postgres';
 import { db } from '~/db/drizzle';
+import { COURSE_CATALOG_MANAGER_ROLES } from '~/lib/authorization';
+import { roleMiddleware } from '~/middlewares/role.middleware';
 import {
   batchCreateOrUpdateUserCourse,
   createCourse,
@@ -27,6 +29,20 @@ import { CourseSchema } from '~/types/course.types';
 import { createAuthRouter } from './router-factory';
 
 export const courseRouter = createAuthRouter();
+
+// The shared course catalog is maintained by academic staff and admins only.
+courseRouter.post(
+  createCourseRoute.getRoutingPath(),
+  roleMiddleware([...COURSE_CATALOG_MANAGER_ROLES]),
+);
+courseRouter.put(
+  updateCourseRoute.getRoutingPath(),
+  roleMiddleware([...COURSE_CATALOG_MANAGER_ROLES]),
+);
+courseRouter.delete(
+  deleteCourseRoute.getRoutingPath(),
+  roleMiddleware([...COURSE_CATALOG_MANAGER_ROLES]),
+);
 
 // User Course Controller
 

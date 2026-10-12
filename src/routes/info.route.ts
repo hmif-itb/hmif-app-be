@@ -159,6 +159,14 @@ export const deleteInfoRoute = createRoute({
         },
       },
     },
+    403: {
+      description: 'Only the author or a moderator can delete this info',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
+        },
+      },
+    },
     404: {
       description: 'Id not found',
       content: {

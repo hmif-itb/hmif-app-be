@@ -238,6 +238,14 @@ export async function deleteInfo(db: Database, id: string) {
   return await db.delete(infos).where(eq(infos.id, id)).returning().then(first);
 }
 
+export async function getInfoCreatorId(db: Database, id: string) {
+  return await db
+    .select({ creatorId: infos.creatorId })
+    .from(infos)
+    .where(eq(infos.id, id))
+    .then(first);
+}
+
 export async function getListInfos(
   db: Database,
   q: z.infer<typeof ListInfoParamsSchema>,

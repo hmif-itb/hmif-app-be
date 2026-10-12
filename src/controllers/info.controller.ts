@@ -1,15 +1,18 @@
 import postgres from 'postgres';
 import { db } from '~/db/drizzle';
+import { canDeleteContent } from '~/lib/authorization';
 import {
   createInfo,
   createReadInfo,
   deleteInfo,
   deleteReadInfo,
   getInfoById,
+  getInfoCreatorId,
   getListInfos,
   notifyNewInfo,
   renotifyInfo,
 } from '~/repositories/info.repo';
+import { getUserRoles } from '~/repositories/user-role.repo';
 import {
   createInfoRoute,
   deleteInfoRoute,
@@ -81,9 +84,21 @@ infoRouter.openapi(createInfoRoute, async (c) => {
 });
 
 infoRouter.openapi(deleteInfoRoute, async (c) => {
+  const { id: userId } = c.var.user;
   const { infoId } = c.req.valid('param');
-  const info = await deleteInfo(db, infoId);
+
+  const info = await getInfoCreatorId(db, infoId);
   if (!info) {
+    return c.json({ error: 'Info not found' }, 404);
+  }
+
+  const roles = await getUserRoles(db, userId);
+  if (!canDeleteContent({ id: userId, roles }, info.creatorId)) {
+    return c.json({ error: 'Forbidden' }, 403);
+  }
+
+  const deleted = await deleteInfo(db, infoId);
+  if (!deleted) {
     return c.json({ error: 'Info not found' }, 404);
   }
   return c.json({}, 200);
